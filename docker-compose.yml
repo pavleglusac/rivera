@@ -1,0 +1,62 @@
+version: '3.6'
+services:
+  db:
+    image: postgres
+    #hostname: postgres
+    container_name: rivera-docker-db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: riveradb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      #- 5433:5432
+      - "5432:5432"
+    networks:
+      - backdb
+    expose: 
+      - 5433
+  
+  backend:
+    build: 
+      context: ./backend/rivera
+      target:  finalApp
+    image: rivera-backend
+    container_name: rivera-backend-container
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/riveradb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+    ports:
+      - 8080:8080
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - frontback 
+      - backdb
+
+  frontend:
+    #build: ./frontend/rivera
+    image: rivera-frontend
+    container_name: rivera-frontend-container
+    build:
+      context: ./frontend/rivera
+    ports:
+      - 3000:3000
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - backend
+    networks: 
+      - frontback     
+  
+networks: 
+  backdb:
+    driver: bridge
+  frontback:
+    driver: bridge
