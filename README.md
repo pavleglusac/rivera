@@ -1,7 +1,5 @@
 # Rivera
 
-Simple overview of use/purpose.
-
 ## Description
 
 An in-depth paragraph about your project and overview of use.
@@ -10,13 +8,9 @@ An in-depth paragraph about your project and overview of use.
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+JDK 17
+Node.js 16.14.2 LTS
+PostgreSQL 14
 
 ### Running in docker
 
@@ -45,6 +39,16 @@ While in base directory, execute the following command
 ./run.sh
 ```
 
+Or, manually:
+1. While in /Rivera/backend/rivera
+```
+mvn spring-boot:run
+```
+2. While in /Rivera/frontend/river
+```
+npm i
+npm run dev
+```
 
 ## Help
 
