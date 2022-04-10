@@ -1,5 +1,7 @@
 <template>
-  <navbar/>
+  <div class="container">
+    <navbar/>
+  </div>
 </template>
 
 <script>
@@ -17,5 +19,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 </style>

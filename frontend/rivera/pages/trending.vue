@@ -14,7 +14,4 @@ export default {
 </script>
 
 <style>
-p {
-    margin-top: 100%;
-}
 </style>
