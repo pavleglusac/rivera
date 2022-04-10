@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -14,6 +15,8 @@ public class Review {
     private Integer id;
     private Double score;
     private ReviewStatus status;
+    private LocalDateTime posted;
+    private String text;
     @ManyToOne
     private Client client;
 }
