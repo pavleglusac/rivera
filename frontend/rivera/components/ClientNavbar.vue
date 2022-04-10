@@ -14,9 +14,9 @@
             <ul>
                 <li><NuxtLink to="/trending" exact class="menu-link"><b-icon icon="star-fill" /> Trending</NuxtLink></li>
                 <li><NuxtLink to="/offers" class="menu-link"><b-icon icon="search" /> Offers</NuxtLink></li>
-                <li><NuxtLink to="/reservations" class="menu-link"><b-icon icon="calendar-check-fill" /> Reservations</NuxtLink></li>
-                <li><NuxtLink to="/subscribed" class="menu-link"><b-icon icon="bell-fill" /> Subscribed</NuxtLink></li>
-                <li><NuxtLink to="/client-profile" class="menu-link"><b-icon icon="person-fill" /> My Profile</NuxtLink></li>
+                <li><NuxtLink to="/client/reservations" class="menu-link"><b-icon icon="calendar-check-fill" /> Reservations</NuxtLink></li>
+                <li><NuxtLink to="/client/subscribed" class="menu-link"><b-icon icon="bell-fill" /> Subscribed</NuxtLink></li>
+                <li><NuxtLink to="/client/client-profile" class="menu-link"><b-icon icon="person-fill" /> My Profile</NuxtLink></li>
                 <li><NuxtLink to="/log-in" class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</NuxtLink></li>
             </ul>
       </b-navbar-nav>
@@ -27,14 +27,6 @@
 
 <script>
 export default {
-data() {
-    return {
-    }
-},
-methods: {
-},
-    computed: {
-    },
 };
 </script>
 
