@@ -14,8 +14,8 @@ public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
     private Double price;
     private Integer capacity;
     @ManyToMany
