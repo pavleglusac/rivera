@@ -6,10 +6,7 @@ import com.tim20.rivera.service.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,4 +31,20 @@ public class AdventureController {
         adventureService.addAdventure(adventure, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
+
+    @GetMapping(path="get-adventure")
+    public AdventureDTO getAdventure(@RequestParam("id") Integer id) throws IOException {
+        return adventureService.getAdventure(id);
+    }
+
+    @PostMapping(path="update-adventure")
+    public ResponseEntity<String> updateAdventure(
+            AdventureDTO adventure,
+            @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
+    ) throws IOException {
+
+        adventureService.updateAdventure(adventure, multipartFiles);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
 }

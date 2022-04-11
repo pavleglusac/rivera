@@ -19,11 +19,16 @@ public class Rentable {
     private Integer id;
     private String name;
     private String description;
+    private String addresss;
+    private String city;
+    private String country;
     @ElementCollection
     private List<String> pictures;
     private String profilePicture;
     @ElementCollection
     private List<String> rulesOfConduct;
+    @ElementCollection
+    private List<String> addditionalServices;
     @OneToMany
     private List<Tag> tags;
     private Double averageScore;

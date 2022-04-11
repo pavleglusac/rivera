@@ -134,7 +134,10 @@ export default {
 			formData.append("country", this.country);
 			formData.append("city", this.city);
 			formData.append("address", this.address);
+			formData.append("capacity", this.capacity);
+			formData.append("equipment", this.equipment);
 			formData.append("cancellationTerms", this.cancellationTerms);
+			formData.append("rulesOfConduct", this.rulesOfConduct);
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
