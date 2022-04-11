@@ -234,7 +234,7 @@ export default {
 			var formData = new FormData();
 			var images = document.getElementById('files');
 			
-			if(!(this.name && this.perDay && this.perHour && this.tags && this.country && this.city && this.address && document.getElementById("addedRooms").rows.length>1)){
+			if(!(this.name && this.perDay && this.perHour && this.tags.length>0 && this.cancellationTerms && this.rulesOfConduct.length>0 && this.services.length>0 && this.country && this.city && this.address && document.getElementById("addedRooms").rows.length>1 && images.files.length>=5)){
 					$('#emptyErrorModal').modal('show');
 					$("#addCottageForm").submit(function(e) {
     					e.preventDefault();
@@ -250,10 +250,13 @@ export default {
 			formData.append("city", this.city);
 			formData.append("address", this.address);
 			formData.append("cancellationTerms", this.cancellationTerms);
+			formData.append("rulesOfConduct", this.rulesOfConduct);
+			formData.append("services", this.services);
 			console.log(formData);
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
+			
 			this.$axios.post('/api/cottage/add-cottage', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
