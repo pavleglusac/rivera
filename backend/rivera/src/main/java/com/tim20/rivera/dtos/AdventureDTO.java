@@ -16,8 +16,10 @@ public class AdventureDTO {
     private List<String> rulesOfConduct;
     private Double perHour;
     private Double perDay;
+    private Double averageScore;
     private String address;
     private String city;
     private String country;
-
+    private Integer capacity;
+    private String cancellaitonTerms;
 }
