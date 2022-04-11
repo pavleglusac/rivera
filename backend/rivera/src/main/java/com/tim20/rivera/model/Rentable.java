@@ -29,7 +29,7 @@ public class Rentable {
     private List<String> rulesOfConduct;
     @ElementCollection
     private List<String> addditionalServices;
-    @OneToMany
+    @ManyToMany
     private List<Tag> tags;
     private Double averageScore;
     @OneToMany
