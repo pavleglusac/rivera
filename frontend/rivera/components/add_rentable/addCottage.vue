@@ -4,7 +4,7 @@
 			<div class="form-row">
 				<div class="form-group col-md-4">
 				<label for="name">Name</label>
-				<input type="email" class="form-control" v-model="name" id="inputEmail4" placeholder="Name">
+				<input type="text" class="form-control" v-model="name" id="inputEmail4" placeholder="Name">
 				</div>
 
 				<div class="form-group col-md-3">
@@ -256,7 +256,12 @@ export default {
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
-			
+			var roomsString = "";
+			var table = document.getElementById("addedRooms");
+			for (var i = 1, row; row = table.rows[i]; i++) {
+				roomsString += row.cells[1].innerText+","+row.cells[0].innerText + ";";					
+			}
+			formData.append("rooms", roomsString);
 			this.$axios.post('/api/cottage/add-cottage', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
