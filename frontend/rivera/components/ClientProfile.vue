@@ -82,6 +82,7 @@
                   class="form-control"
                   v-model="city"
                   id="inputCity"
+                  placeholder="Enter your city"
                 />
               </div>
               <div class="form-group col-6">
@@ -102,130 +103,7 @@
           </b-col>
           <b-col>
             <h4>Password Settings</h4>
-
-            <label>Current Password</label>
-            <div v-if="!cpasswordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="text"
-                    class="password-field"
-                    v-model="cpasswordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    class="password-icon"
-                    @click="hideCPassword"
-                    icon="eye-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <div v-if="cpasswordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="password"
-                    class="password-field"
-                    v-model="cpasswordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    @click="showCPassword"
-                    class="password-icon"
-                    icon="eye-slash-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <b-form-invalid-feedback :state="currentPasswordValidation">
-              That is not your current password. Try again.
-            </b-form-invalid-feedback>
-
-            <label>New Password</label>
-            <div v-if="!passwordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="text"
-                    class="password-field"
-                    v-model="passwordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    class="password-icon"
-                    @click="hidePassword"
-                    icon="eye-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <div v-if="passwordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="password"
-                    class="password-field"
-                    v-model="passwordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    @click="showPassword"
-                    class="password-icon"
-                    icon="eye-slash-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <b-form-invalid-feedback :state="newPasswordValidation">
-              Password must be at least 8 characters. Try again.
-            </b-form-invalid-feedback>
-
-            <label>Re-enter New Password</label>
-            <div v-if="!rpasswordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="text"
-                    class="password-field"
-                    v-model="rpasswordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    @click="hideRPassword"
-                    class="password-icon"
-                    icon="eye-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <div v-if="rpasswordHidden" class="bv-example-row">
-              <b-row>
-                <b-col cols="11">
-                  <input
-                    type="password"
-                    class="password-field"
-                    v-model="rpasswordText"
-                  />
-                </b-col>
-                <b-col cols="1">
-                  <b-icon
-                    @click="showRPassword"
-                    class="password-icon"
-                    icon="eye-slash-fill"
-                  ></b-icon>
-                </b-col>
-              </b-row>
-            </div>
-            <b-form-invalid-feedback :state="newPasswordAgainValidation">
-              Re-entered password is not the same as your new password.
-            </b-form-invalid-feedback>
-            <b-button block class="change-password">Change password</b-button>
+            <password-change />
 
             <h4>Loyalty Program</h4>
             <p>Number of points you earned is 235.</p>
@@ -246,22 +124,16 @@
 <script>
 const countries = require("i18n-iso-countries");
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
-import {
-  BIcon,
-  BIconEyeFill,
-  BIconEyeSlashFill,
-  BIconTrashFill,
-  BIconPersonCircle,
-} from "bootstrap-vue";
+import { BIcon, BIconTrashFill, BIconPersonCircle } from "bootstrap-vue";
+import PasswordChange from "./PasswordChange.vue";
 
 export default {
   name: "ClientProfile",
   components: {
     BIcon,
-    BIconEyeFill,
-    BIconEyeSlashFill,
     BIconTrashFill,
     BIconPersonCircle,
+    PasswordChange,
   },
   data() {
     return {
@@ -271,43 +143,9 @@ export default {
       address: "",
       country: "",
       city: "",
-      passwordHidden: {
-        default: false,
-        type: Boolean,
-      },
-      rpasswordHidden: {
-        default: false,
-        type: Boolean,
-      },
-      cpasswordHidden: {
-        default: false,
-        type: Boolean,
-      },
-      passwordText: "",
-      rpasswordText: "",
-      cpasswordText: "",
     };
   },
-  methods: {
-    hidePassword() {
-      this.passwordHidden = true;
-    },
-    showPassword() {
-      this.passwordHidden = false;
-    },
-    hideRPassword() {
-      this.rpasswordHidden = true;
-    },
-    showRPassword() {
-      this.rpasswordHidden = false;
-    },
-    hideCPassword() {
-      this.cpasswordHidden = true;
-    },
-    showCPassword() {
-      this.cpasswordHidden = false;
-    },
-  },
+  methods: {},
   computed: {
     firstNameValidation() {
       return this.firstName.length != 0;
@@ -321,15 +159,6 @@ export default {
     addressValidation() {
       return this.address.length != 0;
     },
-    currentPasswordValidation() {
-      return this.cpasswordText == "current";
-    },
-    newPasswordValidation() {
-      return this.passwordText.length != 0;
-    },
-    newPasswordAgainValidation() {
-      return this.rpasswordText == this.passwordText;
-    },
     countries() {
       const list = countries.getNames("en", { select: "official" });
       return Object.keys(list).map((key) => ({ value: key, label: list[key] }));
@@ -342,8 +171,7 @@ export default {
 </script>
 
 <style scoped>
-.form-control,
-.password-field {
+.form-control {
   height: calc(1.5em + 0.75rem + 2px);
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
@@ -355,21 +183,8 @@ export default {
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.form-control {
   display: block;
   width: 100%;
-}
-
-.password-field {
-  width: 100%;
-}
-
-.password-icon {
-  align-self: center;
-  vertical-align: middle;
-  text-align: center;
 }
 
 .save-changes {
@@ -377,12 +192,5 @@ export default {
   margin-bottom: 8px;
   background-color: #16c79a;
   border: none;
-}
-
-.change-password {
-  margin-top: 8px;
-  background-color: #fff;
-  border: 1px solid #16c79a;
-  color: #16c79a;
 }
 </style>
