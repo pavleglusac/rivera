@@ -231,7 +231,9 @@ export default {
 	},
 	methods: {
 		upload() {
+			var formData = new FormData();
 			var images = document.getElementById('files');
+			
 			if(!(this.name && this.perDay && this.perHour && this.tags && this.country && this.city && this.address && document.getElementById("addedRooms").rows.length>1)){
 					$('#emptyErrorModal').modal('show');
 					$("#addCottageForm").submit(function(e) {
@@ -239,6 +241,28 @@ export default {
 					});
 					return;
 			}
+			formData.append("name", this.name);
+			formData.append("description", this.description);
+			formData.append("perHour", this.perHour);
+			formData.append("perDay", this.perDay);
+			formData.append("tags", this.tags);
+			formData.append("country", this.country);
+			formData.append("city", this.city);
+			formData.append("address", this.address);
+			formData.append("cancellationTerms", this.cancellationTerms);
+			console.log(formData);
+			for (let index = 0; index < images.files.length; index++) {
+				formData.append("images", images.files[index]);
+			}
+			this.$axios.post('/api/cottage/add-cottage', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}).then((resp) => {
+				console.log(resp);
+			}).catch((err) => {
+				console.log(err);
+			});
 		}
 	}
 }
