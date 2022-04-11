@@ -20,6 +20,6 @@ public class Pricelist {
     private String cancellationTerms;
     private Double pricePerHour;
     private Double pricePerDay;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 }
