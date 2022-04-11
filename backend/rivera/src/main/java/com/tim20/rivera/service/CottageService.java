@@ -80,7 +80,11 @@ public class CottageService {
         cottage.setAverageScore(dto.getAverageScore());
         cottage.setPricelists(new ArrayList<>());
         cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
-        cottage.setRulesOfConduct(dtoRulesToRules(dto.getRulesOfConduct()));
+        cottage.setRulesOfConduct(dto.getRulesOfConduct());
+        cottage.setAddresss(dto.getAddress());
+        cottage.setCity(dto.getCity());
+        cottage.setCountry(dto.getCountry());
+        cottage.setAddditionalServices(dto.getServices());
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -98,13 +102,6 @@ public class CottageService {
         return cottage;
     }
 
-    private String dtoRulesToRules(List<String> rulesOfConduct) {
-        String rules = "";
-        for(String rule : rulesOfConduct){
-            rules = rule+"\n";
-        }
-        return rules;
-    }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
         Map<Integer, Integer> map = new HashMap<>();
