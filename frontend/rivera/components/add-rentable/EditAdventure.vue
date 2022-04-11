@@ -12,21 +12,15 @@
 				<input type="number" class="form-control" v-model="capacity"  id="capacity" name="capacity" min="1" max="100" placeholder="Capacity">
 				</div>
 
-				<div class="form-group col-md-1">
+				<div class="form-group col-md-2">
 				<label for="name">Price per hour</label>
 				<input type="number" class="form-control" v-model="perHour"  id="perHour" name="perHour" min="0" placeholder="Price per hour">
 				</div>
 
-				<div class="form-group col-md-1">
+				<div class="form-group col-md-2">
 				<label for="name">Price per day</label>
 				<input type="number" class="form-control" v-model="perDay"  id="capacity" name="perDay" min="0" placeholder="Price per day">
 				</div>
-
-				<div class="form-group col-md-2">
-				<label for="name">Cancellation terms</label>
-				<input type="text" class="form-control" id="terms" placeholder="Cancellation terms" v-model="cancellationTerms">
-				</div>
-
 			</div>
 			<div class="form-group">
     			<label for="exampleFormControlTextarea1">Description</label>
@@ -102,12 +96,18 @@ export default {
 			perHour: 0,
 			perDay: 0,
 			description: "",
-			capacity: 0,
-			cancellationTerms: ""
+			capacity: 0
 		}
 	},
 	mounted() {
-		
+		this.$axios
+        .get('/api/adventure?id=' + this.$route.params.adventure)
+        .then((resp) => {
+            console.log(resp);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 	},
 	methods: {
 		upload() {
@@ -134,17 +134,19 @@ export default {
 			formData.append("country", this.country);
 			formData.append("city", this.city);
 			formData.append("address", this.address);
-			formData.append("cancellationTerms", this.cancellationTerms);
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
-			this.$axios.post('/api/add-adventure', formData, {
+			this.$axios
+            .post('/api/add-adventure', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
-			}).then((resp) => {
+			})
+            .then((resp) => {
 				console.log(resp);
-			}).catch((err) => {
+			})
+            .catch((err) => {
 				console.log(err);
 			});
 		}
