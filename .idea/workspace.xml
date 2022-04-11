@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="01c0b849-5da6-422c-929a-24352112f3ce" name="Default Changelist" comment="" />
+    <list default="true" id="01c0b849-5da6-422c-929a-24352112f3ce" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Rivera.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Rivera.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/rivera/src/main/java/com/tim20/rivera/controller/GreetingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/rivera/src/main/java/com/tim20/rivera/controller/GreetingController.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="27DSsCYo39buST1Ak5Lg6eIEX42" />
   <component name="ProjectViewState">
@@ -17,8 +27,21 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
   </component>
+  <component name="RunManager">
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.tim20.rivera.RiveraApplication" />
+      <module name="Rivera" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="01c0b849-5da6-422c-929a-24352112f3ce" name="Default Changelist" comment="" />
@@ -27,7 +50,12 @@
       <option name="presentableId" value="Default" />
       <updated>1648853368028</updated>
       <workItem from="1648853369379" duration="23000" />
+      <workItem from="1649279276772" duration="247000" />
+      <workItem from="1649279602650" duration="584000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

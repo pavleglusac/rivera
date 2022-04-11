@@ -6,6 +6,9 @@ import com.tim20.rivera.model.Greeting;
 import com.tim20.rivera.repository.AdventureRepository;
 import com.tim20.rivera.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,17 +39,11 @@ public class GreetingController {
         return repository.findAll();
     }
 
-    @PostMapping(path = "/add-greeting")
-    public Boolean addGreeting() {
-        Greeting greeting = new Greeting();
-        greeting.setContent("Ovo je neki greeting");
-        repository.save(greeting);
-        return true;
-    }
-
     @GetMapping(path="hello")
     public String hello(){
         return "hello";
     }
+
+
 
 }
