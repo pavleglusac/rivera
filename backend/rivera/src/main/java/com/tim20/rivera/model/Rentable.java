@@ -21,7 +21,7 @@ public class Rentable {
     private List<String> pictures;
     private String profilePicture;
     private String rulesOfConduct;
-    @OneToMany
+    @ManyToMany
     private List<Tag> tags;
     private Double averageScore;
     @OneToMany

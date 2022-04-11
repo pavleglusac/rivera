@@ -19,7 +19,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CottageService {
@@ -40,6 +42,11 @@ public class CottageService {
                               @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
         Cottage cottage = dtoToCottage(cottageDto);
+        for( var x : cottage.getTags())
+        {
+            System.out.println(x.getName()+","+x.getId()+","+cottage.getId());
+        }
+
         cottageRepository.save(cottage);
         Path path = Paths.get(STATIC_PATH + IMAGES_PATH + cottage.getId());
         if (!Files.exists(path)) {
@@ -72,6 +79,8 @@ public class CottageService {
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
         cottage.setPricelists(new ArrayList<>());
+        cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
+        cottage.setRulesOfConduct(dtoRulesToRules(dto.getRulesOfConduct()));
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -84,7 +93,26 @@ public class CottageService {
         cottage.setCurrentPricelist(pricelist);
         tagService.addTagsIfNotPresent(dto.getTags());
         cottage.setTags(tagService.getTagsByNames(dto.getTags()));
+
+
         return cottage;
+    }
+
+    private String dtoRulesToRules(List<String> rulesOfConduct) {
+        String rules = "";
+        for(String rule : rulesOfConduct){
+            rules = rule+"\n";
+        }
+        return rules;
+    }
+
+    private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
+        Map<Integer, Integer> map = new HashMap<>();
+        var entries = rooms.split(";");
+        for(var entry : entries){
+            map.put(Integer.parseInt(entry.split(",")[0]),Integer.parseInt(entry.split(",")[1]));
+        }
+        return map;
     }
 
 

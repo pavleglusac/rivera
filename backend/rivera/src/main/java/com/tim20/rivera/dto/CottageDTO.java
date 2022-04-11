@@ -21,6 +21,6 @@ public class CottageDTO {
     private String address;
     private String city;
     private String country;
-    private Map<Integer,Integer> rooms;
+    private String rooms;
     private String cancellationTerms;
 }
