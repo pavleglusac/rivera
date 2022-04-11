@@ -34,10 +34,14 @@ export default {
     buildModules: [],
 
     // Modules: https://go.nuxtjs.dev/config-modules
-    modules: [
-        // https://go.nuxtjs.dev/bootstrap
-        'bootstrap-vue/nuxt',
-    ],
+    modules: ['bootstrap-vue/nuxt'],
+    bootstrapVue: {
+        config: {
+            icons: true,
+            components: ['BIcon', 'BIconAlertFill', 'BIconCalendar', 'BIconGears'],
+            componentPlugins: ['IconsPlugin']
+        }
+    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {}

@@ -26,7 +26,17 @@
 </template>
 
 <script>
+import { BIcon, BIconStarFill, BIconSearch, BIconCalendarCheckFill, BIconBellFill, BIconPersonFill, BIconArrow90degLeft } from 'bootstrap-vue'
 export default {
+  components: {
+    BIcon,
+    BIconStarFill,
+    BIconSearch, 
+    BIconCalendarCheckFill,
+    BIconBellFill,
+    BIconPersonFill,
+    BIconArrow90degLeft
+  }
 };
 </script>
 
