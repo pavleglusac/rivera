@@ -94,12 +94,51 @@
 			<div class="d-flex">
 		 		<PictureUpload /> 
 			</div>
-			<button type="button"  class="btn btn-primary float-right">Add cottage</button>
+			<button type="button" @click="upload" class="btn btn-primary float-right">Add cottage</button>
 
 
 
 
 
+			<!-- Modal -->
+			<div class="modal fade" id="roomsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Entry already exists</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
+					Would you like to overwrite it?
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="roomUpdate" >Yes</button>
+					<button type="button" class="btn btn-secondary" id="modalClosure" >No</button>
+					</div>
+				</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="emptyErrorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Error</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
+					Fields must not be empty! Please fill in empty fields and try again!
+					</div>
+					<div class="modal-footer">
+					<button class="btn btn-primary" id="errorModalClosure" >Okay</button>
+					</div>
+				</div>
+				</div>
+			</div>
 		</form>
 	</div>
 </template>
@@ -137,6 +176,9 @@ export default {
 	},
 	mounted() {
 		document.getElementById('addRoom').onclick = function() {addRoom();}
+		document.getElementById('roomUpdate').onclick = function() {updateRoom();}
+		document.getElementById('modalClosure').onclick = function() {closeModal("roomsModal");}
+		document.getElementById('errorModalClosure').onclick = function() {closeModal("emptyErrorModal");}
 				
 		function addRoom(){
 			var tbodyRef = document.getElementById('addedRooms').getElementsByTagName('tbody')[0];
@@ -164,6 +206,38 @@ export default {
 			remove.appendChild(removeText);
 			remove.onclick = function(){
 				tbodyRef.removeChild(newRow);
+			}
+		}
+
+		function updateRoom(){
+			var tbodyRef = document.getElementById('addedRooms').getElementsByTagName('tbody')[0];
+			var numberOfRoomsText = document.createTextNode(document.getElementById('numberOfRooms').value);
+			var numberOfBedsText = document.createTextNode(document.getElementById('numberOfBeds').value);
+			var removeText = document.createTextNode("Remove");
+
+			var table = document.getElementById("addedRooms");
+			for (var i = 1, row; row = table.rows[i]; i++) {
+				if(numberOfBedsText.textContent == row.cells[1].innerText){
+					row.cells[0].innerText = numberOfRoomsText.textContent; 
+					$('#roomsModal').modal('hide');
+					return;
+				}
+			}
+		}
+
+		function closeModal(id){
+			$("#"+id).modal('hide');
+		}
+	},
+	methods: {
+		upload() {
+			var images = document.getElementById('files');
+			if(!(this.name && this.perDay && this.perHour && this.tags && this.country && this.city && this.address && document.getElementById("addedRooms").rows.length>1)){
+					$('#emptyErrorModal').modal('show');
+					$("#addCottageForm").submit(function(e) {
+    					e.preventDefault();
+					});
+					return;
 			}
 		}
 	}
