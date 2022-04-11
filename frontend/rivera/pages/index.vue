@@ -1,9 +1,11 @@
 <template>
-  <Tutorial/>
+<client-profile/>
 </template>
 
 <script>
+import ClientProfile from '../components/ClientProfile.vue';
 export default {
-  name: 'IndexPage'
-}
+  components: { ClientProfile },
+  name: "IndexPage",
+};
 </script>
