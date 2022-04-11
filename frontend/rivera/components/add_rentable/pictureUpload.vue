@@ -1,7 +1,7 @@
 <template>
 <div>
     <div>
-        <label for="files">Select multiple files: </label>
+        <label for="files">Select multiple files (first one is being used as a profile picture): </label>
         <input id="files" type="file" multiple/>        
     </div>
   <div style='margin:auto;'>
