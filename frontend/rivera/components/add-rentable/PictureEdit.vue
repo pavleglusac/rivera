@@ -2,25 +2,54 @@
 <div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <div>
-        <label for="files">Select multiple files: </label>
-        <input id="files" type="file" multiple/>        
+    
+    <div style='margin:auto;'>
+        <div id="sortableImgThumbnailPreviewEdit">
+            <Thumbnail v-for="image in images" :key="image" :path='image' @removedThumbnail="removeThumbnail" />
+        </div>
     </div>
-  <div style='margin:auto;'>
-    <div id="sortableImgThumbnailPreview">
-
-    </div>
-  </div>
 </div>
 
 </template>
 
 <script>
+import Thumbnail from './Thumbnail.vue'
 export default {
+    props: ['pictures'],
+    components: {Thumbnail},
+    data() {
+        return {
+            images: []
+        }
+    },
     methods: {
+        loadImages() {
+            var output = document.getElementById("sortableImgThumbnailPreviewEdit");
+        },
+        getImages() {
+            return this.images;
+        },
+        trimImageName(name) {
+            var n = name.lastIndexOf('\\');
+            var result = name.substring(n + 1);
+            return result;
+        },
+        removeIndex(index) {
+            
+        },
+
+        removeThumbnail(path) {
+            var index = this.images.indexOf(path);
+            if (index !== -1) {
+                this.images.splice(index, 1);
+            }
+            this.$emit('picturesChange', this.images);
+        }
+        
     },
     mounted() {
-        $("#sortableImgThumbnailPreview").sortable({
+        this.images = this.pictures;
+        $("#sortableImgThumbnailPreviewEdit").sortable({
             connectWith: ".RearangeBox",        
             start: function( event, ui ) { 
                 $(ui.item).addClass("dragElemThumbnail");
@@ -31,39 +60,18 @@ export default {
                 $(ui.item).removeClass("dragElemThumbnail");
             }
         });
-        $("#sortableImgThumbnailPreview").disableSelection();
+        $("#sortableImgThumbnailPreviewEdit").disableSelection();
 
+        this.loadImages();
 
-        document.getElementById('files').addEventListener('change', handleFileSelect, false);
-
-        function handleFileSelect(evt) {
-            var files = evt.target.files; 
-            var output = document.getElementById("sortableImgThumbnailPreview");
-            
-            for (var i = 0, f; f = files[i]; i++) {
-            if (!f.type.match('image.*')) {
-                continue;
-            }
-
-            var reader = new FileReader();
-            reader.onload = (function(theFile) {
-                return function(e) {
-                // Render thumbnail.
-                var imgThumbnailElem = "<div class='RearangeBox imgThumbContainer'>\
-                <i class='material-icons imgRemoveBtn' onclick='this.parentNode.outerHTML=``;'>REMOVE</i>\
-                <div class='IMGthumbnail' ><img  src='" + e.target.result + "'" + "title='"+ theFile.name + "'/></div>\
-                <div class='imgName'>"+ theFile.name +"</div></div>";
-                            
-                    output.innerHTML = output.innerHTML + imgThumbnailElem; 
-                
-                };
-            })(f);
-
-            reader.readAsDataURL(f);
+    },
+    watch: {
+        pictures() {
+            this.loadImages();
+        },
+        images() {
+            console.log(this.images);
         }
-  }
-
-
     }
 }
 </script>

@@ -12,15 +12,21 @@
 				<input type="number" class="form-control" v-model="capacity"  id="capacity" name="capacity" min="1" max="100" placeholder="Capacity">
 				</div>
 
-				<div class="form-group col-md-2">
+				<div class="form-group col-md-1">
 				<label for="name">Price per hour</label>
 				<input type="number" class="form-control" v-model="perHour"  id="perHour" name="perHour" min="0" placeholder="Price per hour">
 				</div>
 
-				<div class="form-group col-md-2">
+				<div class="form-group col-md-1">
 				<label for="name">Price per day</label>
 				<input type="number" class="form-control" v-model="perDay"  id="capacity" name="perDay" min="0" placeholder="Price per day">
 				</div>
+
+				<div class="form-group col-md-2">
+				<label for="name">Cancellation terms</label>
+				<input type="text" class="form-control" id="terms" placeholder="Cancellation terms" v-model="cancellationTerms">
+				</div>
+
 			</div>
 			<div class="form-group">
     			<label for="exampleFormControlTextarea1">Description</label>
@@ -62,6 +68,9 @@
 				</div>
 			</div>
 			<div class="d-flex">
+				<PictureEdit :pictures='pictures' @picturesChange='picturesChange' />
+			</div>
+			<div class="d-flex">
 				<PictureUpload />
 			</div>
 		</form>
@@ -73,8 +82,10 @@
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
 import PictureUpload from './PictureUpload.vue';
+import PictureEdit from './PictureEdit.vue'
+import Vue from 'vue'
 export default {
-	components: {PictureUpload},
+	components: {PictureUpload, PictureEdit},
 	computed: {
     countries () {
       const list = countries.getNames('en', { select: 'official' })
@@ -96,14 +107,37 @@ export default {
 			perHour: 0,
 			perDay: 0,
 			description: "",
-			capacity: 0
+			capacity: 0,
+			cancellationTerms: "",
+			pictures: [],
+			id: null
 		}
 	},
 	mounted() {
+		let that = this;
 		this.$axios
-        .get('/api/adventure?id=' + this.$route.params.adventure)
+        .get('/api/get-adventure?id=' + this.$route.params.adventure)
         .then((resp) => {
-            console.log(resp);
+            console.log(resp.data);
+			let adventure = resp.data;
+			that.name = adventure.name;
+			that.country = adventure.country;
+			that.equipment = adventure.equipment;
+			that.services = adventure.services;
+			that.address = adventure.address;
+			that.perHour = adventure.perHour;
+			that.perDay = adventure.perDay;
+			that.description = adventure.description;
+			that.capacity = adventure.capacity;
+			that.rulesOfConduct = adventure.rulesOfConduct;
+			that.cancellationTerms = adventure.cancellationTerms;
+			that.services = adventure.services;
+			that.equipment = adventure.equipment;
+			that.city = adventure.city;
+			that.country = adventure.country;
+			that.pictures.push(...adventure.pictures);
+			that.id = adventure.id;
+			console.log(that.pictures);
         })
         .catch((err) => {
             console.log(err);
@@ -112,19 +146,7 @@ export default {
 	methods: {
 		upload() {
 			var formData = new FormData();
-			console.log(this.name);
-			console.log(this.description);
-			console.log(this.perHour);
-			console.log(this.perDay);
-			console.log(this.services);
-			console.log(this.equipment);
-			console.log(this.tags);
-			console.log(this.country);
-			console.log(this.city);
-			console.log(this.address);
 			var images = document.getElementById('files');
-			console.log(images);
-			console.log(images.files);
 			formData.append("name", this.name);
 			formData.append("description", this.description);
 			formData.append("perHour", this.perHour);
@@ -134,21 +156,32 @@ export default {
 			formData.append("country", this.country);
 			formData.append("city", this.city);
 			formData.append("address", this.address);
+			formData.append("capacity", this.capacity);
+			formData.append("equipment", this.equipment);
+			formData.append("cancellationTerms", this.cancellationTerms);
+			formData.append("rulesOfConduct", this.rulesOfConduct);
+			formData.append("pictures", this.pictures);
+			formData.append("id", this.id);
+			if(images.files.length == 0) {
+				formData.append("images", []);
+			}
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
-			this.$axios
-            .post('/api/add-adventure', formData, {
+			this.$axios.post('/api/update-adventure', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
 				}
-			})
-            .then((resp) => {
+			}).then((resp) => {
 				console.log(resp);
-			})
-            .catch((err) => {
+			}).catch((err) => {
 				console.log(err);
 			});
+		},
+		picturesChange(pics) {
+			this.pictures = pics;
+			console.log("PARENT UPDATE PICS");
+			console.log(pics);
 		}
 	}
 }

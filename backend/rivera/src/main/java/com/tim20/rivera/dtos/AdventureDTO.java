@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class AdventureDTO {
+    private Integer id;
     private String name;
     private String description;
     private List<String> tags;
@@ -21,5 +22,6 @@ public class AdventureDTO {
     private String city;
     private String country;
     private Integer capacity;
-    private String cancellaitonTerms;
+    private String cancellationTerms;
+    private List<String> pictures;
 }
