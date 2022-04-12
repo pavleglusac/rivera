@@ -182,6 +182,59 @@ export default {
 	},
 	
 	mounted() {
+		let that = this;
+		this.$axios
+        .get('/api/cottage/get-cottage?id=' + this.$route.params.cottage)
+        .then((resp) => {
+			let cottage = resp.data;
+			that.name = cottage.name;
+			that.country = cottage.country;
+			that.equipment = cottage.equipment;
+			that.services = cottage.services;
+			that.address = cottage.address;
+			that.perHour = cottage.perHour;
+			that.perDay = cottage.perDay;
+			that.description = cottage.description;
+			that.rulesOfConduct = cottage.rulesOfConduct;
+			that.cancellationTerms = cottage.cancellationTerms;
+			that.services = cottage.services;
+			that.equipment = cottage.equipment;
+			that.city = cottage.city;
+			that.country = cottage.country;
+			that.tags = cottage.tags;
+			that.pictures.push(...cottage.pictures);
+			that.id = cottage.id;
+
+			var stringRooms = cottage.rooms.split(';');
+			var tbodyRef = document.getElementById('addedRooms').getElementsByTagName('tbody')[0];
+			for(var room of stringRooms){
+				if(!room.split(',')[0]){
+					break;
+				}
+				console.log("AAAAAAAAAAAA"+room);
+				var numberOfRoomsText = document.createTextNode(room.split(',')[0]);
+				var numberOfBedsText = document.createTextNode(room.split(',')[1]);
+				var removeText = document.createTextNode("Remove");				
+
+				var newRow = tbodyRef.insertRow();
+
+				var numberOfRooms = newRow.insertCell();
+				var numberOfBeds = newRow.insertCell();
+				var remove = newRow.insertCell();
+
+
+				numberOfRooms.appendChild(numberOfRoomsText);
+				numberOfBeds.appendChild(numberOfBedsText);
+				remove.appendChild(removeText);
+				remove.onclick = function(){
+					tbodyRef.removeChild(newRow);
+				}
+			}
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
 
 		document.getElementById('addRoom').onclick = function() {addRoom();}
 		document.getElementById('roomUpdate').onclick = function() {updateRoom();}
