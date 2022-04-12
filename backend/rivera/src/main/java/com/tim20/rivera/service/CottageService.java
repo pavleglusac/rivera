@@ -3,6 +3,7 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Pricelist;
+import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.PricelistRepository;
 import com.tim20.rivera.repository.TagRepository;
@@ -18,10 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CottageService {
@@ -75,13 +74,19 @@ public class CottageService {
 
     private Cottage dtoToCottage(CottageDTO dto) {
         Cottage cottage = new Cottage();
+        cottage.setPricelists(new ArrayList<>());
+        copyDtoToCottage(dto,cottage);
+        return cottage;
+    }
+
+    private void copyDtoToCottage(CottageDTO dto,Cottage cottage){
         cottage.setName(dto.getName());
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
-        cottage.setPricelists(new ArrayList<>());
         cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
         cottage.setRulesOfConduct(dto.getRulesOfConduct());
         cottage.setAddresss(dto.getAddress());
+        cottage.setPictures(dto.getPictures());
         cottage.setCity(dto.getCity());
         cottage.setCountry(dto.getCountry());
         cottage.setAddditionalServices(dto.getServices());
@@ -98,10 +103,7 @@ public class CottageService {
         tagService.addTagsIfNotPresent(dto.getTags());
         cottage.setTags(tagService.getTagsByNames(dto.getTags()));
 
-
-        return cottage;
     }
-
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
         Map<Integer, Integer> map = new HashMap<>();
@@ -115,5 +117,82 @@ public class CottageService {
 
     public List<Cottage> findAll(){
         return cottageRepository.findAll();
+    }
+
+    public CottageDTO getById(Integer id) {
+        Optional<Cottage> opt = cottageRepository.findById(id);
+        return (opt.isEmpty() ? null : cottageToDto(opt.get()));
+    }
+
+    private CottageDTO cottageToDto(Cottage cottage) {
+        CottageDTO dto = new CottageDTO();
+        dto.setAddress(cottage.getAddresss());
+        StringBuilder roomsString = new StringBuilder();
+        for (Map.Entry<Integer,Integer> entry : cottage.getRooms().entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            roomsString.append(key).append(",").append(value).append(";");
+        }
+        dto.setRooms(roomsString.toString());
+        dto.setId(cottage.getId());
+        dto.setAverageScore(cottage.getAverageScore());
+        dto.setDescription(cottage.getDescription());
+        Pricelist pricelist = cottage.getCurrentPricelist();
+        dto.setCancellationTerms(pricelist.getCancellationTerms());
+        dto.setName(cottage.getName());
+        dto.setTags(cottage
+                .getTags()
+                .stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList())
+        );
+        dto.setCity(cottage.getCity());
+        dto.setCountry(cottage.getCountry());
+        dto.setPerDay(pricelist.getPricePerDay());
+        dto.setPerHour(pricelist.getPricePerHour());
+        dto.setServices(cottage.getAddditionalServices());
+        dto.setPictures(cottage.getPictures());
+        dto.setRulesOfConduct(cottage.getRulesOfConduct());
+        dto.setId(cottage.getId());
+        return dto;
+    }
+
+
+    private List<String> savePictures(Cottage cottage, MultipartFile[] multipartFiles) throws IOException {
+        List<String> paths = new ArrayList<>();
+
+        if(multipartFiles == null) {
+            return paths;
+        }
+
+        Path path = Paths.get(STATIC_PATH + IMAGES_PATH + cottage.getId());
+        if (!Files.exists(path)) {
+            Files.createDirectories(path);
+        }
+
+
+        for (MultipartFile mpf : multipartFiles) {
+            String fileName = mpf.getOriginalFilename();
+            try (InputStream inputStream = mpf.getInputStream()) {
+                Path filePath = path.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                paths.add(IMAGES_PATH + cottage.getId() + "\\" + fileName);
+            } catch (IOException ioe) {
+                throw new IOException("Could not save image file: " + fileName, ioe);
+            }
+        }
+        return paths;
+    }
+
+    public void update(CottageDTO cottageDTO, MultipartFile[] multipartFiles) throws IOException {
+        Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
+        if(opt.isEmpty()) return;
+        Cottage cottage = opt.get();
+        List<String> paths = savePictures(cottage, multipartFiles);
+
+        cottageDTO.getPictures().addAll(paths);
+
+        copyDtoToCottage(cottageDTO, cottage);
+        cottageRepository.save(cottage);
     }
 }
