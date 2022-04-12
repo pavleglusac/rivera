@@ -10,6 +10,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class CottageDTO {
+    private Integer id;
     private String name;
     private String description;
     private List<String> tags;
@@ -23,4 +24,5 @@ public class CottageDTO {
     private String country;
     private String rooms;
     private String cancellationTerms;
+    private List<String> pictures;
 }

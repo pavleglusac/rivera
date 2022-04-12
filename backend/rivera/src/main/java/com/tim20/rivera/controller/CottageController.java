@@ -39,4 +39,21 @@ public class CottageController {
         return cottageService.findAll();
     }
 
+    @GetMapping(path="get-cottage")
+    public CottageDTO getCottage(@RequestParam("id") Integer id) throws IOException {
+        return cottageService.getById(id);
+    }
+
+
+    @PostMapping(path="update-cottage")
+    public ResponseEntity<String> updateCottage(
+            CottageDTO cottage,
+            @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
+    ) throws IOException {
+        cottageService.update(cottage, multipartFiles);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+
+
 }
