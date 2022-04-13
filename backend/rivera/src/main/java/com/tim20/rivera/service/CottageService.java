@@ -195,4 +195,8 @@ public class CottageService {
         copyDtoToCottage(cottageDTO, cottage);
         cottageRepository.save(cottage);
     }
+
+    public void delete(Integer id){
+        cottageRepository.delete(cottageRepository.findById(id).get());
+    }
 }

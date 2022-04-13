@@ -54,6 +54,12 @@ public class CottageController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PostMapping(path="delete-cottage")
+    public ResponseEntity<String> deleteCottage(Integer id){
+        cottageService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
 
 
 }

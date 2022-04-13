@@ -73,5 +73,4 @@ export default {
     '/api/': { target: 'http://localhost:8080/api', pathRewrite: {'^/api/': ''} }
   }
     // Build Configuration: https://go.nuxtjs.dev/config-build
-    build: {}
 }
