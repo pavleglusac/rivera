@@ -55,7 +55,7 @@ public class CottageController {
     }
 
     @PostMapping(path="delete-cottage")
-    public ResponseEntity<String> deleteCottage(Integer id){
+    public ResponseEntity<String> deleteCottage(@RequestParam Integer id){
         cottageService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
