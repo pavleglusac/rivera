@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="form-row">
-            <b-form-tags input-id="tags-basic"></b-form-tags>
+            <b-form-tags input-id="tags-basic" v-model="value"></b-form-tags>
         </div>
       </form>
     </div>
@@ -62,6 +62,34 @@ import UnauthenticatedNavbar from "../components/UnauthenticatedNavbar.vue";
 
 export default {
   components: { UnauthenticatedNavbar },
+
+  data() {
+    return {
+      options: [
+        "Apple",
+        "Orange",
+        "Banana",
+        "Lime",
+        "Peach",
+        "Chocolate",
+        "Strawberry",
+      ],
+      value: [],
+      tags: [],
+      text: "",
+    };
+  },
+  computed: {
+    availableOptions() {
+      return this.options;
+    },
+  },
+  methods: {
+    onOptionClick({ option, addTag }) {
+      addTag(option);
+      this.tags.append(option);
+    },
+  },
 };
 </script>
 
