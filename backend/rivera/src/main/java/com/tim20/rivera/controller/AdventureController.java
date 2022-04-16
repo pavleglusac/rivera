@@ -22,7 +22,7 @@ public class AdventureController {
     @Autowired
     private AdventureService adventureService;
 
-    @PostMapping(path="add-adventure")
+    @PostMapping(path = "add-adventure")
     public ResponseEntity<String> addAdventure(
             AdventureDTO adventure,
             @RequestPart("images") MultipartFile[] multipartFiles
@@ -32,12 +32,12 @@ public class AdventureController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-    @GetMapping(path="get-adventure")
+    @GetMapping(path = "get-adventure")
     public AdventureDTO getAdventure(@RequestParam("id") Integer id) throws IOException {
         return adventureService.getAdventure(id);
     }
 
-    @PostMapping(path="update-adventure")
+    @PostMapping(path = "update-adventure")
     public ResponseEntity<String> updateAdventure(
             AdventureDTO adventure,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles

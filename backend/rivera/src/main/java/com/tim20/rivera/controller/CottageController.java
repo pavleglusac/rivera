@@ -25,7 +25,7 @@ public class CottageController {
     @Autowired
     private CottageService cottageService;
 
-    @PostMapping(path="/add-cottage")
+    @PostMapping(path = "/add-cottage")
     public ResponseEntity<String> addCottage(
             CottageDTO cottage,
             @RequestPart("images") MultipartFile[] multipartFiles
@@ -34,18 +34,19 @@ public class CottageController {
         cottageService.insert(cottage, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
+
     @GetMapping(path = "/get-cottages")
     public List<Cottage> getCottages() {
         return cottageService.findAll();
     }
 
-    @GetMapping(path="get-cottage")
+    @GetMapping(path = "get-cottage")
     public CottageDTO getCottage(@RequestParam("id") Integer id) throws IOException {
         return cottageService.getById(id);
     }
 
 
-    @PostMapping(path="update-cottage")
+    @PostMapping(path = "update-cottage")
     public ResponseEntity<String> updateCottage(
             CottageDTO cottage,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
@@ -53,7 +54,6 @@ public class CottageController {
         cottageService.update(cottage, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
-
 
 
 }

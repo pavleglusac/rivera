@@ -19,6 +19,7 @@ public class TagService {
         Optional<Tag> opt = tagRepository.findByName(name);
         return opt.isEmpty() ? addTag(name) : opt.get();
     }
+
     public Tag addTag(String name) {
         Tag tag = new Tag();
         tag.setName(name);
@@ -26,11 +27,10 @@ public class TagService {
         return tag;
     }
 
-
-    public List<Tag> getTagsByNames(List<String> names){
+    public List<Tag> getTagsByNames(List<String> names) {
         List<Tag> tags = new ArrayList<Tag>();
-        for(String name : names){
-            if(tagRepository.findByName(name).isPresent()){
+        for (String name : names) {
+            if (tagRepository.findByName(name).isPresent()) {
                 tags.add(tagRepository.findByName(name).get());
             }
         }
@@ -38,8 +38,8 @@ public class TagService {
     }
 
     public void addTagsIfNotPresent(List<String> names) {
-        for(String name : names){
-            if(tagRepository.findByName(name).isEmpty()){
+        for (String name : names) {
+            if (tagRepository.findByName(name).isEmpty()) {
                 Tag tag = new Tag();
                 tag.setName(name);
                 tagRepository.save(tag);

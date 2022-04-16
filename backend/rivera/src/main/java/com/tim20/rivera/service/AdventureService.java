@@ -39,7 +39,7 @@ public class AdventureService {
     final String IMAGES_PATH = "\\images\\adventures\\";
 
     public Boolean addAdventure(AdventureDTO adventureDto,
-                                 @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
+                                @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
         Adventure adventure = dtoToAdventure(adventureDto);
         adventureRepository.save(adventure);
@@ -54,7 +54,7 @@ public class AdventureService {
     private List<String> savePictures(Adventure adventure, MultipartFile[] multipartFiles) throws IOException {
         List<String> paths = new ArrayList<>();
 
-        if(multipartFiles == null) {
+        if (multipartFiles == null) {
             return paths;
         }
 
@@ -99,10 +99,10 @@ public class AdventureService {
         dto.setCancellationTerms(pricelist.getCancellationTerms());
         dto.setName(adventure.getName());
         dto.setTags(adventure
-                    .getTags()
-                    .stream()
-                    .map(x -> x.getName())
-                    .collect(Collectors.toList())
+                .getTags()
+                .stream()
+                .map(x -> x.getName())
+                .collect(Collectors.toList())
         );
         dto.setCity(adventure.getCity());
         dto.setCountry(adventure.getCountry());
@@ -115,7 +115,7 @@ public class AdventureService {
         dto.setId(adventure.getId());
         return dto;
     }
-    
+
     public void copyDtoToAdventure(Adventure adventure, AdventureDTO dto) {
         adventure.setName(dto.getName());
         adventure.setCapacity(dto.getCapacity());
@@ -131,7 +131,7 @@ public class AdventureService {
 
         Pricelist pricelist = createPricelist(adventure, dto);
 
-        if(adventure.getPricelists() != null && !adventure.getPricelists().isEmpty()) {
+        if (adventure.getPricelists() != null && !adventure.getPricelists().isEmpty()) {
             Pricelist currPricelist = adventure.getCurrentPricelist();
             currPricelist.setEndDateTime(LocalDateTime.now());
             pricelistRepository.save(currPricelist);
@@ -162,7 +162,7 @@ public class AdventureService {
 
     public void updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
         Optional<Adventure> opt = adventureRepository.findById(dto.getId());
-        if(opt.isEmpty()) return;
+        if (opt.isEmpty()) return;
         Adventure adventure = opt.get();
         List<String> paths = savePictures(adventure, multipartFiles);
         paths.forEach(System.out::println);
