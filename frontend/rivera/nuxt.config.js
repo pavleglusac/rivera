@@ -33,10 +33,10 @@ export default {
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
     buildModules: [],
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    '@nuxtjs/fontawesome',
-  ],
+    // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
+    buildModules: [
+        '@nuxtjs/fontawesome',
+    ],
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: ['bootstrap-vue/nuxt'],
     bootstrapVue: {
@@ -47,31 +47,30 @@ export default {
         }
     },
 
-  fontawesome: {
-    icons: {
-      solid: true
-    }
+    fontawesome: {
+        icons: {
+            solid: true
+        }
 
-  },
+    },
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/bootstrap
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/axios'
-  ],
+    // Modules: https://go.nuxtjs.dev/config-modules
+    modules: [
+        // https://go.nuxtjs.dev/bootstrap
+        'bootstrap-vue/nuxt',
+        '@nuxtjs/axios'
+    ],
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
+    // Build Configuration: https://go.nuxtjs.dev/config-build
+    build: {},
 
-  axios: {
-    proxy: true
-  },
+    axios: {
+        proxy: true
+    },
 
-  proxy: {
-    '/api/': { target: 'http://localhost:8080/api', pathRewrite: {'^/api/': ''} }
-  }
+    proxy: {
+        '/api/': { target: 'http://localhost:8080/api', pathRewrite: { '^/api/': '' } }
+    },
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {}
 }

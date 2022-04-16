@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ClientNavbar from '../../components/ClientNavbar.vue';
+import ClientNavbar from '../../components/client/ClientNavbar.vue';
 export default {
   components: { ClientNavbar },
 }
