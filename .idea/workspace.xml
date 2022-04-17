@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01c0b849-5da6-422c-929a-24352112f3ce" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Rivera.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Rivera.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/rivera/src/main/java/com/tim20/rivera/controller/GreetingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/rivera/src/main/java/com/tim20/rivera/controller/GreetingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/rivera/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/rivera/pages/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
