@@ -211,7 +211,6 @@ export default {
 				if(!room.split(',')[0]){
 					break;
 				}
-				console.log("AAAAAAAAAAAA"+room);
 				var numberOfRoomsText = document.createTextNode(room.split(',')[0]);
 				var numberOfBedsText = document.createTextNode(room.split(',')[1]);
 				var removeText = document.createTextNode("Remove");				

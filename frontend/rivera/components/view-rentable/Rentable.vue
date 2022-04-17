@@ -39,24 +39,26 @@
                     <tr style="border-bottom: 1px solid #c9c9c9;">
                         <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="">Rooms: </td>
                         <td class="w-25">
-                            <li>1 bedded - 3 rooms</li>
-                            <li>2 bedded - 3 rooms</li>
-                            <li>4 bedded - 2 rooms</li>
+                            <li v-for="room in rooms"  :key="room" >
+                                {{room}}
+                            </li>
                         </td>
                     </tr>
                     <tr style="border-bottom: 1px solid #c9c9c9;">
-                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="">Rules of conduct: </td>
+                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="" >Rules of conduct: </td>
                         <td class="w-25">
-                            <li>Nullam eget felis eget nunc lobortis</li>
-                            <li>Mauris ultrices eros in cursus turpis massa tincidunt</li>
-                            <li>Porta non pulvinar neque laoreet suspendisse</li>
-                            <li>In vitae turpis massa sed elementum tempus egestas sed</li>
-                            <li>Mattis molestie a iaculis at. Tellus mauris a diam maecenas sed enim ut</li>
+                            <li v-for="rule in rulesOfConduct"  :key="rule" >
+                                {{rule}}
+                            </li>
                         </td>
                     </tr>
                     <tr style="">
                         <td style="font-size: 1.3em; font-weight: 400; width: 15%;" class="">Additional services: </td>
-                        <td class="w-25">3</td>
+                        <td class="w-25">
+                            <li v-for="service in services"  :key="service" >
+                                {{service}}
+                            </li>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -80,14 +82,14 @@
             </b-col>
             <b-col cols="4" class="align-items-center justify-content-center my-auto pr-2">
                 <div class="my-auto d-inline " style="font-size: 1.5em; font-weight: 500;">
-                    $380&nbsp;
+                    ${{perHour}}
                 </div>
                 <div class="d-inline my-auto" >
                     / hour
                 </div>
                 &nbsp;&nbsp;
                 <div class="my-auto d-inline " style="font-size: 1.5em; font-weight: 500;">
-                    $1500&nbsp;
+                    ${{perDay}}&nbsp;
                 </div>
                 <div class="d-inline my-auto" >
                     / day
@@ -142,18 +144,18 @@ export default {
   components: { MainCard, Carousel, Calendar, Discount, Review },
   data() {
       return {
-            location: 'Cairns, Australia',
-            name: 'Mountain fishing',
+            id: '',
+            location: '',
+            name: '',
+            cancellationTerms: '',
+            perHour: '',
+            perDay: '',
+            rulesOfConduct: '',
             score: 3.5,
-            description: 'Pellentesque habitant morbi tristique senectus et netus et malesuada \
-            fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum \
-            maximus quam mollis consequat',
-            pictures: ['https://images.pexels.com/photos/2431454/pexels-photo-2431454.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                    'https://images.unsplash.com/photo-1493787039806-2edcbe808750?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-                    'https://images.pexels.com/photos/4822293/pexels-photo-4822293.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                    'https://images.unsplash.com/photo-1493787039806-2edcbe808750?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-                    'https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-                    'https://images.unsplash.com/photo-1498855926480-d98e83099315?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'],
+            description: '',
+            pictures: [],
+            rooms: [],
+            services: "",
             tags: [
                 'pet firendly',
                 'canoe',
@@ -267,7 +269,42 @@ export default {
             ]
       }
     },
-    
+  mounted() {      
+		let that = this;
+		this.$axios
+        .get('/api/cottage/get-cottage?id=1')
+        .then((resp) => {
+            let cottage = resp.data;
+			that.name = cottage.name;
+			that.location = cottage.address+","+cottage.city+","+cottage.country;
+			that.services = cottage.services;
+			that.name = cottage.name;
+			that.perHour = cottage.perHour;
+			that.perDay = cottage.perDay;
+			that.description = cottage.description;
+			that.rulesOfConduct = cottage.rulesOfConduct;
+			that.description = cottage.rulesOfConduct;
+			that.cancellationTerms = cottage.cancellationTerms;
+			that.services = cottage.services;
+			that.tags = cottage.tags;
+            console.log("AAAAAAAAAAA"+that.pictures);
+			that.pictures.push(...cottage.pictures);
+            for (var i = 0;i < that.pictures.length;i++)
+                 that.pictures[i] = "http://localhost:8080/"+that.pictures[i];
+            console.log("BBBBBBBBBBB"+that.pictures);
+			that.id = cottage.id;
+			var stringRooms = cottage.rooms.split(';');
+            for(var room of stringRooms){
+				if(!room.split(',')[0]){
+					break;
+				}
+                var roomString = room.split(',')[1]+" bedded - " + room.split(',')[1];
+                (parseInt(room.split(',')[1])>1) ? roomString += " rooms" : roomString += " room"; 
+                that.rooms.push(roomString);
+            }
+            console.log("AAAAAAAAAA"+that.rooms);
+        });
+  }    
     
 }
 </script>

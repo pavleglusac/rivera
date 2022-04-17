@@ -10,7 +10,6 @@ export default {
     },
 	methods: {
 		deleteCottage() {
-            console.log("AAAAAAAAAAAA");
             let cottageId = parseInt(document.getElementById("idCottage").value);
 			this.$axios.post('/api/cottage/delete-cottage?id='+cottageId).then((resp) => {
 				console.log(resp);
