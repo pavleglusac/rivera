@@ -1,24 +1,22 @@
 <template>
   <b-container class="bv-example-row">
     <b-card
-      img-src="https://placekitten.com/300/300"
-      img-alt="Card image"
+      img-alt="Profile photo"
+      v-bind:src=photo
       img-left
       class="mb-3"
     >
       <b-card-text>
-        <h4>Mala maca</h4>
-        <h5>malamaca@gmail.com</h5>
-        <p>
+        <h4>{{name}}</h4>
+        <h5>{{email}}</h5>
+        <p v-model="description">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ad
           consectetur similique nulla alias, doloremque itaque, nesciunt tempore
           eligendi quaerat exercitationem ducimus quas. Nesciunt, facilis.
           Officiis molestiae aliquid at dignissimos.
         </p>
-        <a href="#"
-          ><b-icon icon="person-circle"></b-icon> Change profile photo</a
-        ><br />
-        <a href="#"><b-icon icon="trash-fill"></b-icon> Delete account</a>
+        <b-button @click="changePhoto" variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
+        <b-button variant="link"><b-icon icon="trash-fill"></b-icon> Delete account</b-button>
       </b-card-text>
     </b-card>
     <b-card>
@@ -88,7 +86,7 @@
               <div class="form-group col-6">
                 <label for="inputState">State</label>
                 <select id="inputState" v-model="country" class="form-control">
-                  <option selected>Choose...</option>
+                  <option selected>{{country}}</option>
                   <option
                     v-for="country in countries"
                     :key="country.label"
@@ -103,10 +101,11 @@
           </b-col>
           <b-col>
             <h4>Password Settings</h4>
-            <password-change />
+            <password-change :cpasswordText="password" />
 
             <h4>Loyalty Program</h4>
-            <p>Number of points you earned is 235.</p>
+            <p>Number of points you earned is {{numberOfPoints}}.</p>
+            <p>Number of penalties you have is {{numberOfPenalties}}.</p>
             <b-card
               bg-variant="light"
               header="Gold Program"
@@ -136,15 +135,45 @@ export default {
   },
   data() {
     return {
+      name: "",
+      photo: "",
+      email: "",
+      description: "",
+      password: "",
       firstName: "",
       lastName: "",
       phoneNumber: "",
       address: "",
       country: "",
       city: "",
+      numberOfPenalties: 5,
+      numberOfPoints: 5,
     };
   },
-  methods: {},
+  mounted() {
+    let that = this;
+    // http://localhost:3000/api/get-client?id=pera@gmail.com
+		this.$axios
+        .get('/api/get-client?id=' + this.$route.params.client)
+        .then((resp) => {
+            console.log(resp.data);
+			let client = resp.data;
+
+			that.name = client.name + client.surname;
+			that.firstName = client.name;
+			that.lastName = client.surname;
+			that.email = client.email;
+      that.password = client.password;
+
+			that.phoneNumber = client.phoneNumber;
+			that.photo = client.photo;
+			that.address = client.address;
+			that.country = client.country;
+			that.city = client.city;
+			that.numberOfPenalties = client.numberOfPenalties;
+			that.numberOfPoints = client.numberOfPoints;
+    });
+  },
   computed: {
     firstNameValidation() {
       return this.firstName.length != 0;
@@ -161,9 +190,6 @@ export default {
     countries() {
       const list = countries.getNames("en", { select: "official" });
       return Object.keys(list).map((key) => ({ value: key, label: list[key] }));
-    },
-    buttonLabel() {
-      return this.showPassword ? "Hide" : "Show";
     },
   },
 };
