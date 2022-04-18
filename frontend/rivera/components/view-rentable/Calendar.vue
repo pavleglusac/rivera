@@ -12,6 +12,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 
 export default {
+  props: ['reservations'],
   components: {
     FullCalendar // make the <FullCalendar> tag available
   },
@@ -26,7 +27,7 @@ export default {
         },
         height: "100%",
         initialView: 'dayGridMonth',
-        initialEvents: [
+        events: [
             {
                 title: 'BCH237',
                 start: '2022-04-10T10:30:00',
@@ -54,6 +55,20 @@ export default {
       currentEvents: [],
     }
   },
+  mounted() {
+    console.log("HEEJJ");
+    console.log(this.calendarOptions.events);
+    console.log(this.reservations);
+
+    // this.calendarOptions.events.push(...this.reservations)
+  },
+  watch: {
+    reservations: function(val, oldVal) {
+      console.log(val);
+      val.map((x) => { x.title="Reservation for: "+x.client.username; return x; })
+      this.calendarOptions.events = val
+    }
+  },
   methods: {
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends // update a property
@@ -75,9 +90,7 @@ export default {
       }
     },
     handleEventClick(clickInfo) {
-      if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-        clickInfo.event.remove()
-      }
+      confirm(`Clicked event '${clickInfo.event.title}'`);
     },
     handleEvents(events) {
       this.currentEvents = events
