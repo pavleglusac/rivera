@@ -1,8 +1,10 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.CottageDTO;
+import com.tim20.rivera.dto.CottageProfileDTO;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Pricelist;
+import com.tim20.rivera.model.Review;
 import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.PricelistRepository;
@@ -30,6 +32,9 @@ public class CottageService {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private ReviewService reviewService;
 
     @Autowired
     private PricelistRepository pricelistRepository;
@@ -124,6 +129,11 @@ public class CottageService {
         return (opt.isEmpty() ? null : cottageToDto(opt.get()));
     }
 
+    public CottageProfileDTO getFullById(Integer id) {
+        Optional<Cottage> opt = cottageRepository.findById(id);
+        return (opt.isEmpty() ? null : cottageToProfileDto(opt.get()));
+    }
+
     private CottageDTO cottageToDto(Cottage cottage) {
         CottageDTO dto = new CottageDTO();
         dto.setAddress(cottage.getAddresss());
@@ -154,6 +164,41 @@ public class CottageService {
         dto.setPictures(cottage.getPictures());
         dto.setRulesOfConduct(cottage.getRulesOfConduct());
         dto.setId(cottage.getId());
+        return dto;
+    }
+
+
+    private CottageProfileDTO cottageToProfileDto(Cottage cottage) {
+        CottageProfileDTO dto = new CottageProfileDTO();
+        dto.setAddress(cottage.getAddresss());
+        StringBuilder roomsString = new StringBuilder();
+        for (Map.Entry<Integer,Integer> entry : cottage.getRooms().entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+            roomsString.append(key).append(",").append(value).append(";");
+        }
+        dto.setRooms(roomsString.toString());
+        dto.setId(cottage.getId());
+        dto.setAverageScore(cottage.getAverageScore());
+        dto.setDescription(cottage.getDescription());
+        Pricelist pricelist = cottage.getCurrentPricelist();
+        dto.setCancellationTerms(pricelist.getCancellationTerms());
+        dto.setName(cottage.getName());
+        dto.setTags(cottage
+                .getTags()
+                .stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList())
+        );
+        dto.setCity(cottage.getCity());
+        dto.setCountry(cottage.getCountry());
+        dto.setPerDay(pricelist.getPricePerDay());
+        dto.setPerHour(pricelist.getPricePerHour());
+        dto.setServices(cottage.getAddditionalServices());
+        dto.setPictures(cottage.getPictures());
+        dto.setRulesOfConduct(cottage.getRulesOfConduct());
+        dto.setId(cottage.getId());
+        dto.setReviews(cottage.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         return dto;
     }
 

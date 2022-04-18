@@ -9,7 +9,7 @@
                         </div>
                         <div class="name-user">
                             <strong>{{review.client.name}} {{review.client.surname}}</strong>
-                            <span>@liammendes</span>
+                            <span> {{review.client.email}}</span>
                         </div>
                     </div>
                     <div class="reviews">

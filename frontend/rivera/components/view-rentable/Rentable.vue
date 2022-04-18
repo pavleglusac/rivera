@@ -183,98 +183,23 @@ export default {
                 }
             ],
             reviews: [
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl\
-                    x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl\
-                    x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                },  
-                {
-                    client: {
-                        name: 'Neko drugi',
-                        photo: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '11/5/20',
-                    score: 5.0,
-                    text: "Ut mollis erat non quam rhoncus sodales. Nulla facilisi. Duis sit amet pellentesque dolor. Aliquam mollis rhoncus risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis"
-                },
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                },
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                },
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                }, 
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                }, 
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                }, 
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                }, 
-                {
-                    client: {
-                        name: 'Mika Mikic',
-                        photo: 'https://images.unsplash.com/photo-1610216705422-caa3fcb6d158?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80'
-                    },
-                    posted: '15/2/20',
-                    score: 3.3,
-                    text: "Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi erat varius magna, sit amet imperdiet tellus ex non nisl"
-                }, 
             ]
       }
     },
   mounted() {      
 		let that = this;
 		this.$axios
-        .get('/api/cottage/get-cottage?id=1')
+        .get('/api/cottage/get-full-cottage?id=1')
         .then((resp) => {
             let cottage = resp.data;
+            console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
+            that.reviews = cottage.reviews;
+            for (const [key, value] of Object.entries(cottage.reviews)) {
+                console.log(`${key}: ${value}`+'---------');
+                for (const [key, value] of Object.entries(value)) {
+                console.log(`${key}: ${value}`+'---------');
+                }
+            }
 			that.name = cottage.name;
 			that.location = cottage.address+","+cottage.city+","+cottage.country;
 			that.services = cottage.services;
@@ -283,7 +208,6 @@ export default {
 			that.perDay = cottage.perDay;
 			that.description = cottage.description;
 			that.rulesOfConduct = cottage.rulesOfConduct;
-			that.description = cottage.rulesOfConduct;
 			that.cancellationTerms = cottage.cancellationTerms;
 			that.services = cottage.services;
 			that.tags = cottage.tags;

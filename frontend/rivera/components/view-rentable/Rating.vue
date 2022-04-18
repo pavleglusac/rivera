@@ -13,11 +13,6 @@ export default {
         this.fulls = parseInt(this.score);
         this.halfs = this.fulls == this.score ? 0 : 1;
         this.emptys = 5 - this.halfs - this.fulls;
-        console.log(this.score);
-        console.log(this.fulls);
-        console.log(this.halfs);
-        console.log(this.emptys);
-        console.log("-------------");
     },
     data() {
         return {

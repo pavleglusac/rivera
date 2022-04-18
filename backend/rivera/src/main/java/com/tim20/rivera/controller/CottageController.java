@@ -1,11 +1,10 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.CottageDTO;
-import com.tim20.rivera.model.Calendar;
-import com.tim20.rivera.model.Cottage;
-import com.tim20.rivera.model.Discount;
-import com.tim20.rivera.model.Pricelist;
+import com.tim20.rivera.dto.CottageProfileDTO;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.service.CottageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +23,9 @@ public class CottageController {
 
     @Autowired
     private CottageService cottageService;
+
+    @Autowired
+    private RentableRepository rentableRepository;
 
     @PostMapping(path="/add-cottage")
     public ResponseEntity<String> addCottage(
@@ -44,6 +46,11 @@ public class CottageController {
         return cottageService.getById(id);
     }
 
+    @GetMapping(path="get-full-cottage")
+    public CottageProfileDTO getFullCottage(@RequestParam("id") Integer id) throws IOException {
+        return cottageService.getFullById(id);
+    }
+
 
     @PostMapping(path="update-cottage")
     public ResponseEntity<String> updateCottage(
@@ -58,6 +65,11 @@ public class CottageController {
     public ResponseEntity<String> deleteCottage(@RequestParam Integer id){
         cottageService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @GetMapping(path="test")
+    public List<Rentable> test(){
+        return  rentableRepository.findAll();
     }
 
 
