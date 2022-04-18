@@ -13,7 +13,6 @@ import java.util.Map;
 @Entity
 @Data
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Cottage extends Rentable {
     @ElementCollection
     Map<Integer, Integer> rooms;
