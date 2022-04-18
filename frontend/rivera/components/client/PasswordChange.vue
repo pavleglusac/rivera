@@ -116,10 +116,10 @@ export default {
   },
   computed: {
     currentPasswordValidation() {
-      return this.cpasswordText == "current";
+      return true;
     },
     newPasswordValidation() {
-      return this.passwordText.length >= 8;
+      return true;
     },
     newPasswordAgainValidation() {
       return this.rpasswordText == this.passwordText;
