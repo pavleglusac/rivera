@@ -3,10 +3,7 @@ package com.tim20.rivera.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -16,6 +13,8 @@ public abstract class Person {
 
     @Id
     private String email;
+    @Column(unique = true)
+    private String username;
     private String password;
     private String name;
     private String surname;

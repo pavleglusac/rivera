@@ -22,6 +22,7 @@ public class Discount {
     private Integer capacity;
     @ManyToMany
     private List<Tag> tags;
+
     @ManyToOne
     @JoinColumn(name = "rentable_id")
     private Rentable rentable;

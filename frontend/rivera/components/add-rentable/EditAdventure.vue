@@ -1,5 +1,5 @@
 <template>
-    <div class="p-5 mt-3">  
+    <div class="p-5 mt-3">
 		<form>
 			<div class="form-row">
 				<div class="form-group col-md-4">
@@ -13,12 +13,12 @@
 				</div>
 
 				<div class="form-group col-md-1">
-				<label for="name">Price per hour</label>
+				<label for="name">$ per hour</label>
 				<input type="number" class="form-control" v-model="perHour"  id="perHour" name="perHour" min="0" placeholder="Price per hour">
 				</div>
 
 				<div class="form-group col-md-1">
-				<label for="name">Price per day</label>
+				<label for="name">$ per day</label>
 				<input type="number" class="form-control" v-model="perDay"  id="capacity" name="perDay" min="0" placeholder="Price per day">
 				</div>
 
@@ -74,7 +74,7 @@
 				<PictureUpload />
 			</div>
 		</form>
-		<button @click="upload" class="btn btn-primary float-right">Add adventure</button>
+		<button @click="upload" class="btn btn-primary float-right">Update adventure</button>
 	</div>
 </template>
 
@@ -137,6 +137,8 @@ export default {
 			that.country = adventure.country;
 			that.pictures.push(...adventure.pictures);
 			that.id = adventure.id;
+			that.tags = adventure.tags;
+			that.cancellationTerms = adventure.cancellationTerms;
 			console.log(that.pictures);
         })
         .catch((err) => {

@@ -1,11 +1,11 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dtos.AdventureDTO;
-import com.tim20.rivera.model.Adventure;
-import com.tim20.rivera.model.Pricelist;
-import com.tim20.rivera.model.Tag;
+import com.tim20.rivera.dto.*;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.AdventureRepository;
 import com.tim20.rivera.repository.PricelistRepository;
+import com.tim20.rivera.repository.ReservationRepository;
+import com.tim20.rivera.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -20,6 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,21 @@ public class AdventureService {
 
     @Autowired
     private PricelistRepository pricelistRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private DiscountService discountService;
+
+    @Autowired
+    private ClientService clientService;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String IMAGES_PATH = "\\images\\adventures\\";
@@ -173,4 +189,63 @@ public class AdventureService {
         copyDtoToAdventure(adventure, dto);
         adventureRepository.save(adventure);
     }
+
+    public AdventureProfileDTO getFullById(Integer id) {
+        Optional<Adventure> opt = adventureRepository.findById(id);
+        return (opt.isEmpty() ? null : adventureToProfileDto(opt.get()));
+    }
+
+    private AdventureProfileDTO adventureToProfileDto(Adventure adventure) {
+        AdventureProfileDTO dto = new AdventureProfileDTO();
+        dto.setAddress(adventure.getAddresss());
+        StringBuilder roomsString = new StringBuilder();
+        dto.setId(adventure.getId());
+        dto.setAverageScore(adventure.getAverageScore());
+        dto.setDescription(adventure.getDescription());
+        Pricelist pricelist = adventure.getCurrentPricelist();
+        dto.setCancellationTerms(pricelist.getCancellationTerms());
+        dto.setName(adventure.getName());
+        dto.setTags(adventure
+                .getTags()
+                .stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList())
+        );
+        dto.setCity(adventure.getCity());
+        dto.setCountry(adventure.getCountry());
+        dto.setPerDay(pricelist.getPricePerDay());
+        dto.setPerHour(pricelist.getPricePerHour());
+        dto.setServices(adventure.getAddditionalServices());
+        dto.setPictures(adventure.getPictures());
+        dto.setRulesOfConduct(adventure.getRulesOfConduct());
+        dto.setId(adventure.getId());
+        dto.setReviews(adventure.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
+        dto.setDiscounts(adventure.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
+        dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(adventure, false, LocalDateTime.now()).isEmpty());
+        dto.setOwner(fishingInstructorToDto(adventure.getOwner()));
+        dto.setEquipment(adventure.getFishingEquipment());
+        dto.setCapacity(adventure.getCapacity());
+        dto.setReservations(adventure.getReservations().stream().map(this::reservationToDto).collect(Collectors.toList()));
+        return dto;
+    }
+
+    private ReservationDTO reservationToDto(Reservation reservation) {
+        ReservationDTO dto = new ReservationDTO();
+        dto.setStart(reservation.getStartDateTime());
+        dto.setEnd(reservation.getEndDateTime());
+        dto.setCancelled(reservation.getCancelled());
+        dto.setClient(clientService.clientToCRDto(reservation.getClient()));
+        return dto;
+    }
+
+    private FishingInstructorAdventureProfileDto fishingInstructorToDto(FishingInstructor owner) {
+        var dto = new FishingInstructorAdventureProfileDto();
+        dto.setSurname(owner.getSurname());
+        dto.setName(owner.getName());
+        dto.setBiography(owner.getBiography());
+        dto.setPicture(owner.getPhoto());
+        return dto;
+    }
+
+
 }

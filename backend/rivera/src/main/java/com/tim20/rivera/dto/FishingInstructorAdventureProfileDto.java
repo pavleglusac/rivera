@@ -5,10 +5,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ClientRentableDto {
-    private String username;
+public
+class FishingInstructorAdventureProfileDto {
+    private String picture;
     private String name;
     private String surname;
-    private String email;
-    private String photo;
+    private String biography;
 }

@@ -3,16 +3,16 @@ package com.tim20.rivera.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class Boat extends Rentable {
+
+    @ManyToOne()
+    private BoatOwner owner;
     private BoatType type;
     private Double length;
     private Integer capacity;

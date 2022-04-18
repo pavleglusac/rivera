@@ -4,11 +4,20 @@
 		<div class="d-flex justify-content-center pt-4">
 			<span class="align-middle p-0" style="font-size: 2em; font-weight: 500;">${{discount.price}}</span>
 		</div>
-		<div class="d-flex justify-content-center">
-			{{discount.start}} - {{discount.end}}
+		<div class="d-flex flex-column justify-content-center">
+			<div class="d-flex justify-content-center">
+				{{discount.start}} 
+			</div>
+			<div class="d-flex justify-content-center">
+				<font-awesome-icon icon="arrow-down"/>
+			</div>
+			<div class="d-flex justify-content-center">
+			 {{discount.end}}
+			</div>
+			<br>
 		</div>
 		<div class="d-flex mt-2 justify-content-center pb-3">
-			<b-button class="mt-2" style="background-color: #171F30; border-radius: 10%;">Reservation</b-button>
+			<b-button class="mt-2" style="background-color: #171F30; border-radius: 10%;">reserve</b-button>
 		</div>
 	</div>
 	<div class="pl-2 mb-3 mt-3">

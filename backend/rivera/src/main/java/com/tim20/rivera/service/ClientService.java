@@ -9,6 +9,7 @@ public class ClientService {
 
     public ClientRentableDto clientToCRDto(Client client){
         ClientRentableDto clientRentableDto = new ClientRentableDto();
+        clientRentableDto.setUsername(client.getUsername());
         clientRentableDto.setName(client.getName());
         clientRentableDto.setEmail(client.getEmail());
         clientRentableDto.setPhoto(client.getPhoto());

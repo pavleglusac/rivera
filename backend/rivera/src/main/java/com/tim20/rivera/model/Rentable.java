@@ -34,17 +34,17 @@ public class Rentable {
     @ManyToMany
     private List<Tag> tags;
     private Double averageScore;
-    @OneToMany(mappedBy = "rentable")
+    @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Review> reviews;
-    @OneToMany(mappedBy = "rentable")
+    @OneToMany(mappedBy = "rentable", cascade = CascadeType.PERSIST)
     private List<Discount> discounts;
-    @OneToMany(mappedBy = "rentable")
+    @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Pricelist> pricelists;
     @OneToOne
     private Pricelist currentPricelist;
-    @OneToMany(mappedBy = "rentable")
+    @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Calendar> calendars;
-    @OneToMany(mappedBy = "rentable")
+    @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
 }

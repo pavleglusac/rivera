@@ -211,7 +211,7 @@ export default {
             that.discounts = cottage.discounts;
 			that.pictures.push(...cottage.pictures);
             for (var i = 0;i < that.pictures.length;i++)
-                 that.pictures[i] = "http://localhost:8080/"+that.pictures[i];
+                 that.pictures[i] = "http://localhost:8080"+that.pictures[i];
 			that.id = cottage.id;
 			var stringRooms = cottage.rooms.split(';');
             for(var room of stringRooms){

@@ -2,7 +2,7 @@
     <div class='RearangeBox imgThumbContainer' id="+index+">
         <i class='material-icons imgRemoveBtn' @click='remove()'>REMOVE</i>
         <div class='IMGthumbnail'>
-            <img :src="'http://localhost:8080' + path" />
+            <img :src="'http://localhost:8080' + path" style="object-fit: cover;"/>
         </div>
     <div class='imgName'> {{ trimImageName(path) }} </div></div>
 </template>
