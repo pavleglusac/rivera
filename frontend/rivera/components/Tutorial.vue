@@ -46,7 +46,15 @@
 </template>
 
 <script>
+
 export default {
-  name: 'NuxtTutorial'
+  name: 'NuxtTutorial',
+  mounted() {
+    this.$axios.post('/api/add-greeting').then((resp) => {
+      console.log(resp);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 }
 </script>
