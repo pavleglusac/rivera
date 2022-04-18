@@ -5,10 +5,10 @@
 			<span class="align-middle p-0" style="font-size: 2em; font-weight: 500;">${{discount.price}}</span>
 		</div>
 		<div class="d-flex justify-content-center">
-			{{discount.start}} - {{discount.end}}
+			{{discount.start[2]}}/{{discount.start[1]}}/{{discount.start[0]}} - {{discount.end[2]}}/{{discount.end[1]}}/{{discount.end[0]}}
 		</div>
 		<div class="d-flex mt-2 justify-content-center pb-3">
-			<b-button class="mt-2" style="background-color: #171F30; border-radius: 10%;">Reservation</b-button>
+			<b-button class="mt-2" style="background-color: #171F30; border-radius: 10%;">Reserve</b-button>
 		</div>
 	</div>
 	<div class="pl-2 mb-3 mt-3">

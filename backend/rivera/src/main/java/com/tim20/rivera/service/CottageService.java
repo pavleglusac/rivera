@@ -37,6 +37,9 @@ public class CottageService {
     private ReviewService reviewService;
 
     @Autowired
+    private DiscountService discountService;
+
+    @Autowired
     private PricelistRepository pricelistRepository;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
@@ -199,6 +202,7 @@ public class CottageService {
         dto.setRulesOfConduct(cottage.getRulesOfConduct());
         dto.setId(cottage.getId());
         dto.setReviews(cottage.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
+        dto.setDiscounts(cottage.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
         return dto;
     }
 

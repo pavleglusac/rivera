@@ -25,4 +25,5 @@ public class CottageProfileDTO {
     private String cancellationTerms;
     private List<String> pictures;
     private List<ReviewProfileDTO> reviews;
+    private List<DiscountProfileDTO> discounts;
 }

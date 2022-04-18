@@ -194,12 +194,6 @@ export default {
             let cottage = resp.data;
             console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
             that.reviews = cottage.reviews;
-            for (const [key, value] of Object.entries(cottage.reviews)) {
-                console.log(`${key}: ${value}`+'---------');
-                for (const [key, value] of Object.entries(value)) {
-                console.log(`${key}: ${value}`+'---------');
-                }
-            }
 			that.name = cottage.name;
 			that.location = cottage.address+","+cottage.city+","+cottage.country;
 			that.services = cottage.services;
@@ -211,11 +205,11 @@ export default {
 			that.cancellationTerms = cottage.cancellationTerms;
 			that.services = cottage.services;
 			that.tags = cottage.tags;
-            console.log("AAAAAAAAAAA"+that.pictures);
+            that.discounts = cottage.discounts;
+            console.log("aaaaaaaaaa"+cottage.discounts[0].end[0]);
 			that.pictures.push(...cottage.pictures);
             for (var i = 0;i < that.pictures.length;i++)
                  that.pictures[i] = "http://localhost:8080/"+that.pictures[i];
-            console.log("BBBBBBBBBBB"+that.pictures);
 			that.id = cottage.id;
 			var stringRooms = cottage.rooms.split(';');
             for(var room of stringRooms){
