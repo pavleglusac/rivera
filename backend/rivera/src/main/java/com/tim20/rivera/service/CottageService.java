@@ -206,10 +206,10 @@ public class CottageService {
         dto.setId(cottage.getId());
         dto.setReviews(cottage.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         dto.setDiscounts(cottage.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
-        System.out.println(reservationRepository.findByRentable(cottage).isEmpty());
-        System.out.println(reservationRepository.findByCancelled(false).isEmpty());
-        System.out.println(reservationRepository.findByStartDateTimeIsAfter(LocalDateTime.now()).isEmpty());
-        System.out.println(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
+//        System.out.println(reservationRepository.findByRentable(cottage).isEmpty());
+//        System.out.println(reservationRepository.findByCancelled(false).isEmpty());
+//        System.out.println(reservationRepository.findByStartDateTimeIsAfter(LocalDateTime.now()).isEmpty());
+//        System.out.println(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
         dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
         return dto;
     }

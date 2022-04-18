@@ -1,7 +1,7 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dtos.AdventureDTO;
-import com.tim20.rivera.repository.AdventureRepository;
+import com.tim20.rivera.dto.AdventureDTO;
+import com.tim20.rivera.dto.AdventureProfileDTO;
 import com.tim20.rivera.service.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @RestController
 @RequestMapping("/api")
@@ -44,6 +39,17 @@ public class AdventureController {
     ) throws IOException {
 
         adventureService.updateAdventure(adventure, multipartFiles);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @GetMapping(path = "get-full-adventure")
+    public AdventureProfileDTO getFullAdventure(@RequestParam("id") Integer id) throws IOException {
+        return adventureService.getFullById(id);
+    }
+
+    @PostMapping(path="delete-adventure")
+    public ResponseEntity<String> deleteAdventure(@RequestParam Integer id){
+        adventureService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

@@ -22,7 +22,7 @@ public class Pricelist {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "rentable_id")
     private Rentable rentable;
 }

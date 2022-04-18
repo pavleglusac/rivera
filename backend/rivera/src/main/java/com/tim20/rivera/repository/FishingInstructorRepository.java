@@ -4,5 +4,8 @@ import com.tim20.rivera.model.FishingInstructor;
 import com.tim20.rivera.model.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FishingInstructorRepository extends JpaRepository<FishingInstructor, Integer> {
+import java.util.Optional;
+
+public interface FishingInstructorRepository extends JpaRepository<FishingInstructor, String> {
+    public Optional<FishingInstructor> findByUsername(String username);
 }

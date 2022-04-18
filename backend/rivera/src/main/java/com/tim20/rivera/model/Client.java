@@ -1,6 +1,7 @@
 package com.tim20.rivera.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties("client")
 public class Client extends Person {
     private Integer numberOfPenalties;

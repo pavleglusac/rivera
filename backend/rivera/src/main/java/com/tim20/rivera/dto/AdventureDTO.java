@@ -1,4 +1,4 @@
-package com.tim20.rivera.dtos;
+package com.tim20.rivera.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
