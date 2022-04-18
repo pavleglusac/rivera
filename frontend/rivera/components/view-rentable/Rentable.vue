@@ -189,7 +189,7 @@ export default {
   mounted() {      
 		let that = this;
 		this.$axios
-        .get('/api/cottage/get-full-cottage?id=1')
+        .get('/api/cottage/get-full-cottage?id=' + this.$route.params.cottage)
         .then((resp) => {
             let cottage = resp.data;
             console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");

@@ -8,7 +8,7 @@
             {{name}}
             <div class="float-right">
             <button type="button" class="btn btn-primary rounded-pill">Update</button>
-            <button type="button" class="btn rounded-pill btn-info ">Delete</button>
+            <button type="button" class="btn rounded-pill btn-info " @click="deleteRentable">Delete</button>
             </div>
         </h2>
         <div class="text-secondary" style="font-size: 0.8em;">
@@ -17,6 +17,30 @@
         <div id="desc" class="mt-4 w-75">
             {{description}}
         </div>
+
+
+
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Confirm dialog</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					</div>
+					<div class="modal-body">
+					Are you sure you want to delete?
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="roomUpdate" @click="confirmDeletion()">Yes</button>
+					<button type="button" class="btn btn-secondary" id="modalClosure"  @click="closeModal('deleteModal')">No</button>
+					</div>
+				</div>
+				</div>
+			</div>
+            
     </div>    
 </template>
 
@@ -26,8 +50,10 @@ export default {
         console.log(this.$route.params.cottage+"AAAAAAAAAAAAAAAAA");
     }, 
     methods: {
-        updateRentable(){
-		let that = this;
+        deleteRentable(){
+			$("#deleteModal").modal('show');		
+        },
+        confirmDeletion(){
 		this.$axios
         .post('/api/cottage/delete-cottage?id=' + this.$route.params.cottage)
         .then((resp) => {
@@ -35,9 +61,13 @@ export default {
 		}).catch((err) => {
 			console.log(err);
         });
-
+        this.closeModal("deleteModal");
         },
-        deleteRentable() {
+        closeModal(id){
+			$("#"+id).modal('hide');
+		}
+        ,
+        updateRentable() {
 
         }
     },
