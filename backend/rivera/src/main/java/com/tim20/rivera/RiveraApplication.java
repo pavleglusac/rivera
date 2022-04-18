@@ -46,6 +46,60 @@ public class RiveraApplication {
 	@Autowired
 	private FishingInstructorRepository fishingInstructorRepository;
 
+	private void initializeData2() {
+		Adventure adventure = new Adventure();
+		adventure.setName("Very Cool Fishing");
+		adventure.setAddresss("1234 Main St.");
+		adventure.setCity("Zrenjanin");
+		adventure.setCountry("Serbia");
+		adventure.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
+				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
+				" maximus quam mollis consequat");
+		adventure.setPictures(Arrays.asList("/images/adventures/1/img5.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img3.jpg",
+				"/images/adventures/1/img2.jpg",
+				"/images/adventures/1/img1.jpg"));
+
+		adventure.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
+		Pricelist pricelist = new Pricelist();
+		pricelist.setStartDateTime(LocalDateTime.now());
+		pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
+		pricelist.setPricePerHour(10.0);
+		pricelist.setPricePerDay(40.0);
+		pricelist.setCancellationTerms("20");
+		pricelist.setRentable(adventure);
+		adventure.setPricelists(Arrays.asList(pricelist));
+		adventure.setCurrentPricelist(pricelist);
+		pricelistRepository.save(pricelist);
+
+		adventure.setCapacity(5);
+
+		adventure.setFishingEquipment(Arrays.asList("Rod 123", "Silk 4", "Golden Bait"));
+		adventure.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
+		adventure.setAverageScore(3.3);
+
+		Discount discount1 = new Discount();
+		discount1.setCapacity(3);
+		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
+		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
+		discount1.setPrice(300.0);
+		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
+		discount1.setRentable(adventure);
+
+		Review review1 = new Review();
+		review1.setRentable(adventure);
+		review1.setPosted(LocalDateTime.now());
+		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
+				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
+		review1.setScore(3.3);
+		review1.setClient(clientRepository.findClientByUsername("pera").get());
+		review1.setStatus(ReviewStatus.ACCEPTED);
+		reviewRepository.save(review1);
+
+		adventure.setOwner(fishingInstructorRepository.findByUsername("marko").get());
+		adventureRepository.save(adventure);
+	}
 
 	@EventListener(ApplicationReadyEvent.class)
 	private void initializeData() {
@@ -75,11 +129,10 @@ public class RiveraApplication {
 		pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
 		pricelist.setPricePerHour(10.0);
 		pricelist.setPricePerDay(40.0);
+		pricelist.setCancellationTerms("20");
 		pricelist.setRentable(adventure);
-
 		adventure.setPricelists(Arrays.asList(pricelist));
 		adventure.setCurrentPricelist(pricelist);
-
 		pricelistRepository.save(pricelist);
 
 		adventure.setCapacity(4);
@@ -191,7 +244,7 @@ public class RiveraApplication {
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);
 
-
+		initializeData2();
 	}
 
 }

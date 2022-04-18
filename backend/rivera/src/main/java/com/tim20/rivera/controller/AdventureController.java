@@ -47,4 +47,10 @@ public class AdventureController {
         return adventureService.getFullById(id);
     }
 
+    @PostMapping(path="delete-adventure")
+    public ResponseEntity<String> deleteAdventure(@RequestParam Integer id){
+        adventureService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
 }

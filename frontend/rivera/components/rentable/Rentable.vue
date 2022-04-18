@@ -5,7 +5,7 @@
             <div style="box-shadow: 0 8px 6px -6px #bdbdbd;" class="w-100 h-100 d-flex">
                 <div class="d-flex flex-column" style="width: 35%; height: 100%; ">
                     <div style="height: 50%">
-                        <MainCard :location='location' :description='description' :name='name' :score='score' :canBeChanged="true"/>
+                        <MainCard :location='location' :description='description' :name='name' :score='score' :canBeChanged="!canBeChanged"/>
                     </div>
                     <div style="height: 40%">
                         <img :src="pictures[0]" alt="" class="m-0 p-0" style="object-fit: cover; min-height: 100%; max-height: 100%; min-width:100%; max-width: 100%;" >
@@ -25,7 +25,7 @@
                     <div class="w-100 mt-5" style="height: 60%;">
                         <img :src="pictures[1]" alt="" style="object-fit: cover; width: 100%; height: 100%;"  >
                     </div>
-                    <Carousel :pictures="pictures.slice(2, -1)" /> 
+                    <Carousel :pictures="pictures.slice(2, pictures.lenght)" /> 
                 </div>
             </div>
         </div>
@@ -155,24 +155,7 @@ export default {
                 surname: '',
                 biography: ''
             },
-            discounts: [
-                {
-                    id: 1,
-                    start: '12/5/22',
-                    end: '12/5/22',
-                    capacity: 2,
-                    price: 300,
-                    tags: ['river', 'kayak']
-                },
-                {
-                    id: 2,
-                    start: '12/5/22',
-                    end: '12/5/22',
-                    capacity: 4,
-                    price: 450,
-                    tags: ['mountain', 'extreme', 'lorem', 'ipsum']
-                }
-            ],
+            discounts: [],
             reviews: [],
             services: [],
             rulesOfConduct: [],
@@ -182,7 +165,8 @@ export default {
             perHour: 0,
             perDay: 0,
             biography: '',
-            reservations: []
+            reservations: [],
+            canBeChanged: false
       }
     },
     mounted() {

@@ -2,15 +2,13 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.AdventureRepository;
-import com.tim20.rivera.repository.PricelistRepository;
-import com.tim20.rivera.repository.ReservationRepository;
-import com.tim20.rivera.repository.ReviewRepository;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -51,8 +49,19 @@ public class AdventureService {
     @Autowired
     private ClientService clientService;
 
-    final String STATIC_PATH = "src\\main\\resources\\static\\";
-    final String IMAGES_PATH = "\\images\\adventures\\";
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
+
+    final String STATIC_PATH = "src/main/resources/static/";
+    final String STATIC_PATH_TARGET = "target/classes/static/";
+    final String IMAGES_PATH = "/images/adventures/";
+
+    private FishingInstructor temporaryOwner;
+
+    @PostConstruct
+    private void setTemporaryOwner() {
+        temporaryOwner = fishingInstructorRepository.getById("marko@gmail.com");
+    }
 
     public Boolean addAdventure(AdventureDTO adventureDto,
                                  @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
@@ -75,22 +84,28 @@ public class AdventureService {
         }
 
         Path path = Paths.get(STATIC_PATH + IMAGES_PATH + adventure.getId());
+        Path path_target = Paths.get(STATIC_PATH_TARGET + IMAGES_PATH + adventure.getId());
+        savePicturesOnPath(adventure, multipartFiles, paths, path);
+        savePicturesOnPath(adventure, multipartFiles, paths, path_target);
+
+        return paths.stream().distinct().collect(Collectors.toList());
+    }
+
+    private void savePicturesOnPath(Adventure adventure, MultipartFile[] multipartFiles, List<String> paths, Path path) throws IOException {
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-
 
         for (MultipartFile mpf : multipartFiles) {
             String fileName = mpf.getOriginalFilename();
             try (InputStream inputStream = mpf.getInputStream()) {
                 Path filePath = path.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                paths.add(IMAGES_PATH + adventure.getId() + "\\" + fileName);
+                paths.add(IMAGES_PATH + adventure.getId() + "/" + fileName);
             } catch (IOException ioe) {
                 throw new IOException("Could not save image file: " + fileName, ioe);
             }
         }
-        return paths;
     }
 
     private Adventure dtoToAdventure(AdventureDTO dto) {
@@ -163,6 +178,8 @@ public class AdventureService {
                         .map(x -> tagService.getOrAddTagByName(x))
                         .collect(Collectors.toList())
         );
+
+        adventure.setOwner(temporaryOwner);
     }
 
     private Pricelist createPricelist(Adventure adventure, AdventureDTO dto) {
@@ -248,4 +265,7 @@ public class AdventureService {
     }
 
 
+    public void delete(Integer id) {
+        adventureRepository.delete(adventureRepository.findById(id).get());
+    }
 }

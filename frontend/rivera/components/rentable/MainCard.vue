@@ -63,7 +63,7 @@ export default {
         },
         confirmDeletion(){
 		this.$axios
-        .post('/api/cottage/delete-adventure?id=' + this.$route.params.cottage)
+        .post('/api/delete-adventure?id=' + this.$route.params.adventure)
         .then((resp) => {
 			console.log(resp);
 		}).catch((err) => {
