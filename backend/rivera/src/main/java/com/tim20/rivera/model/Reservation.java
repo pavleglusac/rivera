@@ -1,5 +1,6 @@
 package com.tim20.rivera.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
+@JsonIgnoreProperties("reservations")
 public class Reservation {
 
     @Id
@@ -18,6 +20,9 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
+    @ManyToOne
+    @JoinColumn(name = "rentable_id")
+    private Rentable rentable;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Boolean cancelled;

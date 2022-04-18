@@ -8,6 +8,7 @@ import com.tim20.rivera.model.Review;
 import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.PricelistRepository;
+import com.tim20.rivera.repository.ReservationRepository;
 import com.tim20.rivera.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class CottageService {
 
     @Autowired
     CottageRepository cottageRepository;
+    @Autowired
+    ReservationRepository reservationRepository;
 
     @Autowired
     private TagService tagService;
@@ -203,6 +206,11 @@ public class CottageService {
         dto.setId(cottage.getId());
         dto.setReviews(cottage.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         dto.setDiscounts(cottage.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
+        System.out.println(reservationRepository.findByRentable(cottage).isEmpty());
+        System.out.println(reservationRepository.findByCancelled(false).isEmpty());
+        System.out.println(reservationRepository.findByStartDateTimeIsAfter(LocalDateTime.now()).isEmpty());
+        System.out.println(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
+        dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
         return dto;
     }
 

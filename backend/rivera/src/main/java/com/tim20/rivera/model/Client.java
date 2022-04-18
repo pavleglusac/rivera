@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
 @NoArgsConstructor
 @JsonIgnoreProperties("client")
 public class Client extends Person {

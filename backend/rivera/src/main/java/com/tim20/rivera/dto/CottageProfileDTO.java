@@ -23,6 +23,7 @@ public class CottageProfileDTO {
     private String country;
     private String rooms;
     private String cancellationTerms;
+    private Boolean canBeChanged;
     private List<String> pictures;
     private List<ReviewProfileDTO> reviews;
     private List<DiscountProfileDTO> discounts;

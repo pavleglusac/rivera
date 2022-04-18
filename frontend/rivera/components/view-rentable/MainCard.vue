@@ -7,8 +7,8 @@
             
             {{name}}
             <div class="float-right">
-            <button type="button" class="btn btn-primary rounded-pill">Update</button>
-            <button type="button" class="btn rounded-pill btn-info " @click="deleteRentable">Delete</button>
+            <button type="button" class="btn btn-primary rounded-pill" :disabled='canBeChanged'>Update</button>
+            <button type="button" class="btn rounded-pill btn-info "  :disabled='canBeChanged' @click="deleteRentable">Delete</button>
             </div>
         </h2>
         <div class="text-secondary" style="font-size: 0.8em;">
@@ -25,13 +25,13 @@
 				<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Confirm dialog</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Confirm delete dialog</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 					</div>
 					<div class="modal-body">
-					Are you sure you want to delete?
+					Are you sure you want to proceed?
 					</div>
 					<div class="modal-footer">
 					<button type="button" class="btn btn-primary" id="roomUpdate" @click="confirmDeletion()">Yes</button>
@@ -59,7 +59,7 @@ export default {
         .then((resp) => {
 			console.log(resp);
 		}).catch((err) => {
-			console.log(err);
+			console.log(err);   
         });
         this.closeModal("deleteModal");
         },
@@ -77,7 +77,7 @@ export default {
 
         }
     },
-    props: ['location', 'name', 'score', 'description']
+    props: ['location', 'name', 'score', 'description', 'canBeChanged']
 }
 </script>
 

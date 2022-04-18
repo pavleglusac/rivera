@@ -44,5 +44,7 @@ public class Rentable {
     private Pricelist currentPricelist;
     @OneToMany(mappedBy = "rentable")
     private List<Calendar> calendars;
+    @OneToMany(mappedBy = "rentable")
+    private List<Reservation> reservations;
 
 }

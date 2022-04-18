@@ -4,7 +4,7 @@
             <div style="box-shadow: 0 8px 6px -6px #bdbdbd;" class="w-100 h-100 d-flex">
                 <div class="d-flex flex-column" style="width: 35%; height: 100%; ">
                     <div style="height: 50%">
-                        <MainCard :location='location' :description='description' :name='name' :score='score'/>
+                        <MainCard :location='location' :description='description' :name='name' :score='score' :canBeChanged='canBeChanged'/>
                     </div>
                     <div style="height: 40%">
                         <img :src="pictures[0]" alt="" class="m-0 pr-1" style="object-fit: cover; min-height: 100%; max-height: 100%; min-width:100%; max-width: 100%;" >
@@ -156,6 +156,7 @@ export default {
             pictures: [],
             rooms: [],
             services: "",
+            canBeChanged: Boolean,
             tags: [
                 'pet firendly',
                 'canoe',
@@ -205,8 +206,9 @@ export default {
 			that.cancellationTerms = cottage.cancellationTerms;
 			that.services = cottage.services;
 			that.tags = cottage.tags;
+            that.canBeChanged = !cottage.canBeChanged;
+            console.log(that.canBeChanged +"------");
             that.discounts = cottage.discounts;
-            console.log("aaaaaaaaaa"+cottage.discounts[0].end[0]);
 			that.pictures.push(...cottage.pictures);
             for (var i = 0;i < that.pictures.length;i++)
                  that.pictures[i] = "http://localhost:8080/"+that.pictures[i];
