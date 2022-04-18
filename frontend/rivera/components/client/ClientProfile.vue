@@ -2,31 +2,36 @@
   <b-container class="bv-example-row">
     <b-card
       img-alt="Profile photo"
-      v-bind:src=photo
+      :img=photo
       img-left
       class="mb-3"
+      style="margin-top: 10px"
     >
       <b-card-text>
-        <h4>{{name}}</h4>
+        <h4>{{fullName}}</h4>
         <h5>{{email}}</h5>
+        <h5>{{photo}}</h5>
         <p v-model="description">
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ad
           consectetur similique nulla alias, doloremque itaque, nesciunt tempore
           eligendi quaerat exercitationem ducimus quas. Nesciunt, facilis.
           Officiis molestiae aliquid at dignissimos.
         </p>
-        <b-button @click="changePhoto" variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
+        <b-button v-b-modal.changePicture variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
+        <b-modal id="changePicture" title="Choose your new profile photo">
+          <b-form-file accept="image/*"></b-form-file>
+        </b-modal>
         <b-button variant="link"><b-icon icon="trash-fill"></b-icon> Delete account</b-button>
       </b-card-text>
     </b-card>
-    <b-card>
+    <b-card style="margin-bottom: 10px">
       <b-form @submit.stop.prevent>
         <b-row>
           <b-col>
             <h4>Profile Settings</h4>
             <label for="feedback-first-name">First Name</label>
             <b-form-input
-              v-model="firstName"
+              v-model="name"
               :state="firstNameValidation"
               id="feedback-first-name"
               placeholder="Enter your first name"
@@ -38,7 +43,7 @@
 
             <label for="feedback-last-name">Last Name</label>
             <b-form-input
-              v-model="lastName"
+              v-model="surname"
               :state="lastNameValidation"
               id="feedback-last-name"
               placeholder="Enter your last name"
@@ -97,7 +102,7 @@
                 </select>
               </div>
             </div>
-            <b-button block class="save-changes">Save changes</b-button>
+            <b-button @click="update" block class="save-changes">Save changes</b-button>
           </b-col>
           <b-col>
             <h4>Password Settings</h4>
@@ -135,13 +140,13 @@ export default {
   },
   data() {
     return {
-      name: "",
+      fullName: "",
       photo: "",
       email: "",
       description: "",
       password: "",
-      firstName: "",
-      lastName: "",
+      name: "",
+      surname: "",
       phoneNumber: "",
       address: "",
       country: "",
@@ -152,16 +157,15 @@ export default {
   },
   mounted() {
     let that = this;
-    // http://localhost:3000/api/get-client?id=pera@gmail.com
 		this.$axios
         .get('/api/get-client?id=' + this.$route.params.client)
         .then((resp) => {
             console.log(resp.data);
 			let client = resp.data;
 
-			that.name = client.name + client.surname;
-			that.firstName = client.name;
-			that.lastName = client.surname;
+			that.fullName = client.name + ' ' + client.surname;
+			that.name = client.name;
+			that.surname = client.surname;
 			that.email = client.email;
       that.password = client.password;
 
@@ -176,10 +180,10 @@ export default {
   },
   computed: {
     firstNameValidation() {
-      return this.firstName.length != 0;
+      return this.name.length != 0;
     },
     lastNameValidation() {
-      return this.lastName.length != 0;
+      return this.surname.length != 0;
     },
     phoneNumberValidation() {
       return this.phoneNumber.length >= 9;
@@ -192,6 +196,37 @@ export default {
       return Object.keys(list).map((key) => ({ value: key, label: list[key] }));
     },
   },
+  methods: {
+    update() {
+			var formData = new FormData();
+			formData.append("name", this.name);
+			formData.append("surname", this.surname);
+			formData.append("email", this.email);
+			formData.append("password", this.password);
+			formData.append("phoneNumber", this.phoneNumber);
+			formData.append("address", this.address);
+			formData.append("country", this.country);
+			formData.append("city", this.city);
+			formData.append("numberOfPenalties", this.numberOfPenalties);
+			formData.append("numberOfPoints", this.numberOfPoints);
+			formData.append("equipment", this.equipment);
+			formData.append("photo", this.photo);
+			this.$axios.post('/api/update-client', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}).then((resp) => {
+				console.log(resp);
+			}).catch((err) => {
+				console.log(err);
+			});
+		},
+    changeProfilePhoto(pic) {
+			this.photo = pic;
+			console.log("PARENT UPDATE PICS");
+			console.log(pics);
+		}
+  }
 };
 </script>
 
