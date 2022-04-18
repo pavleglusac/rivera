@@ -21,11 +21,11 @@
                     </div>
                 </div>
             <div class="d-flex flex-column h-100" style="width: 64%;">
-                <div class="w-100 mt-5" style="height: 60%;">
-                    <img :src="pictures[1]" alt="" class="m-0 p-1" style="object-fit: cover; width: 100%; height: 100%;"  >
+                    <div class="w-100 mt-5" style="height: 60%;">
+                        <img :src="pictures[1]" alt="" style="object-fit: cover; width: 100%; height: 100%;"  >
+                    </div>
+                    <Carousel :pictures="pictures.slice(2, pictures.lenght)" /> 
                 </div>
-                <Carousel /> 
-            </div>
             </div>
         </div>
 
@@ -118,12 +118,12 @@
             <div class="row h-100 gx-0">
                 <div class="col-6 gx-0 pr-0">
                     <div>
-                        <Review class="ml-2 mt-1 w-100 h-100" v-for="review in reviews.slice(0, 5)" :key="review.id" :review="review" />
+                        <Review class="ml-2 mt-1 w-100 h-100" v-for="review in reviews.slice().splice(0, Math.ceil(reviews.length / 2))" :key="review.id" :review="review" />
                     </div>
                 </div>
                 <div class="col-6 gx-0">
                     <div>
-                        <Review class="mt-1 w-100 h-100" v-for="review in reviews.slice(5)" :key="review.id" :review="review" />
+                        <Review class="mt-1 w-100 h-100" v-for="review in reviews.slice().splice(-Math.ceil(reviews.length / 2))" :key="review.id" :review="review" />
                     </div>
                 </div>
             </div>
@@ -156,7 +156,12 @@ export default {
             pictures: [],
             rooms: [],
             services: "",
-            canBeChanged: Boolean,
+            canBeChanged: false,
+            owner: {
+                picture: '',
+                name: '',
+                surname: '',
+            },
             tags: [
                 'pet firendly',
                 'canoe',
@@ -195,6 +200,7 @@ export default {
             let cottage = resp.data;
             console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
             that.reviews = cottage.reviews;
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080/" + x.client.photo)
 			that.name = cottage.name;
 			that.location = cottage.address+","+cottage.city+","+cottage.country;
 			that.services = cottage.services;
@@ -209,10 +215,12 @@ export default {
             that.canBeChanged = !cottage.canBeChanged;
             console.log(that.canBeChanged +"------");
             that.discounts = cottage.discounts;
-			that.pictures.push(...cottage.pictures);
-            for (var i = 0;i < that.pictures.length;i++)
-                 that.pictures[i] = "http://localhost:8080"+that.pictures[i];
+            that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
 			that.id = cottage.id;
+            that.owner = cottage.owner;
+            that.owner.picture = "http://localhost:8080" + that.owner.picture;
 			var stringRooms = cottage.rooms.split(';');
             for(var room of stringRooms){
 				if(!room.split(',')[0]){

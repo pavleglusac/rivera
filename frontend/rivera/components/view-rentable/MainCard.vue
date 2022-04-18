@@ -4,11 +4,16 @@
             {{location}}
         </p>
         <h2 id="name" class="mb-0">
-            
             {{name}}
-            <div class="float-right">
-            <button type="button" class="btn btn-primary rounded-pill" :disabled='canBeChanged'>Update</button>
-            <button type="button" class="btn rounded-pill btn-info "  :disabled='canBeChanged' @click="deleteRentable">Delete</button>
+            <div class="float-right mr-1">
+                <b-button type="button" class="btn btn-light rounded-pill" :disabled='canBeChanged' @click="updateRentable">
+                    <font-awesome-icon icon="pen-to-square"  />
+                    Update
+                </b-button>
+                <button type="button" class="btn rounded-pill btn-light "  :disabled='canBeChanged' @click="deleteRentable">
+                    <font-awesome-icon icon="trash"  />
+                    Delete
+                </button>
             </div>
         </h2>
         <div class="text-secondary" style="font-size: 0.8em;">
@@ -18,7 +23,9 @@
             {{description}}
         </div>
 
-
+        <b-modal id="update_modal" title="Update cottage" ref="update_modal" size="xl" hide-footer>
+            <EditCottage />
+        </b-modal>
 
 
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -45,9 +52,10 @@
 </template>
 
 <script>
+import EditCottage from './../add_rentable/editCottage.vue'
 export default {
+    components: { EditCottage },
     mounted() {
-        console.log(this.$route.params.cottage+"AAAAAAAAAAAAAAAAA");
     }, 
     methods: {
         deleteRentable(){
@@ -68,7 +76,7 @@ export default {
 		}
         ,
         updateRentable() {
-
+            this.$refs.update_modal.show();
         }
     },
     data() {

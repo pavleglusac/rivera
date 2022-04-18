@@ -2,19 +2,14 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.CottageProfileDTO;
-import com.tim20.rivera.model.Cottage;
-import com.tim20.rivera.model.Pricelist;
-import com.tim20.rivera.model.Review;
-import com.tim20.rivera.model.Tag;
-import com.tim20.rivera.repository.CottageRepository;
-import com.tim20.rivera.repository.PricelistRepository;
-import com.tim20.rivera.repository.ReservationRepository;
-import com.tim20.rivera.repository.TagRepository;
+import com.tim20.rivera.model.*;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -43,10 +38,39 @@ public class CottageService {
     private DiscountService discountService;
 
     @Autowired
+    private CottageOwnerService cottageOwnerService;
+
+    @Autowired
     private PricelistRepository pricelistRepository;
 
-    final String STATIC_PATH = "src\\main\\resources\\static\\";
-    final String IMAGES_PATH = "\\images\\cottages\\";
+    @Autowired
+    private CottageOwnerRepository cottageOwnerRepository;
+
+    final String STATIC_PATH = "src/main/resources/static/";
+    final String STATIC_PATH_TARGET = "target/classes/static/";
+    final String IMAGES_PATH = "/images/cottages/";
+
+    private CottageOwner temporaryOwner;
+
+
+    @PostConstruct
+    private void setTemporaryOwner() {
+        temporaryOwner = new CottageOwner();
+        temporaryOwner.setName("Marko");
+        temporaryOwner.setSurname("Markovic");
+        temporaryOwner.setAddress("Njegoseva 35");
+        temporaryOwner.setCity("Zrenjanin");
+        temporaryOwner.setCountry("Serbia");
+        temporaryOwner.setStatus(AccountStatus.ACTIVE);
+        temporaryOwner.setDeleted(false);
+        temporaryOwner.setEmail("marko@gmail.com");
+        temporaryOwner.setPassword("sifra");
+        temporaryOwner.setPhoneNumber("+3845135535");
+        temporaryOwner.setUsername("marko");
+        temporaryOwner.setPhoto("/images/clients/" + temporaryOwner.getUsername() + ".jpg");
+        temporaryOwner.setCottages(new ArrayList<Cottage>());
+        cottageOwnerRepository.save(temporaryOwner);
+    }
 
     public Boolean insert(CottageDTO cottageDto,
                               @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
@@ -58,28 +82,50 @@ public class CottageService {
         }
 
         cottageRepository.save(cottage);
+
+        List<String> paths = new ArrayList<>();
+
+        paths = savePictures(cottage, multipartFiles);
+
+        cottage.setPictures(paths);
+        cottage.setProfilePicture(paths.get(0));
+        cottageRepository.save(cottage);
+        cottageOwnerRepository.save(temporaryOwner);
+        return true;
+    }
+
+
+
+    private List<String> savePictures(Cottage cottage, MultipartFile[] multipartFiles) throws IOException {
+        List<String> paths = new ArrayList<>();
+
+        if(multipartFiles == null) {
+            return paths;
+        }
+
         Path path = Paths.get(STATIC_PATH + IMAGES_PATH + cottage.getId());
+        Path path_target = Paths.get(STATIC_PATH_TARGET + IMAGES_PATH + cottage.getId());
+        savePicturesOnPath(cottage, multipartFiles, paths, path);
+        savePicturesOnPath(cottage, multipartFiles, paths, path_target);
+
+        return paths.stream().distinct().collect(Collectors.toList());
+    }
+
+    private void savePicturesOnPath(Cottage cottage, MultipartFile[] multipartFiles, List<String> paths, Path path) throws IOException {
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-
-        List<String> paths = new ArrayList<>();
 
         for (MultipartFile mpf : multipartFiles) {
             String fileName = mpf.getOriginalFilename();
             try (InputStream inputStream = mpf.getInputStream()) {
                 Path filePath = path.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                paths.add(IMAGES_PATH + cottage.getId() + "\\" + fileName);
+                paths.add(IMAGES_PATH + cottage.getId() + "/" + fileName);
             } catch (IOException ioe) {
                 throw new IOException("Could not save image file: " + fileName, ioe);
             }
         }
-
-        cottage.setPictures(paths);
-        cottage.setProfilePicture(paths.get(0));
-        cottageRepository.save(cottage);
-        return true;
     }
 
 
@@ -113,7 +159,8 @@ public class CottageService {
         cottage.setCurrentPricelist(pricelist);
         tagService.addTagsIfNotPresent(dto.getTags());
         cottage.setTags(tagService.getTagsByNames(dto.getTags()));
-
+        cottage.setOwner(temporaryOwner);
+        temporaryOwner.getCottages().add(cottage);
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
@@ -206,40 +253,12 @@ public class CottageService {
         dto.setId(cottage.getId());
         dto.setReviews(cottage.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         dto.setDiscounts(cottage.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
-//        System.out.println(reservationRepository.findByRentable(cottage).isEmpty());
-//        System.out.println(reservationRepository.findByCancelled(false).isEmpty());
-//        System.out.println(reservationRepository.findByStartDateTimeIsAfter(LocalDateTime.now()).isEmpty());
-//        System.out.println(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
         dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(cottage,false,LocalDateTime.now()).isEmpty());
+        dto.setOwner(cottageOwnerService.CottageOwnerToCottageOwnerCPDto(cottage.getOwner()));
         return dto;
     }
 
 
-    private List<String> savePictures(Cottage cottage, MultipartFile[] multipartFiles) throws IOException {
-        List<String> paths = new ArrayList<>();
-
-        if(multipartFiles == null) {
-            return paths;
-        }
-
-        Path path = Paths.get(STATIC_PATH + IMAGES_PATH + cottage.getId());
-        if (!Files.exists(path)) {
-            Files.createDirectories(path);
-        }
-
-
-        for (MultipartFile mpf : multipartFiles) {
-            String fileName = mpf.getOriginalFilename();
-            try (InputStream inputStream = mpf.getInputStream()) {
-                Path filePath = path.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                paths.add(IMAGES_PATH + cottage.getId() + "\\" + fileName);
-            } catch (IOException ioe) {
-                throw new IOException("Could not save image file: " + fileName, ioe);
-            }
-        }
-        return paths;
-    }
 
     public void update(CottageDTO cottageDTO, MultipartFile[] multipartFiles) throws IOException {
         Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());

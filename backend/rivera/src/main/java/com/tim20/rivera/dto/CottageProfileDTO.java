@@ -27,4 +27,5 @@ public class CottageProfileDTO {
     private List<String> pictures;
     private List<ReviewProfileDTO> reviews;
     private List<DiscountProfileDTO> discounts;
+    private CottageOwnerCottageProfileDto owner;
 }

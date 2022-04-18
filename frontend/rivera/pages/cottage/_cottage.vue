@@ -19,12 +19,9 @@
 </template>
 
 <script>
-import editCottage from './../../components/add_rentable/editCottage.vue'
-import addCottage from './../../components/add_rentable/addCottage.vue'
-import profileCottage from './../../components/add_rentable/profileCottage.vue'
 import Rentable from './../../components/view-rentable/Rentable.vue';
 export default {
-    components: {profileCottage, editCottage, addCottage, Rentable },
+    components: { Rentable },
     mounted() {
         console.log(this.$route.params.cottage);
     }
