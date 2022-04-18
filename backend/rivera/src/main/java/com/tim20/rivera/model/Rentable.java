@@ -1,5 +1,6 @@
 package com.tim20.rivera.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@JsonIgnoreProperties("rentable")
 public class Rentable {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -32,15 +34,15 @@ public class Rentable {
     @ManyToMany
     private List<Tag> tags;
     private Double averageScore;
-    @OneToMany
+    @OneToMany(mappedBy = "rentable")
     private List<Review> reviews;
-    @OneToMany
+    @OneToMany(mappedBy = "rentable")
     private List<Discount> discounts;
-    @OneToMany
+    @OneToMany(mappedBy = "rentable")
     private List<Pricelist> pricelists;
     @OneToOne
     private Pricelist currentPricelist;
-    @OneToMany
+    @OneToMany(mappedBy = "rentable")
     private List<Calendar> calendars;
 
 }

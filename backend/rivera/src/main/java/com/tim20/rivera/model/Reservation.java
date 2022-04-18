@@ -16,6 +16,7 @@ public class Reservation {
     private Integer id;
     private Double price;
     @ManyToOne
+    @JoinColumn(name = "client_id")
     private Client client;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
