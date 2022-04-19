@@ -73,12 +73,11 @@ public class CottageService {
     }
 
     public Boolean insert(CottageDTO cottageDto,
-                              @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
+                          @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
         Cottage cottage = dtoToCottage(cottageDto);
-        for( var x : cottage.getTags())
-        {
-            System.out.println(x.getName()+","+x.getId()+","+cottage.getId());
+        for (var x : cottage.getTags()) {
+            System.out.println(x.getName() + "," + x.getId() + "," + cottage.getId());
         }
 
         cottageRepository.save(cottage);
@@ -128,15 +127,14 @@ public class CottageService {
         }
     }
 
-
     private Cottage dtoToCottage(CottageDTO dto) {
         Cottage cottage = new Cottage();
         cottage.setPricelists(new ArrayList<>());
-        copyDtoToCottage(dto,cottage);
+        copyDtoToCottage(dto, cottage);
         return cottage;
     }
 
-    private void copyDtoToCottage(CottageDTO dto,Cottage cottage){
+    private void copyDtoToCottage(CottageDTO dto, Cottage cottage) {
         cottage.setName(dto.getName());
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
@@ -166,14 +164,13 @@ public class CottageService {
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
         Map<Integer, Integer> map = new HashMap<>();
         var entries = rooms.split(";");
-        for(var entry : entries){
-            map.put(Integer.parseInt(entry.split(",")[0]),Integer.parseInt(entry.split(",")[1]));
+        for (var entry : entries) {
+            map.put(Integer.parseInt(entry.split(",")[0]), Integer.parseInt(entry.split(",")[1]));
         }
         return map;
     }
 
-
-    public List<Cottage> findAll(){
+    public List<Cottage> findAll() {
         return cottageRepository.findAll();
     }
 
@@ -191,7 +188,7 @@ public class CottageService {
         CottageDTO dto = new CottageDTO();
         dto.setAddress(cottage.getAddresss());
         StringBuilder roomsString = new StringBuilder();
-        for (Map.Entry<Integer,Integer> entry : cottage.getRooms().entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : cottage.getRooms().entrySet()) {
             Integer key = entry.getKey();
             Integer value = entry.getValue();
             roomsString.append(key).append(",").append(value).append(";");
@@ -262,7 +259,7 @@ public class CottageService {
 
     public void update(CottageDTO cottageDTO, MultipartFile[] multipartFiles) throws IOException {
         Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
-        if(opt.isEmpty()) return;
+        if (opt.isEmpty()) return;
         Cottage cottage = opt.get();
         List<String> paths = savePictures(cottage, multipartFiles);
 

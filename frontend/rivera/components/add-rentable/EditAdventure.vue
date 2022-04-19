@@ -60,7 +60,7 @@
 				<div class="form-group col-4">
 					<label for="inputState">State</label>
 					<select id="inputState" v-model="country" class="form-control">
-						<option selected>Choose...</option>
+						<option selected>{{country}}</option>
 						<option v-for="country in countries" :key="country.label" :value="country.value">
 						{{ country.label }}
 						</option>

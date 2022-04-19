@@ -15,7 +15,8 @@ import java.util.List;
 public class Client extends Person {
     private Integer numberOfPenalties;
     private Integer numberOfPoints;
-    private Boolean subscribed;
+    @OneToMany
+    private List<Rentable> subscribed;
     @OneToMany(mappedBy = "client")
     private List<Reservation> reservations;
     @OneToMany

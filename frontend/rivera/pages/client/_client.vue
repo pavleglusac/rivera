@@ -1,14 +1,15 @@
 <template>
   <div>
     <client-navbar/>  
-    <p>Subscriptions</p>
+    <client-profile/>
   </div>
 </template>
 
 <script>
 import ClientNavbar from '../../components/client/ClientNavbar.vue'
+import ClientProfile from '../../components/client/ClientProfile.vue'
 export default {
-  components: { ClientNavbar },
+  components: { ClientNavbar, ClientProfile },
 
 }
 </script>

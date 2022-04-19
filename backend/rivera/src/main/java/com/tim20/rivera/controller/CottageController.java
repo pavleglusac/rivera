@@ -36,12 +36,13 @@ public class CottageController {
         cottageService.insert(cottage, multipartFiles);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
+
     @GetMapping(path = "/get-cottages")
     public List<Cottage> getCottages() {
         return cottageService.findAll();
     }
 
-    @GetMapping(path="get-cottage")
+    @GetMapping(path = "get-cottage")
     public CottageDTO getCottage(@RequestParam("id") Integer id) throws IOException {
         return cottageService.getById(id);
     }
