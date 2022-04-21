@@ -2,6 +2,8 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.AdventureProfileDTO;
+import com.tim20.rivera.model.Adventure;
+import com.tim20.rivera.model.Client;
 import com.tim20.rivera.service.AdventureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -28,9 +31,15 @@ public class AdventureController {
     }
 
     @GetMapping(path = "get-adventure")
-    public AdventureDTO getAdventure(@RequestParam("id") Integer id) throws IOException {
+    public AdventureDTO getAdventure(@RequestParam("id") Integer id) {
         return adventureService.getAdventure(id);
     }
+
+    @GetMapping(path = "/get-adventures")
+    public List<Adventure> getAdventures() {
+        return adventureService.getAdventures();
+    }
+
 
     @PostMapping(path = "update-adventure")
     public ResponseEntity<String> updateAdventure(

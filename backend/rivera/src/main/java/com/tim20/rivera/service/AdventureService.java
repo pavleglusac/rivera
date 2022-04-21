@@ -255,6 +255,10 @@ public class AdventureService {
         return dto;
     }
 
+    public List<Adventure> getAdventures() {
+        return adventureRepository.findAll();
+    }
+
     private FishingInstructorAdventureProfileDto fishingInstructorToDto(FishingInstructor owner) {
         var dto = new FishingInstructorAdventureProfileDto();
         dto.setSurname(owner.getSurname());
