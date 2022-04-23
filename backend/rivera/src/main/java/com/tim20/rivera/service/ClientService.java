@@ -6,6 +6,7 @@ import com.tim20.rivera.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.tim20.rivera.dto.ClientRentableDto;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,7 +119,7 @@ public class ClientService {
         clientRentableDto.setName(client.getName());
         clientRentableDto.setEmail(client.getEmail());
         clientRentableDto.setPhoto(client.getPhoto());
-        return clientRentableDto;
         clientRentableDto.setSurname(client.getSurname());
+        return clientRentableDto;
     }
 }

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import EditAdventure from './../add-rentable/EditAdventure.vue'
+import EditAdventure from './../add-adventure/EditAdventure.vue'
 export default {
     components: { EditAdventure },
     mounted() {

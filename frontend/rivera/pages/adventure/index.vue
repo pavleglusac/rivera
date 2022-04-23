@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AddAdventure from './../../components/add-rentable/AddAdventure.vue'
+import AddAdventure from './../../components/add-adventure/AddAdventure.vue'
 export default {
   name: 'AddAdventurePage',
   components: { AddAdventure }

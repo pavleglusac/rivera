@@ -151,7 +151,7 @@
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
 import PictureUpload from './PictureUpload.vue';
-import PictureEdit from './../add-rentable/PictureEdit.vue';
+import PictureEdit from './../add-adventure/PictureEdit.vue';
 export default {
 	components: {PictureUpload, PictureEdit},
 	computed: {

@@ -63,7 +63,7 @@ public class CottageService {
         temporaryOwner.setCountry("Serbia");
         temporaryOwner.setStatus(AccountStatus.ACTIVE);
         temporaryOwner.setDeleted(false);
-        temporaryOwner.setEmail("marko@gmail.com");
+        temporaryOwner.setEmail("markodva@gmail.com");
         temporaryOwner.setPassword("sifra");
         temporaryOwner.setPhoneNumber("+3845135535");
         temporaryOwner.setUsername("marko");
