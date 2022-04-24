@@ -63,7 +63,7 @@ public class CottageService {
         temporaryOwner.setCountry("Serbia");
         temporaryOwner.setStatus(AccountStatus.ACTIVE);
         temporaryOwner.setDeleted(false);
-        temporaryOwner.setEmail("marko@gmail.com");
+        temporaryOwner.setEmail("marko2@gmail.com");
         temporaryOwner.setPassword("sifra");
         temporaryOwner.setPhoneNumber("+3845135535");
         temporaryOwner.setUsername("marko");
@@ -140,11 +140,11 @@ public class CottageService {
         cottage.setAverageScore(dto.getAverageScore());
         cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
         cottage.setRulesOfConduct(dto.getRulesOfConduct());
-        cottage.setAddresss(dto.getAddress());
+        cottage.setAddress(dto.getAddress());
         cottage.setPictures(dto.getPictures());
         cottage.setCity(dto.getCity());
         cottage.setCountry(dto.getCountry());
-        cottage.setAddditionalServices(dto.getServices());
+        cottage.setAdditionalServices(dto.getServices());
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -186,7 +186,7 @@ public class CottageService {
 
     private CottageDTO cottageToDto(Cottage cottage) {
         CottageDTO dto = new CottageDTO();
-        dto.setAddress(cottage.getAddresss());
+        dto.setAddress(cottage.getAddress());
         StringBuilder roomsString = new StringBuilder();
         for (Map.Entry<Integer, Integer> entry : cottage.getRooms().entrySet()) {
             Integer key = entry.getKey();
@@ -210,7 +210,7 @@ public class CottageService {
         dto.setCountry(cottage.getCountry());
         dto.setPerDay(pricelist.getPricePerDay());
         dto.setPerHour(pricelist.getPricePerHour());
-        dto.setServices(cottage.getAddditionalServices());
+        dto.setServices(cottage.getAdditionalServices());
         dto.setPictures(cottage.getPictures());
         dto.setRulesOfConduct(cottage.getRulesOfConduct());
         dto.setId(cottage.getId());
@@ -220,7 +220,7 @@ public class CottageService {
 
     private CottageProfileDTO cottageToProfileDto(Cottage cottage) {
         CottageProfileDTO dto = new CottageProfileDTO();
-        dto.setAddress(cottage.getAddresss());
+        dto.setAddress(cottage.getAddress());
         StringBuilder roomsString = new StringBuilder();
         for (Map.Entry<Integer,Integer> entry : cottage.getRooms().entrySet()) {
             Integer key = entry.getKey();
@@ -244,7 +244,7 @@ public class CottageService {
         dto.setCountry(cottage.getCountry());
         dto.setPerDay(pricelist.getPricePerDay());
         dto.setPerHour(pricelist.getPricePerHour());
-        dto.setServices(cottage.getAddditionalServices());
+        dto.setServices(cottage.getAdditionalServices());
         dto.setPictures(cottage.getPictures());
         dto.setRulesOfConduct(cottage.getRulesOfConduct());
         dto.setId(cottage.getId());

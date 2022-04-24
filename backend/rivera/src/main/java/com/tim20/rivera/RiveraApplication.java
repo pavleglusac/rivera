@@ -49,7 +49,7 @@ public class RiveraApplication {
 	private void initializeData2() {
 		Adventure adventure = new Adventure();
 		adventure.setName("Very Cool Fishing");
-		adventure.setAddresss("1234 Main St.");
+		adventure.setAddress("1234 Main St.");
 		adventure.setCity("Zrenjanin");
 		adventure.setCountry("Serbia");
 		adventure.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
@@ -105,7 +105,7 @@ public class RiveraApplication {
 	private void initializeData() {
 		Adventure adventure = new Adventure();
 		adventure.setName("Mountain Fishing");
-		adventure.setAddresss("1234 Main St.");
+		adventure.setAddress("1234 Main St.");
 		adventure.setCity("Cairns");
 		adventure.setCountry("Australia");
 		adventure.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
@@ -239,7 +239,7 @@ public class RiveraApplication {
 		fishingInstructorRepository.save(fishingInstructor);
 		adventure.setOwner(fishingInstructor);
 
-		adventure.setAddditionalServices(Arrays.asList("massage", "therapy", "basketball"));
+		adventure.setAdditionalServices(Arrays.asList("massage", "therapy", "basketball"));
 
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);

@@ -36,7 +36,7 @@ public class AdventureController {
     }
 
     @GetMapping(path = "/get-adventures")
-    public List<Adventure> getAdventures() {
+    public List<AdventureDTO> getAdventures() {
         return adventureService.getAdventures();
     }
 
