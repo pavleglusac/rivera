@@ -40,7 +40,6 @@ public class AdventureController {
         return adventureService.getAdventures();
     }
 
-
     @PostMapping(path = "update-adventure")
     public ResponseEntity<String> updateAdventure(
             AdventureDTO adventure,

@@ -6,23 +6,23 @@
         <div class="container-fluid p-2">
           <ul class="nav nav-pills nav-fill" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active" href="#" data-toggle="pill">
+              <p class="nav-link" v-bind:class="{ active: activeAdventures }" id="adventures-btn" @click="loadAdventures">
                 <span><img src="..\static\icons\fish.png" /> Fishing</span>
-              </a>
+              </p>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="pill">
+              <p class="nav-link" v-bind:class="{ active: activeCottages }" id="cottages-btn" @click="loadCottages">
                 <span><img src="..\static\icons\cottage.png" /> Cottages</span>
-              </a>
+              </p>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" data-toggle="pill">
+              <p class="nav-link" v-bind:class="{ active: activeBoats }" id="boats-btn" @click="loadBoats">
                 <span><img src="..\static\icons\boat.png" /> Boats</span>
-              </a>
+              </p>
             </li>
           </ul>
         </div>
-        <div class="p-4">
+        <div class="p-2">
           <form>
             <div class="form-row">
               <div class="form-group col-md-4">
@@ -63,10 +63,10 @@
           </div>
           <div v-else>
             <!--v-for="adventure, i in (filteredOffers.length > 0 ? filteredOffers : offers)"-->
-            <AdventureCard
-              v-for="adventure in offers"
+            <EntityCard
+              v-for="entity in offers"
               :key="i"
-              :adventure="adventure"
+              :entity="entity"
               class="mb-3"
             />
           </div>
@@ -77,16 +77,19 @@
 </template>
 
 <script>
-import AdventureCard from "../components/search/adventure_card.vue";
+import EntityCard from "../components/search/entity_card.vue";
 import UnauthenticatedNavbar from "../components/UnauthenticatedNavbar.vue";
 
 export default {
-  components: { UnauthenticatedNavbar, AdventureCard },
+  components: { UnauthenticatedNavbar, EntityCard },
   data() {
     return {
       offers: [],
       filteredOffers: [],
       isFiltering: false,
+      activeCottages: false,
+      activeBoats: false,
+      activeAdventures: false,
     };
   },
   methods: {
@@ -99,20 +102,42 @@ export default {
       //const filter = document.getElementById("search-filter");
       //this.filteredHotels = hotels.filter(hotel => (facility => hotel.facilities.includes(facility)));
     },
-  },
-  mounted() {
-    let that = this;
-    this.$axios.get("/api/get-adventures").then((resp) => {
-      console.log(resp.data);
-      console.log("neeema");
-      that.offers = resp.data;
-    });
+    loadBoats() {
+      let that = this;
+      this.$axios.get("/api/get-boats").then((resp) => {
+        console.log(resp.data);
+        that.offers = resp.data;
+      });
+      that.activeCottages = false;
+      that.activeBoats = true;
+      that.activeAdventures = false;
+    },
+    loadAdventures() {
+      let that = this;
+      this.$axios.get("/api/get-adventures").then((resp) => {
+        console.log(resp.data);
+        that.offers = resp.data;
+      });
+      that.activeCottages = false;
+      that.activeBoats = false;
+      that.activeAdventures = true;
+    },
+    loadCottages() {
+      let that = this;
+      this.$axios.get("/api/get-cottages").then((resp) => {
+        console.log(resp.data);
+        that.offers = resp.data;
+      });
+      that.activeCottages = true;
+      that.activeBoats = false;
+      that.activeAdventures = false;
+    },
   },
 };
 </script>
 
 <style>
-li > a .active {
+li > p .active {
   color: #fff;
 }
 
@@ -121,8 +146,10 @@ li > a .active {
   background-color: var(--prime-color);
 }
 
-a {
-  color: var(--dark-blue-color);
+.nav-link:hover {
+  opacity: 0.9;
+  background-color: var(--prime-color);
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {
