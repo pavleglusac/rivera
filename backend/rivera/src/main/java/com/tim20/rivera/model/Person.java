@@ -2,14 +2,17 @@ package com.tim20.rivera.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Entity
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Person {
+public class Person  implements UserDetails {
 
     @Id
     private String email;
@@ -24,4 +27,29 @@ public abstract class Person {
     private String country;
     private String photo;
     private Boolean deleted;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
