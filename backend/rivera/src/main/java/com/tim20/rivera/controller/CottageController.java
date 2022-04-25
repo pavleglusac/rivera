@@ -43,7 +43,7 @@ public class CottageController {
     }
 
     @GetMapping(path = "get-cottage")
-    public CottageDTO getCottage(@RequestParam("id") Integer id) throws IOException {
+    public CottageDTO getCottage(@RequestParam("id") Integer id) {
         return cottageService.getById(id);
     }
 

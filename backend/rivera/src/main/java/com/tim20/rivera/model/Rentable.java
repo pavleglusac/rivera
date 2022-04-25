@@ -21,7 +21,7 @@ public class Rentable {
     private Integer id;
     private String name;
     private String description;
-    private String addresss;
+    private String address;
     private String city;
     private String country;
     @ElementCollection
@@ -30,7 +30,7 @@ public class Rentable {
     @ElementCollection
     private List<String> rulesOfConduct;
     @ElementCollection
-    private List<String> addditionalServices;
+    private List<String> additionalServices;
     @ManyToMany
     private List<Tag> tags;
     private Double averageScore;

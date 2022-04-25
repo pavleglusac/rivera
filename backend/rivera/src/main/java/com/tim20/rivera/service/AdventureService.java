@@ -122,7 +122,7 @@ public class AdventureService {
 
     private AdventureDTO adventureToDto(Adventure adventure) {
         AdventureDTO dto = new AdventureDTO();
-        dto.setAddress(adventure.getAddresss());
+        dto.setAddress(adventure.getAddress());
         dto.setCapacity(adventure.getCapacity());
         dto.setAverageScore(adventure.getAverageScore());
         dto.setDescription(adventure.getDescription());
@@ -140,7 +140,7 @@ public class AdventureService {
         dto.setPerDay(pricelist.getPricePerDay());
         dto.setPerHour(pricelist.getPricePerHour());
         dto.setEquipment(adventure.getFishingEquipment());
-        dto.setServices(adventure.getAddditionalServices());
+        dto.setServices(adventure.getAdditionalServices());
         dto.setPictures(adventure.getPictures());
         dto.setRulesOfConduct(adventure.getRulesOfConduct());
         dto.setId(adventure.getId());
@@ -152,9 +152,9 @@ public class AdventureService {
         adventure.setCapacity(dto.getCapacity());
         adventure.setDescription(dto.getDescription());
         adventure.setAverageScore(dto.getAverageScore());
-        adventure.setAddditionalServices(dto.getServices());
+        adventure.setAdditionalServices(dto.getServices());
         adventure.setFishingEquipment(dto.getEquipment());
-        adventure.setAddresss(dto.getAddress());
+        adventure.setAddress(dto.getAddress());
         adventure.setCity(dto.getCity());
         adventure.setCountry(dto.getCountry());
         adventure.setRulesOfConduct(dto.getRulesOfConduct());
@@ -214,7 +214,7 @@ public class AdventureService {
 
     private AdventureProfileDTO adventureToProfileDto(Adventure adventure) {
         AdventureProfileDTO dto = new AdventureProfileDTO();
-        dto.setAddress(adventure.getAddresss());
+        dto.setAddress(adventure.getAddress());
         StringBuilder roomsString = new StringBuilder();
         dto.setId(adventure.getId());
         dto.setAverageScore(adventure.getAverageScore());
@@ -232,7 +232,7 @@ public class AdventureService {
         dto.setCountry(adventure.getCountry());
         dto.setPerDay(pricelist.getPricePerDay());
         dto.setPerHour(pricelist.getPricePerHour());
-        dto.setServices(adventure.getAddditionalServices());
+        dto.setServices(adventure.getAdditionalServices());
         dto.setPictures(adventure.getPictures());
         dto.setRulesOfConduct(adventure.getRulesOfConduct());
         dto.setId(adventure.getId());
@@ -253,6 +253,10 @@ public class AdventureService {
         dto.setCancelled(reservation.getCancelled());
         dto.setClient(clientService.clientToCRDto(reservation.getClient()));
         return dto;
+    }
+
+    public List<AdventureDTO> getAdventures() {
+        return adventureRepository.findAll().stream().map(this::adventureToDto).collect(Collectors.toList());
     }
 
     private FishingInstructorAdventureProfileDto fishingInstructorToDto(FishingInstructor owner) {

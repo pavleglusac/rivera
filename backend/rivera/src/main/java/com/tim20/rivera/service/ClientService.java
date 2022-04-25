@@ -1,6 +1,7 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.ClientDTO;
+import com.tim20.rivera.dto.ClientRentableDto;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;

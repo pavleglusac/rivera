@@ -8,17 +8,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
       <!-- <edit-adventure /> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-        <Navbar />
       <Rentable />
     </div>
 </template>
 
 <script>
-import Navbar from './../../components/client/ClientNavbar.vue';
-import EditAdventure from './../../components/add-adventure/EditAdventure.vue'
-import Rentable from './../../components/adventure/Rentable.vue'
+import EditAdventure from './../../components/add-rentable/EditAdventure.vue'
+import Rentable from './../../components/rentable/Rentable.vue'
 export default {
-    components: { EditAdventure, Rentable, Navbar }, 
+    components: { EditAdventure, Rentable }, 
     mounted() {
         console.log(this.$route.params.adventure);
     }
