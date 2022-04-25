@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
 
 @Data
@@ -27,6 +28,7 @@ public class Person  implements UserDetails {
     private String country;
     private String photo;
     private Boolean deleted;
+    private Timestamp lastPasswordResetDate;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
