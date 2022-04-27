@@ -29,16 +29,18 @@
                 <b-form-input
                   id="search-filter"
                   placeholder="Search..."
+                  v-model="searchText"
+                  v-on:input="reload"
                 ></b-form-input>
               </div>
               <div class="form-group col-md-3">
-                <b-form-datepicker placeholder="Start date"></b-form-datepicker>
+                <b-form-datepicker v-on:input="reload" placeholder="Start date"></b-form-datepicker>
               </div>
               <div class="form-group col-md-3">
-                <b-form-datepicker placeholder="End date"></b-form-datepicker>
+                <b-form-datepicker v-on:input="reload" placeholder="End date"></b-form-datepicker>
               </div>
               <div class="form-group col-md-2">
-                <b-dropdown text="Order by ">
+                <b-dropdown v-on:input="reload" text="Order by ">
                   <b-dropdown-divider></b-dropdown-divider>
                   <b-dropdown-group id="asc" header="Ascending">
                     <b-dropdown-item-button>Price</b-dropdown-item-button>
@@ -55,17 +57,15 @@
             </div>
           </form>
           <div style="margin-bottom: 15px">
-            <b-form-tags input-id="tags-basic"></b-form-tags>
+            <b-form-tags v-on:input="reload" input-id="tags-basic"></b-form-tags>
           </div>
 
           <div v-if="isFiltering && filteredOffers.length === 0">
             <p>No offers found.</p>
           </div>
           <div v-else>
-            <!--v-for="adventure, i in (filteredOffers.length > 0 ? filteredOffers : offers)"-->
             <EntityCard
               v-for="entity in offers"
-              :key="i"
               :entity="entity"
               class="mb-3"
             />
@@ -89,8 +89,12 @@ export default {
       isFiltering: false,
       activeCottages: false,
       activeBoats: false,
-      activeAdventures: false,
+      activeAdventures: true,
+      searchText: ''
     };
+  },
+  mounted() {
+    this.loadAdventures();
   },
   methods: {
     // filters offers by search query
@@ -102,8 +106,17 @@ export default {
       //const filter = document.getElementById("search-filter");
       //this.filteredHotels = hotels.filter(hotel => (facility => hotel.facilities.includes(facility)));
     },
+    reload() {
+      if (this.activeCottages)
+        this.loadCottages();
+      else if (this.activeBoats)
+        this.loadBoats();
+      else
+        this.loadAdventures();
+    },
     loadBoats() {
       let that = this;
+      that.offers = [];
       this.$axios.get("/api/get-boats").then((resp) => {
         console.log(resp.data);
         that.offers = resp.data;
@@ -114,9 +127,29 @@ export default {
     },
     loadAdventures() {
       let that = this;
-      this.$axios.get("/api/get-adventures").then((resp) => {
-        console.log(resp.data);
+      that.offers = [];
+
+      /*var formData = new FormData();
+      formData.append("search", this.searchText);
+      formData.append("start", null);
+      formData.append("end", null);
+      formData.append("orderBy", "name");
+      formData.append("ascending", true);
+      formData.append("tags", []);
+      formData.append("numberOfResults", 10);
+      
+			this.$axios.post('/api/search-adventures', formData, {
+				headers: {
+					'Content-Type': 'form-data'
+				}
+			}).then((resp) => {
         that.offers = resp.data;
+			});*/
+
+      this.$axios.post(`/api/search-adventures?ascending=true&numberOfResults=2&orderBy=name&search=${that.searchText.trim()}`)
+      .then(response => {
+        that.offers = response.data;
+        console.log(response);
       });
       that.activeCottages = false;
       that.activeBoats = false;
@@ -124,6 +157,7 @@ export default {
     },
     loadCottages() {
       let that = this;
+      that.offers = [];
       this.$axios.get("/api/get-cottages").then((resp) => {
         console.log(resp.data);
         that.offers = resp.data;
@@ -150,6 +184,11 @@ li > p .active {
   opacity: 0.9;
   background-color: var(--prime-color);
   cursor: pointer;
+}
+
+.nav-link {
+  font-weight: bold;
+  color: var(--dark-blue-color);
 }
 
 @media screen and (max-width: 768px) {

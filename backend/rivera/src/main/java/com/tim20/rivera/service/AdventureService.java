@@ -16,10 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -268,8 +265,14 @@ public class AdventureService {
         return dto;
     }
 
-
     public void delete(Integer id) {
         adventureRepository.delete(adventureRepository.findById(id).get());
+    }
+
+    public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
+        List<AdventureDTO> adventures = this.getAdventures();
+        return adventures.stream().limit(searchParams.getNumberOfResults())
+                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
+                .collect(Collectors.toList());
     }
 }

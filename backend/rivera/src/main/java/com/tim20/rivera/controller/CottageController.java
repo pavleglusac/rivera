@@ -27,7 +27,7 @@ public class CottageController {
     @Autowired
     private RentableRepository rentableRepository;
 
-    @PostMapping(path="/add-cottage")
+    @PostMapping(path = "/add-cottage")
     public ResponseEntity<String> addCottage(
             CottageDTO cottage,
             @RequestPart("images") MultipartFile[] multipartFiles
@@ -47,13 +47,13 @@ public class CottageController {
         return cottageService.getById(id);
     }
 
-    @GetMapping(path="get-full-cottage")
+    @GetMapping(path = "get-full-cottage")
     public CottageProfileDTO getFullCottage(@RequestParam("id") Integer id) throws IOException {
         return cottageService.getFullById(id);
     }
 
 
-    @PostMapping(path="update-cottage")
+    @PostMapping(path = "update-cottage")
     public ResponseEntity<String> updateCottage(
             CottageDTO cottage,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
@@ -62,17 +62,16 @@ public class CottageController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-    @PostMapping(path="delete-cottage")
-    public ResponseEntity<String> deleteCottage(@RequestParam Integer id){
+    @PostMapping(path = "delete-cottage")
+    public ResponseEntity<String> deleteCottage(@RequestParam Integer id) {
         cottageService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-    @GetMapping(path="test")
-    public List<Rentable> test(){
-        return  rentableRepository.findAll();
+    @GetMapping(path = "test")
+    public List<Rentable> test() {
+        return rentableRepository.findAll();
     }
-
 
 
 }

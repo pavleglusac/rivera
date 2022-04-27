@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties("client")
