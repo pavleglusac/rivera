@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,6 +30,9 @@ public class Person  implements UserDetails {
     private String photo;
     private Boolean deleted;
     private Timestamp lastPasswordResetDate;
+
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
