@@ -133,7 +133,7 @@
         </b-form-invalid-feedback>
 
         <b-button block id="login-btn" variant="primary"  @click="register">Register</b-button>
-        <b-button block id="signup-btn" variant="outline-primary">Already have an accont? Log in</b-button>
+        <b-button block id="signup-btn" variant="outline-primary" @click="changeToLogin">Already have an accont? Log in</b-button>
         <b-button block id="just-looking">Just looking...</b-button>
       </form>
     </b-card>
@@ -182,6 +182,9 @@ export default {
 			}).catch((err) => {
 				console.log(err);
 			});
+        },
+        changeToLogin(){
+            this.$router.push({path: '/login'});
         }
     }
 }

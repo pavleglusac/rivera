@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
-@EnableSwagger2
 @ComponentScan(basePackages = "com.tim20.rivera")
 public class RiveraApplication {
 

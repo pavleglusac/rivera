@@ -1,25 +1,24 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dto.JwtAuthenticationRequestDTO;
-import com.tim20.rivera.dto.OwnerRequestDTO;
-import com.tim20.rivera.dto.UserTokenState;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.exception.ResourceConflictException;
+import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
+import com.tim20.rivera.service.ClientService;
 import com.tim20.rivera.service.EmailService;
 import com.tim20.rivera.service.OwnerService;
 import com.tim20.rivera.service.PersonService;
 import com.tim20.rivera.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -43,6 +42,8 @@ public class AuthenticationController {
 
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private PersonService personService;
 
     // Prvi endpoint koji pogadja korisnik kada se loguje.
     // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
@@ -55,11 +56,22 @@ public class AuthenticationController {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-
+        System.out.println(authenticationRequest.getUsername()+", "+ authenticationRequest.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        System.out.println(authentication.getPrincipal());
         // Kreiraj token za tog korisnika
         Person user = (Person) authentication.getPrincipal();
+
+            System.out.println(authentication.getPrincipal());
+            System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            System.out.println("-----------------------------------------------------------------------------");
+            System.out.println(((Person) authentication.getPrincipal()).getUsername());
+            System.out.println(((Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        System.out.println(user);
+        System.out.println(user.getUsername());
+        System.out.println("+++++++++++++++++++++++++++++++++++++++");
+
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
@@ -69,6 +81,14 @@ public class AuthenticationController {
         catch (AuthenticationException ae){
             return null;
         }
+    }
+
+
+    @GetMapping("/get-logged-user")
+    public PersonDTO getLoggedUser(){
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println(((Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        return personService.personToDTO((Person)(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
     // Endpoint za registraciju novog korisnika
