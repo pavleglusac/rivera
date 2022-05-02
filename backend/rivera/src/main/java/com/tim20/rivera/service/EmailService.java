@@ -1,7 +1,7 @@
 package com.tim20.rivera.service;
 
 
-import com.tim20.rivera.dto.UserRequestDTO;
+import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -31,19 +31,19 @@ public class EmailService {
      * Vise informacija na: https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#scheduling
      */
     @Async
-    public void sendNotificaitionAsync(UserRequestDTO userRequest) throws MailException, InterruptedException {
+    public void sendNotificaitionAsync(OwnerRequestDTO ownerRequestDTO) throws MailException, InterruptedException {
         System.out.println("Async metoda se izvrsava u drugom Threadu u odnosu na prihvaceni zahtev. Thread id: " + Thread.currentThread().getId());
         System.out.println("Slanje emaila...");
 
         SimpleMailMessage mail = new SimpleMailMessage();
-        System.out.println(userRequest.getEmail()+"-------------------");
-        mail.setTo(userRequest.getEmail());
+        System.out.println(ownerRequestDTO.getEmail()+"-------------------");
+        mail.setTo(ownerRequestDTO.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
-        mail.setSubject("Primer slanja emaila pomoću asinhronog Spring taska");
+        mail.setSubject("Application");
         String text = "";
-        text = "Application for " + userRequest.getType() + ":";
-        text += userRequest.mailPrint()+"\n";
-        text += "link to accept or decline";
+        text = "Application for " + ownerRequestDTO.getType() + ":";
+        text += ownerRequestDTO.mailPrint()+"\n";
+        text += "http://localhost:3000/registration/"+ownerRequestDTO.getUsername();
         mail.setText(text);
         javaMailSender.send(mail);
 

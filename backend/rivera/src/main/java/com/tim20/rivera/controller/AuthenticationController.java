@@ -1,11 +1,12 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.JwtAuthenticationRequestDTO;
-import com.tim20.rivera.dto.UserRequestDTO;
+import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.dto.UserTokenState;
 import com.tim20.rivera.exception.ResourceConflictException;
 import com.tim20.rivera.model.Person;
 import com.tim20.rivera.service.EmailService;
+import com.tim20.rivera.service.OwnerService;
 import com.tim20.rivera.service.PersonService;
 import com.tim20.rivera.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class AuthenticationController {
 
     @Autowired
     private PersonService userService;
+    @Autowired
+    private OwnerService ownerService;
 
     @Autowired
     private EmailService emailService;
@@ -70,15 +73,15 @@ public class AuthenticationController {
 
     // Endpoint za registraciju novog korisnika
     @PostMapping("/signup")
-    public ResponseEntity<Person> addUser(UserRequestDTO userRequest, UriComponentsBuilder ucBuilder) throws InterruptedException {
+    public ResponseEntity<Person> addUser(OwnerRequestDTO ownerRequestDTO, UriComponentsBuilder ucBuilder) throws InterruptedException {
 
-        Person existUser = this.userService.findByUsername(userRequest.getUsername());
+        Person existUser = this.userService.findByUsername(ownerRequestDTO.getUsername());
 
         if (existUser != null) {
-            throw new ResourceConflictException(userRequest.getUsername(), "Username already exists");
+            throw new ResourceConflictException(ownerRequestDTO.getUsername(), "Username already exists");
         }
-        Person user = this.userService.save(userRequest);
-        emailService.sendNotificaitionAsync(userRequest);
+        Person user = this.ownerService.save(ownerRequestDTO);
+        emailService.sendNotificaitionAsync(ownerRequestDTO);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 }

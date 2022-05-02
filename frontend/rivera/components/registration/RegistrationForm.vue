@@ -19,6 +19,8 @@
             <br>
             country: <input type="text" id="country" v-model="country"/>
             <br>
+            type: <input type="text" id="type" v-model="type"/>
+            <br>
 			<button type="button" @click="register">Register</button>
         </form>
     </div>
@@ -39,6 +41,7 @@ export default {
 			country: "",
 			city: "",
 			address: "",
+			type: "",
 		}
 	},
     methods: {
@@ -56,6 +59,7 @@ export default {
             formData.append("country",this.country);
             formData.append("city",this.city);
             formData.append("address",this.address);
+            formData.append("type","Cottage owner");
             this.$axios.post('/api/auth/signup', formData).then((resp) => {
 				console.log(resp);
 			}).catch((err) => {

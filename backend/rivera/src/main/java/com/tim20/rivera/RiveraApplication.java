@@ -9,12 +9,14 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.event.EventListener;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
+@EnableSwagger2
 @ComponentScan(basePackages = "com.tim20.rivera")
 public class RiveraApplication {
 
