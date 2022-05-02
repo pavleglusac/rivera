@@ -1,32 +1,138 @@
 <template>
-    <div>
-        <form id="registrationForm">
-            email: <input type="text" id="email" v-model="email" disabled/>
-            <br>
-            username: <input type="text" id="username"  v-model="username" disabled/>
-            <br>
-            name: <input type="text" id="name"  v-model="name" disabled/>
-            <br>
-            surname: <input type="text" id="surname"  v-model="surname" disabled/>
-            <br>
-            phoneNumber: <input type="text" id="phoneNumber"  v-model="phoneNumber" disabled/>
-            <br>
-            address: <input type="text" id="address"  v-model="address" disabled/>
-            <br>
-            city: <input type="text" id="city"  v-model="city" disabled/>
-            <br>
-            country: <input type="text" id="country" v-model="country" disabled/>
-            <br>
-            status: <input type="text" id="status" v-model="status" disabled/>
-            <br>
-			<div v-if="status=='WAITING'">
-				<button @click="accept" > ACCEPT </button>
-				<button @click="decline" > DECLINE </button>
-			</div>
-        </form>
-    </div>
-</template>
+  <div>
+    <b-card class="text-center mx-auto my-auto card">
+      <img src="..\..\static\rivera_logo_ver.png" />
+      <form id="registrationForm">
+          
+		<div class="form-row ">
+            <div class="form-group col-6">
+            <label>Email</label>
+            <input
+                type="email"
+                placeholder="Enter your email address"
+                class="form-control form-control-lg"
+                id="email" v-model="email"
+				disabled
+            />
+            </div>
+            <div class="form-group col-6">
+            <label>Username</label>
+            <input
+                type="text"
+                placeholder="Enter your username"
+                class="form-control form-control-lg"
+                id="username" v-model="username"
+				disabled
+            />
+            
+            </div>
+        </div>
+        <div class="form-row ">
+            <div class="form-group col-6">
+            <label>Name</label>
+            <input
+                type="text"
+                placeholder="Enter your surname"
+                class="form-control form-control-lg"
+                v-model="name"
+				disabled
+            />
+            </div>
+            <div class="form-group col-6 ">
+            <label>Surname</label>
+            <input
+                type="text"
+                placeholder="Enter your surname"
+                class="form-control form-control-lg"
+                id="surname" v-model="surname"
+				disabled
+            />
+            </div>
+        </div>
+        
+        <div class="form-row ">
+            <div class="form-group col-6">
+            <label>Phone number</label>
+            <input
+                type="text"
+                placeholder="Enter your phone number"
+                class="form-control form-control-lg"
+                id="phoneNumber" v-model="phoneNumber"
+				disabled
+            />
+            </div>
+            <div class="form-group col-6 ">
+            <label>Address</label>
+            <input
+                type="text"
+                placeholder="Enter your address"
+                class="form-control form-control-lg"
+                id="address" v-model="address"
+				disabled
+            />
+            </div>
+        </div>
+        <div class="form-row ">
+            <div class="form-group col-6">
+            <label>Country</label>
+            <input
+                type="text"
+                placeholder="Enter your country"
+                class="form-control form-control-lg"
+                id="country" v-model="country"
+				disabled
+            />
+            </div>
+            <div class="form-group col-6 ">
+            <label>City</label>
+            <input
+                type="text"
+                placeholder="Enter your city"
+                class="form-control form-control-lg"
+                id="city" v-model="city"
+				disabled
+            />
+            </div>
+        </div>
+        <div class="form-row ">
+            <div class="form-group col-12">
+            <label>Description</label>
+            <textarea
+                placeholder="Enter description"
+                class="form-control form-control-lg"
+                id="description" v-model="description"
+				disabled
+            />
+            </div>
+        </div>
 
+		<div class="form-row ">
+            <div class="form-group col-3">
+            </div>
+            <div class="form-group col-6 ">
+            <label>Status</label>
+            <input
+                type="text"
+                placeholder="Status"
+                class="form-control form-control-lg"
+                id="status" v-model="status"
+				disabled
+            />
+            </div>
+        </div>
+        
+        <b-form-invalid-feedback>
+          Wrong email or password. Please try again.
+        </b-form-invalid-feedback>
+
+		<div v-if="status=='WAITING'">
+			<b-button block id="login-btn" variant="primary"  @click="accept">Accept</b-button>
+			<b-button block id="signup-btn" variant="outline-primary">Decline</b-button>
+		</div>
+      </form>
+    </b-card>
+  </div>
+</template>
 <script>
 export default {
 	data () {
@@ -42,6 +148,7 @@ export default {
 			city: "",
 			address: "",
 			type: "",
+			description: "",
 			status: "",
 		}
 	},
@@ -60,6 +167,7 @@ export default {
 				that.city=owner.city;
 				that.address=owner.address;
 				that.status=owner.status;
+				that.description=owner.description;
 				console.log(owner);
 			}).catch((err) => {
 				console.log(err);

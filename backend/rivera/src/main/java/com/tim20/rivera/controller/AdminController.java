@@ -23,10 +23,12 @@ public class AdminController {
 
     @PostMapping(path = "activate-owner")
     public void activatePerson(@RequestParam("username") String username) throws IOException {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         ownerService.activateOwner(username);
     }
     @PostMapping(path = "deactivate-owner")
     public void deactivatePerson(@RequestParam("username") String username) throws IOException {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         ownerService.deactivateOwner(username);
     }
 }
