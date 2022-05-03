@@ -12,7 +12,9 @@
                 placeholder="Enter your email address"
                 class="form-control form-control-lg"
                 id="email" v-model="email"
+                v-bind:class="{'error-boarder' : $v.email.$invalid}"
             />
+            <ErrorDiv :parameter="$v.email" :name="'Email'"> </ErrorDiv>            
             </div>
             <div class="form-group col-6">
             <label>Username</label>
@@ -21,8 +23,9 @@
                 placeholder="Enter your username"
                 class="form-control form-control-lg"
                 id="username" v-model="username"
+                v-bind:class="{'error-boarder' : $v.username.$invalid}"
             />
-            
+            <ErrorDiv :parameter="$v.username" :name="'Username'"> </ErrorDiv>            
             </div>
         </div>
         <div class="form-row ">
@@ -33,7 +36,9 @@
                 placeholder="Enter your password"
                 class="form-control form-control-lg"
                 id="password" v-model="password"
+                v-bind:class="{'error-boarder' : $v.password.$invalid}"
             />
+            <ErrorDiv :parameter="$v.password" :name="'Password'"> </ErrorDiv>
             </div>
             <div class="form-group col-6 ">
             <label>Reenter password</label>
@@ -41,7 +46,10 @@
                 type="password"
                 placeholder="Reenter your password"
                 class="form-control form-control-lg"
+                id="password2" v-model="password2"
+                v-bind:class="{'error-boarder' : $v.password2.$invalid}"
             />
+            <ErrorDiv :parameter="$v.password2" :name="'Password'"> </ErrorDiv>
             </div>
         </div>
         <div class="form-row ">
@@ -52,7 +60,9 @@
                 placeholder="Enter your surname"
                 class="form-control form-control-lg"
                 v-model="name"
+                v-bind:class="{'error-boarder' : $v.name.$invalid}"
             />
+            <ErrorDiv :parameter="$v.name" :name="'Name'"> </ErrorDiv>
             </div>
             <div class="form-group col-6 ">
             <label>Surname</label>
@@ -61,7 +71,9 @@
                 placeholder="Enter your surname"
                 class="form-control form-control-lg"
                 id="surname" v-model="surname"
+                v-bind:class="{'error-boarder' : $v.surname.$invalid}"
             />
+            <ErrorDiv :parameter="$v.surname" :name="'Surname'"> </ErrorDiv>
             </div>
         </div>
         
@@ -73,7 +85,9 @@
                 placeholder="Enter your phone number"
                 class="form-control form-control-lg"
                 id="phoneNumber" v-model="phoneNumber"
+                v-bind:class="{'error-boarder' : $v.phoneNumber.$invalid}"
             />
+            <ErrorDiv :parameter="$v.phoneNumber" :name="'Phone number'"> </ErrorDiv>
             </div>
             <div class="form-group col-6 ">
             <label>Address</label>
@@ -82,7 +96,9 @@
                 placeholder="Enter your address"
                 class="form-control form-control-lg"
                 id="address" v-model="address"
+                v-bind:class="{'error-boarder' : $v.address.$invalid}"
             />
+            <ErrorDiv :parameter="$v.address" :name="'Address'"> </ErrorDiv>
             </div>
         </div>
         <div class="form-row ">
@@ -102,7 +118,9 @@
                 placeholder="Enter your city"
                 class="form-control form-control-lg"
                 id="city" v-model="city"
+                v-bind:class="{'error-boarder' : $v.city.$invalid}"
             />
+            <ErrorDiv :parameter="$v.city" :name="'City'"> </ErrorDiv>
             </div>
         </div>
         <div class="form-row ">
@@ -112,7 +130,9 @@
                 placeholder="Enter description"
                 class="form-control form-control-lg"
                 id="description" v-model="description"
+                v-bind:class="{'error-boarder' : $v.description.$invalid}"
             />
+            <ErrorDiv :parameter="$v.description" :name="'Description'"> </ErrorDiv>
             </div>
         </div>
         <div class="form-row ">
@@ -142,26 +162,83 @@
 
 
 <script>
-
+import Vue from 'vue'
+import Vuelidate from 'vuelidate'
+Vue.use(Vuelidate)
+import { required, minLength, between } from 'vuelidate/lib/validators'
+import useValidate from '@vuelidate/core'
+import ErrorDiv from './ErrorDiv.vue'
 export default {
     data () {
     	return {
+			v$: useValidate(),
 			email: "",
 			username: "",
 			password: "",
 			name: "",
 			surname: "",
-			services: "",
 			phoneNumber: "",
 			country: "",
 			city: "",
 			address: "",
 			type: "",
 			description: "",
+			password2: "",
 		}
 	},
+    components:{
+        ErrorDiv : ErrorDiv
+    },
+    validations: {
+            name: {
+                required,
+                minLength: minLength(2),
+            },
+			email: {
+                required,
+                minLength: minLength(2),
+            },
+			username: {
+                required,
+                minLength: minLength(2),
+            },
+			password: {
+                required,
+                minLength: minLength(2),
+            },
+			surname: {
+                required,
+                minLength: minLength(2),
+            },
+			phoneNumber:{
+                required,
+                minLength: minLength(2),
+            },
+			city: {
+                required,
+                minLength: minLength(2),
+            },
+			address: {
+                required,
+                minLength: minLength(2),
+            },
+			description: {
+                required,
+                minLength: minLength(2),
+            },password2: {
+                required,
+                minLength: minLength(2),
+            },
+    },
     methods: {
         register(){
+            console.log(this.$v.$invalid);
+            console.log(this.$v.name.$invalid);
+            this.$v.$touch();
+            if(this.$v.$invalid){
+                alert("Validation failed!");
+                return;
+            }
             let that = this;
             console.log("ok");
 			var formData = new FormData();
@@ -170,7 +247,6 @@ export default {
             formData.append("password",this.password);
             formData.append("name",this.name);
             formData.append("surname",this.surname);
-            formData.append("services",this.services);
             formData.append("phoneNumber",this.phoneNumber);
             formData.append("country",this.country);
             formData.append("city",this.city);
@@ -257,4 +333,9 @@ input::-webkit-input-placeholder {
     font-size: 15px;
     line-height: 3;
 }
+
+.error-boarder {
+  border-color: red;
+}
+
 </style>

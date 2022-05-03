@@ -175,6 +175,7 @@ export default {
 	},
 	methods: {
 		accept(){
+            console.log("AAAAAAAAAAAAA");
 			this.$axios.post('/api/admin/activate-owner?username='+ this.$route.params.registration).then((resp) => {
 				console.log("Uspesno");
 			}).catch((err) => {
