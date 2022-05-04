@@ -270,9 +270,36 @@ public class AdventureService {
     }
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
-        List<AdventureDTO> adventures = this.getAdventures();
-        return adventures.stream().limit(searchParams.getNumberOfResults())
+        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventures(), searchParams.getTags()), searchParams);
+        return sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
                 .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+    }
+
+    private List<AdventureDTO> checkAvailableDates(List<AdventureDTO> adventures, SearchParams searchParams) {
+        return adventures;
+    }
+
+    public List<AdventureDTO> checkTags(List<AdventureDTO> adventures, List<String> tags) {
+        if (tags.size() == 0)
+            return adventures;
+        List<AdventureDTO> correctAdventures = new ArrayList<>();
+        for (AdventureDTO a : adventures) {
+            if(a.getTags().containsAll(tags))
+                correctAdventures.add(a);
+        }
+        return correctAdventures;
+    }
+
+    public List<AdventureDTO> sortAdventures(String sortParam, List<AdventureDTO> adventures) {
+        return switch (sortParam) {
+            case "name-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getName)).toList();
+            case "name-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getName, Comparator.reverseOrder())).toList();
+            case "price-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getPerHour)).toList();
+            case "price-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "score-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getAverageScore)).toList();
+            case "score-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            default -> adventures;
+        };
     }
 }

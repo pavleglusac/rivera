@@ -20,6 +20,7 @@
     "@iconscout/vue-unicons": "^0.0.3",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/fontawesome": "^1.1.2",
+    "aos": "^2.3.4",
     "bootstrap": "^4.6.1",
     "bootstrap-icons": "^1.8.1",
     "bootstrap-select-country": "^4.2.0",

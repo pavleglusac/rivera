@@ -16,7 +16,6 @@ public class SearchParams {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     LocalDateTime end;
     String orderBy;
-    boolean ascending;
     List<String> tags;
     int numberOfResults;
 }

@@ -7,6 +7,10 @@
   --white-color: #ffffff;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+  color: var(--link-text-color);
+}
+
 .navbar {
     background: linear-gradient(90deg, var(--light-blue-color) 0%, var(--prime-color) 100%);    
     width: 100%;
@@ -37,23 +41,19 @@
 }
 
 .menu-link {
-  display: inline-flex;
+  display: block;
   align-items: center;
-  padding-left: 15px;
-  padding-right: 15px;
   color: var(--white-color);
   text-decoration: none;
+  cursor: pointer;
+  padding: 15px;
+  margin: 0 10px;  
+  position: relative;
+  z-index: 1;
 }
 
 .active {
-    font-weight: bold;
-}
-
-.navbar a.nuxt-link-active {
   font-weight: bold;
-}
-
-.navbar a.nuxt-link-exact-active {
   color: var(--dark-blue-color);
 }
 
@@ -64,16 +64,6 @@
 
 .navbar ul li {
   display: inline-block;
-}
-
-.menu-link {
-  display: block;
-  padding: 15px;
-  text-decoration: none;
-  color: var(--white-color);
-  margin: 0 10px;  
-  position: relative;
-  z-index: 1;
 }
 
 .menu-link,
@@ -109,3 +99,9 @@
   visibility: visible;
   height: 100%;
 } 
+
+.reservation-buttons {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

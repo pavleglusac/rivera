@@ -155,7 +155,7 @@ export default {
       numberOfPoints: 5,
     };
   },
-  mounted() {
+ /* mounted() {
     let that = this;
 		this.$axios
         .get('/api/get-client?id=' + this.$route.params.client)
@@ -177,7 +177,7 @@ export default {
 			that.numberOfPenalties = client.numberOfPenalties;
 			that.numberOfPoints = client.numberOfPoints;
     });
-  },
+  },*/
   computed: {
     firstNameValidation() {
       return this.name.length != 0;
