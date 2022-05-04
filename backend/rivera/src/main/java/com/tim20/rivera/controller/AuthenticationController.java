@@ -63,15 +63,6 @@ public class AuthenticationController {
         // Kreiraj token za tog korisnika
         Person user = (Person) authentication.getPrincipal();
 
-            System.out.println(authentication.getPrincipal());
-            System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-            System.out.println("-----------------------------------------------------------------------------");
-            System.out.println(((Person) authentication.getPrincipal()).getUsername());
-            System.out.println(((Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
-        System.out.println(user);
-        System.out.println(user.getUsername());
-        System.out.println("+++++++++++++++++++++++++++++++++++++++");
-
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
@@ -95,7 +86,7 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<Person> addUser(OwnerRequestDTO ownerRequestDTO, UriComponentsBuilder ucBuilder) throws InterruptedException {
 
-        Person existUser = this.userService.findByUsername(ownerRequestDTO.getUsername());
+        Owner existUser = this.ownerService.findByUsername(ownerRequestDTO.getUsername());
 
         if (existUser != null) {
             throw new ResourceConflictException(ownerRequestDTO.getUsername(), "Username already exists");

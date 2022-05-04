@@ -18,15 +18,17 @@ public class AdminController {
 
     @GetMapping(path = "get-owner")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username) throws IOException {
-        return ownerService.findByUsername(username);
+        return ownerService.findByUsernameDTO(username);
     }
 
     @PostMapping(path = "activate-owner")
     public void activatePerson(@RequestParam("username") String username) throws IOException {
+        System.out.println("activate");
         ownerService.activateOwner(username);
     }
     @PostMapping(path = "deactivate-owner")
     public void deactivatePerson(@RequestParam("username") String username) throws IOException {
+        System.out.println("deactivate");
         ownerService.deactivateOwner(username);
     }
 }

@@ -207,7 +207,6 @@ export default {
                 required,
                 email,
                 minLength: minLength(2),
-                maxLength: maxLength(20),
             },
 			username: {
                 required,
@@ -242,7 +241,6 @@ export default {
 			description: {
                 required,
                 minLength: minLength(2),
-                maxLength: maxLength(20),
             },
             password2: {
                 required,
@@ -278,7 +276,8 @@ export default {
             formData.append("city",this.city);
             formData.append("address",this.address);
             formData.append("description",this.description);
-            formData.append("type","Cottage owner");
+            console.log(this.type);
+            formData.append("type",this.type);
             this.$axios.post('/api/auth/signup', formData).then((resp) => {
 				console.log(resp);
 			}).catch((err) => {

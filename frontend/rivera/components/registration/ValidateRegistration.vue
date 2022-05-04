@@ -178,6 +178,7 @@ export default {
             console.log("AAAAAAAAAAAAA");
 			this.$axios.post('/api/admin/activate-owner?username='+ this.$route.params.registration).then((resp) => {
 				console.log("Uspesno");
+                window.location.reload();
 			}).catch((err) => {
 				console.log(err);
 			});
@@ -185,6 +186,7 @@ export default {
 		decline(){
 			this.$axios.post('/api/admin/deactivate-owner?username='+ this.$route.params.registration).then((resp) => {
 				console.log("Uspesno");
+                window.location.reload();
 			}).catch((err) => {
 				console.log(err);
 			});

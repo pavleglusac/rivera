@@ -16,8 +16,8 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Person  implements UserDetails {
 
-    @Id
     private String email;
+    @Id
     @Column(unique = true)
     private String username;
     private String password;

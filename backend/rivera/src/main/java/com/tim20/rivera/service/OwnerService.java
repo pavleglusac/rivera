@@ -1,10 +1,8 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.OwnerRequestDTO;
-import com.tim20.rivera.model.AccountStatus;
-import com.tim20.rivera.model.CottageOwner;
-import com.tim20.rivera.model.Owner;
-import com.tim20.rivera.model.Person;
+import com.tim20.rivera.model.*;
+import com.tim20.rivera.repository.BoatOwnerRepository;
 import com.tim20.rivera.repository.CottageOwnerRepository;
 import com.tim20.rivera.repository.OwnerRepository;
 import com.tim20.rivera.repository.PersonRepository;
@@ -18,6 +16,8 @@ public class OwnerService {
     private OwnerRepository ownerRepository;
     @Autowired
     private CottageOwnerRepository cottageOwnerRepository;
+    @Autowired
+    private BoatOwnerRepository boatOwnerRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,13 +26,41 @@ public class OwnerService {
     public Person save(OwnerRequestDTO userRequestDTO){
         Owner owner = null;
         switch (userRequestDTO.getType()){
-            case "Cottage owner": owner = cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO));
+            case "Cottage Owner": owner = cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO)); break;
+            case "Boat Owner": owner = boatOwnerRepository.save(OwnerRequestDTOToBoatOwner(userRequestDTO));break;
         }
         return owner;
     }
 
+    public Owner findByUsername(String username){
+        return ownerRepository.findByUsername(username);
+    }
+    public Owner findByUsernameForLogin(String username){
+        Owner owner = ownerRepository.findByUsername(username);
+        if(owner.getStatus().equals(AccountStatus.ACTIVE)){
+            return owner;
+        }
+        else return null;
+    }
     public CottageOwner OwnerRequestDTOToCottageOwner(OwnerRequestDTO userRequestDTO){
         CottageOwner owner = new CottageOwner();
+        owner.setAddress(userRequestDTO.getAddress());
+        owner.setCity(userRequestDTO.getCity());
+        owner.setCountry(userRequestDTO.getCountry());
+        owner.setEmail(userRequestDTO.getEmail());
+        owner.setName(userRequestDTO.getName());
+        owner.setSurname(userRequestDTO.getSurname());
+        owner.setPhoto(userRequestDTO.getPhoto());
+        owner.setPhoneNumber(userRequestDTO.getPhoneNumber());
+        owner.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        owner.setStatus(AccountStatus.WAITING);
+        owner.setSignUpDescription("description");
+        owner.setUsername(userRequestDTO.getUsername());
+        return owner;
+    }
+
+    public BoatOwner OwnerRequestDTOToBoatOwner(OwnerRequestDTO userRequestDTO){
+        BoatOwner owner = new BoatOwner();
         owner.setAddress(userRequestDTO.getAddress());
         owner.setCity(userRequestDTO.getCity());
         owner.setCountry(userRequestDTO.getCountry());
@@ -64,7 +92,7 @@ public class OwnerService {
     }
 
 
-    public OwnerRequestDTO findByUsername(String username) {
+    public OwnerRequestDTO findByUsernameDTO(String username) {
         return ownerToOwnerRequestDTO(ownerRepository.findByUsername(username));
     }
 
