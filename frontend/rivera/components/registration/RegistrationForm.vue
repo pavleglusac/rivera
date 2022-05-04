@@ -104,12 +104,13 @@
         <div class="form-row ">
             <div class="form-group col-6">
             <label>Country</label>
-            <input
-                type="text"
-                placeholder="Enter your country"
-                class="form-control form-control-lg"
-                id="country" v-model="country"
-            />
+					<select id="inputState" v-model="country" class="form-control"  v-bind:class="{'error-boarder' : $v.country.$invalid}">
+						<option selected>Choose...</option>
+						<option v-for="country in countries" :key="country.label" :value="country.value">
+						{{ country.label }}
+						</option>
+					</select>
+            <ErrorDiv :parameter="$v.country" :name="'Country'"> </ErrorDiv>
             </div>
             <div class="form-group col-6 ">
             <label>City</label>
@@ -139,12 +140,10 @@
             <div class="form-group col-3"></div>
             <div class="form-group col-6 ">
             <label>Type</label>
-            <input
-                type="text"
-                placeholder="Enter your type"
-                class="form-control form-control-lg"
-                id="type" v-model="type"
-            />
+            <select v-model="type" class="form-control"  v-bind:class="{'error-boarder' : $v.type.$invalid}">
+                <option v-for="tip in types" >{{tip}}</option>
+            </select>
+            <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
             </div>
         </div>
         
@@ -162,13 +161,21 @@
 
 
 <script>
+const countries = require('i18n-iso-countries')
+countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
-import { required, minLength, between } from 'vuelidate/lib/validators'
+import { required, minLength, between, email, maxLength } from 'vuelidate/lib/validators'
 import useValidate from '@vuelidate/core'
 import ErrorDiv from './ErrorDiv.vue'
 export default {
+    computed: {
+    countries () {
+      const list = countries.getNames('en', { select: 'official' })
+      return Object.keys(list).map((key) => ({ value: key, label: list[key] }))
+    }
+  },
     data () {
     	return {
 			v$: useValidate(),
@@ -184,6 +191,7 @@ export default {
 			type: "",
 			description: "",
 			password2: "",
+            types: ['Cottage Owner','Boat Owner']
 		}
 	},
     components:{
@@ -193,41 +201,59 @@ export default {
             name: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			email: {
                 required,
+                email,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			username: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			password: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			surname: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			phoneNumber:{
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			city: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			address: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
             },
 			description: {
                 required,
                 minLength: minLength(2),
-            },password2: {
+                maxLength: maxLength(20),
+            },
+            password2: {
                 required,
                 minLength: minLength(2),
+                maxLength: maxLength(20),
+            },
+            type: {
+                required,
+            },
+            country: {
+                required,
             },
     },
     methods: {
