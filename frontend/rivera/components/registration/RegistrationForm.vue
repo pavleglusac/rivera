@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="regForm">
     <b-card class="text-center mx-auto my-auto card">
       <img src="..\..\static\rivera_logo_ver.png" />
       <form id="registrationForm">
@@ -294,73 +294,5 @@ export default {
 
 <style>
 
-html,
-body {
-  background: linear-gradient(
-    90deg,
-    var(--light-blue-color) 0%,
-    var(--prime-color) 100%
-  );
-}
-
-.card {
-    border-radius: 20;
-    filter: drop-shadow(0px 2px 3px);
-    padding: 10px;
-    margin: 0 auto; 
-    float: none;
-    margin-bottom: 10px;
-    max-width: 40rem;
-    padding: 50px;
-}
-
-.card img {
-    height: 200px;
-    margin-bottom: 30px;
-}
-
-#login-btn {
-    background-color: var(--prime-color);
-    border: none;
-}
-
-#signup-btn {
-    border: 2px solid var(--prime-color);
-    color: var(--prime-color);
-}
-
-#signup-btn:hover {
-    background-color: var(--prime-color);
-    color: white;
-}
-
-#just-looking {
-    border: none;
-    background: white;
-    color: var(--dark-blue-color);
-    font-weight: 500;
-}
-
-#just-looking:hover {
-    border: 2px solid var(--dark-blue-color);
-}
-
-label {
-    float: left;
-    font-size: 18px;
-}
-
-input[type="email"],
-input[type="password"] {
-    font-size: 18px;
-}
-input::-webkit-input-placeholder {
-    font-size: 15px;
-    line-height: 3;
-}
-
-.error-boarder {
-  border-color: red;
-}
 
 </style>

@@ -77,23 +77,24 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Person> addUser(OwnerRequestDTO ownerRequestDTO, UriComponentsBuilder ucBuilder) throws InterruptedException {
+    public ResponseEntity<Person> addOwner(OwnerRequestDTO ownerRequestDTO, UriComponentsBuilder ucBuilder) throws InterruptedException {
 
         Owner existUser = this.ownerService.findByUsername(ownerRequestDTO.getUsername());
 
         if (existUser != null) {
-            throw new ResourceConflictException(ownerRequestDTO.getUsername(), "Username already exists");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         Person user = this.ownerService.save(ownerRequestDTO);
         emailService.sendNotificaitionAsync(ownerRequestDTO);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping(path="check-if-exists")
+    @GetMapping(path="check-if-username-exists")
     public Boolean ifExists(String username){
         Person existUser = personService.findByUsername(username);
         return existUser != null;
     }
+
 
     @GetMapping(path="getRole")
     public String getRole(){

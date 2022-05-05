@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AddCottage from './../../components/add_rentable/AddCottage.vue'
+import AddCottage from './../../components/add_cottage/AddCottage.vue'
 export default {
   name: 'AddCottagePage',
   components: { AddCottage }
