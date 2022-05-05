@@ -100,6 +100,9 @@
                 <Calendar :reservations="reservations"/>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
 
         <div class="w-100 pl-5 mt-5">
             <div style="font-size: 1.8em; font-weight: 500;" class="mt-4">Discount offers!</div>

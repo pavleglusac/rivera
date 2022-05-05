@@ -47,7 +47,7 @@
           On date
         </b-form-radio>
       </b-form-group>
-      <b-button v-b-modal.time_modal class="float-right">Next</b-button>
+      <b-button @click="timeModal" class="float-right">Next</b-button>
     </b-modal>
     <!-- TIME picker -->
     <b-modal
@@ -230,6 +230,11 @@ export default {
         datesSet: this.handleMonthChange,
         firstDay: 1,
         eventOverlap: false,
+        eventDurationEditable: false,
+        eventStartEditable: false,
+        background: "green",
+        eventBackgroundColor: "#7bb888",
+        eventBorderColor: "#7bb888"
         /* you can update a remote database when these fire:
         eventAdd:
         eventChange:
@@ -254,10 +259,18 @@ export default {
       this.calendarOptions.events = val;
     },
     mode: function (val, oldVal) {
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      console.log(calendarApi);
       if (val == "view") {
         this.calendarOptions.selectable = false;
         this.calendarOptions.dateClick = this.handleDayClick;
+      } else if(val == "add") {
+        calendarApi.setOption("eventBackgroundColor", "#7bb888");
+        calendarApi.setOption("eventBorderColor", "#7bb888");
+        this.calendarOptions.selectable = true;
       } else {
+        calendarApi.setOption("eventBackgroundColor", "#D25034");
+        calendarApi.setOption("eventBorderColor", "#D25034");
         this.calendarOptions.selectable = true;
       }
     },
@@ -267,6 +280,7 @@ export default {
       this.calendarOptions.weekends = !this.calendarOptions.weekends; // update a property
     },
     handleDateSelect(selectInfo) {
+      console.log(selectInfo);
       let startMoment = moment(selectInfo.start);
       let endMoment = moment(selectInfo.end);
       this.year = startMoment.year;
@@ -283,13 +297,7 @@ export default {
         }
       }
 
-      console.log("OVO TRAZIS");
-      console.log(this.selectedDays);
-
       this.select_info = selectInfo;
-      console.log("select info ");
-      console.log(this.select_info);
-
       this.$refs.repeat_modal.show();
     },
 
@@ -316,7 +324,19 @@ export default {
         this.$refs.month_modal.show();
       }
       else {
+        this.$refs.repeat_modal.hide();
         this.createPatterns();
+      }
+    },
+    timeModal() {
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      console.log("time modal() ", calendarApi.view.type);
+      if(calendarApi.view.type == "dayGridMonth") {
+        this.$refs.time_modal.show()
+      } else {
+        this.startTime = moment(this.select_info.start).format("HH:MM:ss")
+        this.endTime = moment(this.select_info.end).format("HH:MM:ss")
+        this.timePicked();
       }
     },
     createPatterns() {
@@ -453,5 +473,9 @@ export default {
     },
   },
 };
-
 </script>
+
+<style>
+
+</style>
+
