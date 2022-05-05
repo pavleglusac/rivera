@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import EditAdventure from './../../components/add-rentable/EditAdventure.vue'
-import Rentable from './../../components/rentable/Rentable.vue'
+import EditAdventure from './../../components/add-adventure/EditAdventure.vue'
+import Rentable from './../../components/adventure/Rentable.vue'
 export default {
     components: { EditAdventure, Rentable }, 
     mounted() {
