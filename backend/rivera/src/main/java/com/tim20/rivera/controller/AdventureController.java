@@ -83,4 +83,10 @@ public class AdventureController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PostMapping("remove-availabilities")
+    public ResponseEntity removeAvailabilities(@RequestParam Integer id) {
+        adventureAvailabilityService.removeAvailabilities(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

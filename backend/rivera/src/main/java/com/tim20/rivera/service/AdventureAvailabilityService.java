@@ -319,6 +319,7 @@ public class AdventureAvailabilityService {
 
 
     private Pair<LocalDateTime, LocalDateTime> getStampsForDate(LocalDateTime date, AvailabilityPattern pattern) {
+        date = date.minusSeconds(1);
         CronExpression cronStart = CronExpression.parse(pattern.getPatternStart());
         CronExpression cronEnd = CronExpression.parse(pattern.getPatternEnd());
         LocalDateTime start = cronStart.next(date);
@@ -392,4 +393,17 @@ public class AdventureAvailabilityService {
 
     }
 
+    public void removeAvailabilities(Integer adventureId) {
+        Adventure adventure = adventureRepository.getById(adventureId);
+        List<Calendar> cals = adventure.getCalendars();
+        if(cals == null) {
+            adventure.setCalendars(new ArrayList<>());
+            cals = adventure.getCalendars();
+        }
+        if(!cals.isEmpty()) {
+            cals.get(0).setPatternsOfAvailability(new ArrayList<>());
+            calendarRepository.save(cals.get(0));
+        }
+        adventureRepository.save(adventure);
+    }
 }

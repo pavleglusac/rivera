@@ -30,15 +30,6 @@
         </b-form-radio>
         <b-form-radio
           v-model="selected_repeat"
-          value="otherweek"
-          button
-          button-variant="light"
-          size="lg"
-        >
-          Every other week
-        </b-form-radio>
-        <b-form-radio
-          v-model="selected_repeat"
           value="date"
           button
           button-variant="light"
@@ -123,7 +114,7 @@
           button-variant="light"
           size="lg"
         >
-          <font-awesome-icon icon="eye" />
+          <font-awesome-icon icon="eye" /> View
         </b-form-radio>
         <b-form-radio
           v-model="mode"
@@ -132,7 +123,7 @@
           button-variant="light"
           size="lg"
         >
-          <font-awesome-icon icon="plus" />
+          <font-awesome-icon icon="plus" /> Add
         </b-form-radio>
         <b-form-radio
           v-model="mode"
@@ -141,9 +132,9 @@
           button-variant="light"
           size="lg"
         >
-          <font-awesome-icon icon="minus" />
+          <font-awesome-icon icon="minus" />  Subtract
         </b-form-radio>
-        <b-button variant="light" size="lg" class="float-right ml-5 mr-0">
+        <b-button @click="removeAvailabilities" variant="light" size="lg" class="float-right ml-5 mr-0">
           <font-awesome-icon icon="trash-can" />
         </b-button>
       </b-form-group>
@@ -194,6 +185,7 @@ export default {
       endTime: "15:00",
       selectedMonths: [],
       selectedDays: [],
+      continuous: false,
       ids: 0,
       year: 2022,
       select_info: {},
@@ -291,7 +283,7 @@ export default {
         this.selectedDays = days;
       } else {
         let tempStartMoment = startMoment;
-        while (tempStartMoment.isBefore(endMoment)) {
+        while (tempStartMoment.isSameOrBefore(endMoment, 'day')) {
           this.selectedDays.push(days[tempStartMoment.day()]);
           tempStartMoment.add(1, "d");
         }
@@ -340,14 +332,16 @@ export default {
       }
     },
     createPatterns() {
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      if(calendarApi.view.type == "timeGridWeek") {
+        this.continuous = true;
+      }
       if (this.selected_repeat == "week") {
         console.log("select info ", this.select_info);
         this.create_repeat_week_patterns();
       } else if (this.selected_repeat == "norepeat") {
         this.create_no_repeat_patterns();
-      } else if (this.selected_repeat == "otherweek") {
-        this.create_other_week_patterns();
-      } else {
+      }  else {
         this.create_date_patterns();
       }
       this.selectedMonths = [];
@@ -418,11 +412,25 @@ export default {
       let endMin = parseInt(this.endTime.split(":")[1]);
       let patterns = []
       this.selectedMonths = [this.months[startDate.month()]]
-      while(startDate.isBefore(endDate)) {
-        let patternStart = "0 ";
-        let patternEnd = "0 ";
-        patternStart += `${startMin} ${startHour} ` + startDate.date() + " ";
-        patternEnd += `${endMin} ${endHour} ` + startDate.date() + " ";
+      let startDateCopy = startDate.clone();
+      while(startDate.isSameOrBefore(endDate, 'day')) {
+        let patternStart = "";
+        let patternEnd = "";
+        if(this.continuous) {
+          if(startDateCopy.isSame(startDate)) {
+            patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
+            patternEnd += `59 59 23 ` + startDate.date() + " ";
+          } else if(this.isLastDateBeforeEnd(startDate, endDate)) {
+            patternStart += `0 0 0 ` + startDate.date() + " ";
+            patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
+          } else {
+            patternStart += `0 0 0 ` + startDate.date() + " ";
+            patternEnd += `59 59 23 ` + startDate.date() + " ";
+          }
+        } else {
+          patternStart += `${startMin} ${startHour} ` + startDate.date() + " ";
+          patternEnd += `${endMin} ${endHour} ` + startDate.date() + " ";
+        }
         let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd);
         patternStart = ret.start;
         patternEnd = ret.end;
@@ -430,6 +438,23 @@ export default {
         patterns.push([patternStart, patternEnd])
       }
       this.sendPattern(patterns);
+    },
+    isLastDateBeforeEnd(startDate, endDate){
+      let s = startDate.clone();
+      s.add(1, 'days');
+      return startDate.isSame(endDate, 'day');
+    },
+    removeAvailabilities() {
+      let that = this;
+      this.$axios
+        .post(
+          `/api/remove-availabilities?id=${this.$route.params.adventure}` ,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        ).then(that.getAvailabilities());
     },
     async getAvailabilities() {
       let calendarApi = this.$refs.fullCalendar.getApi();
