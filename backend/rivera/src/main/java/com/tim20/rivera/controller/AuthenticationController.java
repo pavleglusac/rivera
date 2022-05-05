@@ -45,28 +45,22 @@ public class AuthenticationController {
     @Autowired
     private PersonService personService;
 
-    // Prvi endpoint koji pogadja korisnik kada se loguje.
-    // Tada zna samo svoje korisnicko ime i lozinku i to prosledjuje na backend.
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
             JwtAuthenticationRequestDTO authenticationRequest, HttpServletResponse response) {
 
-        // Ukoliko kredencijali nisu ispravni, logovanje nece biti uspesno, desice se
-        // AuthenticationException
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         System.out.println(authenticationRequest.getUsername()+", "+ authenticationRequest.getPassword());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication); 
 
         System.out.println(authentication.getPrincipal());
-        // Kreiraj token za tog korisnika
         Person user = (Person) authentication.getPrincipal();
 
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
-        // Vrati token kao odgovor na uspesnu autentifikaciju
         return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
             }
         catch (AuthenticationException ae){
@@ -82,7 +76,6 @@ public class AuthenticationController {
         return personService.personToDTO((Person)(SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
-    // Endpoint za registraciju novog korisnika
     @PostMapping("/signup")
     public ResponseEntity<Person> addUser(OwnerRequestDTO ownerRequestDTO, UriComponentsBuilder ucBuilder) throws InterruptedException {
 
