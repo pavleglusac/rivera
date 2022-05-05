@@ -109,3 +109,71 @@
   visibility: visible;
   height: 100%;
 } 
+
+.regForm  {
+  background: linear-gradient(
+    90deg,
+    var(--light-blue-color) 0%,
+    var(--prime-color) 100%
+  );
+}
+
+.regForm .card {
+    border-radius: 20;
+    filter: drop-shadow(0px 2px 3px);
+    padding: 10px;
+    margin: 0 auto; 
+    float: none;
+    margin-bottom: 10px;
+    max-width: 40rem;
+    padding: 50px;
+}
+
+.regForm .card img {
+    height: 200px;
+    margin-bottom: 30px;
+}
+
+.regForm #login-btn {
+    background-color: var(--prime-color);
+    border: none;
+}
+
+.regForm #signup-btn {
+    border: 2px solid var(--prime-color);
+    color: var(--prime-color);
+}
+
+.regForm #signup-btn:hover {
+    background-color: var(--prime-color);
+    color: white;
+}
+
+.regForm #just-looking {
+    border: none;
+    background: white;
+    color: var(--dark-blue-color);
+    font-weight: 500;
+}
+
+.regForm #just-looking:hover {
+    border: 2px solid var(--dark-blue-color);
+}
+
+.regForm label {
+    float: left;
+    font-size: 18px;
+}
+
+.regForm input[type="email"],
+.regForm input[type="password"] {
+    font-size: 18px;
+}
+.regForm input::-webkit-input-placeholder {
+    font-size: 15px;
+    line-height: 3;
+}
+
+.regForm .error-boarder {
+  border-color: red;
+}

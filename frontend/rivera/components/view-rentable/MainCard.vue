@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import EditCottage from './../add_rentable/editCottage.vue'
+import EditCottage from '../add_cottage/EditCottage.vue'
 export default {
     components: { EditCottage },
     mounted() {
