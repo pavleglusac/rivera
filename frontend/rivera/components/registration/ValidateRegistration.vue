@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="regForm">
     <b-card class="text-center mx-auto my-auto card">
       <img src="..\..\static\rivera_logo_ver.png" />
       <form id="registrationForm">
@@ -127,7 +127,7 @@
 
 		<div v-if="status=='WAITING'">
 			<b-button block id="login-btn" variant="primary"  @click="accept">Accept</b-button>
-			<b-button block id="signup-btn" variant="outline-primary">Decline</b-button>
+			<b-button block id="signup-btn" variant="outline-primary" @click="decline">Decline</b-button>
 		</div>
       </form>
     </b-card>

@@ -59,11 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
                 .authorizeRequests().antMatchers("/auth/login").permitAll()
-                .antMatchers("/auth/signup").permitAll()		// /auth/**
-                .antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
-                .antMatchers("/api/foo").permitAll()		// /api/foo
+                .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/api/foo").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
-                .antMatchers("/**").permitAll()		// /api/foo
+                .antMatchers("/**").permitAll()
                   .anyRequest().authenticated().and()
 
                 .cors().and()
