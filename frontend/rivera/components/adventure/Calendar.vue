@@ -54,15 +54,29 @@
       <input type="time" id="startTime" name="startTime" v-model="startTime" />
       <label for="endTime">Select end time:</label>
       <input type="time" id="endTime" name="endTime" v-model="endTime" />
-      <b-form-checkbox
-        id="checkbox-1"
-        v-model="status"
-        name="checkbox-1"
-        value="accepted"
-        unchecked-value="not_accepted"
-      >
-        All day
-      </b-form-checkbox>
+      
+      <b-form-group>
+        <b-form-radio
+          v-model="continuous"
+          value="false"
+          button
+          button-variant="light"
+          size="lg"
+        >
+          Dates are treated individually
+        </b-form-radio>
+        <b-form-radio
+          v-model="continuous"
+          value="true"
+          button
+          button-variant="light"
+          size="lg"
+        >
+          Dates are continuous
+        </b-form-radio>
+      </b-form-group>
+
+
       <b-button @click="timePicked" class="float-right">Next</b-button>
     </b-modal>
     <!-- Month picker -->
@@ -273,6 +287,7 @@ export default {
     },
     handleDateSelect(selectInfo) {
       console.log(selectInfo);
+      let calendarApi = this.$refs.fullCalendar.getApi();
       let startMoment = moment(selectInfo.start);
       let endMoment = moment(selectInfo.end);
       this.year = startMoment.year;
@@ -283,10 +298,18 @@ export default {
         this.selectedDays = days;
       } else {
         let tempStartMoment = startMoment;
-        while (tempStartMoment.isSameOrBefore(endMoment, 'day')) {
-          this.selectedDays.push(days[tempStartMoment.day()]);
-          tempStartMoment.add(1, "d");
+        if(calendarApi.view.type == "timeGridWeek") {
+          while (tempStartMoment.isSameOrBefore(endMoment, 'day')) {
+            this.selectedDays.push(days[tempStartMoment.day()]);
+            tempStartMoment.add(1, "d");
+          }
+        } else {
+          while (tempStartMoment.isBefore(endMoment, 'day')) {
+            this.selectedDays.push(days[tempStartMoment.day()]);
+            tempStartMoment.add(1, "d");
+          }
         }
+        
       }
 
       this.select_info = selectInfo;
@@ -334,22 +357,23 @@ export default {
     createPatterns() {
       let calendarApi = this.$refs.fullCalendar.getApi();
       if(calendarApi.view.type == "timeGridWeek") {
-        this.continuous = true;
+        this.continuous = 'true';
+        "ovo se desi izgleda mora biti nema sta drugo"
       }
+
       if (this.selected_repeat == "week") {
-        console.log("select info ", this.select_info);
         this.create_repeat_week_patterns();
       } else if (this.selected_repeat == "norepeat") {
         this.create_no_repeat_patterns();
       }  else {
+        console.log("CREATE DATE PATTERNS ELSE");
         this.create_date_patterns();
       }
       this.selectedMonths = [];
       this.selectedDays = [];
       this.$refs.month_modal.hide();
     },
-    addMonthsAndDaysToPattern(patternStart, patternEnd) {
-      console.log("here 1");
+    addMonthsAndDaysToPattern(patternStart, patternEnd, starDay=false) {
       for (let month of this.selectedMonths) {
         patternStart += month + ",";
         patternEnd += month + ",";
@@ -358,13 +382,18 @@ export default {
       patternStart += " ";
       patternEnd = patternEnd.substring(0, patternEnd.length - 1);
       patternEnd += " ";
-      console.log("here 2");
-      for (let day of this.selectedDays) {
-        patternStart += day + ",";
-        patternEnd += day + ",";
+      if(!starDay) {
+        for (let day of this.selectedDays) {
+          patternStart += day + ",";
+          patternEnd += day + ",";
+        }
+        patternStart = patternStart.substring(0, patternStart.length - 1);
+        patternEnd = patternEnd.substring(0, patternEnd.length - 1);
+      } else {
+         patternStart += "*";
+         patternEnd += "*";
       }
-      patternStart = patternStart.substring(0, patternStart.length - 1);
-      patternEnd = patternEnd.substring(0, patternEnd.length - 1);
+      
       return { start: patternStart, end: patternEnd };
     },
     sendPattern(patterns) {
@@ -411,12 +440,14 @@ export default {
       let startMin = parseInt(this.startTime.split(":")[1]);
       let endMin = parseInt(this.endTime.split(":")[1]);
       let patterns = []
+      console.log("CONTINUOUS: ", this.continuous);
+      console.log(startDate, endDate);
       this.selectedMonths = [this.months[startDate.month()]]
       let startDateCopy = startDate.clone();
       while(startDate.isSameOrBefore(endDate, 'day')) {
         let patternStart = "";
         let patternEnd = "";
-        if(this.continuous) {
+        if(this.continuous == 'true' && !startDateCopy.isSame(endDate, 'day')) {
           if(startDateCopy.isSame(startDate)) {
             patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
             patternEnd += `59 59 23 ` + startDate.date() + " ";
@@ -428,10 +459,48 @@ export default {
             patternEnd += `59 59 23 ` + startDate.date() + " ";
           }
         } else {
-          patternStart += `${startMin} ${startHour} ` + startDate.date() + " ";
-          patternEnd += `${endMin} ${endHour} ` + startDate.date() + " ";
+          patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
+          patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
         }
         let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd);
+        patternStart = ret.start;
+        patternEnd = ret.end;
+        startDate.add(1, 'days');
+        patterns.push([patternStart, patternEnd])
+      }
+      this.sendPattern(patterns);
+    },
+    create_date_patterns() {
+      let startDate = moment(this.select_info.start);
+      let endDate = moment(this.select_info.end);
+      let startHour = parseInt(this.startTime.split(":")[0]);
+      let endHour = parseInt(this.endTime.split(":")[0]);
+      let startMin = parseInt(this.startTime.split(":")[1]);
+      let endMin = parseInt(this.endTime.split(":")[1]);
+      let patterns = []
+      let startDateCopy = startDate.clone();
+      console.log("CONTINUOUS: ", this.continuous);
+      while(startDate.isSameOrBefore(endDate, 'day')) {
+        let patternStart = "";
+        let patternEnd = "";
+        if(this.continuous === 'true' && !startDateCopy.isSame(endDate, 'day')) {
+          console.log('ja sam lud');
+          console.log(this.continuous);
+          if(startDateCopy.isSame(startDate)) {
+            patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
+            patternEnd += `59 59 23 ` + startDate.date() + " ";
+          } else if(this.isLastDateBeforeEnd(startDate, endDate)) {
+            patternStart += `0 0 0 ` + startDate.date() + " ";
+            patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
+          } else {
+            patternStart += `0 0 0 ` + startDate.date() + " ";
+            patternEnd += `59 59 23 ` + startDate.date() + " ";
+          }
+        } else {
+          patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
+          patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
+        }
+        let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd, true);
         patternStart = ret.start;
         patternEnd = ret.end;
         startDate.add(1, 'days');
@@ -492,6 +561,7 @@ export default {
               end: temp.endDateTime,
               display: "block",
               color: "#7bb888",
+              
             });
           }
         });
