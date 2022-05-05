@@ -89,6 +89,11 @@ public class AuthenticationController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @GetMapping(path="check-if-exists")
+    public Boolean ifExists(String username){
+        Person existUser = personService.findByUsername(username);
+        return existUser != null;
+    }
 
     @GetMapping(path="getRole")
     public String getRole(){
