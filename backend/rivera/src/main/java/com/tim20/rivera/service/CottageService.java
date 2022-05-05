@@ -66,7 +66,7 @@ public class CottageService {
         temporaryOwner.setEmail("marko2@gmail.com");
         temporaryOwner.setPassword("sifra");
         temporaryOwner.setPhoneNumber("+3845135535");
-        temporaryOwner.setUsername("marko");
+        temporaryOwner.setUsername("marko2");
         temporaryOwner.setPhoto("/images/clients/" + temporaryOwner.getUsername() + ".jpg");
         temporaryOwner.setCottages(new ArrayList<Cottage>());
         cottageOwnerRepository.save(temporaryOwner);

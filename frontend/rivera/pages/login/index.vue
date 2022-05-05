@@ -6,14 +6,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <AddCottage />
+    <LoginForm />
   </div>
 </template>
 
 <script>
-import AddCottage from './../../components/add_cottage/AddCottage.vue'
+import LoginForm from '../../components/login/LoginForm.vue'
 export default {
-  name: 'AddCottagePage',
-  components: { AddCottage }
+  name: 'loginPage',
+  components: { LoginForm }
 }
 </script>

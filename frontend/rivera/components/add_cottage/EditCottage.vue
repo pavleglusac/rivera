@@ -150,14 +150,14 @@
 		
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
-import PictureUpload from './PictureUpload.vue';
+import PictureUpload from './../add-adventure/PictureUpload.vue';
 import PictureEdit from './../add-adventure/PictureEdit.vue';
 export default {
 	components: {PictureUpload, PictureEdit},
 	computed: {
     countries () {
       const list = countries.getNames('en', { select: 'official' })
-      return Object.keys(list).map((key) => ({ value: key, label: list[key] }))
+      return Object.keys(list).map((key) => ({ value: kyey, label: list[key] }))
     }
   },
   data () {
