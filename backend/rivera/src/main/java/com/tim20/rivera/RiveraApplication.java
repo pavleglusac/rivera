@@ -45,6 +45,9 @@ public class RiveraApplication {
 	private ReservationRepository reservationRepository;
 
 	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
 	private FishingInstructorRepository fishingInstructorRepository;
 
 	private void initializeData2() {
@@ -245,6 +248,16 @@ public class RiveraApplication {
 
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);
+
+		Role role = new Role();
+		Role role2 = new Role();
+
+		role.setName("ROLE_COTTAGE_OWNER");
+		role.setId(1l);
+		role2.setName("ROLE_BOAT_OWNER");
+		role2.setId(2l);
+		roleRepository.save(role);
+		roleRepository.save(role2);
 
 		initializeData2();
 	}

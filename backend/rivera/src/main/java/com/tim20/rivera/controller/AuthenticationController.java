@@ -95,4 +95,11 @@ public class AuthenticationController {
         emailService.sendNotificaitionAsync(ownerRequestDTO);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
+
+    @GetMapping(path="getRole")
+    public String getRole(){
+        System.out.println(((Person)(SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles());
+        return ((Person)(SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles().get(0).getName();
+    }
 }

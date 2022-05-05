@@ -18,6 +18,9 @@
             disabled
           />
         </div>
+        <button type="button" @click="cowner"> COWNER </button>
+        <button type="button" @click="bowner"> BOWNER </button>
+        <button type="button" @click="idk"> IDK </button>
         </form>
     </b-card>
   </div>
@@ -41,6 +44,42 @@ export default {
 			}).catch((err) => {
 				console.log(err);
 			});
+  },
+  methods:{
+    cowner(){
+      let that = this;
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios.get('/api/helloCowner',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+				console.log(resp.data);
+			}).catch((err) => {
+				console.log(err);
+			});
+    },
+    bowner(){
+      let that = this;
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios.get('/api/helloBowner',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+				console.log(resp.data);
+			}).catch((err) => {
+				console.log(err);
+			});
+    },
+    idk(){
+      let that = this;
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios.get('/api/auth/getRole',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+				console.log(resp.data);
+			}).catch((err) => {
+				console.log(err);
+			});
+
+    },
   }
 };
 </script>

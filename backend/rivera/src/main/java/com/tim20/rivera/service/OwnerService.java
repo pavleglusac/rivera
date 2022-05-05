@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OwnerService {
     @Autowired
@@ -18,6 +20,8 @@ public class OwnerService {
     private CottageOwnerRepository cottageOwnerRepository;
     @Autowired
     private BoatOwnerRepository boatOwnerRepository;
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -56,6 +60,8 @@ public class OwnerService {
         owner.setStatus(AccountStatus.WAITING);
         owner.setSignUpDescription("description");
         owner.setUsername(userRequestDTO.getUsername());
+        List<Role> roles = roleService.findByName("ROLE_COTTAGE_OWNER");
+        owner.setRoles(roles);
         return owner;
     }
 
@@ -73,6 +79,8 @@ public class OwnerService {
         owner.setStatus(AccountStatus.WAITING);
         owner.setSignUpDescription("description");
         owner.setUsername(userRequestDTO.getUsername());
+        List<Role> roles = roleService.findByName("ROLE_BOAT_OWNER");
+        owner.setRoles(roles);
         return owner;
     }
 
