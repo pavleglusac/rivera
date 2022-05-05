@@ -17,7 +17,8 @@
         
         <hr class="w-100">
         
-        <b-card-text style="font-size: 0.8em;">{{entity.description}}</b-card-text>
+        <b-card-text v-if="entity.description.length<200" style="font-size: 0.8em;">{{entity.description}}</b-card-text>
+        <b-card-text v-else style="font-size: 0.8em;">{{entity.description.substring(0,200)}}...</b-card-text>
         <div>
           <li v-for="tag in entity.tags">
               <span class="tag">{{ tag }}</span>

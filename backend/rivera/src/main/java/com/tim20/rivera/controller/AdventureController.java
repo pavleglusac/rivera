@@ -2,6 +2,7 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.AdventureProfileDTO;
+import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.Adventure;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.service.AdventureService;
@@ -35,6 +36,11 @@ public class AdventureController {
         return adventureService.getAdventure(id);
     }
 
+    @PostMapping(path="/search-adventures")
+    public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
+        return adventureService.searchAdventures(searchParams);
+    }
+
     @GetMapping(path = "/get-adventures")
     public List<AdventureDTO> getAdventures() {
         return adventureService.getAdventures();
@@ -55,8 +61,8 @@ public class AdventureController {
         return adventureService.getFullById(id);
     }
 
-    @PostMapping(path="delete-adventure")
-    public ResponseEntity<String> deleteAdventure(@RequestParam Integer id){
+    @PostMapping(path = "delete-adventure")
+    public ResponseEntity<String> deleteAdventure(@RequestParam Integer id) {
         adventureService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }

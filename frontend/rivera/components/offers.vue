@@ -1,6 +1,5 @@
 <template>
   <div>
-    <unauthenticated-navbar />
     <b-card class="mb-3" style="margin: 40px; margin-top: 10px">
       <b-form>
         <div class="container-fluid p-2">
@@ -25,47 +24,36 @@
         <div class="p-2">
           <form>
             <div class="form-row">
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-3">
                 <b-form-input
                   id="search-filter"
+                  size="sm"
                   placeholder="Search..."
+                  v-model="searchText"
+                  v-on:input="reload"
                 ></b-form-input>
               </div>
               <div class="form-group col-md-3">
-                <b-form-datepicker placeholder="Start date"></b-form-datepicker>
+                <b-form-datepicker size="sm" v-on:input="reload" placeholder="Start date"></b-form-datepicker>
               </div>
               <div class="form-group col-md-3">
-                <b-form-datepicker placeholder="End date"></b-form-datepicker>
+                <b-form-datepicker size="sm" v-on:input="reload" placeholder="End date"></b-form-datepicker>
               </div>
-              <div class="form-group col-md-2">
-                <b-dropdown text="Order by ">
-                  <b-dropdown-divider></b-dropdown-divider>
-                  <b-dropdown-group id="asc" header="Ascending">
-                    <b-dropdown-item-button>Price</b-dropdown-item-button>
-                    <b-dropdown-item-button>Name</b-dropdown-item-button>
-                    <b-dropdown-item-button>Score</b-dropdown-item-button>
-                  </b-dropdown-group>
-                  <b-dropdown-group id="desc" header="Descending">
-                    <b-dropdown-item-button>Price</b-dropdown-item-button>
-                    <b-dropdown-item-button>Name</b-dropdown-item-button>
-                    <b-dropdown-item-button>Score</b-dropdown-item-button>
-                  </b-dropdown-group>
-                </b-dropdown>
+              <div class="form-group col-md-3">
+                <b-form-select size="sm" v-model="sort" :options="orderBy" @change.native="reload"></b-form-select>
               </div>
             </div>
           </form>
           <div style="margin-bottom: 15px">
-            <b-form-tags input-id="tags-basic"></b-form-tags>
+            <b-form-tags size="sm" v-on:input="reload" v-model="tags" input-id="tags-basic"></b-form-tags>
           </div>
 
-          <div v-if="isFiltering && filteredOffers.length === 0">
-            <p>No offers found.</p>
+          <div v-if="offers.length === 0">
+            <p style="text-align:center;">No offers found.</p>
           </div>
           <div v-else>
-            <!--v-for="adventure, i in (filteredOffers.length > 0 ? filteredOffers : offers)"-->
             <EntityCard
               v-for="entity in offers"
-              :key="i"
               :entity="entity"
               class="mb-3"
             />
@@ -77,8 +65,8 @@
 </template>
 
 <script>
-import EntityCard from "../components/search/entity_card.vue";
-import UnauthenticatedNavbar from "../components/UnauthenticatedNavbar.vue";
+import EntityCard from "./search/entity_card.vue";
+import UnauthenticatedNavbar from "./UnauthenticatedNavbar.vue";
 
 export default {
   components: { UnauthenticatedNavbar, EntityCard },
@@ -89,8 +77,22 @@ export default {
       isFiltering: false,
       activeCottages: false,
       activeBoats: false,
-      activeAdventures: false,
+      tags: [],
+      activeAdventures: true,
+      searchText: '',
+      sort: 'name-a',
+      orderBy: [
+        { value: 'name-a', text: "Sort by name ascending" },
+        { value: 'price-a', text: "Sort by price ascending" },
+        { value: 'score-a', text: "Sort by score ascending" },
+        { value: 'name-d', text: "Sort by name descending" },
+        { value: 'price-d', text: "Sort by price descending" },
+        { value: 'score-d', text: "Sort by score descending" }
+      ],
     };
+  },
+  mounted() {
+    this.loadAdventures();
   },
   methods: {
     // filters offers by search query
@@ -102,8 +104,17 @@ export default {
       //const filter = document.getElementById("search-filter");
       //this.filteredHotels = hotels.filter(hotel => (facility => hotel.facilities.includes(facility)));
     },
+    reload() {
+      if (this.activeCottages)
+        this.loadCottages();
+      else if (this.activeBoats)
+        this.loadBoats();
+      else
+        this.loadAdventures();
+    },
     loadBoats() {
       let that = this;
+      that.offers = [];
       this.$axios.get("/api/get-boats").then((resp) => {
         console.log(resp.data);
         that.offers = resp.data;
@@ -114,9 +125,12 @@ export default {
     },
     loadAdventures() {
       let that = this;
-      this.$axios.get("/api/get-adventures").then((resp) => {
-        console.log(resp.data);
-        that.offers = resp.data;
+      that.offers = [];
+      console.log(that.sort);
+      this.$axios.post(`/api/search-adventures?&numberOfResults=2&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
+      .then(response => {
+        that.offers = response.data;
+        console.log(response);
       });
       that.activeCottages = false;
       that.activeBoats = false;
@@ -124,6 +138,7 @@ export default {
     },
     loadCottages() {
       let that = this;
+      that.offers = [];
       this.$axios.get("/api/get-cottages").then((resp) => {
         console.log(resp.data);
         that.offers = resp.data;
@@ -150,6 +165,11 @@ li > p .active {
   opacity: 0.9;
   background-color: var(--prime-color);
   cursor: pointer;
+}
+
+.nav-link {
+  font-weight: bold;
+  color: var(--dark-blue-color);
 }
 
 @media screen and (max-width: 768px) {
