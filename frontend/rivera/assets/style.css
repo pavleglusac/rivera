@@ -200,3 +200,14 @@ select,
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.divider {
+  height: 10px;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    var(--light-blue-color) 0%,
+    var(--prime-color) 100%
+  );
+  margin: 16px auto;
+}
