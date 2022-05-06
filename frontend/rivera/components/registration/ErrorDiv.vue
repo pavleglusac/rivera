@@ -1,5 +1,5 @@
 <template>
-    <div style="font-size:15px">
+    <div style="font-size:15px; float: left;">
         <span class="error"  v-if="!parameter.required  &&  parameter.required!=null">
             {{name}} must not be empty!
         </span>
@@ -22,4 +22,4 @@
         console.log  ("asfafs");
       }
     }
-   </script>
+</script>

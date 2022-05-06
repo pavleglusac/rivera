@@ -12,10 +12,10 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <li><NuxtLink to="/trending" exact class="menu-link"><b-icon icon="star-fill" /> Trending</NuxtLink></li>
-                <li><NuxtLink to="/offers" class="menu-link"><b-icon icon="search" /> Offers</NuxtLink></li>
-                <b-nav-item><b-button size="sm" variant="outline-light">Log in</b-button></b-nav-item>
-                <b-nav-item><b-button size="sm" variant="light">Create an account</b-button></b-nav-item>
+                <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><b-icon icon="star-fill" /> Trending</li></nuxt-link>
+                <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
+                <b-nav-item><nuxt-link to="/login"><b-button size="sm" variant="outline-light">Log in</b-button></nuxt-link></b-nav-item>
+                <b-nav-item><nuxt-link to="/registration"><b-button size="sm" variant="light">Create an account</b-button></nuxt-link></b-nav-item>
             </ul>
       </b-navbar-nav>
     </b-collapse>
@@ -32,6 +32,13 @@ export default {
     BIcon,
     BIconStarFill,
     BIconSearch
+  },
+  props: {
+    currentPage: {
+      type: String,
+      required: false,
+      default: 'trending'
+    },  
   }
 };
 </script>

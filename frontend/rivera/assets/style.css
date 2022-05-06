@@ -100,71 +100,98 @@ h1, h2, h3, h4, h5, h6, p {
   height: 100%;
 } 
 
-.regForm  {
+.login-form,
+.registration-form
+ {
   background: linear-gradient(
     90deg,
     var(--light-blue-color) 0%,
     var(--prime-color) 100%
   );
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
 }
 
-.regForm .card {
+.login-form .card {
     border-radius: 20;
     filter: drop-shadow(0px 2px 3px);
-    padding: 10px;
-    margin: 0 auto; 
     float: none;
-    margin-bottom: 10px;
-    max-width: 40rem;
+    max-width: 60rem;
     padding: 50px;
 }
 
-.regForm .card img {
+.registration-form .card {
+    border-radius: 20;
+    filter: drop-shadow(0px 2px 3px);
+    float: none;
+    min-width: 60rem;
+    padding: 30px;
+}
+
+.login-form .card img {
     height: 200px;
     margin-bottom: 30px;
 }
 
-.regForm #login-btn {
+.registration-form .card img {
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.login-form #login-btn,
+.registration-form #register-btn {
     background-color: var(--prime-color);
     border: none;
 }
 
-.regForm #signup-btn {
+.login-form #signup-btn,
+.registration-form #login-btn {
     border: 2px solid var(--prime-color);
     color: var(--prime-color);
 }
 
-.regForm #signup-btn:hover {
+.login-form #signup-btn:hover,
+.registration-form #login-btn:hover {
     background-color: var(--prime-color);
     color: white;
 }
 
-.regForm #just-looking {
+.login-form #just-looking {
     border: none;
     background: white;
     color: var(--dark-blue-color);
     font-weight: 500;
 }
 
-.regForm #just-looking:hover {
-    border: 2px solid var(--dark-blue-color);
-}
-
-.regForm label {
+.login-form label,
+.registration-form label {
     float: left;
-    font-size: 18px;
+    font-size: 16px;
 }
 
-.regForm input[type="email"],
-.regForm input[type="password"] {
-    font-size: 18px;
+.login-form input[type="email"],
+.login-form input[type="text"],
+.registration-form input[type="email"],
+.registration-form input[type="text"],
+select,
+.login-form input[type="password"],
+.registration-form input[type="password"],
+.registration-form text-area {
+    font-size: 14px;
 }
-.regForm input::-webkit-input-placeholder {
+
+.login-form input::-webkit-input-placeholder 
+.registration-form input::-webkit-input-placeholder 
+{
     font-size: 15px;
     line-height: 3;
 }
 
-.regForm .error-boarder {
+.login-form .error-boarder,
+.registration-form .error-boarder {
   border-color: red;
 }
 

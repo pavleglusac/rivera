@@ -1,15 +1,15 @@
 <template>
 <div>
-    <ClientNavbar :currentPage="'subscribed'"/>
-    <p>Subscribed</p>    
+    <ClientNavbar :currentPage="'trending'"/>
+    <p>Client Trending</p>    
 </div>  
 </template>
 
 <script>
 import ClientNavbar from '../../components/navbars/ClientNavbar.vue';
 export default {
-  components: { ClientNavbar },
-
+    components: { ClientNavbar  },
+    name: "ClientTrending"
 }
 </script>
 

@@ -65,11 +65,12 @@
 </template>
 
 <script>
-import EntityCard from "./search/entity_card.vue";
-import UnauthenticatedNavbar from "./UnauthenticatedNavbar.vue";
+import EntityCard from "../components/search/entity_card.vue";
+import UnauthenticatedNavbar from '../components/navbars/UnauthenticatedNavbar.vue';
+import { BIcon, BIconStarFill, BIconSearch } from 'bootstrap-vue'
 
 export default {
-  components: { UnauthenticatedNavbar, EntityCard },
+  components: { UnauthenticatedNavbar, EntityCard, BIcon, BIconStarFill, BIconSearch },
   data() {
     return {
       offers: [],
