@@ -16,10 +16,8 @@ public class Calendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ElementCollection
-    private List<String> patternsOfAvailability;
-    @ElementCollection
-    private List<String> patternsOfUnavailability;
+    @OneToMany
+    private List<AvailabilityPattern> patternsOfAvailability;
 
     @ManyToOne
     @JoinColumn(name = "rentable_id")

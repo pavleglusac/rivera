@@ -1,7 +1,7 @@
 <template>
     <div class="w-100 ml-0 mr-0 h-100">
         
-        <div class="w-100 pl-5 pt-5 pb-0 d-flex" style="height: 100vh;">
+        <div class="w-100 pl-5 pb-0 d-flex" style="height: 100vh;">
             <div style="box-shadow: 0 8px 6px -6px #bdbdbd;" class="w-100 h-100 d-flex">
                 <div class="d-flex flex-column" style="width: 35%; height: 100%; ">
                     <div style="height: 50%">
@@ -30,9 +30,9 @@
             </div>
         </div>
 
-        <div class="pl-5 mt-5 d-flex">
+        <div class="pl-5 mt-5 d-flex h-100" style="height: 100vh;">
             <div class="d-flex flex-column w-50">
-                <table style="font-size: 1.2em;" class="w-100">
+                <table style="font-size: 1.2em;" class="w-100 h-100">
                     <tr style="border-bottom: 1px solid #c9c9c9;">
                         <td style="font-size: 1.3em; font-weight: 400; width: 25%;" class="">Capacity: </td>
                         <td class="w-25">
@@ -100,6 +100,9 @@
                 <Calendar :reservations="reservations"/>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
 
         <div class="w-100 pl-5 mt-5">
             <div style="font-size: 1.8em; font-weight: 500;" class="mt-4">Discount offers!</div>
