@@ -352,8 +352,8 @@ export default {
       if(calendarApi.view.type == "dayGridMonth") {
         this.$refs.time_modal.show()
       } else {
-        this.startTime = moment(this.select_info.start).format("hh:mm:ss")
-        this.endTime = moment(this.select_info.end).format("hh:mm:ss")
+        this.startTime = moment(this.select_info.start).format("HH:mm:ss");
+        this.endTime = moment(this.select_info.end).format("HH:mm:ss");
         this.timePicked();
       }
     },
@@ -374,7 +374,7 @@ export default {
       this.selectedDays = [];
       this.$refs.month_modal.hide();
     },
-    addMonthsAndDaysToPattern(patternStart, patternEnd, starDay=false) {
+    addMonthsAndDaysToPattern(patternStart, patternEnd, starDay=false, seperateDays=false, date='') {
       for (let month of this.selectedMonths) {
         patternStart += month + ",";
         patternEnd += month + ",";
@@ -383,8 +383,15 @@ export default {
       patternStart += " ";
       patternEnd = patternEnd.substring(0, patternEnd.length - 1);
       patternEnd += " ";
+      let selectedDays;
+      if(seperateDays) {
+        selectedDays = [date.format("ddd").toUpperCase()]
+      } else {
+        selectedDays = this.selectedDays;
+      }
+
       if(!starDay) {
-        for (let day of this.selectedDays) {
+        for (let day of selectedDays) {
           patternStart += day + ",";
           patternEnd += day + ",";
         }
@@ -420,18 +427,22 @@ export default {
         });
     },
     create_repeat_week_patterns() {
-      let patternStart = "0 ";
-      let patternEnd = "0 ";
+      let startDate = moment(this.select_info.start);
+      let endDate = moment(this.select_info.end);
       let startHour = parseInt(this.startTime.split(":")[0]);
       let endHour = parseInt(this.endTime.split(":")[0]);
       let startMin = parseInt(this.startTime.split(":")[1]);
       let endMin = parseInt(this.endTime.split(":")[1]);
-      patternStart += `${startMin} ${startHour} * `;
-      patternEnd += `${endMin} ${endHour} * `;
-      let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd);
-      patternStart = ret.start;
-      patternEnd = ret.end;
-      this.sendPattern([[patternStart, patternEnd]]);
+      let patterns = [];
+      let startDateCopy = startDate.clone();
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      if(calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, 'd');
+      }
+      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      console.log("LOG:", info);
+      this.createPatternList(info, false, true, true);
+      this.sendPattern(patterns);
     },
     create_no_repeat_patterns() {
       let startDate = moment(this.select_info.start);
@@ -443,37 +454,12 @@ export default {
       let patterns = []
       this.selectedMonths = [this.months[startDate.month()]]
       let startDateCopy = startDate.clone();
-      console.log("CREATE NO REPEAT PATTERN");
-      console.log(endDate.format());
       let calendarApi = this.$refs.fullCalendar.getApi();
       if(calendarApi.view.type == "dayGridMonth") {
         endDate = endDate.subtract(1, 'd');
       }
-      while(startDate.isSameOrBefore(endDate, 'day')) {
-        let patternStart = "";
-        let patternEnd = "";
-        console.log(startDate.format());
-        if(this.continuous == 'true' && !startDateCopy.isSame(endDate, 'day')) {
-          if(startDateCopy.isSame(startDate)) {
-            patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
-            patternEnd += `59 59 23 ` + startDate.date() + " ";
-          } else if(this.isLastDateBeforeEnd(startDate, endDate)) {
-            patternStart += `0 0 0 ` + startDate.date() + " ";
-            patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
-          } else {
-            patternStart += `0 0 0 ` + startDate.date() + " ";
-            patternEnd += `59 59 23 ` + startDate.date() + " ";
-          }
-        } else {
-          patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
-          patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
-        }
-        let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd);
-        patternStart = ret.start;
-        patternEnd = ret.end;
-        startDate.add(1, 'days');
-        patterns.push([patternStart, patternEnd])
-      }
+      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      this.createPatternList(info, false, false, false);
       this.sendPattern(patterns);
     },
     create_date_patterns() {
@@ -489,31 +475,42 @@ export default {
       if(calendarApi.view.type == "dayGridMonth") {
         endDate = endDate.subtract(1, 'd');
       }
-      while(startDate.isSameOrBefore(endDate, 'day')) {
-        let patternStart = "";
-        let patternEnd = "";
-        if(this.continuous === 'true' && !startDateCopy.isSame(endDate, 'day')) {
-          if(startDateCopy.isSame(startDate)) {
-            patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
-            patternEnd += `59 59 23 ` + startDate.date() + " ";
-          } else if(this.isLastDateBeforeEnd(startDate, endDate)) {
-            patternStart += `0 0 0 ` + startDate.date() + " ";
-            patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
+      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      this.createPatternList(info, true, false, false);
+      this.sendPattern(patterns);
+    },
+    createPatternList(info, starDay=false, starDate=false, seperateDays=false) {
+      let datePattern = function(date) {
+        if(starDate)
+          return '*'
+        else
+          return date.date();
+      }
+      while(info.startDate.isSameOrBefore(info.endDate, 'day')) {
+        let patternStart="";
+        let patternEnd="";
+
+        if(this.continuous=='true'&&!info.startDateCopy.isSame(info.endDate, 'day')) {
+          if(info.startDateCopy.isSame(info.startDate)) {
+            patternStart+=`0 ${info.startMin} ${info.startHour} `+datePattern(info.startDate)+" ";
+            patternEnd+=`59 59 23 `+datePattern(info.startDate)+" ";
+          } else if(this.isLastDateBeforeEnd(info.startDate, info.endDate)) {
+            patternStart+=`0 0 0 `+datePattern(info.startDate)+" ";
+            patternEnd+=`0 ${info.endMin} ${info.endHour} `+datePattern(info.startDate)+" ";
           } else {
-            patternStart += `0 0 0 ` + startDate.date() + " ";
-            patternEnd += `59 59 23 ` + startDate.date() + " ";
+            patternStart+=`0 0 0 `+datePattern(info.startDate)+" ";
+            patternEnd+=`59 59 23 `+datePattern(info.startDate)+" ";
           }
         } else {
-          patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
-          patternEnd += `0 ${endMin} ${endHour} ` + startDate.date() + " ";
+          patternStart+=`0 ${info.startMin} ${info.startHour} `+datePattern(info.startDate)+" ";
+          patternEnd+=`0 ${info.endMin} ${info.endHour} `+datePattern(info.startDate)+" ";
         }
-        let ret = this.addMonthsAndDaysToPattern(patternStart, patternEnd, true);
-        patternStart = ret.start;
-        patternEnd = ret.end;
-        startDate.add(1, 'days');
-        patterns.push([patternStart, patternEnd])
+        let ret=this.addMonthsAndDaysToPattern(patternStart, patternEnd, starDay, seperateDays, info.startDate);
+        patternStart=ret.start;
+        patternEnd=ret.end;
+        info.startDate.add(1, 'days');
+        info.patterns.push([patternStart, patternEnd]);
       }
-      this.sendPattern(patterns);
     },
     isLastDateBeforeEnd(startDate, endDate){
       let s = startDate.clone();
@@ -580,4 +577,5 @@ export default {
 <style>
 
 </style>
+
 

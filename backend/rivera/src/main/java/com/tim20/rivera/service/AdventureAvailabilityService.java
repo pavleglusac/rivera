@@ -200,7 +200,7 @@ public class AdventureAvailabilityService {
             return;
         }
         if (LocalDate.from(start).isBefore(LocalDate.from(pattern.getStartDateTime()))) {
-            System.out.println("returned " + start + " " + pattern.getStartDateTime());
+            //System.out.println("returned " + start + " " + pattern.getStartDateTime());
             return;
         }
         Availability availability = new Availability();
@@ -322,8 +322,14 @@ public class AdventureAvailabilityService {
         date = date.minusSeconds(1);
         CronExpression cronStart = CronExpression.parse(pattern.getPatternStart());
         CronExpression cronEnd = CronExpression.parse(pattern.getPatternEnd());
+        System.out.println(date);
+        System.out.println(pattern.getPatternStart());
+        System.out.println(pattern.getPatternEnd());
         LocalDateTime start = cronStart.next(date);
         LocalDateTime end = cronEnd.next(date);
+        System.out.println(start);
+        System.out.println(end);
+        System.out.println("-----");
         return Pair.of(start, end);
     }
 
@@ -334,7 +340,7 @@ public class AdventureAvailabilityService {
     private Boolean isAfterOrEquals(LocalDateTime t1, LocalDateTime t2) {
         return (t1.isAfter(t2) || t1.isEqual(t2));
     }
-
+    
 
     public void testBigAvailability() {
         Adventure adventure = adventureRepository.getById(1);
