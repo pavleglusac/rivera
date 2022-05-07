@@ -257,7 +257,6 @@ export default {
 
   watch: {
     reservations: function (val, oldVal) {
-      console.log(val);
       val.map((x) => {
         x.title = "Reservation for: " + x.client.username;
         return x;
@@ -266,7 +265,6 @@ export default {
     },
     mode: function (val, oldVal) {
       let calendarApi = this.$refs.fullCalendar.getApi();
-      console.log(calendarApi);
       if (val == "view") {
         this.calendarOptions.selectable = false;
         this.calendarOptions.dateClick = this.handleDayClick;
@@ -286,10 +284,16 @@ export default {
       this.calendarOptions.weekends = !this.calendarOptions.weekends; // update a property
     },
     handleDateSelect(selectInfo) {
-      console.log(selectInfo);
+      console.log("SELECT INFO:", selectInfo);
       let calendarApi = this.$refs.fullCalendar.getApi();
       let startMoment = moment(selectInfo.start);
       let endMoment = moment(selectInfo.end);
+      if(calendarApi.view.type == "dayGridMonth") {
+        endMoment = endMoment.subtract(1, 'd');
+      }
+      console.log(startMoment);
+      console.log(endMoment);
+      console.log("----------");
       this.year = startMoment.year;
       let days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
       this.selectedDays = [];
@@ -298,7 +302,7 @@ export default {
         this.selectedDays = days;
       } else {
         let tempStartMoment = startMoment;
-        if(calendarApi.view.type == "timeGridWeek") {
+        if(true) {
           while (tempStartMoment.isSameOrBefore(endMoment, 'day')) {
             this.selectedDays.push(days[tempStartMoment.day()]);
             tempStartMoment.add(1, "d");
@@ -318,7 +322,7 @@ export default {
 
     handleDayClick(clickInfo) {
       let calendarApi = this.$refs.fullCalendar.getApi();
-      console.log(clickInfo);
+      console.log("CLICK INFO:", clickInfo);
       if(this.mode == "view") {
         calendarApi.gotoDate(clickInfo.date);
         calendarApi.changeView("timeGridDay");
@@ -345,12 +349,11 @@ export default {
     },
     timeModal() {
       let calendarApi = this.$refs.fullCalendar.getApi();
-      console.log("time modal() ", calendarApi.view.type);
       if(calendarApi.view.type == "dayGridMonth") {
         this.$refs.time_modal.show()
       } else {
-        this.startTime = moment(this.select_info.start).format("HH:MM:ss")
-        this.endTime = moment(this.select_info.end).format("HH:MM:ss")
+        this.startTime = moment(this.select_info.start).format("hh:mm:ss")
+        this.endTime = moment(this.select_info.end).format("hh:mm:ss")
         this.timePicked();
       }
     },
@@ -358,7 +361,6 @@ export default {
       let calendarApi = this.$refs.fullCalendar.getApi();
       if(calendarApi.view.type == "timeGridWeek") {
         this.continuous = 'true';
-        "ovo se desi izgleda mora biti nema sta drugo"
       }
 
       if (this.selected_repeat == "week") {
@@ -366,7 +368,6 @@ export default {
       } else if (this.selected_repeat == "norepeat") {
         this.create_no_repeat_patterns();
       }  else {
-        console.log("CREATE DATE PATTERNS ELSE");
         this.create_date_patterns();
       }
       this.selectedMonths = [];
@@ -440,13 +441,18 @@ export default {
       let startMin = parseInt(this.startTime.split(":")[1]);
       let endMin = parseInt(this.endTime.split(":")[1]);
       let patterns = []
-      console.log("CONTINUOUS: ", this.continuous);
-      console.log(startDate, endDate);
       this.selectedMonths = [this.months[startDate.month()]]
       let startDateCopy = startDate.clone();
+      console.log("CREATE NO REPEAT PATTERN");
+      console.log(endDate.format());
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      if(calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, 'd');
+      }
       while(startDate.isSameOrBefore(endDate, 'day')) {
         let patternStart = "";
         let patternEnd = "";
+        console.log(startDate.format());
         if(this.continuous == 'true' && !startDateCopy.isSame(endDate, 'day')) {
           if(startDateCopy.isSame(startDate)) {
             patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
@@ -479,13 +485,14 @@ export default {
       let endMin = parseInt(this.endTime.split(":")[1]);
       let patterns = []
       let startDateCopy = startDate.clone();
-      console.log("CONTINUOUS: ", this.continuous);
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      if(calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, 'd');
+      }
       while(startDate.isSameOrBefore(endDate, 'day')) {
         let patternStart = "";
         let patternEnd = "";
         if(this.continuous === 'true' && !startDateCopy.isSame(endDate, 'day')) {
-          console.log('ja sam lud');
-          console.log(this.continuous);
           if(startDateCopy.isSame(startDate)) {
             patternStart += `0 ${startMin} ${startHour} ` + startDate.date() + " ";
             patternEnd += `59 59 23 ` + startDate.date() + " ";

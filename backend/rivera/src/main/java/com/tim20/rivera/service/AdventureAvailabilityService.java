@@ -249,7 +249,7 @@ public class AdventureAvailabilityService {
         for (int i = 1; i < availabilities.size(); i++) {
             var prev = availabilities.get(i - 1);
             var curr = availabilities.get(i);
-            if(prev.getEndDateTime().isAfter(curr.getStartDateTime()) && prev.getStartDateTime().isBefore(curr.getStartDateTime())) {
+            if(isAfterOrEquals(prev.getEndDateTime(), curr.getStartDateTime()) && prev.getStartDateTime().isBefore(curr.getStartDateTime())) {
                 curr.setStartDateTime(prev.getStartDateTime());
                 if(prev.getEndDateTime().isAfter(curr.getEndDateTime())) {
                     curr.setEndDateTime(prev.getEndDateTime());
