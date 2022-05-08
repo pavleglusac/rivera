@@ -12,8 +12,8 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <nuxt-link to="/instructor/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
-                <nuxt-link to="/instructor"><li class="menu-link" :class="currentPage=='adventures' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> My Adventures</li></nuxt-link>
+                <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
+                <nuxt-link to="/adventures"><li class="menu-link" :class="currentPage=='adventures' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> My Adventures</li></nuxt-link>
                 <nuxt-link to="/instructor/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>

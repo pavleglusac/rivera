@@ -55,7 +55,9 @@
             <EntityCard
               v-for="entity in offers"
               :entity="entity"
+              :offerType="getActiveOffers()"
               class="mb-3"
+              v-bind:key="entity.name"
             />
           </div>
         </div>
@@ -96,6 +98,14 @@ export default {
     this.loadAdventures();
   },
   methods: {
+    getActiveOffers() {
+      if (this.activeCottages)
+        return "cottage";
+      else if (this.activeBoats)
+        return "boat";
+      else
+        return "adventure";
+    },
     reload() {
       if (this.activeCottages)
         this.loadCottages();

@@ -1,12 +1,13 @@
 <template>
+<b-col>
   <div class="mt-2">
     <b-card
       img-top
       tag="article"
       style="max-width: 30rem"
       class="mb-2"
-      img-src="../../assets/cottage.jpg"
-      title="Cute cottage"
+      :img-src='"http://localhost:8080" + entity.picture'
+      :title="entity.name"
     >
       <b-card-body style="padding: 0; align-text: center">
         <div class="text-secondary" style="font-size: 1em">
@@ -18,8 +19,10 @@
           {{ entity.country }}
         </div>
         <div class="text-secondary" style="font-size: 1em">
-          <font-awesome-icon icon="calendar" />&nbsp;{{ entity.start }} -
-          {{ entity.end }}
+          <font-awesome-icon icon="calendar" />&nbsp; Start: {{ new Date(entity.start).toDateString() }}
+        </div>
+        <div class="text-secondary" style="font-size: 1em">
+          &nbsp;&nbsp;&nbsp;&nbsp; End: {{ new Date(entity.end).toDateString() }}
         </div>
         <b-button href="#" class="prime-btn mt-2" variant="primary"
           >Book now for only {{ entity.price }} $</b-button
@@ -27,12 +30,17 @@
       </b-card-body>
     </b-card>
   </div>
+</b-col>
 </template>
 
 <script>
 export default {
   name: "EntityOnDiscount",
+  components: {},
   data() {
+    return { entity: this.entity, };
+  },
+  /*data() {
     return {
       entity: {
         start: "11.05.2022.",
@@ -46,8 +54,13 @@ export default {
         name: "Cute little cottage",
       },
     };
+  },*/
+  props: {
+    entity: {
+      type: Object,
+      required: true,
+    },
   },
-  props: {},
 };
 </script>
 

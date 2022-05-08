@@ -12,10 +12,10 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <nuxt-link to="/client"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><b-icon icon="star-fill" /> Trending</li></nuxt-link>
-                <nuxt-link to="/client/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
-                <nuxt-link to="/client/reservations"><li class="menu-link" :class="currentPage=='reservations' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> Reservations</li></nuxt-link>
-                <nuxt-link to="/client/subscribed"><li class="menu-link" :class="currentPage=='subscribed' ? 'active' : ''"><b-icon icon="bell-fill" /> Subscribed</li></nuxt-link>
+                <nuxt-link to="/recommended"><li class="menu-link" :class="currentPage=='recommended' ? 'active' : ''"><b-icon icon="star-fill" /> Recommended</li></nuxt-link>
+                <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
+                <nuxt-link to="/reservations"><li class="menu-link" :class="currentPage=='reservations' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> Reservations</li></nuxt-link>
+                <nuxt-link to="/subscribed"><li class="menu-link" :class="currentPage=='subscribed' ? 'active' : ''"><b-icon icon="bell-fill" /> Subscribed</li></nuxt-link>
                 <nuxt-link to="/client/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
@@ -43,7 +43,7 @@ props: {
     currentPage: {
       type: String,
       required: false,
-      default: 'trending'
+      default: 'recommended'
     },  
   }
 };

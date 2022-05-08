@@ -29,7 +29,7 @@
             
         <div class="d-flex justify-content-between align-items-center">
             <span class="font-1h">{{entity.perHour}}$ per hour / {{entity.perDay}}$ per day</span>
-            <b-button variant="primary" class="book-btn">Book Now</b-button>
+            <b-button variant="primary" @click="detailedOffer()" class="book-btn">Book Now</b-button>
         </div>
     </b-card-body>
   </b-card>
@@ -42,11 +42,25 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    detailedOffer() {
+      if(this.offerType == "adventure")
+        this.$router.push({ path: "/adventure/" + this.entity.id });
+      else if(this.offerType == "cottage")
+        this.$router.push({ path: "/cottage/" + this.entity.id });
+      else if(this.offerType == "boat")
+        this.$router.push({ path: "/boat/" + this.entity.id });
+    },
+  },
   props: {
     entity: {
       type: Object,
       required: true,
     },
+    offerType: {
+      type: String,
+      required: true,
+    }
   },
 };
 </script>

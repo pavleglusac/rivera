@@ -1,15 +1,15 @@
 <template>
   <div>
-    <FishingInstructorNavbar :currentPage="'profile'" />
+    <Navbar :currentPage="'profile'" />
     <p>My profile</p>
   </div>
 </template>
 
 <script>
-import FishingInstructorNavbar from '../../components/navbars/FishingInstructorNavbar.vue';
+import Navbar from '../../components/navbar.vue';
 
 export default {
-  components: { FishingInstructorNavbar },
+  components: { Navbar },
 }
 
 </script>

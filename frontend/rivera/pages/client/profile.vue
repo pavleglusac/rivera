@@ -1,15 +1,15 @@
 <template>
 <div>
-    <ClientNavbar :currentPage="'profile'"/>
+    <Navbar :currentPage="'profile'"/>
     <ClientProfile/>
 </div>  
 </template>
 
 <script>
-import ClientNavbar from '../../components/navbars/ClientNavbar.vue';
+import Navbar from '../../components/navbar.vue';
 import ClientProfile from '../../components/client/ClientProfile.vue';
 export default {
-  components: { ClientNavbar },
+  components: { Navbar, ClientProfile },
 
 }
 </script>

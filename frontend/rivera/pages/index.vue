@@ -1,12 +1,12 @@
 <template>
 <div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>-->
   <div data-bs-spy="scroll">
-    <UnauthenticatedNavbar />
+    <navbar :currentPage="'trending'" />
 
     <!--landing-->
     <section id="home" class="bg-cover landing cover1">
@@ -238,11 +238,11 @@
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
-import UnauthenticatedNavbar from "../components/navbars/UnauthenticatedNavbar.vue";
 import { BIcon, BIconStarFill, BIconSearch } from "bootstrap-vue";
+import Navbar from '../components/navbar.vue';
 
 export default {
-  components: { UnauthenticatedNavbar, BIcon, BIconStarFill, BIconSearch },
+  components: { BIcon, BIconStarFill, BIconSearch, Navbar },
   mounted() {
     AOS.init();
     let that = this;

@@ -1,15 +1,15 @@
 <template>
   <div>
-    <CottageOwnerNavbar :currentPage="'profile'" />
+    <Navbar :currentPage="'profile'" />
     <p>My profile</p>
   </div>
 </template>
 
 <script>
-import CottageOwnerNavbar from '../../components/navbars/CottageOwnerNavbar.vue';
+import Navbar from '../../components/navbar.vue';
 
 export default {
-  components: { CottageOwnerNavbar },
+  components: { Navbar },
 }
 
 </script>
