@@ -120,7 +120,7 @@ h1, h2, h3, h4, h5, h6, p {
     filter: drop-shadow(0px 2px 3px);
     float: none;
     max-width: 60rem;
-    padding: 50px;
+    padding: 40px;
 }
 
 .registration-form .card {
@@ -129,6 +129,7 @@ h1, h2, h3, h4, h5, h6, p {
     float: none;
     min-width: 60rem;
     padding: 30px;
+    margin-top: 5px;
 }
 
 .login-form .card img {
@@ -180,7 +181,7 @@ select,
 .login-form input[type="password"],
 .registration-form input[type="password"],
 .registration-form text-area {
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .login-form input::-webkit-input-placeholder 
@@ -210,4 +211,14 @@ select,
     var(--prime-color) 100%
   );
   margin: 16px auto;
+}
+
+.get-started {
+  background: linear-gradient(
+    90deg,
+    var(--light-blue-color) 0%,
+    var(--prime-color) 100%
+  );
+  border: none;
+  font-size: 23px;
 }

@@ -2,24 +2,18 @@
   <b-container class="bv-example-row">
     <b-card
       img-alt="Profile photo"
-      :img=photo
+      :img-src='"http://localhost:8080" + client.photo'
       img-left
       class="mb-3"
       style="margin-top: 10px"
     >
       <b-card-text>
-        <h4>{{fullName}}</h4>
-        <h5>{{email}}</h5>
-        <h5>{{photo}}</h5>
-        <p v-model="description">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ad
-          consectetur similique nulla alias, doloremque itaque, nesciunt tempore
-          eligendi quaerat exercitationem ducimus quas. Nesciunt, facilis.
-          Officiis molestiae aliquid at dignissimos.
-        </p>
+        <h4>{{client.fullName}}</h4>
+        <h5>{{client.email}}</h5>
+        <h5>{{client.photo}}</h5>
         <b-button v-b-modal.changePicture variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
         <b-modal id="changePicture" title="Choose your new profile photo">
-          <b-form-file accept="image/*"></b-form-file>
+          <b-form-file id="photoFile" v-model="client.photo" accept="image/*"></b-form-file>
         </b-modal>
         <b-button variant="link"><b-icon icon="trash-fill"></b-icon> Delete account</b-button>
       </b-card-text>
@@ -31,7 +25,7 @@
             <h4>Profile Settings</h4>
             <label for="feedback-first-name">First Name</label>
             <b-form-input
-              v-model="name"
+              v-model="client.name"
               :state="firstNameValidation"
               id="feedback-first-name"
               placeholder="Enter your first name"
@@ -43,7 +37,7 @@
 
             <label for="feedback-last-name">Last Name</label>
             <b-form-input
-              v-model="surname"
+              v-model="client.surname"
               :state="lastNameValidation"
               id="feedback-last-name"
               placeholder="Enter your last name"
@@ -55,7 +49,7 @@
 
             <label for="feedback-phone-number">Phone Number</label>
             <b-form-input
-              v-model="phoneNumber"
+              v-model="client.phoneNumber"
               :state="phoneNumberValidation"
               id="feedback-phone-number"
               placeholder="Enter your phone number"
@@ -67,7 +61,7 @@
 
             <label for="feedback-address">Address</label>
             <b-form-input
-              v-model="address"
+              v-model="client.address"
               :state="addressValidation"
               id="feedback-address"
               placeholder="Enter your address"
@@ -83,14 +77,14 @@
                 <input
                   type="text"
                   class="form-control"
-                  v-model="city"
+                  v-model="client.city"
                   id="inputCity"
                   placeholder="Enter your city"
                 />
               </div>
               <div class="form-group col-6">
                 <label for="inputState">State</label>
-                <select id="inputState" v-model="country" class="form-control">
+                <select id="inputState" v-model="client.country" class="form-control">
                   <option selected>{{country}}</option>
                   <option
                     v-for="country in countries"
@@ -106,11 +100,11 @@
           </b-col>
           <b-col>
             <h4>Password Settings</h4>
-            <password-change :cpasswordText="password" />
+            <password-change :cpasswordText="client.password" />
 
             <h4>Loyalty Program</h4>
-            <p>Number of points you earned is {{numberOfPoints}}.</p>
-            <p>Number of penalties you have is {{numberOfPenalties}}.</p>
+            <p>Number of points you earned is {{client.numberOfPoints}}.</p>
+            <p>Number of penalties you have is {{client.numberOfPenalties}}.</p>
             <b-card
               bg-variant="light"
               header="Gold Program"
@@ -140,56 +134,39 @@ export default {
   },
   data() {
     return {
-      fullName: "",
-      photo: "",
-      email: "",
-      description: "",
-      password: "",
-      name: "",
-      surname: "",
-      phoneNumber: "",
-      address: "",
-      country: "",
-      city: "",
-      numberOfPenalties: 5,
-      numberOfPoints: 5,
+      client: {
+        fullName: "",
+        username: "",
+        photo: "",
+        email: "",
+        description: "",
+        password: "",
+        name: "",
+        surname: "",
+        phoneNumber: "",
+        address: "",
+        country: "",
+        city: "",
+        numberOfPenalties: 0,
+        numberOfPoints: 0,
+      }
     };
   },
- /* mounted() {
-    let that = this;
-		this.$axios
-        .get('/api/get-client?id=' + this.$route.params.client)
-        .then((resp) => {
-            console.log(resp.data);
-			let client = resp.data;
-
-			that.fullName = client.name + ' ' + client.surname;
-			that.name = client.name;
-			that.surname = client.surname;
-			that.email = client.email;
-      that.password = client.password;
-
-			that.phoneNumber = client.phoneNumber;
-			that.photo = client.photo;
-			that.address = client.address;
-			that.country = client.country;
-			that.city = client.city;
-			that.numberOfPenalties = client.numberOfPenalties;
-			that.numberOfPoints = client.numberOfPoints;
-    });
-  },*/
+  mounted() {
+    
+  },
   computed: {
     firstNameValidation() {
-      return this.name.length != 0;
+      return this.client.name.length != 0;
     },
     lastNameValidation() {
-      return this.surname.length != 0;
+      return this.client.surname.length != 0;
     },
     phoneNumberValidation() {
-      return this.phoneNumber.length >= 9;
+      return this.client.phoneNumber.length >= 9;
     },
     addressValidation() {
-      return this.address.length != 0;
+      return this.client.address.length != 0;
     },
     countries() {
       const list = countries.getNames("en", { select: "official" });
@@ -197,20 +174,49 @@ export default {
     },
   },
   methods: {
+    getLoggedUser() {
+      let that = this;
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios.get('/api/auth/get-logged-user',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+        that.client = resp.data;
+        console.log(window.localStorage.getItem("JWT"));
+				console.log(resp.data);
+			}).catch((err) => {
+				console.log(err);
+			});
+    },
+    setClientData(client) {
+      let that = this;
+      that.client.fullName = client.name + ' ' + client.surname;
+      that.client.name = client.name;
+      that.client.username = client.username;
+      that.client.surname = client.surname;
+      that.client.email = client.email;
+      that.client.password = client.password;
+      that.client.phoneNumber = client.phoneNumber;
+      that.client.photo = client.photo;
+      that.client.address = client.address;
+      that.client.country = client.country;
+      that.client.city = client.city;
+      that.client.numberOfPenalties = client.numberOfPenalties;
+      that.client.numberOfPoints = client.numberOfPoints;
+    },
     update() {
 			var formData = new FormData();
-			formData.append("name", this.name);
-			formData.append("surname", this.surname);
-			formData.append("email", this.email);
-			formData.append("password", this.password);
-			formData.append("phoneNumber", this.phoneNumber);
-			formData.append("address", this.address);
-			formData.append("country", this.country);
-			formData.append("city", this.city);
-			formData.append("numberOfPenalties", this.numberOfPenalties);
-			formData.append("numberOfPoints", this.numberOfPoints);
-			formData.append("equipment", this.equipment);
-			formData.append("photo", this.photo);
+			formData.append("name", this.client.name);
+			formData.append("surname", this.client.surname);
+			formData.append("email", this.client.email);
+			formData.append("password", this.client.password);
+			formData.append("phoneNumber", this.client.phoneNumber);
+			formData.append("address", this.client.address);
+			formData.append("country", this.client.country);
+			formData.append("city", this.client.city);
+			formData.append("numberOfPenalties", this.client.numberOfPenalties);
+			formData.append("numberOfPoints", this.client.numberOfPoints);
+			formData.append("equipment", this.client.equipment);
+			formData.append("photo", this.client.photo);
 			this.$axios.post('/api/update-client', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data'
@@ -222,9 +228,9 @@ export default {
 			});
 		},
     changeProfilePhoto(pic) {
-			this.photo = pic;
+			this.client.photo = pic;
 			console.log("PARENT UPDATE PICS");
-			console.log(pics);
+			console.log(pic);
 		}
   }
 };

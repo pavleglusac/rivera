@@ -13,7 +13,6 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     public List<Role> findByName(String name) {
-        List<Role> roles = this.roleRepository.findByName(name);
-        return roles;
+        return this.roleRepository.findByName(name);
     }
 }

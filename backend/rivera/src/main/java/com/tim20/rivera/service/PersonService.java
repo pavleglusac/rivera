@@ -21,19 +21,15 @@ import org.springframework.stereotype.Service;
 public class PersonService{
     @Autowired
     private PersonRepository personRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     public Person findByUsername(String username){
         return personRepository.findByUsername(username);
     }
 
-
     public PersonDTO personToDTO(Person person) {
         PersonDTO dto = new PersonDTO();
-
         dto.setEmail(person.getEmail());
         dto.setPassword(person.getPassword());
         dto.setName(person.getName());

@@ -18,6 +18,7 @@
             type="username"
             placeholder="Enter your username"
             class="form-control form-control-lg"
+            style="font-size: 15px"
             v-model="username"
           />
         </div>
@@ -34,14 +35,14 @@
           Wrong email or password. Please try again.
         </b-form-invalid-feedback>
 
-        <b-button block id="login-btn" variant="primary" @click="login()"
+        <b-button block id="login-btn" variant="primary" @click="login"
           >Log In</b-button
         >
         <b-button
           block
           id="signup-btn"
           variant="outline-primary"
-          @click="changeToRegistration()"
+          @click="changeToRegistration"
           >Create an account</b-button
         >
         <nuxt-link to="/"
@@ -67,6 +68,7 @@ export default {
     },
     login() {
       var formData = new FormData();
+      console.log("EEE");
       formData.append("username", this.username);
       formData.append("password", this.password);
       this.$axios

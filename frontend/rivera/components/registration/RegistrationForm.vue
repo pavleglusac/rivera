@@ -161,7 +161,7 @@
             <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" v-if="this.type != 'Regular User'">
           <div class="form-group col-12">
             <label>Description</label>
             <textarea
@@ -234,7 +234,7 @@ export default {
       type: "",
       description: "",
       password2: "",
-      types: ["Cottage Owner", "Boat Owner"],
+      types: ["Cottage Owner", "Boat Owner", "Regular User"],
     };
   },
   components: {
@@ -282,8 +282,6 @@ export default {
       maxLength: maxLength(20),
     },
     description: {
-      required,
-      minLength: minLength(2),
     },
     password2: {
       required,
@@ -299,15 +297,12 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.$v.$invalid);
-      console.log(this.$v.name.$invalid);
-      this.$v.$touch();
-      if (this.$v.$invalid) {
-        alert("Validation failed!");
-        return;
-      }
-      let that = this;
-      console.log("ok");
+      if (this.type != "Regular User")
+        this.registerOwner();
+      else
+        this.registerClient();
+    },
+    getFormData() {
       var formData = new FormData();
       formData.append("email", this.email);
       formData.append("username", this.username);
@@ -318,13 +313,45 @@ export default {
       formData.append("country", this.country);
       formData.append("city", this.city);
       formData.append("address", this.address);
-      formData.append("description", this.description);
-      console.log(this.type);
+      return formData;
+    },
+    registerOwner() {
+      console.log(this.$v.$invalid);
+      console.log(this.$v.name.$invalid);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        alert("Validation failed!");
+        return;
+      }
+      console.log("ok");
+      var formData = this.getFormData();
       formData.append("type", this.type);
+      formData.append("description", this.type != "Regular User" ? this.description : '');
       this.$axios
         .post("/api/auth/signup", formData)
         .then((resp) => {
           console.log(resp);
+          <b-modal>Your registration is almost done. Check out your email!</b-modal>
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+     registerClient() {
+      console.log(this.$v.$invalid);
+      console.log(this.$v.name.$invalid);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        alert("Validation failed!");
+        return;
+      }
+      console.log("ok");
+      var formData = this.getFormData();
+      this.$axios
+        .post("/api/auth/signupClient", formData)
+        .then((resp) => {
+          console.log(resp);
+          <b-modal>Your registration is almost done. Check out your email!</b-modal>
         })
         .catch((err) => {
           console.log(err);

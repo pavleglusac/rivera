@@ -13,7 +13,7 @@
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
-                <nuxt-link to="/cottages"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> My Cottages</li></nuxt-link>
+                <nuxt-link to="/cottages"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><font-awesome-icon icon="house" /> My Cottages</li></nuxt-link>
                 <nuxt-link to="/cottageOwner/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>

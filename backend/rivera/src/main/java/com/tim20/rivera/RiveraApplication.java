@@ -2,6 +2,7 @@ package com.tim20.rivera;
 
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
+import com.tim20.rivera.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,11 +10,13 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.tim20.rivera")
@@ -49,6 +52,12 @@ public class RiveraApplication {
 
 	@Autowired
 	private FishingInstructorRepository fishingInstructorRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RoleService roleService;
 
 	private void initializeData2() {
 		Adventure adventure = new Adventure();
@@ -97,7 +106,7 @@ public class RiveraApplication {
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
 				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
-		review1.setClient(clientRepository.findClientByUsername("pera").get());
+		review1.setClient(clientRepository.findByUsername("pera"));
 		review1.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review1);
 
@@ -109,17 +118,17 @@ public class RiveraApplication {
 	private void initializeData() {
 		Adventure adventure = new Adventure();
 		adventure.setName("Mountain Fishing");
-		adventure.setAddress("1234 Main St.");
+		adventure.setAddress("7 Grove St.");
 		adventure.setCity("Cairns");
 		adventure.setCountry("Australia");
 		adventure.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
 				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
 				" maximus quam mollis consequat");
 		adventure.setPictures(Arrays.asList("/images/adventures/1/img1.jpg",
-											"/images/adventures/1/img2.jpg",
-											"/images/adventures/1/img3.jpg",
-											"/images/adventures/1/img4.jpg",
-											"/images/adventures/1/img5.jpg"));
+				"/images/adventures/1/img2.jpg",
+				"/images/adventures/1/img3.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img5.jpg"));
 		Tag tagWifi = new Tag(); tagWifi.setName("wifi");
 		Tag tagRiver = new Tag(); tagRiver.setName("river");
 		Tag tagExtreme = new Tag(); tagExtreme.setName("extreme");
@@ -174,7 +183,7 @@ public class RiveraApplication {
 		client1.setSurname("Petrovic");
 		client1.setDeleted(false);
 		client1.setEmail("pera@gmail.com");
-		client1.setPassword("sifra");
+		client1.setPassword(passwordEncoder.encode("sifra"));
 		client1.setPhoneNumber("+3815565456");
 		client1.setPhoto("/images/clients/" + client1.getUsername() + ".jpg");
 		clientRepository.save(client1);
@@ -188,7 +197,7 @@ public class RiveraApplication {
 		client2.setSurname("Mikic");
 		client2.setDeleted(false);
 		client2.setEmail("mika@gmail.com");
-		client2.setPassword("sifra");
+		client2.setPassword(passwordEncoder.encode("sifra"));
 		client2.setPhoneNumber("+3815565456");
 		client2.setPhoto("/images/clients/" + client1.getUsername() + ".jpg");
 		clientRepository.save(client2);
@@ -197,7 +206,7 @@ public class RiveraApplication {
 		review1.setRentable(adventure);
 		review1.setPosted(LocalDateTime.now());
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
-						"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
+				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
 		review1.setClient(client1);
 		review1.setStatus(ReviewStatus.ACCEPTED);
@@ -207,7 +216,7 @@ public class RiveraApplication {
 		review2.setRentable(adventure);
 		review2.setPosted(LocalDateTime.now());
 		review2.setText("Ut mollis erat non quam rhoncus sodales. Nulla facilisi. Duis sit amet pellentesque dolor. Aliquam mollis rhoncus " +
-						"risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis");
+				"risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis");
 		review2.setScore(3.3);
 		review2.setClient(client2);
 		review2.setStatus(ReviewStatus.ACCEPTED);
@@ -233,14 +242,39 @@ public class RiveraApplication {
 		fishingInstructor.setStatus(AccountStatus.ACTIVE);
 		fishingInstructor.setDeleted(false);
 		fishingInstructor.setBiography("Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. " +
-										"Maecenas nec quam tellus ex non nisl" +
-										"x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.");
+				"Maecenas nec quam tellus ex non nisl" +
+				"x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.");
 		fishingInstructor.setEmail("marko@gmail.com");
-		fishingInstructor.setPassword("sifra");
+		fishingInstructor.setPassword(passwordEncoder.encode("sifra"));
 		fishingInstructor.setPhoneNumber("+3845135535");
 		fishingInstructor.setUsername("marko");
 		fishingInstructor.setPhoto("/images/clients/" + fishingInstructor.getUsername() + ".jpg");
 		fishingInstructor.setAdventures(Arrays.asList(adventure));
+
+
+		Role role = new Role();
+		Role role2 = new Role();
+
+		role.setName("ROLE_COTTAGE_OWNER");
+		role.setId(1L);
+		role2.setName("ROLE_BOAT_OWNER");
+		role2.setId(2L);
+		roleRepository.save(role);
+		roleRepository.save(role2);
+
+		Role role3 = new Role();
+		role3.setName("ROLE_FISHING_INSTRUCTOR");
+		role3.setId(3L);
+		roleRepository.save(role3);
+
+		Role role4 = new Role();
+		role4.setName("ROLE_CLIENT");
+		role4.setId(4L);
+		roleRepository.save(role4);
+
+		List<Role> roles = roleService.findByName("ROLE_FISHING_INSTRUCTOR");
+		fishingInstructor.setRoles(roles);
+
 		fishingInstructorRepository.save(fishingInstructor);
 		adventure.setOwner(fishingInstructor);
 
@@ -248,16 +282,6 @@ public class RiveraApplication {
 
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);
-
-		Role role = new Role();
-		Role role2 = new Role();
-
-		role.setName("ROLE_COTTAGE_OWNER");
-		role.setId(1l);
-		role2.setName("ROLE_BOAT_OWNER");
-		role2.setId(2l);
-		roleRepository.save(role);
-		roleRepository.save(role2);
 
 		initializeData2();
 	}

@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="shadow-sm" img-left max-height="300">
+  <b-card no-body class="shadow-sm" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
     <b-card-img class="cover-img" :src='"http://localhost:8080" + entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-center">
@@ -29,7 +29,7 @@
             
         <div class="d-flex justify-content-between align-items-center">
             <span class="font-1h">{{entity.perHour}}$ per hour / {{entity.perDay}}$ per day</span>
-            <b-button variant="primary" @click="detailedOffer()" class="book-btn">Book Now</b-button>
+            <b-button variant="primary" class="book-btn">Book Now</b-button>
         </div>
     </b-card-body>
   </b-card>

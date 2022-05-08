@@ -1,10 +1,10 @@
 <template>
 <div>
     <unauthenticated-navbar v-if="role=='unauthenticated'" :currentPage="currentPage" />
-    <client-navbar v-if="role=='client'" :currentPage="currentPage" />
-    <boat-owner-navbar v-if="role=='boatOwner'" :currentPage="currentPage" />
-    <cottage-owner-navbar v-if="role=='cottageOwner'" :currentPage="currentPage" />
-    <fishing-instructor-navbar v-if="role=='instructor'" :currentPage="currentPage" />
+    <client-navbar v-if="role=='ROLE_CLIENT'" :currentPage="currentPage" />
+    <boat-owner-navbar v-if="role=='ROLE_BOAT_OWNER'" :currentPage="currentPage" />
+    <cottage-owner-navbar v-if="role=='ROLE_COTTAGE_OWNER'" :currentPage="currentPage" />
+    <fishing-instructor-navbar v-if="role=='ROLE_FISHING_INSTRUCTOR'" :currentPage="currentPage" />
 </div>
 </template>
 

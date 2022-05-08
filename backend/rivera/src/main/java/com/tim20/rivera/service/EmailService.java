@@ -1,6 +1,7 @@
 package com.tim20.rivera.service;
 
 
+import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.util.Objects;
 
 
 @Service
@@ -36,18 +38,35 @@ public class EmailService {
         System.out.println("Slanje emaila...");
 
         SimpleMailMessage mail = new SimpleMailMessage();
-        System.out.println(ownerRequestDTO.getEmail()+"-------------------");
+        System.out.println(ownerRequestDTO.getEmail() + "-------------------");
         mail.setTo(ownerRequestDTO.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Application");
         String text = "";
         text = "Application for " + ownerRequestDTO.getType() + ":";
-        text += ownerRequestDTO.mailPrint()+"\n";
-        text += "http://localhost:3000/registration/"+ownerRequestDTO.getUsername();
+        text += ownerRequestDTO.mailPrint() + "\n";
+        text += "http://localhost:3000/registration/" + ownerRequestDTO.getUsername();
         mail.setText(text);
         javaMailSender.send(mail);
 
         System.out.println("Email poslat!");
+    }
+
+    @Async
+    public void sendNotificaitionClientAsync(ClientRequestDTO clientRequestDTO) throws MailException {
+        System.out.println("Sending email...");
+        SimpleMailMessage mail = new SimpleMailMessage();
+        System.out.println(clientRequestDTO.getEmail() + "-------------------");
+        mail.setTo(clientRequestDTO.getEmail());
+        mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+        mail.setSubject("Rivera - Account Activation link");
+        String text = "Application for client:";
+        text += clientRequestDTO.mailPrint() + "\n";
+        text += "http://localhost:3000/clientValidation/" + clientRequestDTO.getUsername();
+        mail.setText(text);
+        javaMailSender.send(mail);
+        System.out.println(text);
+        System.out.println("Email sent!");
     }
 
     public void sendNotificaitionSync(Person user) throws MailException, InterruptedException, MessagingException {

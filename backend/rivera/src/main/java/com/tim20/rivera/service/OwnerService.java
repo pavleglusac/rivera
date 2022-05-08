@@ -22,31 +22,30 @@ public class OwnerService {
     private BoatOwnerRepository boatOwnerRepository;
     @Autowired
     private RoleService roleService;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
 
-    public Person save(OwnerRequestDTO userRequestDTO){
-        Owner owner = null;
-        switch (userRequestDTO.getType()){
-            case "Cottage Owner": owner = cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO)); break;
-            case "Boat Owner": owner = boatOwnerRepository.save(OwnerRequestDTOToBoatOwner(userRequestDTO));break;
-        }
-        return owner;
+    public Person save(OwnerRequestDTO userRequestDTO) {
+        return switch (userRequestDTO.getType()) {
+            case "Cottage Owner" -> cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO));
+            case "Boat Owner" -> boatOwnerRepository.save(OwnerRequestDTOToBoatOwner(userRequestDTO));
+            default -> null;
+        };
     }
 
-    public Owner findByUsername(String username){
+    public Owner findByUsername(String username) {
         return ownerRepository.findByUsername(username);
     }
-    public Owner findByUsernameForLogin(String username){
+
+    public Owner findByUsernameForLogin(String username) {
         Owner owner = ownerRepository.findByUsername(username);
-        if(owner.getStatus().equals(AccountStatus.ACTIVE)){
+        if (owner.getStatus().equals(AccountStatus.ACTIVE)) {
             return owner;
-        }
-        else return null;
+        } else return null;
     }
-    public CottageOwner OwnerRequestDTOToCottageOwner(OwnerRequestDTO userRequestDTO){
+
+    public CottageOwner OwnerRequestDTOToCottageOwner(OwnerRequestDTO userRequestDTO) {
         CottageOwner owner = new CottageOwner();
         owner.setAddress(userRequestDTO.getAddress());
         owner.setCity(userRequestDTO.getCity());
@@ -65,7 +64,7 @@ public class OwnerService {
         return owner;
     }
 
-    public BoatOwner OwnerRequestDTOToBoatOwner(OwnerRequestDTO userRequestDTO){
+    public BoatOwner OwnerRequestDTOToBoatOwner(OwnerRequestDTO userRequestDTO) {
         BoatOwner owner = new BoatOwner();
         owner.setAddress(userRequestDTO.getAddress());
         owner.setCity(userRequestDTO.getCity());
@@ -84,7 +83,7 @@ public class OwnerService {
         return owner;
     }
 
-    public OwnerRequestDTO ownerToOwnerRequestDTO(Owner owner){
+    public OwnerRequestDTO ownerToOwnerRequestDTO(Owner owner) {
         OwnerRequestDTO ownerRequestDTO = new OwnerRequestDTO();
         ownerRequestDTO.setAddress(owner.getAddress());
         ownerRequestDTO.setCity(owner.getCity());
@@ -99,7 +98,6 @@ public class OwnerService {
         return ownerRequestDTO;
     }
 
-
     public OwnerRequestDTO findByUsernameDTO(String username) {
         return ownerToOwnerRequestDTO(ownerRepository.findByUsername(username));
     }
@@ -112,6 +110,7 @@ public class OwnerService {
         System.out.println(owner.getStatus());
         ownerRepository.save(owner);
     }
+
     public void deactivateOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
         System.out.println(owner.getUsername());

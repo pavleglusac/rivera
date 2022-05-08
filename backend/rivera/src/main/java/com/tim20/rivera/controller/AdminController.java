@@ -26,6 +26,7 @@ public class AdminController {
         System.out.println("activate");
         ownerService.activateOwner(username);
     }
+
     @PostMapping(path = "deactivate-owner")
     public void deactivatePerson(@RequestParam("username") String username) throws IOException {
         System.out.println("deactivate");

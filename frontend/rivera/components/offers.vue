@@ -6,17 +6,17 @@
           <ul class="nav nav-pills nav-fill" role="tablist">
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeAdventures }" id="adventures-btn" @click="loadAdventures">
-                <span><img src="..\static\icons\fish.png" /> Fishing</span>
+                <span><font-awesome-icon icon="fish" /> Fishing</span>
               </p>
             </li>
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeCottages }" id="cottages-btn" @click="loadCottages">
-                <span><img src="..\static\icons\cottage.png" /> Cottages</span>
+                <span><font-awesome-icon icon="house" /> Cottages</span>
               </p>
             </li>
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeBoats }" id="boats-btn" @click="loadBoats">
-                <span><img src="..\static\icons\boat.png" /> Boats</span>
+                <span><font-awesome-icon icon="sailboat" /> Boats</span>
               </p>
             </li>
           </ul>

@@ -12,7 +12,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <nuxt-link to="/recommended"><li class="menu-link" :class="currentPage=='recommended' ? 'active' : ''"><b-icon icon="star-fill" /> Recommended</li></nuxt-link>
+                <nuxt-link to="/recommended"><li class="menu-link" :class="currentPage=='recommended' ? 'active' : ''"><font-awesome-icon icon="fire" /> Recommended</li></nuxt-link>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
                 <nuxt-link to="/reservations"><li class="menu-link" :class="currentPage=='reservations' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> Reservations</li></nuxt-link>
                 <nuxt-link to="/subscribed"><li class="menu-link" :class="currentPage=='subscribed' ? 'active' : ''"><b-icon icon="bell-fill" /> Subscribed</li></nuxt-link>
@@ -26,13 +26,12 @@
 </template>
 
 <script>
-import { BIcon, BIconStarFill, BIconSearch, BIconPersonFill, BIconBellFill, BIconCalendarCheckFill, BIconArrow90degLeft } from 'bootstrap-vue'
+import { BIcon, BIconSearch, BIconPersonFill, BIconBellFill, BIconCalendarCheckFill, BIconArrow90degLeft } from 'bootstrap-vue'
 
 export default {
   name: 'ClientNavbar',
   components: {
     BIcon,
-    BIconStarFill,
     BIconSearch,
     BIconPersonFill,
     BIconCalendarCheckFill,
