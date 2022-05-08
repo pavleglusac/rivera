@@ -17,4 +17,11 @@ public class FishingInstructor extends Owner {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
     private List<Adventure> adventures;
+
+    @Override
+    public String toString() {
+        return "FishingInstructor{" +
+                "biography='" + biography + '\'' +
+                '}';
+    }
 }

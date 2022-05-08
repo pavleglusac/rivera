@@ -148,8 +148,89 @@
         >
           <font-awesome-icon icon="minus" />  Subtract
         </b-form-radio>
-        <b-button @click="removeAvailabilities" variant="light" size="lg" class="float-right ml-5 mr-0">
+
+
+        <b-button @click="removeAvailabilities" variant="light" size="lg" class="float-right ml-1 mr-0">
           <font-awesome-icon icon="trash-can" />
+        </b-button>
+
+        <b-modal
+          id="help_modal"
+          title=""
+          ref="help_modal"
+          size="xl"
+          hide-footer
+          no-stacking
+        >
+
+        <h1 class="border-bottom mb-2">Modes</h1>
+
+        <div>
+          <h3 class="mt-5">
+            View 
+          </h3>
+          <p class="lead">
+            In this mode, you can only view availabilities and reservations. Clicking on dates will preview availabilities for that day and clicking on events will
+            display all the details related to that event. This is the default mode and the only mode nonowners have.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="mt-5">
+            Add 
+          </h3>
+          <p class="lead">
+            While in Add mode, selecting the dates will add new availabilities. When the selection is done, you will be prompted
+            for additional details and options available. Use your mouse and drag across dates or a day.
+          </p>
+          <div class="d-flex justify-content-center" >
+            <img src="@/static/addbasic.gif" class="" alt="" srcset="">
+          </div>
+          <div class="d-flex justify-content-center" >
+            <img src="@/static/addweek.gif" alt="" srcset="">
+          </div>
+            
+        </div>
+
+        <div>
+          <h3 class="mt-5">
+            Subtract 
+          </h3>
+          <p class="lead">
+            Subtract mode does the opposite of Add mode. Everything added by the Add mode is subtracted by the Subtract mode. Availabilities 
+            can be deleted, split, shortened.
+          </p>
+
+          <div class="d-flex justify-content-center mt-4">
+            <p>Shortening the availability</p>
+          </div>
+
+          <div class="d-flex justify-content-center mb-5" >
+            <img src="@/static/subtractshorten.gif" alt="" srcset="">
+          </div>
+
+          <div class="d-flex justify-content-center mt-4">
+            <p>Splitting the availability from 9:00-15:00 to 9:00-10:00 and 10:30-15:00</p>
+          </div>
+
+          <div class="d-flex justify-content-center" >
+            <img src="@/static/subtractsplit.gif" alt="" srcset="">
+          </div>
+
+          <div class="d-flex justify-content-center mt-5" >
+            <p>Split result</p>
+          </div>
+
+          <div class="d-flex justify-content-center" >
+            <img src="@/static/splitresult.png" class="w-100" alt="" srcset="" style="max-height: 60vh; max-width: 60vw;">
+          </div>
+
+        </div>
+
+        </b-modal>
+
+        <b-button v-b-modal.help_modal variant="light" size="lg" class="float-right mr-0">
+          <font-awesome-icon icon="question" /> Help
         </b-button>
       </b-form-group>
     </div>

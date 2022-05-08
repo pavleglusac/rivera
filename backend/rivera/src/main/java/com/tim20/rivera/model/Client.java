@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,4 +25,12 @@ public class Client extends Person {
     private List<ClientCategoryCalendar> categories;
     @OneToMany(mappedBy = "client")
     private List<Review> reviews;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "numberOfPenalties=" + numberOfPenalties +
+                ", numberOfPoints=" + numberOfPoints +
+                '}';
+    }
 }
