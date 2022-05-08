@@ -2,10 +2,7 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.BoatOwnerRepository;
-import com.tim20.rivera.repository.CottageOwnerRepository;
-import com.tim20.rivera.repository.OwnerRepository;
-import com.tim20.rivera.repository.PersonRepository;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +19,8 @@ public class OwnerService {
     private BoatOwnerRepository boatOwnerRepository;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -32,6 +31,7 @@ public class OwnerService {
         switch (userRequestDTO.getType()){
             case "Cottage Owner": owner = cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO)); break;
             case "Boat Owner": owner = boatOwnerRepository.save(OwnerRequestDTOToBoatOwner(userRequestDTO));break;
+            case "Fishing Instructor": owner = fishingInstructorRepository.save(OwnerRequestDTOToFishingInstructor(userRequestDTO)); break;
         }
         return owner;
     }
@@ -82,6 +82,26 @@ public class OwnerService {
         List<Role> roles = roleService.findByName("ROLE_BOAT_OWNER");
         owner.setRoles(roles);
         return owner;
+    }
+
+    private FishingInstructor OwnerRequestDTOToFishingInstructor(OwnerRequestDTO userRequestDTO) {
+        FishingInstructor instructor = new FishingInstructor();
+        instructor.setAddress(userRequestDTO.getAddress());
+        instructor.setCity(userRequestDTO.getCity());
+        instructor.setCountry(userRequestDTO.getCountry());
+        instructor.setEmail(userRequestDTO.getEmail());
+        instructor.setName(userRequestDTO.getName());
+        instructor.setSurname(userRequestDTO.getSurname());
+        instructor.setPhoto(userRequestDTO.getPhoto());
+        instructor.setPhoneNumber(userRequestDTO.getPhoneNumber());
+        instructor.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        instructor.setStatus(AccountStatus.WAITING);
+        instructor.setSignUpDescription("description");
+        instructor.setUsername(userRequestDTO.getUsername());
+        instructor.setPhoneNumber(userRequestDTO.getBiography());
+        List<Role> roles = roleService.findByName("ROLE_FISHING_INSTRUCTOR");
+        instructor.setRoles(roles);
+        return instructor;
     }
 
     public OwnerRequestDTO ownerToOwnerRequestDTO(Owner owner){

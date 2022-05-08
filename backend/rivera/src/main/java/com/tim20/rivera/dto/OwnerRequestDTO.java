@@ -20,7 +20,10 @@ public class OwnerRequestDTO {
     private String photo;
     private String type;
     private String description;
+    private String biography;
     private AccountStatus status;
+
+
 
 
     public AccountStatus getStatus() {

@@ -156,9 +156,24 @@
               class="form-control"
               v-bind:class="{ 'error-boarder': $v.type.$invalid }"
             >
-              <option v-for="tip in types">{{ tip }}</option>
+              <option v-for="tip in types" :key="tip">{{ tip }}</option>
             </select>
             <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
+          </div>
+        </div>
+        <div class="form-row" v-if="type == 'Fishing Instructor'">
+          <div class="form-group col-12">
+            <label>Biography</label>
+            <textarea
+              placeholder="Enter biography"
+              class="form-control form-control-lg"
+              id="biography"
+              style="font-size: 16px;"
+              v-model="biography"
+              v-bind:class="{ 'error-boarder': $v.biography.$invalid }"
+            />
+            <ErrorDiv :parameter="$v.biography" :name="'Biography'">
+            </ErrorDiv>
           </div>
         </div>
         <div class="form-row">
@@ -234,7 +249,8 @@ export default {
       type: "",
       description: "",
       password2: "",
-      types: ["Cottage Owner", "Boat Owner"],
+      biography: "",
+      types: ["Cottage Owner", "Boat Owner", "Fishing Instructor"],
     };
   },
   components: {
@@ -285,6 +301,10 @@ export default {
       required,
       minLength: minLength(2),
     },
+    biography: {
+      required,
+      minLength: minLength(5),
+    },
     password2: {
       required,
       minLength: minLength(2),
@@ -319,6 +339,7 @@ export default {
       formData.append("city", this.city);
       formData.append("address", this.address);
       formData.append("description", this.description);
+      formData.append("biography", this.biography);
       console.log(this.type);
       formData.append("type", this.type);
       this.$axios
@@ -334,6 +355,15 @@ export default {
       this.$router.push({ path: "/login" });
     },
   },
+  watch: {
+    type: function(val, oldVal){
+      if(val != 'Fishing Instructor') {
+        this.biography = "fhnfksdfgksdjdfsdjk";
+      } else {
+        this.biography = "";
+      }
+    }
+  }
 };
 </script>
 
