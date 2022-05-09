@@ -12,6 +12,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
+                <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Homepage</li></nuxt-link>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
                 <nuxt-link to="/adventures"><li class="menu-link" :class="currentPage=='adventures' ? 'active' : ''"><font-awesome-icon icon="fish" /> My Adventures</li></nuxt-link>
                 <nuxt-link to="/instructor/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>

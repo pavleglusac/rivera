@@ -102,7 +102,7 @@
           </b-col>
           <b-col>
             <h4>Password Settings</h4>
-            <password-change :cpasswordText="client.password" />
+            <password-change />
 
             <h4>Loyalty Program</h4>
             <p>Number of points you earned is {{client.numberOfPoints}}.</p>
@@ -142,7 +142,6 @@ export default {
         photo: "",
         email: "",
         description: "",
-        password: "",
         name: "",
         surname: "",
         phoneNumber: "",

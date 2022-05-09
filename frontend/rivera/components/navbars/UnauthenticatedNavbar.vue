@@ -12,7 +12,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><b-icon icon="star-fill" /> Trending</li></nuxt-link>
+                <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Homepage</li></nuxt-link>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
                 <b-nav-item><nuxt-link to="/login"><b-button size="sm" variant="outline-light">Log in</b-button></nuxt-link></b-nav-item>
                 <b-nav-item><nuxt-link to="/registration"><b-button size="sm" variant="light">Create an account</b-button></nuxt-link></b-nav-item>

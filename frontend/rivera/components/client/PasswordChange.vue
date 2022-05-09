@@ -69,7 +69,6 @@
 <script>
 import { BIcon, BIconEyeFill, BIconEyeSlashFill } from "bootstrap-vue";
 export default {
-  props: ['cpasswordText'],
   name: "ClientProfile",
   components: {
     BIcon,
@@ -92,6 +91,7 @@ export default {
       },
       passwordText: "",
       rpasswordText: "",
+      cpasswordText: "",
     };
   },
   methods: {

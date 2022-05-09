@@ -19,7 +19,7 @@
           Also, our job is to help instructors and owners manage their
           reservations and calendars.
         </p>
-        <b-button class="get-started" data-aos="zoom-in">Get started</b-button>
+        <b-button class="get-started" @click="redirect" data-aos="zoom-in">Get started</b-button>
       </b-container>
     </section>
 
@@ -152,15 +152,13 @@
         </div>
         <div class="row text-start">
           <div class="col-md-4" data-aos="fade-up">
-            <img src="../assets/fishing.jpg" alt="" />
+            <img class="trending-photo" src="../assets/blue_boat.jpg" alt="" />
             <div class="mt-4">
               <div class="text-secondary" style="font-size: 0.8em">
                 <font-awesome-icon icon="star" /> &nbsp;{{ boat.averageScore }}
               </div>
               <span>{{ boat.city }}, {{ boat.country }}</span>
-              <h5 class="mt-1 mb-2">
-                <a href="#">{{ boat.name }}</a>
-              </h5>
+              <h5 class="mt-1 mb-2">{{ boat.name }}</h5>
               <p v-if="boat.description.length < 200" style="font-size: 0.8em">
                 {{ boat.description }}
               </p>
@@ -170,7 +168,7 @@
             </div>
           </div>
           <div class="col-md-4" data-aos="fade-up">
-            <img src="../assets/fishing.jpg" alt="" />
+            <img class="trending-photo" src="../assets/kid_fishing.jpg" alt="" />
             <div class="mt-4">
               <div class="text-secondary" style="font-size: 0.8em">
                 <font-awesome-icon icon="star" /> &nbsp;{{
@@ -178,9 +176,7 @@
                 }}
               </div>
               <span>{{ adventure.city }}, {{ adventure.country }}</span>
-              <h5 class="mt-1 mb-2">
-                <a href="#">{{ adventure.name }}</a>
-              </h5>
+              <h5 class="mt-1 mb-2">{{ adventure.name }}</h5>
               <p
                 v-if="adventure.description.length < 200"
                 style="font-size: 0.8em"
@@ -193,7 +189,7 @@
             </div>
           </div>
           <div class="col-md-4" data-aos="fade-up">
-            <img src="../assets/fishing.jpg" alt="" />
+            <img class="trending-photo" src="../assets/cottage_on_river.jpg" alt="" />
             <div class="mt-4">
               <div class="text-secondary" style="font-size: 0.8em">
                 <font-awesome-icon icon="star" /> &nbsp;{{
@@ -201,9 +197,7 @@
                 }}
               </div>
               <span>{{ cottage.city }}, {{ cottage.country }}</span>
-              <h5 class="mt-1 mb-2">
-                <a href="#">{{ cottage.name }}</a>
-              </h5>
+              <h5 class="mt-1 mb-2">{{ cottage.name }}</h5>
               <p
                 v-if="cottage.description.length < 200"
                 style="font-size: 0.8em"
@@ -238,60 +232,54 @@
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { BIcon, BIconStarFill, BIconSearch } from "bootstrap-vue";
 import Navbar from '../components/navbar.vue';
 
 export default {
-  components: { BIcon, BIconStarFill, BIconSearch, Navbar },
+  components: { Navbar },
   mounted() {
     AOS.init();
-    let that = this;
-    /*this.$axios.post(`/api/search-adventures?&numberOfResults=1&orderBy=${score-d}`)
-    .then(response => {
-      console.log(response);
-      that.adventure = response.data;
-      that.boat = response.data;
-      that.cottage = response.data;
-    });
-    this.$axios.post(`/api/search-boats?&numberOfResults=1&orderBy=${score-d}`)
-    .then(response => {
-      that.adventure = response.data;
-      console.log(response);
-    });
-    this.$axios.post(`/api/search-cottages?&numberOfResults=1&orderBy=${score-d}`)
-    .then(response => {
-      that.adventure = response.data;
-      console.log(response);
-    });*/
   },
   data() {
     return {
       boat: {
-        pictures: [".assets\fishing.jpg"],
-        description: "This is the best thing ever.",
-        name: "Fishing - Duvan",
+        description: "This is the great opportunity for your kids to learn fishing. Also, you do not need any additional equipment for this tour.",
+        name: "Fishing for kids",
         country: "Serbia",
         city: "Novi Sad",
         averageScore: 5.0,
       },
       adventure: {
-        pictures: ["../assets/fishing.jpg"],
-        description: "This is the best thing ever.",
-        name: "Fishing - Duvan",
+        description: "Can you imagine your next party here? This is one of the best yachts we can offer.",
+        name: "Blue Yacht",
         country: "Serbia",
-        city: "Novi Sad",
+        city: "Belgrade",
         averageScore: 5.0,
       },
       cottage: {
-        pictures: ["../assets/fishing.jpg"],
-        description: "This is the best thing ever.",
-        name: "Fishing - Duvan",
+        description: "Go checkout your calendar and book this adorable cottage for your next family gathering.",
+        name: "Cure family getaway",
         country: "Serbia",
-        city: "Novi Sad",
-        averageScore: 5.0,
+        city: "Bajina bašta",
+        averageScore: 4.8,
       },
     };
   },
+  methods: {
+    redirect() {
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios.get('/api/auth/getRole', {
+                          headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+                      }).then((resp) => {
+          if(resp.data == "unauthenticated") {
+            this.$router.push({ path: "/login" });
+          } else {
+            this.$router.push({ path: "/offers" });
+          }
+      }).catch((err) => {
+          console.log(err);
+      });
+    }
+  }
 };
 </script>
 
@@ -378,5 +366,10 @@ section img {
 }
 .service .service-img {
   position: relative;
+}
+.trending-photo {
+  width: 350px;
+  height: 250px;
+  object-fit: cover;
 }
 </style>

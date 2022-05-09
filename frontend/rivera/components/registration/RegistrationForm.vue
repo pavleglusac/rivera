@@ -2,7 +2,6 @@
   <div
     class="
       registration-form
-      fixed-top
       d-flex
       align-items-center
       justify-content-center
@@ -177,16 +176,14 @@
           </div>
         </div>
 
-        <b-form-invalid-feedback>
-          Wrong email or password. Please try again.
-        </b-form-invalid-feedback>
-
         <b-button block id="register-btn" variant="primary" @click="register"
           >Register</b-button
         >
+        <b-spinner variant="success" v-if="emailSending" class="spinning m-2"></b-spinner>
         <b-modal id="success" hide-footer>
           <div class="d-block text-center">
-            <h4>Your registration is almost done. Go check out your email to verify your account.</h4>
+            <h4 v-if="type=='Regular User'">Your registration is almost done. Go check out your email to verify your account.</h4>
+            <h4 v-else>Your request has been sent to admin. You will get notified when he verifies your account.</h4>
           </div>
         </b-modal>
         <b-button
@@ -239,6 +236,7 @@ export default {
       type: "",
       description: "",
       password2: "",
+      emailSending: false,
       types: ["Cottage Owner", "Boat Owner", "Regular User"],
     };
   },
@@ -321,6 +319,7 @@ export default {
       return formData;
     },
     registerOwner() {
+      this.emailSending = true;
       console.log(this.$v.$invalid);
       console.log(this.$v.name.$invalid);
       this.$v.$touch();
@@ -337,12 +336,14 @@ export default {
         .then((resp) => {
           console.log(resp);
           this.$bvModal.show('success');
+          this.emailSending = false;
         })
         .catch((err) => {
           console.log(err);
         });
     },
      registerClient() {
+      this.emailSending = true;
       console.log(this.$v.$invalid);
       console.log(this.$v.name.$invalid);
       this.$v.$touch();
@@ -357,6 +358,7 @@ export default {
         .then((resp) => {
           console.log(resp);
           this.$bvModal.show('success');
+          this.emailSending = false;
         })
         .catch((err) => {
           console.log(err);
@@ -371,4 +373,7 @@ export default {
 
 
 <style>
+.spinning {
+  background-color: var(--primary-color);
+}
 </style>

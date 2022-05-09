@@ -74,7 +74,7 @@ public class RiveraApplication {
 				"/images/adventures/1/img2.jpg",
 				"/images/adventures/1/img1.jpg"));
 
-		//adventure.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
+		adventure.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
 		Pricelist pricelist = new Pricelist();
 		pricelist.setStartDateTime(LocalDateTime.now());
 		pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -97,7 +97,7 @@ public class RiveraApplication {
 		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
 		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
 		discount1.setPrice(300.0);
-		//discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
+		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
 		discount1.setRentable(adventure);
 
 		Review review1 = new Review();
@@ -134,8 +134,22 @@ public class RiveraApplication {
 		Tag tagExtreme = new Tag(); tagExtreme.setName("extreme");
 		Tag tagCanoe = new Tag(); tagCanoe.setName("canoe");
 		tagRepository.saveAll(Arrays.asList(tagWifi, tagRiver, tagCanoe, tagExtreme));
+		adventure.setTags(Arrays.asList(tagWifi, tagExtreme, tagRiver));
 
-		//adventure.setTags(Arrays.asList(tagWifi, tagExtreme, tagRiver));
+		Adventure adventure2 = new Adventure();
+		adventure2.setName("Some adventure");
+		adventure2.setAddress("7 Grove St.");
+		adventure2.setCity("Cairns");
+		adventure2.setCountry("New Zeland");
+		adventure2.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
+				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
+				" maximus quam mollis consequat");
+		adventure2.setPictures(Arrays.asList("/images/adventures/1/img3.jpg",
+				"/images/adventures/1/img2.jpg",
+				"/images/adventures/1/img1.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img5.jpg"));
+		adventure2.setTags(Arrays.asList(tagExtreme, tagRiver));
 
 		Pricelist pricelist = new Pricelist();
 		pricelist.setStartDateTime(LocalDateTime.now());
@@ -144,22 +158,37 @@ public class RiveraApplication {
 		pricelist.setPricePerDay(40.0);
 		pricelist.setCancellationTerms("20");
 		pricelist.setRentable(adventure);
-		adventure.setPricelists(Arrays.asList(pricelist));
+		adventure.setPricelists(List.of(pricelist));
 		adventure.setCurrentPricelist(pricelist);
 		pricelistRepository.save(pricelist);
 
+		Pricelist pricelist2 = new Pricelist();
+		pricelist2.setStartDateTime(LocalDateTime.now());
+		pricelist2.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
+		pricelist2.setPricePerHour(15.0);
+		pricelist2.setPricePerDay(50.0);
+		pricelist2.setCancellationTerms("20");
+		pricelist2.setRentable(adventure2);
+		adventure2.setPricelists(List.of(pricelist2));
+		adventure2.setCurrentPricelist(pricelist2);
+		pricelistRepository.save(pricelist2);
+
 		adventure.setCapacity(4);
+		adventure2.setCapacity(3);
 
 		adventure.setFishingEquipment(Arrays.asList("Rod 123", "Silk 4", "Golden Bait"));
+		adventure2.setFishingEquipment(List.of("Rod 123"));
 		adventure.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
+		adventure2.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
 		adventure.setAverageScore(3.3);
+		adventure2.setAverageScore(2.3);
 
 		Discount discount1 = new Discount();
 		discount1.setCapacity(3);
 		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
 		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
 		discount1.setPrice(300.0);
-		//discount1.setTags(Arrays.asList(tagCanoe, tagExtreme));
+		discount1.setTags(Arrays.asList(tagCanoe, tagExtreme));
 		discount1.setRentable(adventure);
 
 		Discount discount2 = new Discount();
@@ -167,8 +196,8 @@ public class RiveraApplication {
 		discount2.setStartDateTime(LocalDateTime.of(2022, 8, 18, 16, 0 ));
 		discount2.setEndDateTime(LocalDateTime.of(2022, 8, 18, 17, 0 ));
 		discount2.setPrice(450.0);
-		//
-		// discount2.setTags(Arrays.asList(tagCanoe, tagExtreme));
+
+		discount2.setTags(Arrays.asList(tagCanoe, tagExtreme));
 		discount2.setRentable(adventure);
 
 		adventure.setDiscounts(Arrays.asList(discount1, discount2));
@@ -224,7 +253,6 @@ public class RiveraApplication {
 
 		adventure.setReviews(Arrays.asList(review1, review2));
 
-
 		Reservation reservation = new Reservation();
 		reservation.setClient(client1);
 		reservation.setRentable(adventure);
@@ -249,8 +277,7 @@ public class RiveraApplication {
 		fishingInstructor.setPhoneNumber("+3845135535");
 		fishingInstructor.setUsername("marko");
 		fishingInstructor.setPhoto("/images/clients/" + fishingInstructor.getUsername() + ".jpg");
-		fishingInstructor.setAdventures(Arrays.asList(adventure));
-
+		fishingInstructor.setAdventures(List.of(adventure));
 
 		Role role = new Role();
 		Role role2 = new Role();
@@ -282,6 +309,7 @@ public class RiveraApplication {
 
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);
+		adventureRepository.save(adventure2);
 
 		initializeData2();
 	}
