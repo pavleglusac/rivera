@@ -1,30 +1,47 @@
 <template>
-    <div class="p-5 mt-3">  
+<div
+    class="
+      rentable-manipulation
+      fixed-top
+      d-flex
+      align-items-center
+      justify-content-center
+    "
+    style="bottom: 0; overflow-y: auto"
+  >
+  <b-container class="bv-example-row">
+    <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
+    <div class="p-5">  
 		<form>
+			<div class="form-row" style="text-align:center">
+				<div class="form-group col-md-12">
+					<h3>Adventure addition</h3>
+				</div>
+			</div>
 			<div class="form-row">
 				<div class="form-group col-md-4">
 				<label for="name">Name</label>
 				<input type="text" class="form-control" id="inputEmail4" placeholder="Name" v-model="name">
 				</div>
 
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-2">
 				<label for="name">Capacity</label>
 				<input type="number" class="form-control" v-model="capacity"  id="capacity" name="capacity" min="1" max="100" placeholder="Capacity">
 				</div>
 
-				<div class="form-group col-md-1">
-				<label for="name">Price per hour</label>
+				<div class="form-group col-md-2">
+				<label for="name">Price per hour(€)</label>
 				<input type="number" class="form-control" v-model="perHour"  id="perHour" name="perHour" min="0" placeholder="Price per hour">
 				</div>
 
-				<div class="form-group col-md-1">
-				<label for="name">Price per day</label>
+				<div class="form-group col-md-2">
+				<label for="name">Price per day(€)</label>
 				<input type="number" class="form-control" v-model="perDay"  id="capacity" name="perDay" min="0" placeholder="Price per day">
 				</div>
 
 				<div class="form-group col-md-2">
 				<label for="name">Cancellation terms</label>
-				<input type="text" class="form-control" id="terms" placeholder="Cancellation terms" v-model="cancellationTerms">
+				<input type="number" step="0.01" class="form-control" id="terms" placeholder="Cancellation terms" v-model="cancellationTerms">
 				</div>
 
 			</div>
@@ -73,6 +90,9 @@
 		</form>
 		<button @click="upload" class="btn btn-primary float-right">Add adventure</button>
 	</div>
+	</b-card>
+  </b-container>
+</div>
 </template>
 
 <script>
@@ -146,6 +166,7 @@ export default {
 					'Content-Type': 'multipart/form-data'
 				}
 			}).then((resp) => {
+				this.$router.push({ path: "/adventure/" + resp.data });
 				console.log(resp);
 			}).catch((err) => {
 				console.log(err);

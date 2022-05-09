@@ -49,6 +49,8 @@ export default {
                 console.log(resp.data);
                 if(resp.data=="ROLE_COTTAGE_OWNER"){
                   this.addType="cottage";
+                } else if(resp.data=="ROLE_FISHING_INSTRUCTOR"){
+                  this.addType="adventure";
                 }
 			}).catch((err) => {
 				console.log(err);
@@ -56,7 +58,7 @@ export default {
   },
   methods:{
     redirect(){
-      this.$router.push({ path: "/cottage" });
+      this.$router.push({ path: "/" + this.addType });
     },
     cowner(){
       let that = this;

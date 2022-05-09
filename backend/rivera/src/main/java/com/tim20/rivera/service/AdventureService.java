@@ -57,10 +57,10 @@ public class AdventureService {
 
     @PostConstruct
     private void setTemporaryOwner() {
-        temporaryOwner = fishingInstructorRepository.getById("marko@gmail.com");
+        temporaryOwner = fishingInstructorRepository.getById("marko");
     }
 
-    public Boolean addAdventure(AdventureDTO adventureDto,
+    public Integer addAdventure(AdventureDTO adventureDto,
                                 @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
         Adventure adventure = dtoToAdventure(adventureDto);
@@ -70,7 +70,7 @@ public class AdventureService {
         adventure.setPictures(paths);
         adventure.setProfilePicture(paths.get(0));
         adventureRepository.save(adventure);
-        return true;
+        return adventure.getId();
     }
 
     private List<String> savePictures(Adventure adventure, MultipartFile[] multipartFiles) throws IOException {

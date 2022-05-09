@@ -125,6 +125,22 @@
           Wrong email or password. Please try again.
         </b-form-invalid-feedback>
 
+        <b-modal ref="decline_modal" size="xl" hide-footer>
+            <h3>Enter reason for declination</h3>
+            <b-form-textarea
+                    id="textarea-large"
+                    size="lg"
+                    placeholder=""
+                    v-model="reason"
+                    v-bind:class="{ 'error-boarder': $v.reason.$invalid }"
+            >
+            </b-form-textarea>
+            <ErrorDiv :parameter="$v.reason" :name="'Reason'">
+            </ErrorDiv>
+            <b-button class="mt-5 float-right" @click="send_decline">Send</b-button>
+        </b-modal>
+
+
 		<div v-if="status=='WAITING'">
 			<b-button block id="login-btn" variant="primary"  @click="accept">Accept</b-button>
 			<b-button block id="signup-btn" variant="outline-primary" @click="decline">Decline</b-button>
@@ -134,7 +150,21 @@
   </div>
 </template>
 <script>
-export default {
+import Vue from "vue";
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+import {
+  required,
+  minLength,
+  between,
+  email,
+  maxLength,
+  sameAs
+} from "vuelidate/lib/validators";
+import useValidate from "@vuelidate/core";
+import ErrorDiv from "./ErrorDiv.vue";
+
+export default {    
 	data () {
     	return {
 			email: "",
@@ -150,6 +180,7 @@ export default {
 			type: "",
 			description: "",
 			status: "",
+            reason: "",
 		}
 	},
     mounted() {
@@ -173,6 +204,15 @@ export default {
 				console.log(err);
 			});
 	},
+    components: {
+        ErrorDiv: ErrorDiv,
+    },
+    validations: {
+        reason: {
+            required,
+            minLength: minLength(2),
+        },
+    },
 	methods: {
 		accept(){
             console.log("AAAAAAAAAAAAA");
@@ -184,13 +224,17 @@ export default {
 			});
 		},
 		decline(){
-			this.$axios.post('/api/admin/deactivate-owner?username='+ this.$route.params.registration).then((resp) => {
+            this.$refs.decline_modal.show();
+		},
+        send_decline() {
+            this.$axios.post('/api/admin/deactivate-owner?username='+ this.$route.params.registration + "&reason=" + this.reason 
+            ).then((resp) => {
 				console.log("Uspesno");
                 window.location.reload();
 			}).catch((err) => {
 				console.log(err);
 			});
-		}
+        }
 	}
 }
 </script>

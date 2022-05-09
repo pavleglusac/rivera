@@ -383,6 +383,7 @@ export default {
 					'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT")
 				}
 			}).then((resp) => {
+				this.$router.push({ path: "/cottage/" + resp.data });
 				console.log(resp);
 			}).catch((err) => {
 				console.log(err);

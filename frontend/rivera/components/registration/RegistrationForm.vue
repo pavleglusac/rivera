@@ -262,7 +262,7 @@ export default {
       usernameExists: false,
       typingTimer : "",
       doneTypingInterval: 2000,
-      loadingUsername: false
+      loadingUsername: false,
       types: ["Cottage Owner", "Boat Owner", "Fishing Instructor"],
       biography: "",
     };
@@ -344,7 +344,7 @@ export default {
       let that = this;
       console.log("ok");
       var formData = new FormData();
-      formData.append("email", this.email);
+      formData.append("email", "mrsisatim20+" + this.email);
       formData.append("username", this.username);
       formData.append("password", this.password);
       formData.append("name", this.name);

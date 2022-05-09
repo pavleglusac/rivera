@@ -35,13 +35,13 @@ public class CottageController {
     private CottageAvailabilityService cottageAvailabilityService;
 
     @PostMapping(path = "/add-cottage")
-    public ResponseEntity<String> addCottage(
+    public ResponseEntity<Integer> addCottage(
             CottageDTO cottage,
             @RequestPart("images") MultipartFile[] multipartFiles
     ) throws IOException {
 
-        cottageService.insert(cottage, multipartFiles);
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        Integer id = cottageService.insert(cottage, multipartFiles);
+        return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
     @GetMapping(path = "/get-cottages")

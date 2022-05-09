@@ -4,10 +4,10 @@
             {{name}} must not be empty!
         </span>
         <span v-else-if="!parameter.minLength &&  parameter.minLength!=null">
-            {{name}} must be more then 2 characters!
+            {{name}} must be more than 2 characters!
         </span>
         <span v-else-if="!parameter.maxLength && parameter.maxLength!=null">
-            {{name}} must be less then 20 characters!
+            {{name}} must be less than 20 characters!
         </span>
         <span v-else-if="!parameter.email && parameter.email!=null">
             Email must be proper format!

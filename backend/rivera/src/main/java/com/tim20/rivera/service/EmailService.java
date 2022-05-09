@@ -2,6 +2,7 @@ package com.tim20.rivera.service;
 
 
 import com.tim20.rivera.dto.OwnerRequestDTO;
+import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -25,6 +26,12 @@ public class EmailService {
      */
     @Autowired
     private Environment env;
+
+    @Autowired
+    private PersonService personService;
+
+    @Autowired
+    private OwnerService ownerService;
 
     /*
      * Anotacija za oznacavanje asinhronog zadatka
@@ -63,6 +70,38 @@ public class EmailService {
         mail.setText("Pozdrav " + user.getName() + ",\n\nhvala što pratiš ISA.");
         javaMailSender.send(mail);
 
+        System.out.println("Email poslat!");
+    }
+
+    @Async
+    public void sendNotificaitionToUsername(String username, String subject, String text) throws MailException, InterruptedException {
+        System.out.println("Async metoda se izvrsava u drugom Threadu u odnosu na prihvaceni zahtev. Thread id: " + Thread.currentThread().getId());
+        System.out.println("Slanje emaila...");
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+
+        Person person = personService.findByUsername(username);
+        mail.setTo(person.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject(subject);
+        mail.setText(text);
+        javaMailSender.send(mail);
+        System.out.println("Email poslat!");
+    }
+
+    @Async
+    public void sendNotificaitionToOwnerUsername(String username, String subject, String text) throws MailException, InterruptedException {
+        System.out.println("Async metoda se izvrsava u drugom Threadu u odnosu na prihvaceni zahtev. Thread id: " + Thread.currentThread().getId());
+        System.out.println("Slanje emaila...");
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+
+        Owner owner = ownerService.findByUsername(username);
+        mail.setTo(owner.getEmail());
+        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setSubject(subject);
+        mail.setText(text);
+        javaMailSender.send(mail);
         System.out.println("Email poslat!");
     }
 

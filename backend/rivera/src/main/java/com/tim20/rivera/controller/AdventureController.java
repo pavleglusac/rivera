@@ -31,13 +31,13 @@ public class AdventureController {
     private AdventureAvailabilityService adventureAvailabilityService;
 
     @PostMapping(path = "add-adventure")
-    public ResponseEntity<String> addAdventure(
+    public ResponseEntity<Integer> addAdventure(
             AdventureDTO adventure,
             @RequestPart("images") MultipartFile[] multipartFiles
     ) throws IOException {
 
-        adventureService.addAdventure(adventure, multipartFiles);
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        Integer id = adventureService.addAdventure(adventure, multipartFiles);
+        return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
     @GetMapping(path = "get-adventure")

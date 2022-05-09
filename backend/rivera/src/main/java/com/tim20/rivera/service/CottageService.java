@@ -72,7 +72,7 @@ public class CottageService {
         cottageOwnerRepository.save(temporaryOwner);
     }
 
-    public Boolean insert(CottageDTO cottageDto,
+    public Integer insert(CottageDTO cottageDto,
                           @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
         Cottage cottage = dtoToCottage(cottageDto);
@@ -90,7 +90,7 @@ public class CottageService {
         cottage.setProfilePicture(paths.get(0));
         cottageRepository.save(cottage);
         cottageOwnerRepository.save(temporaryOwner);
-        return true;
+        return cottage.getId();
     }
 
 
