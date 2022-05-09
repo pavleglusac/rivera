@@ -37,8 +37,8 @@ public class EmailService {
 
         SimpleMailMessage mail = new SimpleMailMessage();
         System.out.println(ownerRequestDTO.getEmail()+"-------------------");
-        mail.setTo(ownerRequestDTO.getEmail());
-        mail.setFrom(env.getProperty("spring.mail.username"));
+        mail.setTo(env.getProperty("spring.mail.username"));
+        mail.setFrom(ownerRequestDTO.getEmail());
         mail.setSubject("Application");
         String text = "";
         text = "Application for " + ownerRequestDTO.getType() + ":";

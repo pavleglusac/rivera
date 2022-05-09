@@ -120,4 +120,9 @@ public class OwnerService {
         System.out.println(owner.getStatus());
         ownerRepository.save(owner);
     }
+
+    public boolean checkIfApprovedOrNonExistent(String username){
+        Owner owner = ownerRepository.findByUsername(username);
+        return owner == null || owner.getStatus()==AccountStatus.ACTIVE;
+    }
 }

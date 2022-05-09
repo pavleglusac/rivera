@@ -18,9 +18,7 @@
             disabled
           />
         </div>
-        <button type="button" @click="cowner"> COWNER </button>
-        <button type="button" @click="bowner"> BOWNER </button>
-        <button type="button" @click="idk"> IDK </button>
+        <button type="button"  class="btn btn-primary"  @click="redirect">Add {{addType}} </button>
         </form>
     </b-card>
   </div>
@@ -30,6 +28,7 @@ export default {
   data() {
     return {
 			username: "",
+			addType: "",
       };
   },
   mounted(){
@@ -44,8 +43,21 @@ export default {
 			}).catch((err) => {
 				console.log(err);
 			});
+      this.$axios.get('/api/auth/getRole',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+                console.log(resp.data);
+                if(resp.data=="ROLE_COTTAGE_OWNER"){
+                  this.addType="cottage";
+                }
+			}).catch((err) => {
+				console.log(err);
+			});
   },
   methods:{
+    redirect(){
+      this.$router.push({ path: "/cottage" });
+    },
     cowner(){
       let that = this;
       console.log(window.localStorage.getItem("JWT"));

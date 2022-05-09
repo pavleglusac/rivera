@@ -9,7 +9,7 @@
       no-stacking
     >
       <h2>Repeat:</h2>
-      <b-form-group label="Button style radios">
+      <b-form-group>
         <b-form-radio
           v-model="selected_repeat"
           value="norepeat"

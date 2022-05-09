@@ -12,6 +12,9 @@
         <span v-else-if="!parameter.email && parameter.email!=null">
             Email must be proper format!
         </span>
+        <span v-else-if="!parameter.sameAsPassword && parameter.sameAsPassword!=null">
+            Passwords must match!
+        </span>
     </div>
 </template>
 

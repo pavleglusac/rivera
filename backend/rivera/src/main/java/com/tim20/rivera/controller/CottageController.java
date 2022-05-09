@@ -82,6 +82,13 @@ public class CottageController {
 
 
 
+    @PostMapping("define-availability")
+    public ResponseEntity<String> defineAvailability(@RequestBody AvailabilityRequest availabilityRequest) {
+        System.out.println(availabilityRequest);
+        cottageAvailabilityService.defineAvailability(availabilityRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
     @GetMapping("get-availabilities")
     public List<Availability> getAvailabilities(@RequestParam String from, @RequestParam String to, @RequestParam Integer cottageId) {
         LocalDateTime fromDateTime = LocalDateTime.parse(from);
@@ -89,4 +96,15 @@ public class CottageController {
         return cottageAvailabilityService.getAvailabilities(cottageId, fromDateTime, toDateTime);
     }
 
+    @GetMapping("test-availability")
+    public ResponseEntity<String> testAvailability() {
+        cottageAvailabilityService.testBigAvailability();
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping("remove-availabilities")
+    public ResponseEntity removeAvailabilities(@RequestParam Integer id) {
+        cottageAvailabilityService.removeAvailabilities(id);
+        return ResponseEntity.ok().build();
+    }
 }

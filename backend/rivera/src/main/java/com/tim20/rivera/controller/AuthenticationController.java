@@ -57,7 +57,9 @@ public class AuthenticationController {
 
         System.out.println(authentication.getPrincipal());
         Person user = (Person) authentication.getPrincipal();
-
+        if(!ownerService.checkIfApprovedOrNonExistent(user.getUsername())){
+            return null;
+        }
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 

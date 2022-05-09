@@ -32,6 +32,38 @@ public class CottageAvailabilityService {
     @Autowired
     AvailabilityRepository availabilityRepository;
 
+    public void defineAvailability(AvailabilityRequest availabilityRequest) {
+        Cottage cottage = cottageRepository.getById(availabilityRequest.getRentableId());
+        List<Calendar> cals = cottage.getCalendars();
+        if(cals == null) {
+            cottage.setCalendars(new ArrayList<>());
+            cals = cottage.getCalendars();
+        }
+
+        if(cals.isEmpty()) {
+            Calendar calendar = new Calendar();
+            calendar.setPatternsOfAvailability(new ArrayList<>());
+            calendar.setRentable(cottage);
+            calendarRepository.save(calendar);
+            cals.add(calendar);
+        }
+
+        Calendar cal = cals.get(0);
+        for (int i = 0; i < availabilityRequest.getPatterns().size(); i++) {
+            AvailabilityPattern pattern = new AvailabilityPattern();
+            pattern.setPatternStart(availabilityRequest.getPatterns().get(i).get(0));
+            pattern.setPatternEnd(availabilityRequest.getPatterns().get(i).get(1));
+            pattern.setAddition(availabilityRequest.getAddition());
+            pattern.setStartDateTime(availabilityRequest.getSelectedStartDate());
+            pattern.setEndDateTime(availabilityRequest.getSelectedEndDate());
+            availabilityRepository.save(pattern);
+            cal.getPatternsOfAvailability().add(pattern);
+        }
+
+        calendarRepository.save(cal);
+        cottageRepository.save(cottage);
+    }
+
 
     public List<Availability> getAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
         Cottage cottage = cottageRepository.getById(id);
@@ -213,4 +245,70 @@ public class CottageAvailabilityService {
     }
 
 
+    public void testBigAvailability() {
+        Cottage cottage = cottageRepository.getById(1);
+        AvailabilityRequest request1 = new AvailabilityRequest();
+        request1.setAddition(true);
+        request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 10 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
+        request1.setRepeat("week");
+        request1.setRentableId(1);
+        request1.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
+        request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
+        defineAvailability(request1);
+
+        List<Availability> avs = getAvailabilities(cottage, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+
+
+        AvailabilityRequest request2 = new AvailabilityRequest();
+        request2.setAddition(true);
+        request2.setPatterns(Arrays.asList(Arrays.asList("0 0 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 12 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
+        request2.setRepeat("week");
+        request2.setRentableId(1);
+        request2.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
+        request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
+        defineAvailability(request2);
+
+        avs = getAvailabilities(cottage, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+
+
+
+        AvailabilityRequest request3 = new AvailabilityRequest();
+        request3.setAddition(true);
+        request3.setPatterns(Arrays.asList(Arrays.asList("0 30 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 14 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
+        request3.setRepeat("week");
+        request3.setRentableId(1);
+        request3.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
+        request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
+        defineAvailability(request3);
+
+        avs = getAvailabilities(cottage, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+
+
+        AvailabilityRequest request4 = new AvailabilityRequest();
+        request4.setAddition(true);
+        request4.setPatterns(Arrays.asList(Arrays.asList("0 0 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 35 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
+        request4.setRepeat("week");
+        request4.setRentableId(1);
+        request4.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
+        request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
+        defineAvailability(request4);
+
+        avs = getAvailabilities(cottage, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+
+
+    }
+
+    public void removeAvailabilities(Integer cottageId) {
+        Cottage cottage = cottageRepository.getById(cottageId);
+        List<Calendar> cals = cottage.getCalendars();
+        if(cals == null) {
+            cottage.setCalendars(new ArrayList<>());
+            cals = cottage.getCalendars();
+        }
+        if(!cals.isEmpty()) {
+            cals.get(0).setPatternsOfAvailability(new ArrayList<>());
+            calendarRepository.save(cals.get(0));
+        }
+        cottageRepository.save(cottage);
+    }
 }

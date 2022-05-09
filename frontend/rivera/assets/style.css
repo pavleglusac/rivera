@@ -101,7 +101,8 @@ h1, h2, h3, h4, h5, h6, p {
 } 
 
 .login-form,
-.registration-form
+.registration-form,
+.rentable-manipulation
  {
   background: linear-gradient(
     90deg,
@@ -114,6 +115,7 @@ h1, h2, h3, h4, h5, h6, p {
   height: 100%;
   width: 100%;
 }
+
 
 .login-form .card {
     border-radius: 20;
@@ -192,6 +194,8 @@ select,
 
 .login-form .error-boarder,
 .registration-form .error-boarder {
+  border-color: red;
+}.error-boarder {
   border-color: red;
 }
 

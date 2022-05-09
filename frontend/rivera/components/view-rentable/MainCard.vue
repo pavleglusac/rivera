@@ -23,7 +23,7 @@
             {{description}}
         </div>
 
-        <b-modal id="update_modal" title="Update cottage" ref="update_modal" size="xl" hide-footer>
+        <b-modal id="update_modal" ref="update_modal" size="xl"  hide-footer hide-header>
             <EditCottage />
         </b-modal>
 

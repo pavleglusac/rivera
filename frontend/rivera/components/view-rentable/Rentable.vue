@@ -1,4 +1,5 @@
 <template>
+    <div >
     <div class="w-100 ml-0 mr-0 h-100">
         <div class="w-100 pl-5 pt-5 pb-0 d-flex" style="height: 100vh;">
             <div style="box-shadow: 0 8px 6px -6px #bdbdbd;" class="w-100 h-100 d-flex">
@@ -131,6 +132,7 @@
         </div>
         
     </div>
+    </div>
 </template>
 
 <script>
@@ -156,6 +158,7 @@ export default {
             pictures: [],
             rooms: [],
             services: "",
+            address: "",
             canBeChanged: false,
             owner: {
                 picture: '',
