@@ -184,6 +184,11 @@
         <b-button block id="register-btn" variant="primary" @click="register"
           >Register</b-button
         >
+        <b-modal id="success" hide-footer>
+          <div class="d-block text-center">
+            <h4>Your registration is almost done. Go check out your email to verify your account.</h4>
+          </div>
+        </b-modal>
         <b-button
           block
           id="login-btn"
@@ -331,7 +336,7 @@ export default {
         .post("/api/auth/signup", formData)
         .then((resp) => {
           console.log(resp);
-          <b-modal>Your registration is almost done. Check out your email!</b-modal>
+          this.$bvModal.show('success');
         })
         .catch((err) => {
           console.log(err);
@@ -351,7 +356,7 @@ export default {
         .post("/api/auth/signupClient", formData)
         .then((resp) => {
           console.log(resp);
-          <b-modal>Your registration is almost done. Check out your email!</b-modal>
+          this.$bvModal.show('success');
         })
         .catch((err) => {
           console.log(err);

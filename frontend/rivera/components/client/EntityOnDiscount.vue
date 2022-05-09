@@ -40,21 +40,6 @@ export default {
   data() {
     return { entity: this.entity, };
   },
-  /*data() {
-    return {
-      entity: {
-        start: "11.05.2022.",
-        end: "19.05.2022.",
-        capacity: "5",
-        averageScore: "5.0",
-        price: "200",
-        city: "Novi Sad",
-        country: "Serbia",
-        picture: "",
-        name: "Cute little cottage",
-      },
-    };
-  },*/
   props: {
     entity: {
       type: Object,

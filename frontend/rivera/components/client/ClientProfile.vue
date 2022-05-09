@@ -1,22 +1,24 @@
 <template>
   <b-container class="bv-example-row">
-    <b-card
-      img-alt="Profile photo"
-      :img-src='"http://localhost:8080" + client.photo'
-      img-left
-      class="mb-3"
-      style="margin-top: 10px"
-    >
-      <b-card-text>
-        <h4>{{client.fullName}}</h4>
-        <h5>{{client.email}}</h5>
-        <h5>{{client.photo}}</h5>
-        <b-button v-b-modal.changePicture variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
-        <b-modal id="changePicture" title="Choose your new profile photo">
-          <b-form-file id="photoFile" v-model="client.photo" accept="image/*"></b-form-file>
-        </b-modal>
-        <b-button variant="link"><b-icon icon="trash-fill"></b-icon> Delete account</b-button>
-      </b-card-text>
+    <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
+      <b-row no-gutters>
+        <b-col md="4">
+          <b-card-img id="preview" v-if="url" :src="url" alt="Profile photo" class="rounded-0"></b-card-img>
+        </b-col>
+        <b-col md="8">
+          <b-card-body :title="client.fullName">
+            <b-card-text>
+            <h5>{{client.username}}</h5>
+            <h5>{{client.email}}</h5>
+            <b-button v-b-modal.changePicture variant="link"><b-icon icon="person-circle"></b-icon> Change profile photo</b-button>
+            <b-modal id="changePicture" title="Choose your new profile photo">
+              <b-form-file id="photoFile" @change="onFileChange" accept="image/*"></b-form-file>
+            </b-modal><br>
+            <b-button variant="link"><b-icon icon="trash-fill"></b-icon> Delete account</b-button>
+          </b-card-text>
+          </b-card-body>
+        </b-col>
+      </b-row>
     </b-card>
     <b-card style="margin-bottom: 10px">
       <b-form @submit.stop.prevent>
@@ -85,7 +87,7 @@
               <div class="form-group col-6">
                 <label for="inputState">State</label>
                 <select id="inputState" v-model="client.country" class="form-control">
-                  <option selected>{{country}}</option>
+                  <option selected>{{client.country}}</option>
                   <option
                     v-for="country in countries"
                     :key="country.label"
@@ -149,11 +151,12 @@ export default {
         city: "",
         numberOfPenalties: 0,
         numberOfPoints: 0,
-      }
+      },
+      url: "",
     };
   },
   mounted() {
-    
+    this.getLoggedUser();
   },
   computed: {
     firstNameValidation() {
@@ -163,7 +166,7 @@ export default {
       return this.client.surname.length != 0;
     },
     phoneNumberValidation() {
-      return this.client.phoneNumber.length >= 9;
+      return this.client.phoneNumber.length >= 3;
     },
     addressValidation() {
       return this.client.address.length != 0;
@@ -177,12 +180,13 @@ export default {
     getLoggedUser() {
       let that = this;
       console.log(window.localStorage.getItem("JWT"));
-      this.$axios.get('/api/auth/get-logged-user',{
+      this.$axios.get('/api/auth/get-logged-username',{
 								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
 							}).then((resp) => {
-        that.client = resp.data;
-        console.log(window.localStorage.getItem("JWT"));
-				console.log(resp.data);
+              this.$axios.get('/api/get-client-by-username?username=' + resp.data) 
+							.then((resp) => {
+                  that.setClientData(resp.data);
+              });
 			}).catch((err) => {
 				console.log(err);
 			});
@@ -202,6 +206,7 @@ export default {
       that.client.city = client.city;
       that.client.numberOfPenalties = client.numberOfPenalties;
       that.client.numberOfPoints = client.numberOfPoints;
+      that.url = "http://localhost:8080" + client.photo;
     },
     update() {
 			var formData = new FormData();
@@ -231,7 +236,11 @@ export default {
 			this.client.photo = pic;
 			console.log("PARENT UPDATE PICS");
 			console.log(pic);
-		}
+		},
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    }
   }
 };
 </script>
@@ -257,5 +266,10 @@ export default {
   margin-bottom: 8px;
   background-color: #16c79a;
   border: none;
+}
+#preview {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
 }
 </style>

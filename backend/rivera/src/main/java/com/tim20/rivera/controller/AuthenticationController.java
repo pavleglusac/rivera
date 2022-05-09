@@ -72,6 +72,11 @@ public class AuthenticationController {
         return personService.personToDTO((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
+    @GetMapping("/get-logged-username")
+    public String getLoggedUsername() {
+        return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<Person> addOwner(OwnerRequestDTO ownerRequestDTO) throws InterruptedException {
 
@@ -86,7 +91,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signupClient")
-    public ResponseEntity<Person> addClient(ClientRequestDTO clientRequestDTO) throws InterruptedException {
+    public ResponseEntity<Person> addClient(ClientRequestDTO clientRequestDTO) {
         Client existUser = this.clientService.findByUsername(clientRequestDTO.getUsername());
         if (existUser != null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

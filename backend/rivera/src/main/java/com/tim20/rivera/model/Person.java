@@ -34,7 +34,6 @@ public class Person  implements UserDetails {
     private Boolean deleted;
     private Timestamp lastPasswordResetDate;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "user_role",

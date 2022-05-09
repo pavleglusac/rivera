@@ -31,13 +31,14 @@
             v-model="password"
           />
         </div>
-        <b-form-invalid-feedback>
-          Wrong email or password. Please try again.
-        </b-form-invalid-feedback>
-
         <b-button block id="login-btn" variant="primary" @click="login"
           >Log In</b-button
         >
+        <b-modal id="wrong-login-data" hide-footer>
+          <div class="text-center">
+            <h3>Wrong username or password. Try again.</h3>
+          </div>
+        </b-modal>
         <b-button
           block
           id="signup-btn"
@@ -68,7 +69,6 @@ export default {
     },
     login() {
       var formData = new FormData();
-      console.log("EEE");
       formData.append("username", this.username);
       formData.append("password", this.password);
       this.$axios
@@ -76,10 +76,11 @@ export default {
         .then((resp) => {
           if (resp.data) {
             window.localStorage.setItem("JWT", resp.data["accessToken"]);
-            this.$router.push("welcome");
+            this.$router.push("/");
           }
         })
         .catch((err) => {
+          this.$bvModal.show('wrong-login-data');
           console.log(err);
         });
     },

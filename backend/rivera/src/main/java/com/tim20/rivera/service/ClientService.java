@@ -6,6 +6,7 @@ import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.model.AccountStatus;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Person;
+import com.tim20.rivera.model.Role;
 import com.tim20.rivera.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,11 +30,13 @@ public class ClientService {
     ClientRepository clientRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleService roleService;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
     final String IMAGES_PATH = "\\images\\clients\\";
-    final String DEFAULT_PHOTO_PATH = "src\\main\\resources\\static\\images\\default.jpg";
+    final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
     public List<Client> getClients() {
         return clientRepository.findAll();
@@ -65,12 +68,13 @@ public class ClientService {
     private ClientDTO clientToDTO(Client client) {
         ClientDTO dto = new ClientDTO();
         dto.setEmail(client.getEmail());
-        dto.setPassword(client.getPassword());
+        dto.setPassword(passwordEncoder.encode(client.getPassword()));
         dto.setName(client.getName());
         dto.setSurname(client.getSurname());
         dto.setPhoneNumber(client.getPhoneNumber());
         dto.setAddress(client.getAddress());
         dto.setCity(client.getCity());
+        dto.setUsername(client.getUsername());
         dto.setCountry(client.getCountry());
         dto.setPhoto(client.getPhoto());
         dto.setDeleted(client.getDeleted());
@@ -170,6 +174,8 @@ public class ClientService {
         client.setReservations(new ArrayList<>());
         client.setReviews(new ArrayList<>());
         client.setCategories(new ArrayList<>());
+        List<Role> roles = roleService.findByName("ROLE_CLIENT");
+        client.setRoles(roles);
         return client;
     }
 
@@ -191,8 +197,11 @@ public class ClientService {
 
     public Client activateClient(String username) {
         Client client = clientRepository.findByUsername(username);
-        if(client!=null)
+        if(client!=null) {
+            System.out.println(client.getUsername());
             client.setStatus(AccountStatus.ACTIVE);
+            clientRepository.save(client);
+        }
         return client;
     }
 }
