@@ -32,10 +32,16 @@
               placeholder="Enter your username"
               class="form-control form-control-lg"
               id="username"
-              v-model="username"
-              v-bind:class="{ 'error-boarder': $v.username.$invalid }"
+              v-model="username" @keyup="resetTimer"
+              v-bind:class="{ 'error-boarder': $v.username.$invalid || usernameExists }"
             />
-            <ErrorDiv :parameter="$v.username" :name="'Username'"> </ErrorDiv>
+            <div>
+              <b-spinner small label="Small Spinner" style="float:left" class="m-1" v-if="loadingUsername"></b-spinner> 
+            <span v-if="usernameExists">
+              Username already exists!
+            </span>
+            <ErrorDiv v-else :parameter="$v.username" :name="'  Username'"> </ErrorDiv>
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -209,10 +215,14 @@ import {
   between,
   email,
   maxLength,
+  sameAs
 } from "vuelidate/lib/validators";
 import useValidate from "@vuelidate/core";
 import ErrorDiv from "./ErrorDiv.vue";
 export default {
+  mounted(){
+
+  },
   computed: {
     countries() {
       const list = countries.getNames("en", { select: "official" });
@@ -234,7 +244,11 @@ export default {
       type: "",
       description: "",
       password2: "",
+      usernameExists: false,
       types: ["Cottage Owner", "Boat Owner"],
+      typingTimer : "",
+      doneTypingInterval: 2000,
+      loadingUsername: false
     };
   },
   components: {
@@ -289,6 +303,7 @@ export default {
       required,
       minLength: minLength(2),
       maxLength: maxLength(20),
+      sameAsPassword: sameAs('password')
     },
     type: {
       required,
@@ -302,7 +317,7 @@ export default {
       console.log(this.$v.$invalid);
       console.log(this.$v.name.$invalid);
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || this.usernameExists) {
         alert("Validation failed!");
         return;
       }
@@ -333,10 +348,35 @@ export default {
     changeToLogin() {
       this.$router.push({ path: "/login" });
     },
+		doneTyping () {
+      console.log(username.value);
+        $('#username').addClass("ok-border");
+			this.$axios.get('/api/auth/check-if-username-exists?username='+ username.value
+			).then((resp) => {
+        console.log("PRoverenoooo",resp.data);
+        this.loadingUsername = false;
+				this.usernameExists = resp.data;
+			}).catch((err) => {
+				console.log(err);
+			})
+		},
+		resetTimer(){
+			clearTimeout(this.typingTimer);
+			this.usernameExists = false;
+      this.loadingUsername = true;
+        $('#username').removeClass("ok-border");
+				if ($('#username').val()) {
+					this.typingTimer = setTimeout(this.doneTyping, this.doneTypingInterval);
+				}
+		}
   },
 };
 </script>
 
 
 <style>
+.ok-border{
+  border-color: #16C79A;
+
+}
 </style>

@@ -29,11 +29,10 @@
             class="form-control form-control-lg"
             v-model="password"
           />
-        </div>
-        <b-form-invalid-feedback>
+        <span v-if="nonExistent">
           Wrong email or password. Please try again.
-        </b-form-invalid-feedback>
-
+        </span>
+        </div>
         <b-button block id="login-btn" variant="primary" @click="login()"
           >Log In</b-button
         >
@@ -59,6 +58,7 @@ export default {
     return {
       username: "",
       password: "",
+      nonExistent: false
     };
   },
   methods: {
@@ -75,6 +75,9 @@ export default {
           if (resp.data) {
             window.localStorage.setItem("JWT", resp.data["accessToken"]);
             this.$router.push("welcome");
+          }
+          else{
+            this.nonExistent = true;
           }
         })
         .catch((err) => {

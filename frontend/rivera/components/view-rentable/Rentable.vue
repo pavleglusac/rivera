@@ -1,4 +1,5 @@
 <template>
+    <div >
     <div class="w-100 ml-0 mr-0 h-100">
         <div class="w-100 pl-5 pt-5 pb-0 d-flex" style="height: 100vh;">
             <div style="box-shadow: 0 8px 6px -6px #bdbdbd;" class="w-100 h-100 d-flex">
@@ -29,41 +30,41 @@
             </div>
         </div>
 
-        <div class="pl-5 mt-5 d-flex">
+        <div class="pl-5 mt-5 d-flex"  style="min-height: 75vh;">
             <div class="d-flex flex-column w-50">
-                <table style="font-size: 1.2em;" class="w-100">
+                <table style="font-size: 1.2em;" class="w-100 infoTable" >
                     <tr style="border-bottom: 1px solid #c9c9c9;">
                         <td style="font-size: 1.3em; font-weight: 400; width: 25%;" class="">Cancellation terms: </td>
                         <td class="w-25">10%</td>
                     </tr>
                     <tr style="border-bottom: 1px solid #c9c9c9;">
-                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="">Rooms: </td>
+                        <td style="font-size: 1.3em; font-weight: 400; width: 25%;" class="">Rooms: </td>
                         <td class="w-25">
-                            <li v-for="room in rooms"  :key="room" >
-                                {{room}}
-                            </li>
+                            <p class="p-0 m-0" v-for="room in rooms"  :key="room" >
+                                {{room}} <br>
+                            </p>
                         </td>
                     </tr>
                     <tr style="border-bottom: 1px solid #c9c9c9;">
-                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="" >Rules of conduct: </td>
+                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; " class="" >Rules of conduct: </td>
                         <td class="w-25">
-                            <li v-for="rule in rulesOfConduct"  :key="rule" >
-                                {{rule}}
-                            </li>
+                            <p class="p-0 m-0" v-for="rule in rulesOfConduct"  :key="rule" >
+                                {{rule}} <br>
+                            </p>
                         </td>
                     </tr>
                     <tr style="">
                         <td style="font-size: 1.3em; font-weight: 400; width: 15%;" class="">Additional services: </td>
                         <td class="w-25">
-                            <li v-for="service in services"  :key="service" >
-                                {{service}}
-                            </li>
+                            <p class="p-0 m-0" v-for="service in services"  :key="service" >
+                                {{service}} <br>
+                            </p>
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="d-flex w-50 ml-auto justify-content-center align-items-center">
-                <iframe src="https://maps.google.com/maps?q=novisad&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                <iframe :src="'https://maps.google.com/maps?q='+encodeURIComponent(location+','+address)+'&t=&z=13&ie=UTF8&iwloc=&output=embed'" frameborder="0"
                 style="border:0; width: 80%; height: 80%;" allowfullscreen></iframe>
             </div>
         </div>
@@ -131,6 +132,7 @@
         </div>
         
     </div>
+    </div>
 </template>
 
 <script>
@@ -156,6 +158,7 @@ export default {
             pictures: [],
             rooms: [],
             services: "",
+            address: "",
             canBeChanged: false,
             owner: {
                 picture: '',
@@ -200,13 +203,14 @@ export default {
             let cottage = resp.data;
             console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
             that.reviews = cottage.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080/" + x.client.photo)
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
 			that.name = cottage.name;
 			that.location = cottage.address+","+cottage.city+","+cottage.country;
 			that.services = cottage.services;
 			that.name = cottage.name;
 			that.perHour = cottage.perHour;
 			that.perDay = cottage.perDay;
+            that.address = cottage.address;
 			that.description = cottage.description;
 			that.rulesOfConduct = cottage.rulesOfConduct;
 			that.cancellationTerms = cottage.cancellationTerms;
@@ -252,5 +256,27 @@ export default {
     -moz-page-break-inside:avoid;
     page-break-inside: avoid;
     break-inside: avoid-column;
+}
+
+
+.infoTable {
+    max-height: 30vh;
+}
+
+.infoTable tr {
+    height: 70px;
+}
+
+td {
+    height: 100px;
+}
+
+ul {
+    margin:0;
+    padding: 0;
+    list-style-position: inside;
+}
+li {
+    padding: 0;
 }
 </style>

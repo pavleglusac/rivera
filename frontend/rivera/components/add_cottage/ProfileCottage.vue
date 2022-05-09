@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
     <input type="text" id="idCottage"/>
     <button id="deleteCottageButton" @click="deleteCottage"> Delete cottage </button>
     </div>
