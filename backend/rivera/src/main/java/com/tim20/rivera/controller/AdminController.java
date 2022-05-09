@@ -30,6 +30,7 @@ public class AdminController {
         System.out.println("activate");
         ownerService.activateOwner(username);
     }
+
     @PostMapping(path = "deactivate-owner")
     public void deactivatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
         System.out.println("deactivate");

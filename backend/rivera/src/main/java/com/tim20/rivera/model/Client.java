@@ -25,6 +25,7 @@ public class Client extends Person {
     private List<ClientCategoryCalendar> categories;
     @OneToMany(mappedBy = "client")
     private List<Review> reviews;
+    private AccountStatus status;
 
     @Override
     public String toString() {

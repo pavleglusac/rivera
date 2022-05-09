@@ -18,6 +18,7 @@
             type="username"
             placeholder="Enter your username"
             class="form-control form-control-lg"
+            style="font-size: 15px"
             v-model="username"
           />
         </div>
@@ -33,14 +34,19 @@
           Wrong email or password. Please try again.
         </span>
         </div>
-        <b-button block id="login-btn" variant="primary" @click="login()"
+        <b-button block id="login-btn" variant="primary" @click="login"
           >Log In</b-button
         >
+        <b-modal id="wrong-login-data" hide-footer>
+          <div class="text-center">
+            <h3>Wrong username or password. Try again.</h3>
+          </div>
+        </b-modal>
         <b-button
           block
           id="signup-btn"
           variant="outline-primary"
-          @click="changeToRegistration()"
+          @click="changeToRegistration"
           >Create an account</b-button
         >
         <nuxt-link to="/"
@@ -74,13 +80,14 @@ export default {
         .then((resp) => {
           if (resp.data) {
             window.localStorage.setItem("JWT", resp.data["accessToken"]);
-            this.$router.push("welcome");
+            this.$router.push("/");
           }
           else{
             this.nonExistent = true;
           }
         })
         .catch((err) => {
+          this.$bvModal.show('wrong-login-data');
           console.log(err);
         });
     },

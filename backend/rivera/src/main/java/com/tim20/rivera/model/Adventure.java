@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Adventure extends Rentable{
+public class Adventure extends Rentable {
     private Integer capacity;
     @ElementCollection
     private List<String> fishingEquipment;

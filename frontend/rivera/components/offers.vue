@@ -6,17 +6,17 @@
           <ul class="nav nav-pills nav-fill" role="tablist">
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeAdventures }" id="adventures-btn" @click="loadAdventures">
-                <span><img src="..\static\icons\fish.png" /> Fishing</span>
+                <span><font-awesome-icon icon="fish" /> Fishing</span>
               </p>
             </li>
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeCottages }" id="cottages-btn" @click="loadCottages">
-                <span><img src="..\static\icons\cottage.png" /> Cottages</span>
+                <span><font-awesome-icon icon="house" /> Cottages</span>
               </p>
             </li>
             <li class="nav-item">
               <p class="nav-link" v-bind:class="{ active: activeBoats }" id="boats-btn" @click="loadBoats">
-                <span><img src="..\static\icons\boat.png" /> Boats</span>
+                <span><font-awesome-icon icon="sailboat" /> Boats</span>
               </p>
             </li>
           </ul>
@@ -55,7 +55,9 @@
             <EntityCard
               v-for="entity in offers"
               :entity="entity"
+              :offerType="getActiveOffers()"
               class="mb-3"
+              v-bind:key="entity.name"
             />
           </div>
         </div>
@@ -96,14 +98,13 @@ export default {
     this.loadAdventures();
   },
   methods: {
-    // filters offers by search query
-    filter() {
-      let offers = this.offers;
-      //const to = this.$route;
-
-      this.filteredOffers = [];
-      //const filter = document.getElementById("search-filter");
-      //this.filteredHotels = hotels.filter(hotel => (facility => hotel.facilities.includes(facility)));
+    getActiveOffers() {
+      if (this.activeCottages)
+        return "cottage";
+      else if (this.activeBoats)
+        return "boat";
+      else
+        return "adventure";
     },
     reload() {
       if (this.activeCottages)
@@ -116,9 +117,9 @@ export default {
     loadBoats() {
       let that = this;
       that.offers = [];
-      this.$axios.get("/api/get-boats").then((resp) => {
-        console.log(resp.data);
-        that.offers = resp.data;
+      this.$axios.post(`/api/search-boats?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
+      .then(response => {
+        that.offers = response.data;
       });
       that.activeCottages = false;
       that.activeBoats = true;
@@ -127,11 +128,9 @@ export default {
     loadAdventures() {
       let that = this;
       that.offers = [];
-      console.log(that.sort);
-      this.$axios.post(`/api/search-adventures?&numberOfResults=2&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
+      this.$axios.post(`/api/search-adventures?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
       .then(response => {
         that.offers = response.data;
-        console.log(response);
       });
       that.activeCottages = false;
       that.activeBoats = false;
@@ -140,9 +139,9 @@ export default {
     loadCottages() {
       let that = this;
       that.offers = [];
-      this.$axios.get("/api/get-cottages").then((resp) => {
-        console.log(resp.data);
-        that.offers = resp.data;
+      this.$axios.post(`/api/cottage/search-cottages?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
+      .then(response => {
+        that.offers = response.data;
       });
       that.activeCottages = true;
       that.activeBoats = false;

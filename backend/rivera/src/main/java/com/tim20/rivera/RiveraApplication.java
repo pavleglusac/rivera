@@ -74,7 +74,7 @@ public class RiveraApplication {
 				"/images/adventures/1/img2.jpg",
 				"/images/adventures/1/img1.jpg"));
 
-		//adventure.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
+		adventure.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
 		Pricelist pricelist = new Pricelist();
 		pricelist.setStartDateTime(LocalDateTime.now());
 		pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -97,7 +97,7 @@ public class RiveraApplication {
 		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
 		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
 		discount1.setPrice(300.0);
-		//discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
+		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
 		discount1.setRentable(adventure);
 
 		Review review1 = new Review();
@@ -106,7 +106,7 @@ public class RiveraApplication {
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
 				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
-		review1.setClient(clientRepository.findClientByUsername("pera").get());
+		review1.setClient(clientRepository.findByUsername("pera"));
 		review1.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review1);
 
@@ -116,6 +116,26 @@ public class RiveraApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	private void initializeData() {
+		Role role = new Role();
+		Role role2 = new Role();
+
+		role.setName("ROLE_COTTAGE_OWNER");
+		role.setId(1L);
+		role2.setName("ROLE_BOAT_OWNER");
+		role2.setId(2L);
+		roleRepository.save(role);
+		roleRepository.save(role2);
+
+		Role role3 = new Role();
+		role3.setName("ROLE_FISHING_INSTRUCTOR");
+		role3.setId(3L);
+		roleRepository.save(role3);
+
+		Role role4 = new Role();
+		role4.setName("ROLE_CLIENT");
+		role4.setId(4L);
+		roleRepository.save(role4);
+
 		Adventure adventure = new Adventure();
 		adventure.setName("Mountain Fishing");
 		adventure.setAddress("7 Grove St.");
@@ -125,17 +145,31 @@ public class RiveraApplication {
 				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
 				" maximus quam mollis consequat");
 		adventure.setPictures(Arrays.asList("/images/adventures/1/img1.jpg",
-											"/images/adventures/1/img2.jpg",
-											"/images/adventures/1/img3.jpg",
-											"/images/adventures/1/img4.jpg",
-											"/images/adventures/1/img5.jpg"));
+				"/images/adventures/1/img2.jpg",
+				"/images/adventures/1/img3.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img5.jpg"));
 		Tag tagWifi = new Tag(); tagWifi.setName("wifi");
 		Tag tagRiver = new Tag(); tagRiver.setName("river");
 		Tag tagExtreme = new Tag(); tagExtreme.setName("extreme");
 		Tag tagCanoe = new Tag(); tagCanoe.setName("canoe");
 		tagRepository.saveAll(Arrays.asList(tagWifi, tagRiver, tagCanoe, tagExtreme));
+		adventure.setTags(Arrays.asList(tagWifi, tagExtreme, tagRiver));
 
-		//adventure.setTags(Arrays.asList(tagWifi, tagExtreme, tagRiver));
+		Adventure adventure2 = new Adventure();
+		adventure2.setName("Some adventure");
+		adventure2.setAddress("7 Grove St.");
+		adventure2.setCity("Cairns");
+		adventure2.setCountry("New Zeland");
+		adventure2.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
+				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
+				" maximus quam mollis consequat");
+		adventure2.setPictures(Arrays.asList("/images/adventures/1/img3.jpg",
+				"/images/adventures/1/img2.jpg",
+				"/images/adventures/1/img1.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img5.jpg"));
+		adventure2.setTags(Arrays.asList(tagExtreme, tagRiver));
 
 		Pricelist pricelist = new Pricelist();
 		pricelist.setStartDateTime(LocalDateTime.now());
@@ -144,22 +178,37 @@ public class RiveraApplication {
 		pricelist.setPricePerDay(40.0);
 		pricelist.setCancellationTerms("20");
 		pricelist.setRentable(adventure);
-		adventure.setPricelists(Arrays.asList(pricelist));
+		adventure.setPricelists(List.of(pricelist));
 		adventure.setCurrentPricelist(pricelist);
 		pricelistRepository.save(pricelist);
 
+		Pricelist pricelist2 = new Pricelist();
+		pricelist2.setStartDateTime(LocalDateTime.now());
+		pricelist2.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
+		pricelist2.setPricePerHour(15.0);
+		pricelist2.setPricePerDay(50.0);
+		pricelist2.setCancellationTerms("20");
+		pricelist2.setRentable(adventure2);
+		adventure2.setPricelists(List.of(pricelist2));
+		adventure2.setCurrentPricelist(pricelist2);
+		pricelistRepository.save(pricelist2);
+
 		adventure.setCapacity(4);
+		adventure2.setCapacity(3);
 
 		adventure.setFishingEquipment(Arrays.asList("Rod 123", "Silk 4", "Golden Bait"));
+		adventure2.setFishingEquipment(List.of("Rod 123"));
 		adventure.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
+		adventure2.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
 		adventure.setAverageScore(3.3);
+		adventure2.setAverageScore(2.3);
 
 		Discount discount1 = new Discount();
 		discount1.setCapacity(3);
 		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
 		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
 		discount1.setPrice(300.0);
-		//discount1.setTags(Arrays.asList(tagCanoe, tagExtreme));
+		discount1.setTags(Arrays.asList(tagCanoe, tagExtreme));
 		discount1.setRentable(adventure);
 
 		Discount discount2 = new Discount();
@@ -167,8 +216,8 @@ public class RiveraApplication {
 		discount2.setStartDateTime(LocalDateTime.of(2022, 8, 18, 16, 0 ));
 		discount2.setEndDateTime(LocalDateTime.of(2022, 8, 18, 17, 0 ));
 		discount2.setPrice(450.0);
-		//
-		// discount2.setTags(Arrays.asList(tagCanoe, tagExtreme));
+
+		discount2.setTags(Arrays.asList(tagCanoe, tagExtreme));
 		discount2.setRentable(adventure);
 
 		adventure.setDiscounts(Arrays.asList(discount1, discount2));
@@ -185,7 +234,10 @@ public class RiveraApplication {
 		client1.setEmail("pera@gmail.com");
 		client1.setPassword(passwordEncoder.encode("sifra"));
 		client1.setPhoneNumber("+3815565456");
+		client1.setNumberOfPenalties(0);
+		client1.setNumberOfPoints(0);
 		client1.setPhoto("/images/clients/" + client1.getUsername() + ".jpg");
+		client1.setRoles(roleRepository.findByName("ROLE_CLIENT"));
 		clientRepository.save(client1);
 
 		Client client2 = new Client();
@@ -206,7 +258,7 @@ public class RiveraApplication {
 		review1.setRentable(adventure);
 		review1.setPosted(LocalDateTime.now());
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
-						"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
+				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
 		review1.setClient(client1);
 		review1.setStatus(ReviewStatus.ACCEPTED);
@@ -216,14 +268,13 @@ public class RiveraApplication {
 		review2.setRentable(adventure);
 		review2.setPosted(LocalDateTime.now());
 		review2.setText("Ut mollis erat non quam rhoncus sodales. Nulla facilisi. Duis sit amet pellentesque dolor. Aliquam mollis rhoncus " +
-						"risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis");
+				"risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis");
 		review2.setScore(3.3);
 		review2.setClient(client2);
 		review2.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review2);
 
 		adventure.setReviews(Arrays.asList(review1, review2));
-
 
 		Reservation reservation = new Reservation();
 		reservation.setClient(client1);
@@ -242,30 +293,14 @@ public class RiveraApplication {
 		fishingInstructor.setStatus(AccountStatus.ACTIVE);
 		fishingInstructor.setDeleted(false);
 		fishingInstructor.setBiography("Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. " +
-										"Maecenas nec quam tellus ex non nisl" +
-										"x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.");
+				"Maecenas nec quam tellus ex non nisl" +
+				"x diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.");
 		fishingInstructor.setEmail("marko@gmail.com");
 		fishingInstructor.setPassword(passwordEncoder.encode("sifra"));
 		fishingInstructor.setPhoneNumber("+3845135535");
 		fishingInstructor.setUsername("marko");
 		fishingInstructor.setPhoto("/images/clients/" + fishingInstructor.getUsername() + ".jpg");
-		fishingInstructor.setAdventures(Arrays.asList(adventure));
-
-
-		Role role = new Role();
-		Role role2 = new Role();
-
-		role.setName("ROLE_COTTAGE_OWNER");
-		role.setId(1l);
-		role2.setName("ROLE_BOAT_OWNER");
-		role2.setId(2l);
-		roleRepository.save(role);
-		roleRepository.save(role2);
-
-		Role role3 = new Role();
-		role3.setName("ROLE_FISHING_INSTRUCTOR");
-		role3.setId(3l);
-		roleRepository.save(role3);
+		fishingInstructor.setAdventures(List.of(adventure));
 
 		List<Role> roles = roleService.findByName("ROLE_FISHING_INSTRUCTOR");
 		fishingInstructor.setRoles(roles);
@@ -277,8 +312,7 @@ public class RiveraApplication {
 
 		reservationRepository.save(reservation);
 		adventureRepository.save(adventure);
-
-
+		adventureRepository.save(adventure2);
 
 		initializeData2();
 	}

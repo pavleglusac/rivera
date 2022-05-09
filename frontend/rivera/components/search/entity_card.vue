@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="shadow-sm" img-left max-height="300">
+  <b-card no-body class="shadow-sm" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
     <b-card-img class="cover-img" :src='"http://localhost:8080" + entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-center">
@@ -42,11 +42,25 @@ export default {
   data() {
     return {};
   },
+  methods: {
+    detailedOffer() {
+      if(this.offerType == "adventure")
+        this.$router.push({ path: "/adventure/" + this.entity.id });
+      else if(this.offerType == "cottage")
+        this.$router.push({ path: "/cottage/" + this.entity.id });
+      else if(this.offerType == "boat")
+        this.$router.push({ path: "/boat/" + this.entity.id });
+    },
+  },
   props: {
     entity: {
       type: Object,
       required: true,
     },
+    offerType: {
+      type: String,
+      required: true,
+    }
   },
 };
 </script>

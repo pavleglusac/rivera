@@ -96,6 +96,7 @@ public class AdventureService {
         for (MultipartFile mpf : multipartFiles) {
             String fileName = mpf.getOriginalFilename();
             try (InputStream inputStream = mpf.getInputStream()) {
+                assert fileName != null;
                 Path filePath = path.resolve(fileName);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
                 paths.add(IMAGES_PATH + adventure.getId() + "/" + fileName);
@@ -285,7 +286,7 @@ public class AdventureService {
             return adventures;
         List<AdventureDTO> correctAdventures = new ArrayList<>();
         for (AdventureDTO a : adventures) {
-            if(a.getTags().containsAll(tags))
+            if (a.getTags().containsAll(tags))
                 correctAdventures.add(a);
         }
         return correctAdventures;

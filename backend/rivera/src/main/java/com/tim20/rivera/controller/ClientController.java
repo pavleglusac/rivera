@@ -1,6 +1,7 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.ClientDTO;
+import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +31,25 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @GetMapping(path = "get-client-by-username")
+    public ClientRequestDTO getClientByUsername(@RequestParam("username") String username) {
+        return clientService.getClientByUsername(username);
+    }
+
     @GetMapping(path = "get-client")
     public ClientDTO getClient(@RequestParam("id") String id) {
         return clientService.getClient(id);
     }
 
     @PostMapping(path = "update-client")
-    public ResponseEntity<String> updateClient(
-            ClientDTO clientDTO,
-            @RequestPart(value = "photo", required = false) MultipartFile multipartFile
-    ) throws IOException {
-
-        clientService.updateClient(clientDTO, multipartFile);
+    public ResponseEntity<String> updateClient(ClientDTO clientDTO) {
+        clientService.updateClient(clientDTO);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping(path = "activate-client")
+    public Client activateClient(@RequestParam("username") String username) {
+        System.out.println("activate");
+        return clientService.activateClient(username);
     }
 }

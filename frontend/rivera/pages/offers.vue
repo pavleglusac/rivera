@@ -1,16 +1,16 @@
 <template>
   <div>
-    <UnauthenticatedNavbar :currentPage="'offers'" />
+    <navbar :currentPage="'offers'" />
     <offers/>
   </div>
 </template>
 
 <script>
-import UnauthenticatedNavbar from '../components/navbars/UnauthenticatedNavbar.vue';
+import Navbar from '../components/navbar.vue';
 import Offers from '../components/offers.vue';
 
 export default {
-  components: { UnauthenticatedNavbar, Offers },
+  components: { Offers, Navbar },
 }
 
 </script>

@@ -1,7 +1,9 @@
 package com.tim20.rivera.controller;
 
+import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.CottageProfileDTO;
+import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.RentableRepository;
@@ -59,7 +61,6 @@ public class CottageController {
         return cottageService.getFullById(id);
     }
 
-
     @PostMapping(path = "update-cottage")
     public ResponseEntity<String> updateCottage(
             CottageDTO cottage,
@@ -79,8 +80,6 @@ public class CottageController {
     public List<Rentable> test() {
         return rentableRepository.findAll();
     }
-
-
 
     @PostMapping("define-availability")
     public ResponseEntity<String> defineAvailability(@RequestBody AvailabilityRequest availabilityRequest) {
@@ -107,4 +106,10 @@ public class CottageController {
         cottageAvailabilityService.removeAvailabilities(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(path="/search-cottages")
+    public List<CottageDTO> searchCottages(SearchParams searchParams) {
+        return cottageService.searchCottages(searchParams);
+    }
+
 }

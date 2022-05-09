@@ -12,8 +12,9 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
-                <nuxt-link to="/boatOwner/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
-                <nuxt-link to="/boatOwner/"><li class="menu-link" :class="currentPage=='boats' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> My Boats</li></nuxt-link>
+                <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Homepage</li></nuxt-link>
+                <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
+                <nuxt-link to="/boats"><li class="menu-link" :class="currentPage=='boats' ? 'active' : ''"><font-awesome-icon icon="sailboat" /> My Boats</li></nuxt-link>
                 <nuxt-link to="/boatOwner/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>

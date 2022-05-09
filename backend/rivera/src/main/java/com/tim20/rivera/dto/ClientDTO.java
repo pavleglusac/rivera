@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class ClientDTO {
     private String email;
     private String password;
+    private String username;
     private String name;
     private String surname;
     private String phoneNumber;

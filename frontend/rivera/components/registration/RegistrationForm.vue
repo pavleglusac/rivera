@@ -2,7 +2,6 @@
   <div
     class="
       registration-form
-      fixed-top
       d-flex
       align-items-center
       justify-content-center
@@ -182,7 +181,7 @@
             </ErrorDiv>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" v-if="this.type != 'Regular User'">
           <div class="form-group col-12">
             <label>Description</label>
             <textarea
@@ -198,13 +197,16 @@
           </div>
         </div>
 
-        <b-form-invalid-feedback>
-          Wrong email or password. Please try again.
-        </b-form-invalid-feedback>
-
         <b-button block id="register-btn" variant="primary" @click="register"
           >Register</b-button
         >
+        <b-spinner variant="success" v-if="emailSending" class="spinning m-2"></b-spinner>
+        <b-modal id="success" hide-footer>
+          <div class="d-block text-center">
+            <h4 v-if="type=='Regular User'">Your registration is almost done. Go check out your email to verify your account.</h4>
+            <h4 v-else>Your request has been sent to admin. You will get notified when he verifies your account.</h4>
+          </div>
+        </b-modal>
         <b-button
           block
           id="login-btn"
@@ -263,8 +265,9 @@ export default {
       typingTimer : "",
       doneTypingInterval: 2000,
       loadingUsername: false,
-      types: ["Cottage Owner", "Boat Owner", "Fishing Instructor"],
+      types: ["Cottage Owner", "Boat Owner", "Fishing Instructor", "Regular User"],
       biography: "",
+      emailSending: false,
     };
   },
   components: {
@@ -312,8 +315,6 @@ export default {
       maxLength: maxLength(20),
     },
     description: {
-      required,
-      minLength: minLength(2),
     },
     biography: {
       required,
@@ -334,15 +335,12 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.$v.$invalid);
-      console.log(this.$v.name.$invalid);
-      this.$v.$touch();
-      if (this.$v.$invalid || this.usernameExists) {
-        alert("Validation failed!");
-        return;
-      }
-      let that = this;
-      console.log("ok");
+      if (this.type != "Regular User")
+        this.registerOwner();
+      else
+        this.registerClient();
+    },
+    getFormData() {
       var formData = new FormData();
       formData.append("email", "mrsisatim20+" + this.email);
       formData.append("username", this.username);
@@ -353,14 +351,52 @@ export default {
       formData.append("country", this.country);
       formData.append("city", this.city);
       formData.append("address", this.address);
-      formData.append("description", this.description);
-      formData.append("biography", this.biography);
       console.log(this.type);
+      return formData;
+    },
+    registerOwner() {
+      this.emailSending = true;
+      console.log(this.$v.$invalid);
+      console.log(this.$v.name.$invalid);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        alert("Validation failed!");
+        return;
+      }
+      console.log("ok");
+      var formData = this.getFormData();
       formData.append("type", this.type);
+      formData.append("description", this.description);
+      if(this.type == "Fishing Instructor")
+            formData.append("biography", this.biography);
       this.$axios
         .post("/api/auth/signup", formData)
         .then((resp) => {
           console.log(resp);
+          this.$bvModal.show('success');
+          this.emailSending = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+     registerClient() {
+      this.emailSending = true;
+      console.log(this.$v.$invalid);
+      console.log(this.$v.name.$invalid);
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        alert("Validation failed!");
+        return;
+      }
+      console.log("ok");
+      var formData = this.getFormData();
+      this.$axios
+        .post("/api/auth/signupClient", formData)
+        .then((resp) => {
+          console.log(resp);
+          this.$bvModal.show('success');
+          this.emailSending = false;
         })
         .catch((err) => {
           console.log(err);
@@ -405,8 +441,7 @@ export default {
 
 
 <style>
-.ok-border{
+.ok-border {
   border-color: #16C79A;
-
 }
 </style>

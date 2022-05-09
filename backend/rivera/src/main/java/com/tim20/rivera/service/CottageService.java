@@ -1,7 +1,9 @@
 package com.tim20.rivera.service;
 
+import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.CottageProfileDTO;
+import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -271,5 +273,39 @@ public class CottageService {
 
     public void delete(Integer id){
         cottageRepository.delete(cottageRepository.findById(id).get());
+    }
+
+    public List<CottageDTO> searchCottages(SearchParams searchParams) {
+        List<CottageDTO> cottages = checkTags(this.getCottages(), searchParams.getTags());
+        return sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
+                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
+                .collect(Collectors.toList()));
+    }
+
+    public List<CottageDTO> getCottages() {
+        return cottageRepository.findAll().stream().map(this::cottageToDto).collect(Collectors.toList());
+    }
+
+    private List<CottageDTO> checkTags(List<CottageDTO> cottages, List<String> tags) {
+        if (tags.size() == 0)
+            return cottages;
+        List<CottageDTO> correctCottages = new ArrayList<>();
+        for (CottageDTO c : cottages) {
+            if (c.getTags().containsAll(tags))
+                correctCottages.add(c);
+        }
+        return correctCottages;
+    }
+
+    public List<CottageDTO> sortCottages(String sortParam, List<CottageDTO> cottages) {
+        return switch (sortParam) {
+            case "name-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName)).toList();
+            case "name-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName, Comparator.reverseOrder())).toList();
+            case "price-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour)).toList();
+            case "price-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "score-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore)).toList();
+            case "score-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            default -> cottages;
+        };
     }
 }
