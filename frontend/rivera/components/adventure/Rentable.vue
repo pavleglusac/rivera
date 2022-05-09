@@ -30,37 +30,37 @@
             </div>
         </div>
 
-        <div class="pl-5 mt-5 d-flex h-100" style="height: 100vh;">
+        <div class="pl-5 mt-5 d-flex h-100" style="min-height: 75vh;">
             <div class="d-flex flex-column w-50">
-                <table style="font-size: 1.2em;" class="w-100 h-100">
+                <table style="font-size: 1.2em;" class="w-100 h-100 infoTable">
                     <tr style="border-bottom: 1px solid #c9c9c9;">
                         <td style="font-size: 1.3em; font-weight: 400; width: 25%;" class="">Capacity: </td>
                         <td class="w-25">
-                            {{capacity}}
+                             <p class="p-0 m-0">{{capacity}}</p>
                         </td>
                     </tr>
                     <tr style="border-bottom: 1px solid #c9c9c9;">
-                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="">Equipment: </td>
+                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; " class="">Equipment: </td>
                         <td class="w-25">
-                            <li v-for="e in equipment" :key=e>{{e}}</li>
+                            <p class="p-0 m-0" v-for="e in equipment" :key=e>• {{e}}<br></p>
                         </td>
                     </tr>
                     <tr style="border-bottom: 1px solid #c9c9c9;">
-                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; vertical-align: top;" class="">Rules of conduct: </td>
+                        <td style="font-size: 1.3em; font-weight: 400; width: 25%; " class="">Rules of conduct: </td>
                         <td class="w-25">
-                            <li v-for="rule in rulesOfConduct" :key=rule>{{rule}}</li>
+                            <p class="p-0 m-0" v-for="rule in rulesOfConduct" :key=rule>• {{rule}}<br></p>
                         </td>
                     </tr>
                     <tr style="">
                         <td style="font-size: 1.3em; font-weight: 400; width: 15%;" class="">Additional services: </td>
                         <td class="w-25">
-                            <li v-for="service in services" :key=service>{{service}}</li>
+                            <p class="p-0 m-0" v-for="service in services" :key=service>• {{service}}<br></p>
                         </td>
                     </tr>
                 </table>
             </div>
             <div class="d-flex w-50 ml-auto justify-content-center align-items-center">
-                <iframe src="https://maps.google.com/maps?q=novisad&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                <iframe :src="'https://maps.google.com/maps?q='+encodeURIComponent(location+','+address)+'&t=&z=13&ie=UTF8&iwloc=&output=embed'" frameborder="0"
                 style="border:0; width: 80%; height: 80%;" allowfullscreen></iframe>
             </div>
         </div>
@@ -112,7 +112,7 @@
         </div>
 
         <div class="mt-5 pl-5 w-100 mb-5">
-            <div style="font-size: 1.8em; font-weight: 500;">
+            <div style="font-size: 1.8em; font-weight: 500;" class="mt-5 mb-5">
                 Client reviews
             </div>
             <div class="row h-100 gx-0">
@@ -180,9 +180,10 @@ export default {
             let adventure = resp.data;
             console.log(adventure);
             that.reviews = adventure.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080/" + x.client.photo)
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
 			that.name = adventure.name;
 			that.location = adventure.city+", "+adventure.country;
+            that.address = adventure.address;
 			that.services = adventure.services;
 			that.name = adventure.name;
 			that.perHour = adventure.perHour;
@@ -226,5 +227,26 @@ export default {
     -moz-page-break-inside:avoid;
     page-break-inside: avoid;
     break-inside: avoid-column;
+}
+
+.infoTable {
+    max-height: 30vh;
+}
+
+.infoTable tr {
+    height: 70px;
+}
+
+td {
+    height: 100px;
+}
+
+ul {
+    margin:0;
+    padding: 0;
+    list-style-position: inside;
+}
+li {
+    padding: 0;
 }
 </style>
