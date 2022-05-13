@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -15,4 +16,6 @@ public class Owner extends Person {
     private AccountStatus status;
     @OneToMany
     private List<OwnerCategoryCalendar> categories;
+    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
+    private List<Rentable> rentables;
 }

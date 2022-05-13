@@ -13,4 +13,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByRentable(Rentable rentable);
     List<Reservation> findByCancelled(Boolean cancelled);
     List<Reservation> findByStartDateTimeIsAfter(LocalDateTime dateTime);
+    List<ReservationRepository>  findByRentableId(String id);
 }

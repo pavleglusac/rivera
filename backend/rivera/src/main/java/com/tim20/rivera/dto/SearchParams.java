@@ -18,4 +18,5 @@ public class SearchParams {
     String orderBy;
     List<String> tags;
     int numberOfResults;
+    String ownerUsername;
 }

@@ -14,6 +14,4 @@ import java.util.Map;
 public class Cottage extends Rentable {
     @ElementCollection
     Map<Integer, Integer> rooms;
-    @ManyToOne
-    private CottageOwner owner;
 }

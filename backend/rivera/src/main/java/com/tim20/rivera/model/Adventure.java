@@ -13,6 +13,4 @@ public class Adventure extends Rentable {
     private Integer capacity;
     @ElementCollection
     private List<String> fishingEquipment;
-    @ManyToOne
-    private FishingInstructor owner;
 }

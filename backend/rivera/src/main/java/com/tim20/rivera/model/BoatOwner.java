@@ -12,7 +12,4 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 public class BoatOwner extends Owner {
-
-    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
-    private List<Boat> boats;
 }
