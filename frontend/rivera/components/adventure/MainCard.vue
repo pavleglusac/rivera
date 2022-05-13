@@ -10,6 +10,12 @@
                     <font-awesome-icon icon="pen-to-square"  />
                     Update
                 </b-button>
+                <b-button v-if="isSubscribed" type="button" class="btn btn-light rounded-pill" @click="subscribe">
+                    + Subscribe
+                </b-button>
+                <b-button v-else type="button" class="btn btn-light rounded-pill" @click="unsubscribe">
+                    - Unsubscribe
+                </b-button>
                 <button type="button" class="btn rounded-pill btn-light "  :disabled='!canBeChanged' @click="deleteRentable">
                     <font-awesome-icon icon="trash"  />
                     Delete
@@ -54,29 +60,75 @@
 import EditAdventure from './../add-adventure/EditAdventure.vue'
 export default {
     components: { EditAdventure },
+    data() {
+        return {
+            isSubscribed: false,
+            username: ""
+        }
+    },
     mounted() {
-
+        this.getUsername();
+        this.subscribed();
     }, 
     methods: {
-        deleteRentable(){
+        deleteRentable() {
 			$("#deleteModal").modal('show');		
         },
-        confirmDeletion(){
-		this.$axios
-        .post('/api/delete-adventure?id=' + this.$route.params.adventure)
-        .then((resp) => {
-			console.log(resp);
-		}).catch((err) => {
-			console.log(err);   
-        });
-        this.closeModal("deleteModal");
+        confirmDeletion() {
+            this.$axios
+            .post('/api/delete-adventure?id=' + this.$route.params.adventure)
+            .then((resp) => {
+                console.log(resp);
+            }).catch((err) => {
+                console.log(err);   
+            });
+            this.closeModal("deleteModal");
         },
-        closeModal(id){
+        closeModal(id) {
 			$("#"+id).modal('hide');
-		}
-        ,
+		},
         updateRentable() {
             this.$refs.update_modal.show();
+        },
+        getUsername() {
+            let that = this;
+            this.$axios.get('/api/auth/get-logged-username', { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+                }).then((resp) => {
+                    console.log("HEEEEEi");
+                    console.log(resp.data);
+                    that.username = resp.data;
+                    console.log(that.username);
+
+                }).catch((err) => {
+                    console.log(err);
+                });
+        },
+        subscribed() {
+            let that = this;
+            this.$axios.post('/api/is-subscribed?username=' + that.username + 'id=' + this.$route.params.adventure)
+                .then((resp) => {
+                    that.isSubscribed = resp.data;
+                }).catch((err) => {
+                    console.log(err);   
+                });
+        },
+        subscribe() {
+            let that = this;
+            this.$axios.post('/api/subscribe?username=' + that.username + 'id=' + this.$route.params.adventure)
+                .then((resp) => {
+                    console.log(resp);
+                }).catch((err) => {
+                    console.log(err);   
+                });
+        },
+        unsubscribe() {
+            let that = this;
+            this.$axios.post('/api/unsubscribe?username=' + that.username + 'id=' + this.$route.params.adventure)
+                .then((resp) => {
+                    console.log(resp);
+                }).catch((err) => {
+                    console.log(err);   
+                });
         }
     },
     data() {

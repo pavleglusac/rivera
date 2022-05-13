@@ -69,7 +69,7 @@
 <script>
 import { BIcon, BIconEyeFill, BIconEyeSlashFill } from "bootstrap-vue";
 export default {
-  name: "ClientProfile",
+  name: "PasswordChange",
   components: {
     BIcon,
     BIconEyeFill,

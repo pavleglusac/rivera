@@ -2,11 +2,14 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.ClientDTO;
 import com.tim20.rivera.dto.ClientRequestDTO;
+import com.tim20.rivera.dto.EntityDTO;
 import com.tim20.rivera.model.Client;
+import com.tim20.rivera.model.Person;
 import com.tim20.rivera.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,5 +54,26 @@ public class ClientController {
     public Client activateClient(@RequestParam("username") String username) {
         System.out.println("activate");
         return clientService.activateClient(username);
+    }
+    @GetMapping(path = "get-subscribed-entities")
+    public List<EntityDTO> getSubscribedEntities(@RequestParam("username") String username, String search) {
+        return clientService.getSubscribedEntities(username, search);
+    }
+
+    @PostMapping(path = "is-subscribed")
+    public Boolean isSubscribed(@RequestParam("username") String username, Integer id) {
+        return clientService.isSubscribed(username, id);
+    }
+
+    @PostMapping(path = "subscribe")
+    public ResponseEntity<String> subscribe(@RequestParam("username") String username, Integer id) {
+        clientService.subscribe(username, id);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping(path = "unsubscribe")
+    public ResponseEntity<String> unsubscribe(@RequestParam("username") String username, Integer id) {
+        clientService.unsubscribe(username, id);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

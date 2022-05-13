@@ -3,11 +3,10 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.ClientDTO;
 import com.tim20.rivera.dto.ClientRentableDto;
 import com.tim20.rivera.dto.ClientRequestDTO;
-import com.tim20.rivera.model.AccountStatus;
-import com.tim20.rivera.model.Client;
-import com.tim20.rivera.model.Person;
-import com.tim20.rivera.model.Role;
+import com.tim20.rivera.dto.EntityDTO;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ClientRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,8 @@ public class ClientService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    RentableRepository rentableRepository;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -113,6 +114,36 @@ public class ClientService {
         savePictureOnPath(multipartFiles, clientPath);
         savePictureOnPath(multipartFiles, clientTargetPath);
         return clientPath.toString();
+    }
+
+    public List<EntityDTO> getSubscribedEntities(String clientUsername, String search) {
+        List<EntityDTO> entities = new ArrayList<>();
+        Client client = clientRepository.findByUsername(clientUsername);
+        for (Rentable entity: client.getSubscribed()) {
+            if(entity.getName().contains(search))
+                entities.add(new EntityDTO(entity, EntityKind.ADVENTURE));
+        }
+        return entities;
+    }
+
+    public void subscribe(String clientUsername, Integer id) {
+        Client client = clientRepository.findByUsername(clientUsername);
+        try {
+            Rentable rentable = rentableRepository.getById(id);
+            client.getSubscribed().add(rentable);
+        } catch (Exception e) {
+            System.out.println("no rentable found");
+        }
+    }
+
+    public void unsubscribe(String clientUsername, Integer id) {
+        Client client = clientRepository.findByUsername(clientUsername);
+        try {
+            Rentable rentable = rentableRepository.getById(id);
+            client.getSubscribed().remove(rentable);
+        } catch (Exception e) {
+            System.out.println("no rentable found");
+        }
     }
 
     private void savePictureOnPath(MultipartFile multipartFile, Path clientPath) throws IOException {
@@ -201,5 +232,11 @@ public class ClientService {
             clientRepository.save(client);
         }
         return client;
+    }
+
+    public Boolean isSubscribed(String username, Integer id) {
+        Client client = clientRepository.findByUsername(username);
+        Rentable rentable = rentableRepository.getById(id);
+        return client.getSubscribed().contains(rentable);
     }
 }
