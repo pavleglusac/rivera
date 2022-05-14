@@ -12,5 +12,5 @@ public class ReservationDTO {
     LocalDateTime end;
     Boolean cancelled;
     ClientRentableDto client;
-    String rentableId;
+    RentableDTO rentable;
 }

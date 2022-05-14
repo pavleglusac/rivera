@@ -1,6 +1,7 @@
 package com.tim20.rivera.repository;
 
 import com.tim20.rivera.model.Cottage;
+import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByCancelled(Boolean cancelled);
     List<Reservation> findByStartDateTimeIsAfter(LocalDateTime dateTime);
     List<ReservationRepository>  findByRentableId(String id);
+    List<Reservation> findByRentableOwnerUsername(String username);
 }

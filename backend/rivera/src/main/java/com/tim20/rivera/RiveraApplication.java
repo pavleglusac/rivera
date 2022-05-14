@@ -76,11 +76,11 @@ public class RiveraApplication {
 		cottage.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
 				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
 				" maximus quam mollis consequat");
-		cottage.setPictures(Arrays.asList("/images/cottages/1/img5.jpg",
-				"/images/cottages/1/img4.jpg",
-				"/images/cottages/1/img3.jpg",
-				"/images/cottages/1/img2.jpg",
-				"/images/cottages/1/img1.jpg"));
+		cottage.setPictures(Arrays.asList("/images/adventures/1/img5.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img3.jpg",
+				"/images/adventuresFishing/1/img2.jpg",
+				"/images/adventures/1/img1.jpg"));
 
 		cottage.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
 		Pricelist pricelist = new Pricelist();
@@ -130,6 +130,7 @@ public class RiveraApplication {
 		cottageOwner.setUsername("cowner");
 		cottageOwner.setPhoto("/images/clients/" + cottageOwner.getUsername() + ".jpg");
 		cottageOwner.setRentables(List.of(cottage));
+		cottageOwner.setAddress("adresa");
 
 		List<Role> roles = roleService.findByName("ROLE_COTTAGE_OWNER");
 		cottageOwner.setRoles(roles);

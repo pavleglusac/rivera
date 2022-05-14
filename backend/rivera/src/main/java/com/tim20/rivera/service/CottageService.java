@@ -186,7 +186,7 @@ public class CottageService {
         return (opt.isEmpty() ? null : cottageToProfileDto(opt.get()));
     }
 
-    private CottageDTO cottageToDto(Cottage cottage) {
+    public CottageDTO cottageToDto(Cottage cottage) {
         CottageDTO dto = new CottageDTO();
         dto.setAddress(cottage.getAddress());
         StringBuilder roomsString = new StringBuilder();
@@ -310,8 +310,6 @@ public class CottageService {
     }
 
     public List<CottageDTO> searchCottagesForOwner(SearchParams searchParams) {
-        System.out.println("\n"+this.getCottagesOfOwner(searchParams.getOwnerUsername()));
-        System.out.println(searchParams.getOwnerUsername()+"----\n");
         List<CottageDTO> cottages = checkTags(this.getCottagesOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
         return sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
                 .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))

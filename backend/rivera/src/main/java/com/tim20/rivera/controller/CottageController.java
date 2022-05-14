@@ -122,6 +122,11 @@ public class CottageController {
         return cottageService.searchCottagesForOwner(searchParams);
     }
 
+    @PostMapping(path="/search-reservations-for-owner")
+    public List<ReservationDTO> searchReservationsForOwner(SearchParams searchParams) {
+        return reservationService.searchReservationsForOwner(searchParams);
+    }
+
 
     @GetMapping(path= "/get-reservations-by-owner")
     public List<ReservationDTO> getReservationsByOwner(){
