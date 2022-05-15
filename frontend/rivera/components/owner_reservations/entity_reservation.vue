@@ -20,7 +20,7 @@
         <b-card-text @click="goToClient()" style="font-size: 1em;" class="m-0">
             <h6 class="card-title">Reservee: </h6>
         <b-card-text  style="font-size: 1em;" >
-            <b-avatar :src='"http://localhost:8080" + reservation.client.photo' size="6rem"></b-avatar>
+            <b-avatar :src='"http://localhost:8080" + reservation.client.photo' size="4rem"></b-avatar>
                 {{reservation.client.name}} {{reservation.client.surname}}
             </b-card-text>
         </b-card-text>
@@ -47,14 +47,14 @@ export default {
   },
   methods: {
     goToClient(){
-        this.$router.push({ path: "/client/" + this.reservation.client.username });
+        this.$router.push({ path: "/client/" + this.reservation.client.username }); //TODO: kad se naprave stranice korisnika odvedi ih tamo
     },
     formatDate(date) {
       var hours = date.getHours();
       var minutes = date.getMinutes();
       var ampm = hours >= 12 ? 'pm' : 'am';
       hours = hours % 12;
-      hours = hours ? hours : 12; // the hour '0' should be '12'
+      hours = hours ? hours : 12; 
       minutes = minutes < 10 ? '0'+minutes : minutes;
       var strTime = hours + ':' + minutes + ' ' + ampm;
       return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;

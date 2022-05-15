@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     loadReservations() {
-      let that = this;
+      let that = this; 
       that.reservations = [];
       this.$axios.get('/api/auth/get-logged-username',{
 								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 

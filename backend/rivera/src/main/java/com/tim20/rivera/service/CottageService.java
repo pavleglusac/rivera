@@ -84,7 +84,7 @@ public class CottageService {
         cottage.setOwner(cottageOwnerRepository.getById("cowner")); //TODO: izvuci ownera iz jwt kad se bude slao
         cottageRepository.save(cottage);
 
-        List<String> paths = new ArrayList<>();
+        List<String> paths;
 
         paths = savePictures(cottage, multipartFiles);
 
