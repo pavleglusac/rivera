@@ -117,7 +117,7 @@ public class ClientService {
         Path clientTargetPath = Paths.get(STATIC_PATH_TARGET + IMAGES_PATH + client.getUsername());
         savePictureOnPath(multipartFiles, clientPath);
         savePictureOnPath(multipartFiles, clientTargetPath);
-        return clientPath.toString();
+        return "/images/clients/" + client.getUsername() + "/" + multipartFiles.getOriginalFilename();
     }
 
     public List<EntityDTO> getSubscribedEntities(String clientUsername, String search) {
@@ -154,7 +154,7 @@ public class ClientService {
             Rentable rentable = rentableRepository.getById(id);
             System.out.println(rentable);
             System.out.println(client.getSubscribed().toString());
-            client.getSubscribed().removeIf(next -> next.equals(rentable));
+            client.getSubscribed().removeIf(next -> next.getId().equals(rentable.getId()));
             clientRepository.save(client);
             System.out.println(client.getSubscribed().toString());
             System.out.println("client has unsubscribed");

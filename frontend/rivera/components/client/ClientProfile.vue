@@ -72,14 +72,17 @@ export default {
       that.client.surname = client.surname;
       that.client.email = client.email;
       that.client.photo = client.photo;
+      console.log(client.photo);
       that.url = "http://localhost:8080" + client.photo;
     },
     onFileChange(e) {
       const file = e.target.files[0];
       this.photoData = file;
       this.url = URL.createObjectURL(file);
-      this.$axios.post('/api/update-client-photo?username=' + this.client.username + '&image=' + file, { headers: {
-					'Content-Type': 'multipart/image' 
+      let formData = new FormData();
+      formData.append('image', file);
+      this.$axios.post('/api/update-client-photo?username=' + this.client.username, formData, { headers: {
+					'Content-Type': 'multipart/form-data' 
     }}) 
         .then((resp) => {
             console.log(resp);

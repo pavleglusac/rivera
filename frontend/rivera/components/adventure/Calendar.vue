@@ -126,7 +126,7 @@
           value="view"
           button
           button-variant="light"
-          size="lg"
+          size="md"
         >
           <font-awesome-icon icon="eye" /> View
         </b-form-radio>
@@ -135,7 +135,7 @@
           value="add"
           button
           button-variant="light"
-          size="lg"
+          size="md"
         >
           <font-awesome-icon icon="plus" /> Add
         </b-form-radio>
@@ -144,13 +144,13 @@
           value="subtract"
           button
           button-variant="light"
-          size="lg"
+          size="md"
         >
           <font-awesome-icon icon="minus" />  Subtract
         </b-form-radio>
 
 
-        <b-button @click="removeAvailabilities" variant="light" size="lg" class="float-right ml-1 mr-0">
+        <b-button @click="removeAvailabilities" variant="light" size="md" class="float-right ml-1 mr-0">
           <font-awesome-icon icon="trash-can" />
         </b-button>
 
@@ -229,7 +229,7 @@
 
         </b-modal>
 
-        <b-button v-b-modal.help_modal variant="light" size="lg" class="float-right mr-0">
+        <b-button v-b-modal.help_modal variant="light" size="md" class="float-right mr-0">
           <font-awesome-icon icon="question" /> Help
         </b-button>
       </b-form-group>
