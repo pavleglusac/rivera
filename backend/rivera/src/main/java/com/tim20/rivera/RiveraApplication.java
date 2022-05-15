@@ -104,6 +104,9 @@ public class RiveraApplication {
 		discount1.setPrice(300.0);
 		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
 		discount1.setRentable(cottage);
+		cottage.setDiscounts(List.of(discount1));
+		discountRepository.save(discount1);
+
 
 		Review review1 = new Review();
 		review1.setRentable(cottage);
@@ -191,6 +194,8 @@ public class RiveraApplication {
 		discount1.setPrice(300.0);
 		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
 		discount1.setRentable(adventure);
+		adventure.setDiscounts(List.of(discount1));
+		discountRepository.save(discount1);
 
 		Review review1 = new Review();
 		review1.setRentable(adventure);
@@ -308,12 +313,35 @@ public class RiveraApplication {
 		discount2.setStartDateTime(LocalDateTime.of(2022, 8, 18, 16, 0 ));
 		discount2.setEndDateTime(LocalDateTime.of(2022, 8, 18, 17, 0 ));
 		discount2.setPrice(450.0);
-
 		discount2.setTags(Arrays.asList(tagCanoe, tagExtreme));
 		discount2.setRentable(adventure);
 
-		adventure.setDiscounts(Arrays.asList(discount1, discount2));
-		discountRepository.saveAll(Arrays.asList(discount1, discount2));
+		Discount discount3 = new Discount();
+		discount3.setCapacity(3);
+		discount3.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
+		discount3.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
+		discount3.setPrice(300.0);
+		discount3.setTags(Arrays.asList(tagCanoe, tagExtreme));
+		discount3.setRentable(adventure);
+
+		Discount discount4 = new Discount();
+		discount4.setCapacity(3);
+		discount4.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
+		discount4.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
+		discount4.setPrice(300.0);
+		discount4.setTags(Arrays.asList(tagCanoe, tagExtreme));
+		discount4.setRentable(adventure);
+
+		Discount discount5 = new Discount();
+		discount5.setCapacity(3);
+		discount5.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
+		discount5.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
+		discount5.setPrice(300.0);
+		discount5.setTags(Arrays.asList(tagCanoe, tagExtreme));
+		discount5.setRentable(adventure);
+
+		adventure.setDiscounts(Arrays.asList(discount1, discount2, discount3, discount5, discount4));
+		discountRepository.saveAll(Arrays.asList(discount1, discount2, discount3, discount5, discount4));
 
 		Client client1 = new Client();
 		client1.setUsername("pera");

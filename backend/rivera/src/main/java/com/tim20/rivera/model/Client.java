@@ -21,8 +21,6 @@ public class Client extends Person {
     private List<Rentable> subscribed;
     @OneToMany(mappedBy = "client")
     private List<Reservation> reservations;
-    @OneToMany
-    private List<ClientCategoryCalendar> categories;
     @OneToMany(mappedBy = "client")
     private List<Review> reviews;
     private AccountStatus status;

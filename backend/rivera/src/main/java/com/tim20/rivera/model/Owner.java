@@ -14,8 +14,7 @@ import java.util.List;
 public class Owner extends Person {
     private String signUpDescription;
     private AccountStatus status;
-    @OneToMany
-    private List<OwnerCategoryCalendar> categories;
+
     @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private List<Rentable> rentables;
 }

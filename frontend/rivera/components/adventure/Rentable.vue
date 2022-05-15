@@ -180,7 +180,7 @@ export default {
             let adventure = resp.data;
             console.log(adventure);
             that.reviews = adventure.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo);
 			that.name = adventure.name;
 			that.location = adventure.city+", "+adventure.country;
             that.address = adventure.address;

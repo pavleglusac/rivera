@@ -12,11 +12,13 @@ import javax.persistence.Id;
 @Entity
 @Data
 @NoArgsConstructor
-public class OwnerCategory {
+public class MemberCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Double percentage;
     private Integer numberOfPoints;
     private String name;
+    private String color;
+    private Boolean forOwner;
 }

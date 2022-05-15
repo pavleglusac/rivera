@@ -47,6 +47,7 @@ public class AdventureController {
 
     @PostMapping(path="/search-adventures")
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
+        System.out.println(searchParams.getOwnerUsername());
         return adventureService.searchAdventures(searchParams);
     }
 
