@@ -18,9 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClientService {
@@ -106,6 +104,12 @@ public class ClientService {
         clientRepository.save(client);
     }
 
+    public void updateClientPhoto(String username, MultipartFile photo) throws IOException {
+        Client client = clientRepository.findByUsername(username);
+        client.setPhoto(this.savePicture(client, photo));
+        clientRepository.save(client);
+    }
+
     private String savePicture(Client client, MultipartFile multipartFiles) throws IOException {
         String path = client.getPhoto();
         if (multipartFiles == null) return path;
@@ -120,8 +124,14 @@ public class ClientService {
         List<EntityDTO> entities = new ArrayList<>();
         Client client = clientRepository.findByUsername(clientUsername);
         for (Rentable entity: client.getSubscribed()) {
-            if(entity.getName().contains(search))
-                entities.add(new EntityDTO(entity, EntityKind.ADVENTURE));
+            if(entity.getName().toLowerCase().contains(search.toLowerCase())) {
+                if (entity instanceof Adventure)
+                    entities.add(new EntityDTO(entity, EntityKind.ADVENTURE));
+                else if (entity instanceof Cottage)
+                    entities.add(new EntityDTO(entity, EntityKind.COTTAGE));
+                else if (entity instanceof Boat)
+                    entities.add(new EntityDTO(entity, EntityKind.BOAT));
+            }
         }
         return entities;
     }
@@ -131,6 +141,8 @@ public class ClientService {
         try {
             Rentable rentable = rentableRepository.getById(id);
             client.getSubscribed().add(rentable);
+            clientRepository.save(client);
+            System.out.println("client has subscribed");
         } catch (Exception e) {
             System.out.println("no rentable found");
         }
@@ -140,7 +152,12 @@ public class ClientService {
         Client client = clientRepository.findByUsername(clientUsername);
         try {
             Rentable rentable = rentableRepository.getById(id);
-            client.getSubscribed().remove(rentable);
+            System.out.println(rentable);
+            System.out.println(client.getSubscribed().toString());
+            client.getSubscribed().removeIf(next -> next.equals(rentable));
+            clientRepository.save(client);
+            System.out.println(client.getSubscribed().toString());
+            System.out.println("client has unsubscribed");
         } catch (Exception e) {
             System.out.println("no rentable found");
         }
@@ -236,7 +253,9 @@ public class ClientService {
 
     public Boolean isSubscribed(String username, Integer id) {
         Client client = clientRepository.findByUsername(username);
+        System.out.println(client.getSubscribed().toString());
         Rentable rentable = rentableRepository.getById(id);
         return client.getSubscribed().contains(rentable);
     }
+
 }

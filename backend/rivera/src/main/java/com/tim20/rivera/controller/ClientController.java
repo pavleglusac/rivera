@@ -50,6 +50,12 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PostMapping(path = "update-client-photo")
+    public ResponseEntity<String> updateClientPhoto(@RequestParam("username") String username, @RequestPart(value = "image") MultipartFile image) throws IOException {
+        clientService.updateClientPhoto(username, image);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
     @PostMapping(path = "activate-client")
     public Client activateClient(@RequestParam("username") String username) {
         System.out.println("activate");

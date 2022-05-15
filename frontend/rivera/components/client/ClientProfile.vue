@@ -74,15 +74,18 @@ export default {
       that.client.photo = client.photo;
       that.url = "http://localhost:8080" + client.photo;
     },
-    changeProfilePhoto(pic) {
-			this.client.photo = pic;
-			console.log("PARENT UPDATE PICS");
-			console.log(pic);
-		},
     onFileChange(e) {
       const file = e.target.files[0];
       this.photoData = file;
       this.url = URL.createObjectURL(file);
+      this.$axios.post('/api/update-client-photo?username=' + this.client.username + '&image=' + file, { headers: {
+					'Content-Type': 'multipart/image' 
+    }}) 
+        .then((resp) => {
+            console.log(resp);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
   }
 };

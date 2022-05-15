@@ -6,13 +6,17 @@
             size="sm"
             placeholder="Search..."
             v-model="search"
+            v-on:input="loadSubscribed"
         ></b-form-input>
     </div>
     <b-list-group>
       <b-list-group-item v-for="entity in subscribed" :key="entity.id" class="d-flex align-items-center">
-        <b-avatar variant="info" :src='"http://localhost:8080" + entity.picture' class="mr-3"></b-avatar>
-        <span class="mr-auto">{{entity.name}}</span>
-        <b-button>Unsubscribe</b-button>
+        <b-avatar variant="info" :src='"http://localhost:8080" + entity.profilePicture' class="mr-3"></b-avatar>
+        <span @click="goToProfile(entity)" style="cursor: pointer" class="mr-auto">
+        <font-awesome-icon v-if="entity.kind == 'ADVENTURE'" icon="fish" />
+        <font-awesome-icon v-else-if="entity.kind == 'COTTAGE'" icon="house" />
+        <font-awesome-icon v-else icon="sailboat" /> {{entity.name}}</span>
+        <b-button size="sm" @click="unsubscribe(entity.id)">Unsubscribe</b-button>
       </b-list-group-item>
     </b-list-group>
 </div>
@@ -31,19 +35,39 @@ export default {
     this.loadSubscribed();
   },
   methods: {
-      loadSubscribed() {
-        let that = this;
+    goToProfile(entity) {
+        if(entity.kind == "ADVENTURE")
+            this.$router.push({ path: "/adventure/" + entity.id });
+        else if(entity.kind == "COTTAGE")
+            this.$router.push({ path: "/cottage/" + entity.id });
+        else
+            this.$router.push({ path: "/boat/" + entity.id });
+    },
+    loadSubscribed() {
+        this.subscribed = [];
         this.$axios.get('/api/auth/get-logged-username', { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
                         }).then((resp) => {
-            that.subscribed = [];
-            this.$axios.get('/api/get-subscribed-entities?username=' + resp.data + 'search=' + that.search)
+            this.$axios.get('/api/get-subscribed-entities?username=' + resp.data + '&search=' + this.search)
             .then(response => {
-                that.subscribed = response.data;
+                this.subscribed = response.data;
+                console.log(this.subscribed);
             });
-        }).catch((err) => {
-            console.log(err);
-        });
+            }).catch((err) => {
+                console.log(err);
+            });
     },
+    unsubscribe(id) {
+        let that = this;
+        this.$axios.get('/api/auth/get-logged-username', { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+        }).then((resp) => {
+            this.$axios.post('/api/unsubscribe?username=' + resp.data + '&id=' + id)
+                .then((resp) => {
+                    that.loadSubscribed();
+                }).catch((err) => {
+                    console.log(err);   
+                });
+            });
+    }
   },
 }
 </script>

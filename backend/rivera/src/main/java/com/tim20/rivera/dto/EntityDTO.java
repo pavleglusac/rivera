@@ -16,7 +16,7 @@ public class EntityDTO {
     public EntityDTO(Rentable rentable, EntityKind kind) {
         this.id = rentable.getId();
         this.name = rentable.getName();
-        this.profilePicture = rentable.getProfilePicture();
+        this.profilePicture = rentable.getPictures().get(0);
         this.kind = kind;
     }
 }

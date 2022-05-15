@@ -46,5 +46,4 @@ public class Rentable {
     private List<Calendar> calendars;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
-
 }
