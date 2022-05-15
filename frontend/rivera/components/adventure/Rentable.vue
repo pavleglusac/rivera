@@ -119,7 +119,7 @@
     <div class="w-100 pb-0 d-flex mt-5">
       <div class="d-flex flex-column" style="width: 100%; height: 100%">
         <h3 class="subtitle">Offers on discount</h3>
-        <div class="d-flex flex-column h-100">
+        <div v-if="discounts.length > 0" class="d-flex flex-column h-100">
           <div class="row ml-2">
             <Discount
               class="m-1 col-2"
@@ -129,12 +129,15 @@
             />
           </div>
         </div>
+        <div v-else class="d-flex flex-column h-100">
+          <p>There are no offers on discount right now. If you want to receive email notification when owner creates a special offer, please subscribe to this entity.</p>
+        </div>
       </div>
     </div>
 
     <div class="mt-5 w-100 mb-5">
     <h3 class="subtitle">Reviews</h3>
-      <div class="row h-100 gx-0">
+      <div v-if="reviews.length > 0" class="row h-100 gx-0">
         <div class="col-6 gx-0 pr-0">
           <div>
             <Review
@@ -159,6 +162,9 @@
             />
           </div>
         </div>
+      </div>
+      <div v-else>
+        <p>No one reviewed this entity yet.</p>
       </div>
     </div>
   </div>

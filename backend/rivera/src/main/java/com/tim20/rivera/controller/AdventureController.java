@@ -76,7 +76,6 @@ public class AdventureController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-
     @PostMapping("define-availability")
     public ResponseEntity<String> defineAvailability(@RequestBody AvailabilityRequest availabilityRequest) {
         System.out.println(availabilityRequest);

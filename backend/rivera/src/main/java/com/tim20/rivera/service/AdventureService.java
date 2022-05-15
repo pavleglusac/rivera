@@ -272,9 +272,18 @@ public class AdventureService {
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
         List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventures(), searchParams.getTags()), searchParams);
-        return sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
-                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList()));
+        return filter(searchParams.getSearch().toLowerCase(), sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
+                .collect(Collectors.toList())));
+    }
+
+    public List<AdventureDTO> filter(String keyWord, List<AdventureDTO> adventures) {
+        List<AdventureDTO> correctAdventures = new ArrayList<>();
+        for (AdventureDTO a : adventures) {
+            if (a.getName().toLowerCase().contains(keyWord) || a.getAddress().toLowerCase().contains(keyWord)
+            || a.getCity().toLowerCase().contains(keyWord) || a.getCountry().toLowerCase().contains(keyWord))
+                correctAdventures.add(a);
+        }
+        return correctAdventures;
     }
 
     private List<AdventureDTO> checkAvailableDates(List<AdventureDTO> adventures, SearchParams searchParams) {

@@ -152,11 +152,8 @@ public class ClientService {
         Client client = clientRepository.findByUsername(clientUsername);
         try {
             Rentable rentable = rentableRepository.getById(id);
-            System.out.println(rentable);
-            System.out.println(client.getSubscribed().toString());
             client.getSubscribed().removeIf(next -> next.getId().equals(rentable.getId()));
             clientRepository.save(client);
-            System.out.println(client.getSubscribed().toString());
             System.out.println("client has unsubscribed");
         } catch (Exception e) {
             System.out.println("no rentable found");

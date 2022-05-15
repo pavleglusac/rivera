@@ -277,9 +277,8 @@ public class CottageService {
 
     public List<CottageDTO> searchCottages(SearchParams searchParams) {
         List<CottageDTO> cottages = checkTags(this.getCottages(), searchParams.getTags());
-        return sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
-                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList()));
+        return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
+                .collect(Collectors.toList())));
     }
 
     public List<CottageDTO> getCottages() {
@@ -293,6 +292,16 @@ public class CottageService {
         for (CottageDTO c : cottages) {
             if (c.getTags().containsAll(tags))
                 correctCottages.add(c);
+        }
+        return correctCottages;
+    }
+
+    public List<CottageDTO> filter(String keyWord, List<CottageDTO> cottages) {
+        List<CottageDTO> correctCottages = new ArrayList<>();
+        for (CottageDTO a : cottages) {
+            if (a.getName().toLowerCase().contains(keyWord) || a.getAddress().toLowerCase().contains(keyWord)
+                    || a.getCity().toLowerCase().contains(keyWord) || a.getCountry().toLowerCase().contains(keyWord))
+                correctCottages.add(a);
         }
         return correctCottages;
     }
