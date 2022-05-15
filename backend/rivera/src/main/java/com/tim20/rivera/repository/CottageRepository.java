@@ -8,4 +8,5 @@ import java.util.List;
 import java.util.Set;
 
 public interface CottageRepository  extends JpaRepository<Cottage, Integer> {
+    List<Cottage> findByOwnerUsername(String username);
 }

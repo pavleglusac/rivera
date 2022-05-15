@@ -11,8 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class Boat extends Rentable {
 
-    @ManyToOne()
-    private BoatOwner owner;
     private BoatType type;
     private Double length;
     private Integer capacity;

@@ -12,6 +12,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CottageOwner extends Owner {
-    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
-    private List<Cottage> cottages;
+    @Override
+    public String toString() {
+        return "CottageOwner{" +
+                '}';
+    }
 }

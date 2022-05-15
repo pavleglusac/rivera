@@ -1,14 +1,13 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dto.AdventureDTO;
-import com.tim20.rivera.dto.CottageDTO;
-import com.tim20.rivera.dto.CottageProfileDTO;
-import com.tim20.rivera.dto.SearchParams;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.service.CottageAvailabilityService;
+import com.tim20.rivera.service.CottageOwnerService;
 import com.tim20.rivera.service.CottageService;
+import com.tim20.rivera.service.ReservationService;
 import com.tim20.rivera.util.Availability;
 import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +34,12 @@ public class CottageController {
 
     @Autowired
     private CottageAvailabilityService cottageAvailabilityService;
+
+    @Autowired
+    private CottageOwnerService cottageOwnerService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @PostMapping(path = "/add-cottage")
     public ResponseEntity<Integer> addCottage(
@@ -112,4 +117,24 @@ public class CottageController {
         return cottageService.searchCottages(searchParams);
     }
 
+    @PostMapping(path="/search-cottages-for-owner")
+    public List<CottageDTO> searchCottagesForOwner(SearchParams searchParams) {
+        return cottageService.searchCottagesForOwner(searchParams);
+    }
+
+    @PostMapping(path="/search-reservations-for-owner")
+    public List<ReservationDTO> searchReservationsForOwner(SearchParams searchParams) {
+        return reservationService.searchReservationsForOwner(searchParams);
+    }
+
+
+    @GetMapping(path= "/get-reservations-by-owner")
+    public List<ReservationDTO> getReservationsByOwner(){
+        return reservationService.getReservationsByOwner();
+    }
+
+    @GetMapping(path= "/get-reservations-by-cottage")
+    public List<ReservationDTO> getReservationsByCottage(){
+        return null;
+    }
 }

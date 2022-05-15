@@ -70,7 +70,7 @@ public class CottageService {
         temporaryOwner.setPhoneNumber("+3845135535");
         temporaryOwner.setUsername("marko2");
         temporaryOwner.setPhoto("/images/clients/" + temporaryOwner.getUsername() + ".jpg");
-        temporaryOwner.setCottages(new ArrayList<Cottage>());
+        temporaryOwner.setRentables(new ArrayList<Rentable>());
         cottageOwnerRepository.save(temporaryOwner);
     }
 
@@ -81,10 +81,10 @@ public class CottageService {
         for (var x : cottage.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + cottage.getId());
         }
-
+        cottage.setOwner(cottageOwnerRepository.getById("cowner")); //TODO: izvuci ownera iz jwt kad se bude slao
         cottageRepository.save(cottage);
 
-        List<String> paths = new ArrayList<>();
+        List<String> paths;
 
         paths = savePictures(cottage, multipartFiles);
 
@@ -160,7 +160,7 @@ public class CottageService {
         tagService.addTagsIfNotPresent(dto.getTags());
         cottage.setTags(tagService.getTagsByNames(dto.getTags()));
         cottage.setOwner(temporaryOwner);
-        temporaryOwner.getCottages().add(cottage);
+        temporaryOwner.getRentables().add(cottage);
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
@@ -186,7 +186,7 @@ public class CottageService {
         return (opt.isEmpty() ? null : cottageToProfileDto(opt.get()));
     }
 
-    private CottageDTO cottageToDto(Cottage cottage) {
+    public CottageDTO cottageToDto(Cottage cottage) {
         CottageDTO dto = new CottageDTO();
         dto.setAddress(cottage.getAddress());
         StringBuilder roomsString = new StringBuilder();
@@ -307,5 +307,16 @@ public class CottageService {
             case "score-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
             default -> cottages;
         };
+    }
+
+    public List<CottageDTO> searchCottagesForOwner(SearchParams searchParams) {
+        List<CottageDTO> cottages = checkTags(this.getCottagesOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        return sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
+                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
+                .collect(Collectors.toList()));
+    }
+
+    private List<CottageDTO> getCottagesOfOwner(String ownerUsername) {
+        return cottageRepository.findByOwnerUsername(ownerUsername).stream().map(this::cottageToDto).collect(Collectors.toList());
     }
 }

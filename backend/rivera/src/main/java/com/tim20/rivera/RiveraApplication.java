@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.tim20.rivera")
@@ -58,6 +59,97 @@ public class RiveraApplication {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private CottageOwnerRepository cottageOwnerRepository;
+
+	@Autowired
+	private CottageRepository cottageRepository;
+
+
+	public void initData3(){
+		Cottage cottage = new Cottage();
+		cottage.setName("Very Cool Cottage");
+		cottage.setAddress("1234 Main St.");
+		cottage.setCity("Zrenjanin");
+		cottage.setCountry("Serbia");
+		cottage.setDescription("Pellentesque habitant morbi tristique senectus et netus et malesuada" +
+				" fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum" +
+				" maximus quam mollis consequat");
+		cottage.setPictures(Arrays.asList("/images/adventures/1/img5.jpg",
+				"/images/adventures/1/img4.jpg",
+				"/images/adventures/1/img3.jpg",
+				"/images/adventuresFishing/1/img2.jpg",
+				"/images/adventures/1/img1.jpg"));
+
+		cottage.setTags(Arrays.asList(tagRepository.findByName("wifi").get(), tagRepository.findByName("river").get()));
+		Pricelist pricelist = new Pricelist();
+		pricelist.setStartDateTime(LocalDateTime.now());
+		pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
+		pricelist.setPricePerHour(10.0);
+		pricelist.setPricePerDay(40.0);
+		pricelist.setCancellationTerms("20");
+		pricelist.setRentable(cottage);
+		cottage.setPricelists(Arrays.asList(pricelist));
+		cottage.setCurrentPricelist(pricelist);
+		pricelistRepository.save(pricelist);
+
+		cottage.setRulesOfConduct(Arrays.asList("no smoking", "no destruction of property"));
+		cottage.setAverageScore(3.3);
+
+		Discount discount1 = new Discount();
+		discount1.setCapacity(3);
+		discount1.setStartDateTime(LocalDateTime.of(2022, 8, 12, 16, 0 ));
+		discount1.setEndDateTime(LocalDateTime.of(2022, 8, 13, 1, 0 ));
+		discount1.setPrice(300.0);
+		discount1.setTags(Arrays.asList(tagRepository.findByName("canoe").get(), tagRepository.findByName("extreme").get()));
+		discount1.setRentable(cottage);
+
+		Review review1 = new Review();
+		review1.setRentable(cottage);
+		review1.setPosted(LocalDateTime.now());
+		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
+				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
+		review1.setScore(3.3);
+		review1.setClient(clientRepository.findByUsername("pera"));
+		review1.setStatus(ReviewStatus.ACCEPTED);
+		reviewRepository.save(review1);
+
+
+		CottageOwner cottageOwner = new CottageOwner();
+		cottageOwner.setName("Marko");
+		cottageOwner.setSurname("Markovic");
+		cottageOwner.setAddress("Njegoseva 35");
+		cottageOwner.setCity("Zrenjanin");
+		cottageOwner.setCountry("Serbia");
+		cottageOwner.setStatus(AccountStatus.ACTIVE);
+		cottageOwner.setDeleted(false);
+		cottageOwner.setEmail("marko@gmail.com");
+		cottageOwner.setPassword(passwordEncoder.encode("sifra"));
+		cottageOwner.setPhoneNumber("+3845135535");
+		cottageOwner.setUsername("cowner");
+		cottageOwner.setPhoto("/images/clients/" + cottageOwner.getUsername() + ".jpg");
+		cottageOwner.setRentables(List.of(cottage));
+		cottageOwner.setAddress("adresa");
+
+		List<Role> roles = roleService.findByName("ROLE_COTTAGE_OWNER");
+		cottageOwner.setRoles(roles);
+
+		cottageOwnerRepository.save(cottageOwner);
+		cottage.setOwner(cottageOwner);
+
+		cottageRepository.save(cottage);
+		
+		Reservation reservation = new Reservation();
+		reservation.setClient(clientRepository.findByUsername("mika"));
+		reservation.setRentable(cottage);
+		reservation.setStartDateTime(LocalDateTime.now().plusHours(1));
+		reservation.setEndDateTime(LocalDateTime.now().plusHours(2));
+		reservation.setPrice(130.0);
+		reservation.setCancelled(false);
+		reservationRepository.save(reservation);
+
+	}
 
 	private void initializeData2() {
 		Adventure adventure = new Adventure();
@@ -300,7 +392,7 @@ public class RiveraApplication {
 		fishingInstructor.setPhoneNumber("+3845135535");
 		fishingInstructor.setUsername("marko");
 		fishingInstructor.setPhoto("/images/clients/" + fishingInstructor.getUsername() + ".jpg");
-		fishingInstructor.setAdventures(List.of(adventure));
+		fishingInstructor.setRentables(List.of(adventure));
 
 		List<Role> roles = roleService.findByName("ROLE_FISHING_INSTRUCTOR");
 		fishingInstructor.setRoles(roles);
@@ -315,6 +407,8 @@ public class RiveraApplication {
 		adventureRepository.save(adventure2);
 
 		initializeData2();
+		initData3();
 	}
+
 
 }

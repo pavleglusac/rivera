@@ -237,7 +237,7 @@ public class AdventureService {
         dto.setReviews(adventure.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         dto.setDiscounts(adventure.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
         dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(adventure, false, LocalDateTime.now()).isEmpty());
-        dto.setOwner(fishingInstructorToDto(adventure.getOwner()));
+        dto.setOwner(fishingInstructorToDto(fishingInstructorRepository.getById(adventure.getOwner().getUsername())));
         dto.setEquipment(adventure.getFishingEquipment());
         dto.setCapacity(adventure.getCapacity());
         dto.setReservations(adventure.getReservations().stream().map(this::reservationToDto).collect(Collectors.toList()));
