@@ -29,4 +29,7 @@ public class Reservation {
 
     public static Integer pointsPerReservation;
     public static Integer ownerPoints;
+
+    @OneToOne(mappedBy = "reservation")
+    ReservationReport reservationReport;
 }

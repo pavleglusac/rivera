@@ -250,6 +250,17 @@ public class AdventureService {
         dto.setEnd(reservation.getEndDateTime());
         dto.setCancelled(reservation.getCancelled());
         dto.setClient(clientService.clientToCRDto(reservation.getClient()));
+        dto.setId(reservation.getId());
+        dto.setReport(null);
+        if(reservation.getReservationReport() != null) {
+            ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
+            reservationReportDTO.setId(reservation.getReservationReport().getId());
+            reservationReportDTO.setReservationReportType(reservation.getReservationReport().getReservationReportType());
+            reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
+            reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
+            reservationReportDTO.setText(reservation.getReservationReport().getText());
+            dto.setReport(reservationReportDTO);
+        }
         return dto;
     }
 

@@ -20,9 +20,10 @@
               class="form-control form-control-lg"
               id="email"
               v-model="email"
-              v-bind:class="{ 'error-boarder': $v.email.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.email.$invalid && emailClicked }"
+              @click="emailClicked = true;"
             />
-            <ErrorDiv :parameter="$v.email" :name="'Email'"> </ErrorDiv>
+            <ErrorDiv v-if="emailClicked" :parameter="$v.email" :name="'Email'"> </ErrorDiv>
           </div>
           <div class="form-group col-6">
             <label>Username</label>
@@ -32,14 +33,17 @@
               class="form-control form-control-lg"
               id="username"
               v-model="username" @keyup="resetTimer"
-              v-bind:class="{ 'error-boarder': $v.username.$invalid || usernameExists }"
+              v-bind:class="{ 'error-boarder': ($v.username.$invalid || usernameExists) && usernameClicked}"
+              @click="usernameClicked = true;"
             />
             <div>
               <b-spinner small label="Small Spinner" style="float:left" class="m-1" v-if="loadingUsername"></b-spinner> 
+            <div v-if="usernameClicked">
             <span v-if="usernameExists">
               Username already exists!
             </span>
             <ErrorDiv v-else :parameter="$v.username" :name="'  Username'"> </ErrorDiv>
+            </div>
             </div>
           </div>
         </div>
@@ -52,9 +56,10 @@
               class="form-control form-control-lg"
               id="password"
               v-model="password"
-              v-bind:class="{ 'error-boarder': $v.password.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.password.$invalid && passwordClicked}"
+              @click="passwordClicked = true;"
             />
-            <ErrorDiv :parameter="$v.password" :name="'Password'"> </ErrorDiv>
+            <ErrorDiv v-if="passwordClicked" :parameter="$v.password" :name="'Password'"> </ErrorDiv>
           </div>
           <div class="form-group col-6">
             <label>Reenter password</label>
@@ -64,9 +69,10 @@
               class="form-control form-control-lg"
               id="password2"
               v-model="password2"
-              v-bind:class="{ 'error-boarder': $v.password2.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.password2.$invalid && password2Clicked }"
+              @click="password2Clicked = true;"
             />
-            <ErrorDiv :parameter="$v.password2" :name="'Password'"> </ErrorDiv>
+            <ErrorDiv v-if="password2Clicked" :parameter="$v.password2" :name="'Password'"> </ErrorDiv>
           </div>
         </div>
         <div class="form-row">
@@ -77,9 +83,10 @@
               placeholder="Enter your surname"
               class="form-control form-control-lg"
               v-model="name"
-              v-bind:class="{ 'error-boarder': $v.name.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.name.$invalid && nameClicked}"
+              @click="nameClicked = true;"
             />
-            <ErrorDiv :parameter="$v.name" :name="'Name'"> </ErrorDiv>
+            <ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'"> </ErrorDiv>
           </div>
           <div class="form-group col-6">
             <label>Surname</label>
@@ -89,9 +96,10 @@
               class="form-control form-control-lg"
               id="surname"
               v-model="surname"
-              v-bind:class="{ 'error-boarder': $v.surname.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.surname.$invalid && surnameClicked}"
+              @click="surnameClicked = true;"
             />
-            <ErrorDiv :parameter="$v.surname" :name="'Surname'"> </ErrorDiv>
+            <ErrorDiv v-if="surnameClicked" :parameter="$v.surname" :name="'Surname'"> </ErrorDiv>
           </div>
         </div>
 
@@ -104,9 +112,10 @@
               class="form-control form-control-lg"
               id="phoneNumber"
               v-model="phoneNumber"
-              v-bind:class="{ 'error-boarder': $v.phoneNumber.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.phoneNumber.$invalid && phoneNumberClicked}"
+              @click="phoneNumberClicked = true;"
             />
-            <ErrorDiv :parameter="$v.phoneNumber" :name="'Phone number'">
+            <ErrorDiv v-if="phoneNumberClicked" :parameter="$v.phoneNumber" :name="'Phone number'">
             </ErrorDiv>
           </div>
           <div class="form-group col-6">
@@ -117,9 +126,10 @@
               class="form-control form-control-lg"
               id="address"
               v-model="address"
-              v-bind:class="{ 'error-boarder': $v.address.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.address.$invalid && addressClicked}"
+              @click="addressClicked = true;"
             />
-            <ErrorDiv :parameter="$v.address" :name="'Address'"> </ErrorDiv>
+            <ErrorDiv v-if="addressClicked" :parameter="$v.address" :name="'Address'"> </ErrorDiv>
           </div>
         </div>
         <div class="form-row">
@@ -129,7 +139,8 @@
               id="inputState"
               v-model="country"
               class="form-control"
-              v-bind:class="{ 'error-boarder': $v.country.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.country.$invalid  && countryClicked}"
+              @click="countryClicked = true;"
             >
               <option selected>Choose...</option>
               <option
@@ -140,7 +151,7 @@
                 {{ country.label }}
               </option>
             </select>
-            <ErrorDiv :parameter="$v.country" :name="'Country'"> </ErrorDiv>
+            <ErrorDiv v-if="countryClicked" :parameter="$v.country" :name="'Country'"> </ErrorDiv>
           </div>
           <div class="form-group col-3">
             <label>City</label>
@@ -150,16 +161,17 @@
               class="form-control form-control-lg"
               id="city"
               v-model="city"
-              v-bind:class="{ 'error-boarder': $v.city.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.city.$invalid  && cityClicked}"
+              @click="cityClicked = true;"
             />
-            <ErrorDiv :parameter="$v.city" :name="'City'"> </ErrorDiv>
+            <ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'"> </ErrorDiv>
           </div>
           <div class="form-group col-6">
             <label>Choose your Rivera role</label>
             <select
               v-model="type"
               class="form-control"
-              v-bind:class="{ 'error-boarder': $v.type.$invalid }"
+              v-bind:class="{ 'error-boarder': $v.type.$invalid  && typeClicked}"
             >
               <option v-for="tip in types" :key="tip">{{ tip }}</option>
             </select>
@@ -261,9 +273,21 @@ export default {
       type: "",
       description: "",
       password2: "",
+      emailClicked: false,
+      usernameClicked: false,
+      passwordClicked: false,
+      nameClicked: false,
+      surnameClicked: false,
+      phoneNumberClicked: false,
+      countryClicked: false,
+      cityClicked: false,
+      addressClicked: false,
+      typeClicked: false,
+      descriptionClicked: false,
+      password2Clicked: false,
       usernameExists: false,
       typingTimer : "",
-      doneTypingInterval: 2000,
+      doneTypingInterval: 500,
       loadingUsername: false,
       types: ["Cottage Owner", "Boat Owner", "Fishing Instructor", "Regular User"],
       biography: "",
@@ -417,6 +441,9 @@ export default {
 				console.log(err);
 			})
 		},
+    setTrue(parameter){
+      parameter = true;
+    },
 		resetTimer(){
 			clearTimeout(this.typingTimer);
 			this.usernameExists = false;
