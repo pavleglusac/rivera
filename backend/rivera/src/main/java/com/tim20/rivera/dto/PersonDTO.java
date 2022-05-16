@@ -16,5 +16,6 @@ public class PersonDTO {
     private String city;
     private String country;
     private String photo;
+    private String biography;
     private Boolean deleted;
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Person  implements UserDetails {
+public class Person implements UserDetails {
 
     private String email;
     @Id

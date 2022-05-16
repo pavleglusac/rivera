@@ -64,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/foo").permitAll()
                 .antMatchers("/swagger-ui/**").permitAll()
                 .antMatchers("/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/**").permitAll()
                   .anyRequest().authenticated().and()
 
                 .cors().and()
@@ -75,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-          web.ignoring().antMatchers(HttpMethod.POST, "/**");
+        //  web.ignoring().antMatchers(HttpMethod.POST, "/**");
 
         web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js");

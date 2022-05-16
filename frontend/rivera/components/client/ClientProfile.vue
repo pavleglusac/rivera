@@ -56,7 +56,7 @@ export default {
       this.$axios.get('/api/auth/get-logged-username',{
 								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
 							}).then((resp) => {
-              this.$axios.get('/api/get-client-by-username?username=' + resp.data) 
+              this.$axios.get('/api/person-by-username?username=' + resp.data) 
 							.then((resp) => {
                   that.setClientData(resp.data);
               });
@@ -81,7 +81,7 @@ export default {
       this.url = URL.createObjectURL(file);
       let formData = new FormData();
       formData.append('image', file);
-      this.$axios.post('/api/update-client-photo?username=' + this.client.username, formData, { headers: {
+      this.$axios.post('/api/update-person-photo?username=' + this.client.username, formData, { headers: {
 					'Content-Type': 'multipart/form-data' 
     }}) 
         .then((resp) => {

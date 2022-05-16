@@ -15,7 +15,7 @@
                 <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Homepage</li></nuxt-link>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
                 <nuxt-link to="/adventures"><li class="menu-link" :class="currentPage=='adventures' ? 'active' : ''"><font-awesome-icon icon="fish" /> My Adventures</li></nuxt-link>
-                <nuxt-link to="/instructor/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
+                <nuxt-link to="/owner/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
       </b-navbar-nav>

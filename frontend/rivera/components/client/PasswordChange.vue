@@ -62,7 +62,7 @@
     <b-form-invalid-feedback :state="newPasswordAgainValidation">
       Re-entered password is not the same as your new password.
     </b-form-invalid-feedback>
-    <b-button block class="change-password">Change password</b-button>
+    <b-button block class="change-password" @click="changePassword">Change password</b-button>
   </div>
 </template>
 
@@ -112,6 +112,42 @@ export default {
     },
     showCPassword() {
       this.cpasswordHidden = false;
+    },
+    changePassword() {
+      let that = this;
+      
+      this.$axios
+				.get("/api/get-logged-username-novi", {
+					headers: {
+						Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+					},
+				})
+				.then((resp) => {
+					this.$axios
+						.post("/api/change-password", {
+              username: resp.data,
+              oldPassword: that.cpasswordText,
+              newPassword: that.passwordText,
+              headers: {
+                Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+              },
+            }, {
+              headers: {
+                Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+              },
+            })
+						.then((resp) => {
+							alert("changed!");
+              window.localStorage.setItem("JWT", resp.data["accessToken"]);
+						})
+            .catch(err => {
+              alert("couldn't change password!");
+            });
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+        
     },
   },
   computed: {
