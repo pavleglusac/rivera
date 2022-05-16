@@ -1,9 +1,6 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.CottageDTO;
-import com.tim20.rivera.dto.ReservationDTO;
-import com.tim20.rivera.dto.ReservationReportDTO;
-import com.tim20.rivera.dto.SearchParams;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
@@ -31,29 +28,31 @@ public class ReservationService {
     private CottageService cottageService;
     @Autowired
     private RentableService rentableService;
+    @Autowired
+    private RentableRepository rentableRepository;
 
     public List<ReservationDTO> getReservationsByOwner() {
         return null;
     }
 
     public List<ReservationDTO> searchReservationsForOwner(SearchParams searchParams) {
-        List<ReservationDTO> reservationDTOS = checkTagsCottage(this.getReservationsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        List<ReservationDTO> reservationDTOS = checkTags(this.getReservationsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
         return sortReservations(searchParams.getOrderBy(), reservationDTOS.stream().limit(searchParams.getNumberOfResults())
                 .filter
-                        (a -> cottageService.cottageToDto(cottageRepository.findById(a.getRentable().getId()).get()).getName().toLowerCase().
+                        (a -> rentableService.rentableToDto(rentableRepository.findById(a.getRentable().getId()).get()).getName().toLowerCase().
                                 contains(searchParams.getSearch().toLowerCase()))
                 .collect(Collectors.toList()));
     }
 
 
-    private List<ReservationDTO> checkTagsCottage(List<ReservationDTO> reservationDTOS, List<String> tags) {
-        List<ReservationDTO> correctCottages = new ArrayList<>();
+    private List<ReservationDTO> checkTags(List<ReservationDTO> reservationDTOS, List<String> tags) {
+        List<ReservationDTO> correctRentables = new ArrayList<>();
         for (ReservationDTO r : reservationDTOS) {
-             CottageDTO c = cottageService.cottageToDto(cottageRepository.findById(r.getRentable().getId()).get());
+             RentableDTO c = rentableService.rentableToDto(rentableRepository.findById(r.getRentable().getId()).get());
              if ((c.getTags().containsAll(tags) || tags.size() == 0))
-                correctCottages.add(r);
+                correctRentables.add(r);
             }
-        return correctCottages;
+        return correctRentables;
     }
 
 

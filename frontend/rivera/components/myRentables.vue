@@ -145,14 +145,21 @@ export default {
       this.loadingRentables = true;
       let that = this;
       that.offers = [];
-      this.$axios.post(`/api/search-adventures?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=`)
-      .then(response => {
-        that.offers = response.data;
-         that.loadingRentables=false;
-      });
+      this.$axios.get('/api/auth/get-logged-username',{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							}).then((resp) => {
+                console.log(resp.data);
+              this.$axios.post(`/api/search-adventures?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
+                .then(response => {
+                  that.offers = response.data;
+                   that.loadingRentables=false;
+                });
       that.activeCottages = false;
       that.activeBoats = false;
       that.activeAdventures = true;
+			}).catch((err) => {
+				console.log(err);
+			});
     },
     loadCottages() {
       this.loadingRentables = true;

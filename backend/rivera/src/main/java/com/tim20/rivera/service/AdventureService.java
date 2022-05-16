@@ -282,11 +282,18 @@ public class AdventureService {
     }
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
-        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventures(), searchParams.getTags()), searchParams);
-        return filter(searchParams.getSearch().toLowerCase(), sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
-                .collect(Collectors.toList())));
+        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventuresOfOwner(searchParams.getOwnerUsername()), searchParams.getTags()), searchParams);
+        return sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
+                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
+                .collect(Collectors.toList()));
     }
 
+    public List<AdventureDTO> getAdventuresOfOwner(String ownerUsername) {
+        if(ownerUsername != null){
+            return adventureRepository.findByOwnerUsername(ownerUsername).stream().map(this::adventureToDto).collect(Collectors.toList());
+        }
+        else return getAdventures();
+    }
     public List<AdventureDTO> filter(String keyWord, List<AdventureDTO> adventures) {
         List<AdventureDTO> correctAdventures = new ArrayList<>();
         for (AdventureDTO a : adventures) {

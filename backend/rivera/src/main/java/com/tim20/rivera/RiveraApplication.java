@@ -427,6 +427,7 @@ public class RiveraApplication {
 
 		fishingInstructorRepository.save(fishingInstructor);
 		adventure.setOwner(fishingInstructor);
+		adventure2.setOwner(fishingInstructor);
 
 		adventure.setAdditionalServices(Arrays.asList("massage", "therapy", "basketball"));
 

@@ -277,7 +277,8 @@ public class CottageService {
 
     public List<CottageDTO> searchCottages(SearchParams searchParams) {
         List<CottageDTO> cottages = checkTags(this.getCottages(), searchParams.getTags());
-        return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
+        return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(),
+                cottages.stream().limit(searchParams.getNumberOfResults())
                 .collect(Collectors.toList())));
     }
 
