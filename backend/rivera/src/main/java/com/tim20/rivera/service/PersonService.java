@@ -2,10 +2,7 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.CottageOwnerRepository;
-import com.tim20.rivera.repository.CottageRepository;
-import com.tim20.rivera.repository.FishingInstructorRepository;
-import com.tim20.rivera.repository.PersonRepository;
+import com.tim20.rivera.repository.*;
 import com.tim20.rivera.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +43,9 @@ public class PersonService{
 
     @Autowired
     private FishingInstructorRepository fishingInstructorRepository;
+
+    @Autowired
+    private TerminationRepository terminationRepository;
 
     @Autowired
     private OwnerService ownerService;
@@ -181,5 +181,21 @@ public class PersonService{
         } catch (AuthenticationException ae) {
             return null;
         }
+    }
+
+    public boolean requestTermination(TerminationRequestDTO dto) {
+        Person person = personRepository.findByUsername(dto.getUsername());
+        if(person == null) return false;
+        System.out.println("person not null");
+        List<TerminationRequest> requests = terminationRepository.findByPerson(person);
+        boolean hasPending = requests.stream().anyMatch(x -> x.getStatus().equals(TerminationStatus.PENDING));
+        if(hasPending) return false;
+        System.out.println("pending not null");
+        TerminationRequest terminationRequest = new TerminationRequest();
+        terminationRequest.setPerson(person);
+        terminationRequest.setDescription(dto.getDescription());
+        terminationRequest.setStatus(TerminationStatus.PENDING);
+        terminationRepository.save(terminationRequest);
+        return true;
     }
 }

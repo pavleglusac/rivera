@@ -3,10 +3,7 @@ package com.tim20.rivera.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -17,6 +14,10 @@ public class TerminationRequest {
     private Integer id;
 
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     private TerminationStatus status;
 }

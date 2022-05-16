@@ -69,5 +69,16 @@ public class PersonController {
         System.out.println(person.getUsername());
     }
 
+    @PostMapping(path="request-termination")
+    public ResponseEntity<String> requestTermination(@RequestBody TerminationRequestDTO dto) {
+        System.out.println(dto.getUsername());
+        System.out.println(dto.getDescription());
+        if(personService.requestTermination(dto)) {
+            return ResponseEntity.status(200).body("ok");
+        } else {
+            return ResponseEntity.status(401).body("already exists!");
+        }
+    }
+
 
 }
