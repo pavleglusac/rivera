@@ -2,6 +2,7 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.ReservationDTO;
+import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Rentable;
@@ -68,9 +69,20 @@ public class ReservationService {
         ReservationDTO dto = new ReservationDTO();
         dto.setStart(reservation.getStartDateTime());
         dto.setEnd(reservation.getEndDateTime());
-        dto.setCancelled(reservation.getCancelled());
         dto.setRentable(rentableService.rentableToDto(reservation.getRentable()));
+        dto.setCancelled(reservation.getCancelled());
         dto.setClient(clientService.clientToCRDto(reservation.getClient()));
+        dto.setId(reservation.getId());
+        dto.setReport(null);
+        if(reservation.getReservationReport() != null) {
+            ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
+            reservationReportDTO.setId(reservation.getReservationReport().getId());
+            reservationReportDTO.setReservationReportType(reservation.getReservationReport().getReservationReportType());
+            reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
+            reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
+            reservationReportDTO.setText(reservation.getReservationReport().getText());
+            dto.setReport(reservationReportDTO);
+        }
         return dto;
     }
 
@@ -78,4 +90,5 @@ public class ReservationService {
     private List<ReservationDTO> getReservationsOfOwner(String ownerUsername) {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
+
 }

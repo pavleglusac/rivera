@@ -30,7 +30,7 @@
                   size="sm"
                   placeholder="Search by name or location..."
                   v-model="searchText"
-                  v-on:input="reload"
+                  v-on:input="resetTimer"
                 ></b-form-input>
               </div>
               <div class="form-group col-md-3">
@@ -48,7 +48,10 @@
             <b-form-tags size="sm" v-on:input="reload" v-model="tags" input-id="tags-basic"></b-form-tags>
           </div>
 
-          <div v-if="offers.length === 0">
+          <div v-if="loadingRentables" class="d-flex justify-content-center mb-3">
+        <b-spinner variant="success" class="spinning m-2"></b-spinner>
+          </div>
+          <div v-else-if="offers.length === 0">
             <p style="text-align:center;">No offers found.</p>
           </div>
           <div v-else>
@@ -82,8 +85,11 @@ export default {
       activeBoats: false,
       tags: [],
       activeAdventures: true,
+      loadingRentables: false,
       searchText: '',
       sort: 'name-a',
+      typingTimer : "",
+      doneTypingInterval: 500,
       orderBy: [
         { value: 'name-a', text: "Sort by name ascending" },
         { value: 'price-a', text: "Sort by price ascending" },
@@ -115,38 +121,51 @@ export default {
         this.loadAdventures();
     },
     loadBoats() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.post(`/api/search-boats?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
       .then(response => {
         that.offers = response.data;
+        that.loadingRentables=false;
       });
       that.activeCottages = false;
       that.activeBoats = true;
       that.activeAdventures = false;
     },
     loadAdventures() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.post(`/api/search-adventures?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
       .then(response => {
         that.offers = response.data;
+        that.loadingRentables=false;
       });
       that.activeCottages = false;
       that.activeBoats = false;
       that.activeAdventures = true;
     },
     loadCottages() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.post(`/api/cottage/search-cottages?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}`)
       .then(response => {
         that.offers = response.data;
+        that.loadingRentables=false;
       });
       that.activeCottages = true;
       that.activeBoats = false;
       that.activeAdventures = false;
-    },
+    },    
+		resetTimer(){
+			clearTimeout(this.typingTimer);
+			this.usernameExists = false;
+      this.loadingUsername = true;
+      this.loadingRentables = true;
+			this.typingTimer = setTimeout(this.reload, this.doneTypingInterval);
+			}
   },
 };
 </script>

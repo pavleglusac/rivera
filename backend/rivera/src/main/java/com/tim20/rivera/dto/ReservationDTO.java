@@ -12,5 +12,7 @@ public class ReservationDTO {
     LocalDateTime end;
     Boolean cancelled;
     ClientRentableDto client;
+    Integer id;
     RentableDTO rentable;
+    ReservationReportDTO report;
 }

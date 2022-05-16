@@ -20,7 +20,9 @@
         </div>
         <button type="button"  class="btn btn-primary"  @click="redirect">Add {{addType}} </button>
         </form>
+    <button type='button' @click="test"> TEST </button>
     </b-card>
+    
   </div>
 </template>
 <script>
@@ -57,6 +59,16 @@ export default {
 			});
   },
   methods:{
+    test(){
+      this.loadingRentables = false;
+      let that = this;
+      this.$axios.post(`/api/helloEj`,{
+								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
+							})
+                .then(response => {
+                  console.log("A");
+                });
+    },
     redirect(){
       this.$router.push({ path: "/" + this.addType });
     },

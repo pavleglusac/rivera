@@ -11,7 +11,7 @@
                   size="sm"
                   placeholder="Search..."
                   v-model="searchText"
-                  v-on:input="reload"
+                  v-on:input="resetTimer"
                 ></b-form-input>
               </div>
               <div class="form-group col-md-3">
@@ -29,10 +29,11 @@
             <b-form-tags size="sm" v-on:input="reload" v-model="tags" input-id="tags-basic"></b-form-tags>
           </div>
 
-          <div v-if="offers.length === 0">
-            <p style="text-align:center;">No offers found.</p>
+          <div v-if="loadingRentables" class="d-flex justify-content-center mb-3">
+        <b-spinner variant="success" class="spinning m-2"></b-spinner>
           </div>
-          <div v-else>
+          
+          <div v-else-if="!(offers.length === 0)">
             <EntityCard
               v-for="entity in offers"
               :entity="entity"
@@ -40,6 +41,9 @@
               class="mb-3"
               v-bind:key="entity.name"
             />
+          </div>
+          <div v-else>
+            <p style="text-align:center;">No offers found.</p>
           </div>
         </div>
       </b-form>
@@ -64,6 +68,9 @@ export default {
       activeBoats: false,
       tags: [],
       activeAdventures: true,
+      loadingRentables: false,
+      typingTimer : "",
+      doneTypingInterval: 500,
       searchText: '',
       sort: 'name-a',
       orderBy: [
@@ -108,11 +115,13 @@ export default {
       if (this.role=="ROLE_COTTAGE_OWNER")
         this.loadCottages();
       else if (this.role=="ROLE_BOAT_OWNER")
-            this.loadBoats();
+        this.loadBoats();
       else
-            this.loadAdventures();
+        this.loadAdventures();
+     
     },
     loadBoats() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.get('/api/auth/get-logged-username',{
@@ -122,6 +131,7 @@ export default {
               this.$axios.post(`/api/search-boats?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
                 .then(response => {
                   that.offers = response.data;
+                   that.loadingRentables=false;
                 });
                 that.activeCottages = false;
                 that.activeBoats = true;
@@ -132,17 +142,20 @@ export default {
       
     },
     loadAdventures() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.post(`/api/search-adventures?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=`)
       .then(response => {
         that.offers = response.data;
+         that.loadingRentables=false;
       });
       that.activeCottages = false;
       that.activeBoats = false;
       that.activeAdventures = true;
     },
     loadCottages() {
+      this.loadingRentables = true;
       let that = this;
       that.offers = [];
       this.$axios.get('/api/auth/get-logged-username',{
@@ -152,6 +165,7 @@ export default {
               this.$axios.post(`/api/cottage/search-cottages-for-owner?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
                 .then(response => {
                   that.offers = response.data;
+                   that.loadingRentables=false;
                 });
                 that.activeCottages = true;
                 that.activeBoats = false;
@@ -160,6 +174,13 @@ export default {
 				console.log(err);
 			});
     },
+		resetTimer(){
+			clearTimeout(this.typingTimer);
+			this.usernameExists = false;
+      this.loadingUsername = true;
+      this.loadingRentables = true;
+			this.typingTimer = setTimeout(this.reload, this.doneTypingInterval);
+			}
   },
 };
 </script>
