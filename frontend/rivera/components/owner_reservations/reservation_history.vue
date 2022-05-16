@@ -11,7 +11,7 @@
                   size="sm"
                   placeholder="Search..."
                   v-model="searchText"
-                  v-on:input="loadReservations"
+                  v-on:input="resetTimer"
                 ></b-form-input>
               </div>
               <div class="form-group col-md-3">
@@ -29,11 +29,14 @@
             <b-form-tags size="sm" v-on:input="loadReservations" v-model="tags" input-id="tags-basic"></b-form-tags>
           </div>
 
-          <div v-if="reservations.length === 0">
-            <p style="text-align:center;">No reservations found.</p>
+          <div v-if="loadingReservations" class="d-flex justify-content-center mb-3">
+        <b-spinner variant="success" class="spinning m-2"></b-spinner>
+          </div>
+          <div v-else-if="reservations.length === 0">
+            <p style="text-align:center;">No offers found.</p>
           </div>
           <div v-else>
-            <EntityCard
+           <EntityCard
               v-for="res in reservations"
               :entity="res.rentable"
               :offerType="getActiveOffers()"
@@ -65,6 +68,9 @@ export default {
       isFiltering: false,
       activeCottages: false,
       activeBoats: false,
+      loadingReservations: false,
+      typingTimer : "",
+      doneTypingInterval: 500,
       tags: [],
       entity: {},
       activeAdventures: true,
@@ -91,6 +97,7 @@ export default {
   },
   methods: {
     loadReservations() {
+      this.loadingReservations = true;
       let that = this; 
       that.reservations = [];
       this.$axios.get('/api/auth/get-logged-username',{
@@ -100,6 +107,7 @@ export default {
               this.$axios.post(`/api/cottage/search-reservations-for-owner?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
                 .then(response => {
                   that.reservations = response.data;
+                  that.loadingReservations = false;
                 });
 			}).catch((err) => {
 				console.log(err);
@@ -107,7 +115,14 @@ export default {
     },
     getActiveOffers(){
       return "cottage";
-    }
+    },    
+		resetTimer(){
+			clearTimeout(this.typingTimer);
+			this.usernameExists = false;
+      this.loadingUsername = true;
+      this.loadingReservations = true;
+			this.typingTimer = setTimeout(this.loadReservations, this.doneTypingInterval);
+			}
   },
 };
 </script>
