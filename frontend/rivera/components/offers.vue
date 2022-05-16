@@ -28,7 +28,7 @@
                 <b-form-input
                   id="search-filter"
                   size="sm"
-                  placeholder="Search..."
+                  placeholder="Search by name or location..."
                   v-model="searchText"
                   v-on:input="reload"
                 ></b-form-input>

@@ -75,7 +75,11 @@ public class AuthenticationController {
 
     @GetMapping("/get-logged-username")
     public String getLoggedUsername() {
-        return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+        try {
+            return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     @PostMapping("/signup")

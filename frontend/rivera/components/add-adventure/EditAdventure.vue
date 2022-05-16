@@ -1,13 +1,13 @@
 <template>
-    <div class="p-5 mt-3">
+    <div>
 		<form>
 			<div class="form-row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-6">
 				<label for="name">Name</label>
 				<input type="text" class="form-control" id="inputEmail4" placeholder="Name" v-model="name">
 				</div>
 
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-2">
 				<label for="name">Capacity</label>
 				<input type="number" class="form-control" v-model="capacity"  id="capacity" name="capacity" min="1" max="100" placeholder="Capacity">
 				</div>
@@ -23,7 +23,7 @@
 				</div>
 
 				<div class="form-group col-md-2">
-				<label for="name">Cancellation terms</label>
+				<label for="name">Cancellation terms in %</label>
 				<input type="text" class="form-control" id="terms" placeholder="Cancellation terms" v-model="cancellationTerms">
 				</div>
 
@@ -34,18 +34,22 @@
   			</div>
 			<div class="form-row">
 				<div class="form-group col-6">
-					<b-form-tags input-id="tags-basic" v-model="tags" placeholder="Tags"></b-form-tags>
+					<label>Tags</label>
+					<b-form-tags input-id="tags-basic" placeholder="add tag..." v-model="tags"></b-form-tags>
 				</div>
 				<div class="form-group col-6">
-					<b-form-tags input-id="tags-basic" v-model="rulesOfConduct" placeholder="Rules of conduct"></b-form-tags>
+					<label>Rules of conduct</label>
+					<b-form-tags input-id="tags-basic" placeholder="add rule..." v-model="rulesOfConduct"></b-form-tags>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="form-group col-6">
-					<b-form-tags input-id="tags-basic" v-model="equipment" placeholder="Equipment"></b-form-tags>
+					<label>Equipment</label>
+					<b-form-tags input-id="tags-basic" v-model="equipment" placeholder="add equipment..."></b-form-tags>
 				</div>
 				<div class="form-group col-6">
-					<b-form-tags input-id="tags-basic" v-model="services" placeholder="Additional services"></b-form-tags>
+					<label>Additional services</label>
+					<b-form-tags input-id="tags-basic" v-model="services" placeholder="add service..."></b-form-tags>
 				</div>
 			</div>
 			<div class="form-row">
@@ -67,6 +71,7 @@
 					</select>
 				</div>
 			</div>
+			<label>Photos</label>
 			<div class="d-flex">
 				<PictureEdit :pictures='pictures' @picturesChange='picturesChange' />
 			</div>
@@ -74,7 +79,7 @@
 				<PictureUpload />
 			</div>
 		</form>
-		<button @click="upload" class="btn btn-primary float-right">Update adventure</button>
+		<button @click="upload" class="btn btn-primary prime-btn float-right">Update adventure</button>
 	</div>
 </template>
 

@@ -79,6 +79,7 @@ li {
   margin: 3px;
   text-align: center;
   color: #fff;
+  font-weight: 500;
   display: inline;
   font-size: 12px;
 }

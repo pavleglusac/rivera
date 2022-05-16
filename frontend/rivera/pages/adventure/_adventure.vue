@@ -8,7 +8,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
         <navbar :currentPage="'adventures'" />
-        <Rentable />
+        <b-card class="mb-3 card-shadow center" style="margin-left: 60px; margin-right: 60px; margin-top: 10px">
+            <Rentable />
+        </b-card>
     </div>
 </template>
 

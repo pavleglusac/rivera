@@ -3,11 +3,10 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.ClientDTO;
 import com.tim20.rivera.dto.ClientRentableDto;
 import com.tim20.rivera.dto.ClientRequestDTO;
-import com.tim20.rivera.model.AccountStatus;
-import com.tim20.rivera.model.Client;
-import com.tim20.rivera.model.Person;
-import com.tim20.rivera.model.Role;
+import com.tim20.rivera.dto.EntityDTO;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ClientRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,9 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ClientService {
@@ -32,6 +29,8 @@ public class ClientService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    RentableRepository rentableRepository;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -105,6 +104,12 @@ public class ClientService {
         clientRepository.save(client);
     }
 
+    public void updateClientPhoto(String username, MultipartFile photo) throws IOException {
+        Client client = clientRepository.findByUsername(username);
+        client.setPhoto(this.savePicture(client, photo));
+        clientRepository.save(client);
+    }
+
     private String savePicture(Client client, MultipartFile multipartFiles) throws IOException {
         String path = client.getPhoto();
         if (multipartFiles == null) return path;
@@ -112,7 +117,47 @@ public class ClientService {
         Path clientTargetPath = Paths.get(STATIC_PATH_TARGET + IMAGES_PATH + client.getUsername());
         savePictureOnPath(multipartFiles, clientPath);
         savePictureOnPath(multipartFiles, clientTargetPath);
-        return clientPath.toString();
+        return "/images/clients/" + client.getUsername() + "/" + multipartFiles.getOriginalFilename();
+    }
+
+    public List<EntityDTO> getSubscribedEntities(String clientUsername, String search) {
+        List<EntityDTO> entities = new ArrayList<>();
+        Client client = clientRepository.findByUsername(clientUsername);
+        for (Rentable entity: client.getSubscribed()) {
+            if(entity.getName().toLowerCase().contains(search.toLowerCase())) {
+                if (entity instanceof Adventure)
+                    entities.add(new EntityDTO(entity, EntityKind.ADVENTURE));
+                else if (entity instanceof Cottage)
+                    entities.add(new EntityDTO(entity, EntityKind.COTTAGE));
+                else if (entity instanceof Boat)
+                    entities.add(new EntityDTO(entity, EntityKind.BOAT));
+            }
+        }
+        return entities;
+    }
+
+    public void subscribe(String clientUsername, Integer id) {
+        Client client = clientRepository.findByUsername(clientUsername);
+        try {
+            Rentable rentable = rentableRepository.getById(id);
+            client.getSubscribed().add(rentable);
+            clientRepository.save(client);
+            System.out.println("client has subscribed");
+        } catch (Exception e) {
+            System.out.println("no rentable found");
+        }
+    }
+
+    public void unsubscribe(String clientUsername, Integer id) {
+        Client client = clientRepository.findByUsername(clientUsername);
+        try {
+            Rentable rentable = rentableRepository.getById(id);
+            client.getSubscribed().removeIf(next -> next.getId().equals(rentable.getId()));
+            clientRepository.save(client);
+            System.out.println("client has unsubscribed");
+        } catch (Exception e) {
+            System.out.println("no rentable found");
+        }
     }
 
     private void savePictureOnPath(MultipartFile multipartFile, Path clientPath) throws IOException {
@@ -202,4 +247,12 @@ public class ClientService {
         }
         return client;
     }
+
+    public Boolean isSubscribed(String username, Integer id) {
+        Client client = clientRepository.findByUsername(username);
+        System.out.println(client.getSubscribed().toString());
+        Rentable rentable = rentableRepository.getById(id);
+        return client.getSubscribed().contains(rentable);
+    }
+
 }

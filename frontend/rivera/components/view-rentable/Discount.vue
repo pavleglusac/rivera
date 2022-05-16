@@ -1,5 +1,5 @@
 <template>
-  <div style="border: 1px solid #9c9a9a; border-radius: 5%;" class="p-0 card">
+  <div style="border: 1px solid #9c9a9a; border-radius: 5%;" class="p-0 card-shadow">
 	<div style="background-color: #F3F9FA; border-radius: 7%;" class="p-0">
 		<div class="d-flex justify-content-center pt-4">
 			<span class="align-middle p-0" style="font-size: 2em; font-weight: 500;">${{discount.price}}</span>
@@ -47,7 +47,7 @@ export default {
 </script>
 
 <style>
-.card {
+.card-shadow {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
 }
 </style>
