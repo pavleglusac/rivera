@@ -1,9 +1,9 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.DiscountOfferDTO;
 import com.tim20.rivera.dto.DiscountProfileDTO;
 import com.tim20.rivera.model.Discount;
+import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.DiscountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class DiscountService {
 
+    private final int NUMBER_OF_OFFERS_SHOWING = 4;
     @Autowired
     private DiscountRepository discountRepository;
 
-    private final int NUMBER_OF_OFFERS_SHOWING = 4;
-
-    public DiscountProfileDTO discountTODPDto(Discount discount){
+    public DiscountProfileDTO discountTODPDto(Discount discount) {
         DiscountProfileDTO discountProfileDTO = new DiscountProfileDTO();
         discountProfileDTO.setCapacity(discount.getCapacity());
         discountProfileDTO.setId(discount.getId());
@@ -79,9 +78,17 @@ public class DiscountService {
     public List<DiscountOfferDTO> getMostPopularOffers() {
         ArrayList<DiscountOfferDTO> offers = new ArrayList<>();
         for (Discount d : discountRepository.findAll().parallelStream()
-                .sorted(Comparator.comparingDouble(p -> p.getRentable().getAverageScore())).toList()) {
+                                            .sorted(Comparator.comparingDouble(p -> p.getRentable().getAverageScore())).toList()) {
             offers.add(discountToDODTO(d));
         }
         return offers.stream().limit(NUMBER_OF_OFFERS_SHOWING).collect(Collectors.toList());
     }
+
+    public List<DiscountOfferDTO> getDiscountsForOwner(Owner owner) {
+        List<Discount> discounts = new ArrayList<>();
+        owner.getRentables()
+             .forEach(rentable -> discounts.addAll(rentable.getDiscounts()));
+        return discounts.stream().map(this::discountToDODTO).collect(Collectors.toList());
+    }
+
 }

@@ -81,10 +81,8 @@ export default {
     loadLastMinuteOffers() {
       let that = this;
       that.lastMinuteOffers = [];
-      console.log("caooo");
       this.$axios.get(`/api/last-minute`)
       .then(response => {
-        console.log(response.data);
         that.lastMinuteOffers = response.data;
         that.is_data_fetched = true;
       });

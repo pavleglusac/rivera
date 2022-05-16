@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-public class OwnerCategoryCalendar {
+public class MemberCategoryCalendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDateTime fromDateTime;
     private LocalDateTime toDateTime;
     @ManyToOne
-    private OwnerCategory category;
+    private MemberCategory category;
 }

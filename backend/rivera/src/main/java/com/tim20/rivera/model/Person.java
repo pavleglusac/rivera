@@ -34,12 +34,16 @@ public class Person  implements UserDetails {
     private Boolean deleted;
     private Timestamp lastPasswordResetDate;
 
+    @OneToMany
+    private List<MemberCategoryCalendar> categories;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

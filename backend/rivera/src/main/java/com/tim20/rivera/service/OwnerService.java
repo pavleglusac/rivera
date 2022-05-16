@@ -1,13 +1,16 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.OwnerRequestDTO;
+import com.tim20.rivera.dto.ReviewProfileDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OwnerService {
@@ -23,7 +26,13 @@ public class OwnerService {
     private FishingInstructorRepository fishingInstructorRepository;
 
     @Autowired
+    private RentableService rentableService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ReviewService reviewService;
 
 
     public Person save(OwnerRequestDTO userRequestDTO) {
@@ -145,4 +154,12 @@ public class OwnerService {
         Owner owner = ownerRepository.findByUsername(username);
         return owner == null || owner.getStatus()==AccountStatus.ACTIVE;
     }
+
+    public List<ReviewProfileDTO> getReviewsForOwner(String username) {
+        List<Rentable> rentables = rentableService.getRentablesForOwner(username);
+        List<Review> reviews = new ArrayList<>();
+        rentables.forEach(x -> reviews.addAll(x.getReviews()));
+        return reviews.stream().map(reviewService::reviewToRPDTO).collect(Collectors.toList());
+    }
+
 }

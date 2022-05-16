@@ -4,7 +4,8 @@
     <b-card
       img-top
       tag="article"
-      style="max-width: 30rem"
+      style="max-width: 30rem;"
+      img-height="200"
       class="mb-2"
       :img-src='"http://localhost:8080" + entity.picture'
       :title="entity.name"
