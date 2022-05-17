@@ -27,7 +27,7 @@
           <div
             class="mt-3"
             @click="goToOwnerProfile"
-            style="cursor: pointer"
+            style="cursor: pointer; float:left"
             v-b-tooltip.hover.bottom="owner.biography"
           >
             <b-avatar
@@ -254,7 +254,7 @@ export default {
   },
   methods: {
     goToOwnerProfile() {
-      //this.$router.push({ path: "/owner/" + owner.id });
+      this.$router.push({ path: "/profile/" + this.owner.username });
     },
   },
 };

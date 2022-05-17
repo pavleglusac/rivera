@@ -56,11 +56,11 @@
           </div>
           <div v-else>
             <EntityCard
-              v-for="entity in offers"
+              v-for="(entity, index) in offers"
               :entity="entity"
               :offerType="getActiveOffers()"
               class="mb-3"
-              v-bind:key="entity.name"
+              v-bind:key="entity.name + index"
             />
           </div>
         </div>
@@ -141,6 +141,7 @@ export default {
       .then(response => {
         that.offers = response.data;
         that.loadingRentables=false;
+        console.log(that.offers);
       });
       that.activeCottages = false;
       that.activeBoats = false;

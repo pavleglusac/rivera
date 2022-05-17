@@ -16,7 +16,10 @@
               <b-button variant="info">Past reservations</b-button>
               <b-button variant="info">Show all</b-button>
             </b-button-group>
-            <h6>21.05.2022.</h6>
+            <ReservationCard/>
+            <ReservationCard/>
+            <ReservationCard/>
+            <ReservationCard/>
           </b-col>
           <b-col>
             <h4>My Calendar</h4>
@@ -28,9 +31,10 @@
 </template>
 
 <script>
+import ReservationCard from "./ReservationCard.vue";
 export default {
   name: 'Reservations',
-  components: {  },
+  components: { ReservationCard },
 
 }
 </script>
