@@ -11,6 +11,7 @@ import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -85,9 +86,39 @@ public class ReservationService {
         return dto;
     }
 
+    private ClientReservationDTO reservationToClientReservationDTO(Reservation reservation) {
+        ClientReservationDTO clientReservationDTO = new ClientReservationDTO();
+        clientReservationDTO.setCancelled(reservation.getCancelled());
+        clientReservationDTO.setStartDateTime(reservation.getStartDateTime());
+        clientReservationDTO.setEndDateTime(reservation.getEndDateTime());
+        clientReservationDTO.setEntity(new EntityReservationDTO(reservation.getRentable()));
+        return clientReservationDTO;
+    }
+
+    public List<ClientReservationDTO> getClientReservations(String username) {
+        return reservationRepository.findByClientUsername(username).stream().map(this::reservationToClientReservationDTO).collect(Collectors.toList());
+    }
+
+    public List<ClientReservationDTO> getReservations(String username, ReservationSearch search) {
+        System.out.println(search.getDate());
+        List<ClientReservationDTO> reservations = this.getClientReservations(username);
+        return getReservationsByDate(reservations.stream().
+                filter(a -> a.getEntity().getName().toLowerCase().contains(search.getSearch().toLowerCase())).toList(), search);
+    }
+
+    private List<ClientReservationDTO> getReservationsByDate(List<ClientReservationDTO> reservations, ReservationSearch search) {
+        if(search.getUpcoming().equals("upcoming"))
+            return reservations.stream().filter(ClientReservationDTO::isUpcoming).toList();
+        if(search.getUpcoming().equals("past"))
+            return reservations.stream().filter(a-> !a.isUpcoming()).toList();
+        if(search.getUpcoming().equals("date")) {
+            LocalDate date = LocalDate.parse(search.getDate());
+            return reservations.stream().filter(a -> a.isBetween(date)).toList();
+        }
+        return reservations;
+    }
 
     private List<ReservationDTO> getReservationsOfOwner(String ownerUsername) {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
-
 }

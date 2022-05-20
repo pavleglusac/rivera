@@ -294,6 +294,7 @@ public class AdventureService {
         }
         else return getAdventures();
     }
+
     public List<AdventureDTO> filter(String keyWord, List<AdventureDTO> adventures) {
         List<AdventureDTO> correctAdventures = new ArrayList<>();
         for (AdventureDTO a : adventures) {

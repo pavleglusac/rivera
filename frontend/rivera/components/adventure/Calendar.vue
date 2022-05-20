@@ -9,7 +9,7 @@
       no-stacking
     >
       <h2>Repeat:</h2>
-      <b-form-group >
+      <b-form-group>
         <b-form-radio
           v-model="selected_repeat"
           value="norepeat"
@@ -54,7 +54,7 @@
       <input type="time" id="startTime" name="startTime" v-model="startTime" />
       <label for="endTime">Select end time:</label>
       <input type="time" id="endTime" name="endTime" v-model="endTime" />
-      
+
       <b-form-group>
         <b-form-radio
           v-model="continuous"
@@ -75,7 +75,6 @@
           Dates are continuous
         </b-form-radio>
       </b-form-group>
-
 
       <b-button @click="timePicked" class="float-right">Next</b-button>
     </b-modal>
@@ -146,11 +145,15 @@
           button-variant="light"
           size="md"
         >
-          <font-awesome-icon icon="minus" />  Subtract
+          <font-awesome-icon icon="minus" /> Subtract
         </b-form-radio>
 
-
-        <b-button @click="removeAvailabilities" variant="light" size="md" class="float-right ml-1 mr-0">
+        <b-button
+          @click="removeAvailabilities"
+          variant="light"
+          size="md"
+          class="float-right ml-1 mr-0"
+        >
           <font-awesome-icon icon="trash-can" />
         </b-button>
 
@@ -162,80 +165,133 @@
           hide-footer
           no-stacking
         >
+          <h1 class="border-bottom mb-2">Modes</h1>
 
-        <h1 class="border-bottom mb-2">Modes</h1>
-
-        <div>
-          <h3 class="mt-5">
-            View 
-          </h3>
-          <p class="lead">
-            In this mode, you can only view availabilities and reservations. Clicking on dates will preview availabilities for that day and clicking on events will
-            display all the details related to that event. This is the default mode and the only mode nonowners have.
-          </p>
-        </div>
-
-        <div>
-          <h3 class="mt-5">
-            Add 
-          </h3>
-          <p class="lead">
-            While in Add mode, selecting the dates will add new availabilities. When the selection is done, you will be prompted
-            for additional details and options available. Use your mouse and drag across dates or a day.
-          </p>
-          <div class="d-flex justify-content-center" >
-            <img src="@/static/addbasic.gif" class="" alt="" srcset="">
-          </div>
-          <div class="d-flex justify-content-center" >
-            <img src="@/static/addweek.gif" alt="" srcset="">
-          </div>
-            
-        </div>
-
-        <div>
-          <h3 class="mt-5">
-            Subtract 
-          </h3>
-          <p class="lead">
-            Subtract mode does the opposite of Add mode. Everything added by the Add mode is subtracted by the Subtract mode. Availabilities 
-            can be deleted, split, shortened.
-          </p>
-
-          <div class="d-flex justify-content-center mt-4">
-            <p>Shortening the availability</p>
+          <div>
+            <h3 class="mt-5">View</h3>
+            <p class="lead">
+              In this mode, you can only view availabilities and reservations.
+              Clicking on dates will preview availabilities for that day and
+              clicking on events will display all the details related to that
+              event. This is the default mode and the only mode nonowners have.
+            </p>
           </div>
 
-          <div class="d-flex justify-content-center mb-5" >
-            <img src="@/static/subtractshorten.gif" alt="" srcset="">
+          <div>
+            <h3 class="mt-5">Add</h3>
+            <p class="lead">
+              While in Add mode, selecting the dates will add new
+              availabilities. When the selection is done, you will be prompted
+              for additional details and options available. Use your mouse and
+              drag across dates or a day.
+            </p>
+            <div class="d-flex justify-content-center">
+              <img src="@/static/addbasic.gif" class="" alt="" srcset="" />
+            </div>
+            <div class="d-flex justify-content-center">
+              <img src="@/static/addweek.gif" alt="" srcset="" />
+            </div>
           </div>
 
-          <div class="d-flex justify-content-center mt-4">
-            <p>Splitting the availability from 9:00-15:00 to 9:00-10:00 and 10:30-15:00</p>
+          <div>
+            <h3 class="mt-5">Subtract</h3>
+            <p class="lead">
+              Subtract mode does the opposite of Add mode. Everything added by
+              the Add mode is subtracted by the Subtract mode. Availabilities
+              can be deleted, split, shortened.
+            </p>
+
+            <div class="d-flex justify-content-center mt-4">
+              <p>Shortening the availability</p>
+            </div>
+
+            <div class="d-flex justify-content-center mb-5">
+              <img src="@/static/subtractshorten.gif" alt="" srcset="" />
+            </div>
+
+            <div class="d-flex justify-content-center mt-4">
+              <p>
+                Splitting the availability from 9:00-15:00 to 9:00-10:00 and
+                10:30-15:00
+              </p>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <img src="@/static/subtractsplit.gif" alt="" srcset="" />
+            </div>
+
+            <div class="d-flex justify-content-center mt-5">
+              <p>Split result</p>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <img
+                src="@/static/splitresult.png"
+                class="w-100"
+                alt=""
+                srcset=""
+                style="max-height: 60vh; max-width: 60vw"
+              />
+            </div>
           </div>
-
-          <div class="d-flex justify-content-center" >
-            <img src="@/static/subtractsplit.gif" alt="" srcset="">
-          </div>
-
-          <div class="d-flex justify-content-center mt-5" >
-            <p>Split result</p>
-          </div>
-
-          <div class="d-flex justify-content-center" >
-            <img src="@/static/splitresult.png" class="w-100" alt="" srcset="" style="max-height: 60vh; max-width: 60vw;">
-          </div>
-
-        </div>
-
         </b-modal>
 
-        <b-button v-b-modal.help_modal variant="light" size="md" class="float-right mr-0">
+        <b-button
+          v-b-modal.help_modal
+          variant="light"
+          size="md"
+          class="float-right mr-0"
+        >
           <font-awesome-icon icon="question" /> Help
         </b-button>
       </b-form-group>
     </div>
 
     <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+
+    <b-modal ref="reservationModal" hide-header hide-footer>
+      <h5><font-awesome-icon icon="calendar-check" /> Reservation</h5>
+      <p>You can reserve the whole appointment or just the part of it.</p>
+      <b-form-radio-group v-model="selectedAppointment">
+        <b-form-radio id="whole-appointment" value="whole" checked
+          >I want the whole appointment.</b-form-radio
+        >
+        <b-form-radio id="part-appointment" value="part"
+          >I want to choose date and time.</b-form-radio
+        >
+      </b-form-radio-group>
+      <div v-if="selectedAppointment == 'part'">
+        <hr />
+        <label>Choose starting time:</label>
+        <b-form inline>
+          <b-form-datepicker
+            v-model="chosenStartDate"
+            :min="appointment.startDate"
+            :max="chosenEndDate"
+            locale="en"
+          ></b-form-datepicker>
+          <b-form-input v-model="chosenStartTime" type="time"></b-form-input>
+        </b-form>
+        <label class="mt-2">Choose ending time:</label>
+        <b-form inline>
+          <b-form-datepicker
+            v-model="chosenEndDate"
+            :min="chosenStartDate"
+            :max="appointment.endDate"
+            locale="en"
+          ></b-form-datepicker>
+          <b-form-input v-model="chosenEndTime" type="time"></b-form-input>
+        </b-form>
+      </div>
+      <hr />
+      <p>Total price for your reservation:</p>
+      <div style="float: right">
+        <b-button @click="closeModal">Cancel</b-button>
+        <b-button @click="reserveAppointment" class="prime-btn"
+          >Reserve now</b-button
+        >
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -254,6 +310,17 @@ export default {
   data() {
     return {
       createAvailabilityModal: true,
+      selectedAppointment: "whole",
+      chosenStartDate: null,
+      chosenStartTime: null,
+      chosenEndDate: null,
+      chosenEndTime: null,
+      appointment: {
+        startDate: null,
+        endDate: null,
+        startTime: null,
+        endTime: null
+      },
       options: [
         { text: "No repeat", value: "norepeat" },
         { text: "Every week", value: "everyweek" },
@@ -321,7 +388,7 @@ export default {
         eventStartEditable: false,
         background: "green",
         eventBackgroundColor: "#7bb888",
-        eventBorderColor: "#7bb888"
+        eventBorderColor: "#7bb888",
         /* you can update a remote database when these fire:
         eventAdd:
         eventChange:
@@ -349,7 +416,7 @@ export default {
       if (val == "view") {
         this.calendarOptions.selectable = false;
         this.calendarOptions.dateClick = this.handleDayClick;
-      } else if(val == "add") {
+      } else if (val == "add") {
         calendarApi.setOption("eventBackgroundColor", "#7bb888");
         calendarApi.setOption("eventBorderColor", "#7bb888");
         this.calendarOptions.selectable = true;
@@ -364,13 +431,18 @@ export default {
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends; // update a property
     },
+    closeModal() {
+      this.$refs["reservationModal"].hide();
+    },
+    reserveAppointment() {},
+    calculateReservationPrice() {},
     handleDateSelect(selectInfo) {
       console.log("SELECT INFO:", selectInfo);
       let calendarApi = this.$refs.fullCalendar.getApi();
       let startMoment = moment(selectInfo.start);
       let endMoment = moment(selectInfo.end);
-      if(calendarApi.view.type == "dayGridMonth") {
-        endMoment = endMoment.subtract(1, 'd');
+      if (calendarApi.view.type == "dayGridMonth") {
+        endMoment = endMoment.subtract(1, "d");
       }
       console.log(startMoment);
       console.log(endMoment);
@@ -383,18 +455,17 @@ export default {
         this.selectedDays = days;
       } else {
         let tempStartMoment = startMoment;
-        if(true) {
-          while (tempStartMoment.isSameOrBefore(endMoment, 'day')) {
+        if (true) {
+          while (tempStartMoment.isSameOrBefore(endMoment, "day")) {
             this.selectedDays.push(days[tempStartMoment.day()]);
             tempStartMoment.add(1, "d");
           }
         } else {
-          while (tempStartMoment.isBefore(endMoment, 'day')) {
+          while (tempStartMoment.isBefore(endMoment, "day")) {
             this.selectedDays.push(days[tempStartMoment.day()]);
             tempStartMoment.add(1, "d");
           }
         }
-        
       }
 
       this.select_info = selectInfo;
@@ -404,14 +475,17 @@ export default {
     handleDayClick(clickInfo) {
       let calendarApi = this.$refs.fullCalendar.getApi();
       console.log("CLICK INFO:", clickInfo);
-      if(this.mode == "view") {
+      if (this.mode == "view") {
         calendarApi.gotoDate(clickInfo.date);
         calendarApi.changeView("timeGridDay");
       }
     },
-
     handleEventClick(clickInfo) {
-      confirm(`Clicked event '${clickInfo.event.title}'`);
+      //confirm(`Clicked event '${clickInfo.event.title}'`);
+      console.log();
+      this.appointment.startDate = clickInfo.event.start;
+      this.appointment.endDate = clickInfo.event.end;
+      this.$refs["reservationModal"].show();
     },
     handleEvents(events) {
       this.currentEvents = events;
@@ -420,18 +494,17 @@ export default {
       this.getAvailabilities();
     },
     timePicked() {
-      if (this.selected_repeat != 'norepeat') {
+      if (this.selected_repeat != "norepeat") {
         this.$refs.month_modal.show();
-      }
-      else {
+      } else {
         this.$refs.repeat_modal.hide();
         this.createPatterns();
       }
     },
     timeModal() {
       let calendarApi = this.$refs.fullCalendar.getApi();
-      if(calendarApi.view.type == "dayGridMonth") {
-        this.$refs.time_modal.show()
+      if (calendarApi.view.type == "dayGridMonth") {
+        this.$refs.time_modal.show();
       } else {
         this.startTime = moment(this.select_info.start).format("HH:mm:ss");
         this.endTime = moment(this.select_info.end).format("HH:mm:ss");
@@ -440,22 +513,28 @@ export default {
     },
     createPatterns() {
       let calendarApi = this.$refs.fullCalendar.getApi();
-      if(calendarApi.view.type == "timeGridWeek") {
-        this.continuous = 'true';
+      if (calendarApi.view.type == "timeGridWeek") {
+        this.continuous = "true";
       }
 
       if (this.selected_repeat == "week") {
         this.create_repeat_week_patterns();
       } else if (this.selected_repeat == "norepeat") {
         this.create_no_repeat_patterns();
-      }  else {
+      } else {
         this.create_date_patterns();
       }
       this.selectedMonths = [];
       this.selectedDays = [];
       this.$refs.month_modal.hide();
     },
-    addMonthsAndDaysToPattern(patternStart, patternEnd, starDay=false, seperateDays=false, date='') {
+    addMonthsAndDaysToPattern(
+      patternStart,
+      patternEnd,
+      starDay = false,
+      seperateDays = false,
+      date = ""
+    ) {
       for (let month of this.selectedMonths) {
         patternStart += month + ",";
         patternEnd += month + ",";
@@ -465,13 +544,13 @@ export default {
       patternEnd = patternEnd.substring(0, patternEnd.length - 1);
       patternEnd += " ";
       let selectedDays;
-      if(seperateDays) {
-        selectedDays = [date.format("ddd").toUpperCase()]
+      if (seperateDays) {
+        selectedDays = [date.format("ddd").toUpperCase()];
       } else {
         selectedDays = this.selectedDays;
       }
 
-      if(!starDay) {
+      if (!starDay) {
         for (let day of selectedDays) {
           patternStart += day + ",";
           patternEnd += day + ",";
@@ -479,22 +558,24 @@ export default {
         patternStart = patternStart.substring(0, patternStart.length - 1);
         patternEnd = patternEnd.substring(0, patternEnd.length - 1);
       } else {
-         patternStart += "*";
-         patternEnd += "*";
+        patternStart += "*";
+        patternEnd += "*";
       }
-      
+
       return { start: patternStart, end: patternEnd };
     },
     sendPattern(patterns) {
-      let to_send={
+      let to_send = {
         patterns: patterns,
-        selectedStartDate: moment(this.select_info.start).format("YYYY-MM-DD")+"T00:00:00",
-        selectedEndDate: moment(this.select_info.end).format("YYYY-MM-DD")+"T00:00:00",
+        selectedStartDate:
+          moment(this.select_info.start).format("YYYY-MM-DD") + "T00:00:00",
+        selectedEndDate:
+          moment(this.select_info.end).format("YYYY-MM-DD") + "T00:00:00",
         repeat: this.selected_repeat,
-        addition: this.mode=="add",
+        addition: this.mode == "add",
         rentableId: this.$route.params.adventure,
       };
-      let that=this;
+      let that = this;
       console.log(to_send);
       this.$axios
         .post("/api/define-availability", JSON.stringify(to_send), {
@@ -517,10 +598,19 @@ export default {
       let patterns = [];
       let startDateCopy = startDate.clone();
       let calendarApi = this.$refs.fullCalendar.getApi();
-      if(calendarApi.view.type == "dayGridMonth") {
-        endDate = endDate.subtract(1, 'd');
+      if (calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, "d");
       }
-      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      let info = {
+        startDate,
+        endDate,
+        startDateCopy,
+        startMin,
+        startHour,
+        endMin,
+        endHour,
+        patterns,
+      };
       console.log("LOG:", info);
       this.createPatternList(info, false, true, true);
       this.sendPattern(patterns);
@@ -532,14 +622,23 @@ export default {
       let endHour = parseInt(this.endTime.split(":")[0]);
       let startMin = parseInt(this.startTime.split(":")[1]);
       let endMin = parseInt(this.endTime.split(":")[1]);
-      let patterns = []
-      this.selectedMonths = [this.months[startDate.month()]]
+      let patterns = [];
+      this.selectedMonths = [this.months[startDate.month()]];
       let startDateCopy = startDate.clone();
       let calendarApi = this.$refs.fullCalendar.getApi();
-      if(calendarApi.view.type == "dayGridMonth") {
-        endDate = endDate.subtract(1, 'd');
+      if (calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, "d");
       }
-      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      let info = {
+        startDate,
+        endDate,
+        startDateCopy,
+        startMin,
+        startHour,
+        endMin,
+        endHour,
+        patterns,
+      };
       this.createPatternList(info, false, false, false);
       this.sendPattern(patterns);
     },
@@ -550,65 +649,96 @@ export default {
       let endHour = parseInt(this.endTime.split(":")[0]);
       let startMin = parseInt(this.startTime.split(":")[1]);
       let endMin = parseInt(this.endTime.split(":")[1]);
-      let patterns = []
+      let patterns = [];
       let startDateCopy = startDate.clone();
       let calendarApi = this.$refs.fullCalendar.getApi();
-      if(calendarApi.view.type == "dayGridMonth") {
-        endDate = endDate.subtract(1, 'd');
+      if (calendarApi.view.type == "dayGridMonth") {
+        endDate = endDate.subtract(1, "d");
       }
-      let info = {startDate, endDate, startDateCopy, startMin, startHour, endMin, endHour, patterns};
+      let info = {
+        startDate,
+        endDate,
+        startDateCopy,
+        startMin,
+        startHour,
+        endMin,
+        endHour,
+        patterns,
+      };
       this.createPatternList(info, true, false, false);
       this.sendPattern(patterns);
     },
-    createPatternList(info, starDay=false, starDate=false, seperateDays=false) {
-      let datePattern = function(date) {
-        if(starDate)
-          return '*'
-        else
-          return date.date();
-      }
-      while(info.startDate.isSameOrBefore(info.endDate, 'day')) {
-        let patternStart="";
-        let patternEnd="";
+    createPatternList(
+      info,
+      starDay = false,
+      starDate = false,
+      seperateDays = false
+    ) {
+      let datePattern = function (date) {
+        if (starDate) return "*";
+        else return date.date();
+      };
+      while (info.startDate.isSameOrBefore(info.endDate, "day")) {
+        let patternStart = "";
+        let patternEnd = "";
 
-        if(this.continuous=='true'&&!info.startDateCopy.isSame(info.endDate, 'day')) {
-          if(info.startDateCopy.isSame(info.startDate)) {
-            patternStart+=`0 ${info.startMin} ${info.startHour} `+datePattern(info.startDate)+" ";
-            patternEnd+=`59 59 23 `+datePattern(info.startDate)+" ";
-          } else if(this.isLastDateBeforeEnd(info.startDate, info.endDate)) {
-            patternStart+=`0 0 0 `+datePattern(info.startDate)+" ";
-            patternEnd+=`0 ${info.endMin} ${info.endHour} `+datePattern(info.startDate)+" ";
+        if (
+          this.continuous == "true" &&
+          !info.startDateCopy.isSame(info.endDate, "day")
+        ) {
+          if (info.startDateCopy.isSame(info.startDate)) {
+            patternStart +=
+              `0 ${info.startMin} ${info.startHour} ` +
+              datePattern(info.startDate) +
+              " ";
+            patternEnd += `59 59 23 ` + datePattern(info.startDate) + " ";
+          } else if (this.isLastDateBeforeEnd(info.startDate, info.endDate)) {
+            patternStart += `0 0 0 ` + datePattern(info.startDate) + " ";
+            patternEnd +=
+              `0 ${info.endMin} ${info.endHour} ` +
+              datePattern(info.startDate) +
+              " ";
           } else {
-            patternStart+=`0 0 0 `+datePattern(info.startDate)+" ";
-            patternEnd+=`59 59 23 `+datePattern(info.startDate)+" ";
+            patternStart += `0 0 0 ` + datePattern(info.startDate) + " ";
+            patternEnd += `59 59 23 ` + datePattern(info.startDate) + " ";
           }
         } else {
-          patternStart+=`0 ${info.startMin} ${info.startHour} `+datePattern(info.startDate)+" ";
-          patternEnd+=`0 ${info.endMin} ${info.endHour} `+datePattern(info.startDate)+" ";
+          patternStart +=
+            `0 ${info.startMin} ${info.startHour} ` +
+            datePattern(info.startDate) +
+            " ";
+          patternEnd +=
+            `0 ${info.endMin} ${info.endHour} ` +
+            datePattern(info.startDate) +
+            " ";
         }
-        let ret=this.addMonthsAndDaysToPattern(patternStart, patternEnd, starDay, seperateDays, info.startDate);
-        patternStart=ret.start;
-        patternEnd=ret.end;
-        info.startDate.add(1, 'days');
+        let ret = this.addMonthsAndDaysToPattern(
+          patternStart,
+          patternEnd,
+          starDay,
+          seperateDays,
+          info.startDate
+        );
+        patternStart = ret.start;
+        patternEnd = ret.end;
+        info.startDate.add(1, "days");
         info.patterns.push([patternStart, patternEnd]);
       }
     },
-    isLastDateBeforeEnd(startDate, endDate){
+    isLastDateBeforeEnd(startDate, endDate) {
       let s = startDate.clone();
-      s.add(1, 'days');
-      return startDate.isSame(endDate, 'day');
+      s.add(1, "days");
+      return startDate.isSame(endDate, "day");
     },
     removeAvailabilities() {
       let that = this;
       this.$axios
-        .post(
-          `/api/remove-availabilities?id=${this.$route.params.adventure}` ,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        ).then(that.getAvailabilities());
+        .post(`/api/remove-availabilities?id=${this.$route.params.adventure}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(that.getAvailabilities());
     },
     async getAvailabilities() {
       let calendarApi = this.$refs.fullCalendar.getApi();
@@ -646,7 +776,6 @@ export default {
               end: temp.endDateTime,
               display: "block",
               color: "#7bb888",
-              
             });
           }
         });
@@ -656,7 +785,6 @@ export default {
 </script>
 
 <style>
-
 </style>
 
 

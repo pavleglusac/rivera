@@ -308,15 +308,15 @@ public class CottageService {
     }
 
     public List<CottageDTO> sortCottages(String sortParam, List<CottageDTO> cottages) {
-        return switch (sortParam) {
-            case "name-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName)).toList();
-            case "name-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName, Comparator.reverseOrder())).toList();
-            case "price-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour)).toList();
-            case "price-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour, Comparator.reverseOrder())).toList();
-            case "score-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore)).toList();
-            case "score-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
-            default -> cottages;
-        };
+        switch (sortParam) {
+            case "name-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getName)).toList();
+            case "name-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getName, Comparator.reverseOrder())).toList();
+            case "price-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour)).toList();
+            case "price-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "score-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore)).toList();
+            case "score-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            default: return cottages;
+        }
     }
 
     public List<CottageDTO> searchCottagesForOwner(SearchParams searchParams) {

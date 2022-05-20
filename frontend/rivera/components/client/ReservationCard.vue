@@ -1,6 +1,6 @@
 <template>
   <b-card
-    class="mb-2"
+    class="mb-2 reservation-card"
     :class="{
       'adventure-reservation-card': reservation.entity.kind == 'ADVENTURE',
       'boat-reservation-card': reservation.entity.kind == 'BOAT',
@@ -20,8 +20,8 @@
       {{ reservation.entity.name }}</span
     >
     <b-card-text style="margin-top: 10px"
-      ><font-awesome-icon icon="clock" />&nbsp;{{ reservation.startDateTime }} -
-      {{ reservation.endDateTime }}<br />
+      ><font-awesome-icon icon="clock" />&nbsp;{{ new Date(reservation.endDateTime).toDateString() }} -
+      {{ new Date(reservation.endDateTime).toDateString() }}<br />
       <font-awesome-icon icon="location-dot" />&nbsp;&nbsp;{{
         reservation.entity.address
       }}, {{ reservation.entity.city }},
@@ -34,26 +34,16 @@
 
 <script>
 export default {
-  /*props: {
-        reservation: {
-            type: Object,
-            required: true
-        }
-    },*/
+  props: {
+      reservation: {
+          type: Object,
+          required: true
+      }
+    },
+  methods: {
+  },
   data() {
     return {
-      reservation: {
-        entity: {
-          profilePicture: "",
-          kind: "ADVENTURE",
-          name: "Cool adventure",
-          city: "City",
-          country: "Country",
-          address: "Address",
-        },
-        startDateTime: "12.03.2000. 13:05",
-        endDateTime: "12.03.2000. 14:05",
-      },
     };
   },
   methods: {},
@@ -61,9 +51,11 @@ export default {
 </script>
 
 <style>
+.reservation-card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
+}
 .adventure-reservation-card {
   border-top: 10px solid #11698e;
-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
 }
 
 .boat-reservation-card {
