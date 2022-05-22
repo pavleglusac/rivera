@@ -1,16 +1,10 @@
 <template>
 	<div
-		class="
-			registration-form
-			fixed-top
-			d-flex
-			align-items-center
-			justify-content-center
-		"
+		
 		style="bottom: 0; overflow-y: auto"
 	>
 		<b-card class="text-center mx-auto my-auto card mt-5">
-			<img src="..\..\static\rivera_logo_hor.png" />
+			<img src="..\..\static\rivera_logo_hor.png" style="height: 100px;" />
 			<form id="registrationForm">
 				<div class="form-row">
 					<div class="form-group col-6">
@@ -188,6 +182,7 @@ import useValidate from "@vuelidate/core";
 import ErrorDiv from "./ErrorDiv.vue";
 
 export default {
+	props: ["usernameToRegister"],
 	data() {
 		return {
 			email: "",
@@ -209,7 +204,7 @@ export default {
 	mounted() {
 		let that = this;
 		this.$axios
-			.get("/api/admin/get-owner?username=" + this.$route.params.registration)
+			.get("/api/admin/get-owner?username=" + this.usernameToRegister)
 			.then((resp) => {
 				let owner = resp.data;
 				that.email = owner.email;
@@ -244,7 +239,7 @@ export default {
 			this.$axios
 				.post(
 					"/api/admin/activate-owner?username=" +
-						this.$route.params.registration
+						this.usernameToRegister
 				)
 				.then((resp) => {
 					console.log("Uspesno");
@@ -261,7 +256,7 @@ export default {
 			this.$axios
 				.post(
 					"/api/admin/deactivate-owner?username=" +
-						this.$route.params.registration +
+						this.usernameToRegister +
 						"&reason=" +
 						this.reason
 				)

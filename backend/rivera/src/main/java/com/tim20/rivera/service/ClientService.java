@@ -216,7 +216,6 @@ public class ClientService {
         client.setSubscribed(new ArrayList<>());
         client.setReservations(new ArrayList<>());
         client.setReviews(new ArrayList<>());
-        client.setCategories(new ArrayList<>());
         List<Role> roles = roleService.findByName("ROLE_CLIENT");
         client.setRoles(roles);
         return client;

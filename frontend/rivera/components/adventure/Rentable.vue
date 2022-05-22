@@ -20,7 +20,7 @@
               {{ perHour }}$ per hour / {{ perDay }}$ per day
             </span>
           </h6>
-          <li v-for="tag in tags">
+          <li v-for="tag in tags" :key="tag">
             <span class="tag">{{ tag }}</span>
           </li>
           <br />

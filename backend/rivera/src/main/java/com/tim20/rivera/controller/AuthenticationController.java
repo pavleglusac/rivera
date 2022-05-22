@@ -2,13 +2,12 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.exception.ResourceConflictException;
+import com.tim20.rivera.model.Admin;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
-import com.tim20.rivera.service.ClientService;
-import com.tim20.rivera.service.EmailService;
-import com.tim20.rivera.service.OwnerService;
-import com.tim20.rivera.service.PersonService;
+import com.tim20.rivera.repository.ClientRepository;
+import com.tim20.rivera.service.*;
 import com.tim20.rivera.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +37,8 @@ public class AuthenticationController {
     private ClientService clientService;
     @Autowired
     private OwnerService ownerService;
+    @Autowired
+    private AdminService adminService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -115,7 +116,6 @@ public class AuthenticationController {
     @GetMapping(path = "getRole")
     public String getRole() {
         try {
-            System.out.println(((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles());
             return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles().get(0).getName();
         } catch (Exception e) {
             return "unauthenticated";
@@ -130,6 +130,9 @@ public class AuthenticationController {
         Owner owner = ownerService.findByUsername(username);
         if (owner != null)
             return "OWNER";
+        Admin admin = adminService.findByUsername(username);
+        if(admin != null)
+            return "ADMIN";
         return "";
     }
 }
