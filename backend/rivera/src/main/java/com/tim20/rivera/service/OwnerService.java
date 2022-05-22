@@ -114,6 +114,8 @@ public class OwnerService {
     }
 
     public OwnerRequestDTO ownerToOwnerRequestDTO(Owner owner){
+        if(owner == null)
+            return null;
         OwnerRequestDTO ownerRequestDTO = new OwnerRequestDTO();
         ownerRequestDTO.setAddress(owner.getAddress());
         ownerRequestDTO.setCity(owner.getCity());

@@ -202,28 +202,7 @@ export default {
 		};
 	},
 	mounted() {
-		let that = this;
-		this.$axios
-			.get("/api/admin/get-owner?username=" + this.usernameToRegister)
-			.then((resp) => {
-				let owner = resp.data;
-				that.email = owner.email;
-				that.username = owner.username;
-				that.password = owner.password;
-				that.name = owner.name;
-				that.surname = owner.surname;
-				that.services = owner.services;
-				that.phoneNumber = owner.phoneNumber;
-				that.country = owner.country;
-				that.city = owner.city;
-				that.address = owner.address;
-				that.status = owner.status;
-				that.description = owner.description;
-				console.log(owner);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		this.getUser();
 	},
 	components: {
 		ErrorDiv: ErrorDiv,
@@ -268,6 +247,36 @@ export default {
 					console.log(err);
 				});
 		},
+		getUser() {
+			let that = this;
+			this.$axios
+				.get("/api/admin/get-owner?username=" + this.usernameToRegister)
+				.then((resp) => {
+					let owner = resp.data;
+					that.email = owner.email;
+					that.username = owner.username;
+					that.password = owner.password;
+					that.name = owner.name;
+					that.surname = owner.surname;
+					that.services = owner.services;
+					that.phoneNumber = owner.phoneNumber;
+					that.country = owner.country;
+					that.city = owner.city;
+					that.address = owner.address;
+					that.status = owner.status;
+					that.description = owner.description;
+					console.log(owner);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
 	},
+	watch: {
+		usernameToRegister: function(newVal, oldVal) {
+			console.log(newVal);
+			this.getUser();
+		}
+	}
 };
 </script>

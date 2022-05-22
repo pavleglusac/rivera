@@ -13,7 +13,7 @@
                     Total requests: {{totalRequests}}
                 </p>
                 <p>
-                    Active accounts: {{activeAccounts}}
+                    Active owner accounts: {{activeAccounts}}
                 </p>
                 <p>
                     Terminated accounts: {{terminatedAccounts}}
@@ -21,10 +21,14 @@
 			</b-card>
 
             <b-card
-				class=" card w-75 mt-2 mb-5 ml-2"
-				style="margin-top: 0; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px"
+				class=" card  mt-2 mb-5 ml-2"
+				style="margin-top: 0; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;"
 			>
-                <validate-registration class="h-100 child" :usernameToRegister="'marko'"></validate-registration>
+                <validate-registration class="h-100 child" :usernameToRegister="currentUsername"></validate-registration>
+                
+                <div class="d-flex flex w-100 justify-content-end mt-3">
+                    <b-button @click="nextUsername">Next</b-button>
+                </div>
 			</b-card>
 		</div>
 	</div>
@@ -39,8 +43,42 @@ export default {
             totalRequests: 1389,
             activeAccounts: 28,
             terminatedAccounts: 6,
+            unregisteredUsernames: [],
+            currentUsername: ''
         }
     },
+    mounted() {
+        this.getUnregisteredUsernames();
+        this.getStats();
+    },
+    methods: {
+        getUnregisteredUsernames() {
+            let that = this;
+            this.$axios.get('/api/admin/unregistered-usernames')
+            .then(resp => {
+                console.log(resp.data);
+                that.unregisteredUsernames.push(...resp.data);
+                that.currentUsername = that.unregisteredUsernames[0];
+            })
+        },
+        nextUsername() {
+            if(this.unregisteredUsernames.length > 0) {
+                let ko = this.unregisteredUsernames.shift();
+                this.unregisteredUsernames.push(ko);
+                this.currentUsername = this.unregisteredUsernames[0];
+            }
+        },
+        getStats() {
+            let that = this;
+            this.$axios.get('/api/admin/registered-stats')
+            .then(resp => {
+                console.log(resp.data);
+                that.activeAccounts = typeof resp.data.ACTIVE !== 'undefined' ? resp.data.ACTIVE : 0;
+                that.totalRequests = typeof resp.data.WAITING !== 'undefined' ? resp.data.WAITING : 0;
+                that.terminatedAccounts = typeof resp.data.TERMINATED !== 'undefined' ? resp.data.TERMINATED : 0;
+            });
+        }
+    }
 
 };
 </script>

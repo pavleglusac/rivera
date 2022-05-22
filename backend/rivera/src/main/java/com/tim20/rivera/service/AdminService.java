@@ -1,14 +1,14 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.model.Admin;
-import com.tim20.rivera.model.MemberCategory;
-import com.tim20.rivera.model.Rules;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AdminService {
@@ -71,5 +71,20 @@ public class AdminService {
         oldRule.setIncomePercentage(rules.getIncomePercentage());
         oldRule.setPointsPerReservation(rules.getPointsPerReservation());
         rulesRepository.save(oldRule);
+    }
+
+    public List<String> getUnregisteredUsernames() {
+        return ownerRepository
+                .findAll()
+                .stream()
+                .filter(owner -> owner.getStatus().equals(AccountStatus.WAITING))
+                .map(Person::getUsername)
+                .collect(Collectors.toList());
+    }
+
+    public HashMap<String, Integer> getRegisteredStats() {
+        HashMap<String, Integer> stats = new HashMap<String, Integer>();
+        ownerRepository.findAll().forEach(x -> stats.put(x.getStatus().name(), stats.getOrDefault(x.getStatus().name(), 0) + 1));
+        return stats;
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,8 @@ public class AdminController {
 
     @GetMapping(path = "get-owner")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username) throws IOException {
+        if(username == null || username.isBlank())
+            return null;
         return ownerService.findByUsernameDTO(username);
     }
 
@@ -81,5 +84,15 @@ public class AdminController {
         }
         adminService.updateRules(rules);
         return ResponseEntity.ok().body("ok");
+    }
+
+    @GetMapping(path="unregistered-usernames")
+    public List<String> getUnregisteredUsernames() {
+        return adminService.getUnregisteredUsernames();
+    }
+
+    @GetMapping(path ="registered-stats")
+    public HashMap<String, Integer> getRegisteredStats() {
+        return adminService.getRegisteredStats();
     }
 }
