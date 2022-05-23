@@ -81,8 +81,8 @@ export default {
 	methods: {
 		goToClient() {
 			this.$router.push({
-				path: "/client/" + this.reservation.client.username,
-			}); //TODO: kad se naprave stranice korisnika odvedi ih tamo
+				path: "/profile/" + this.reservation.client.username,
+			}); 
 		},
 		formatDate(date) {
 			var hours = date.getHours();

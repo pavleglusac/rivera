@@ -16,4 +16,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByStartDateTimeIsAfter(LocalDateTime dateTime);
     List<ReservationRepository>  findByRentableId(String id);
     List<Reservation> findByRentableOwnerUsername(String username);
+    List<Reservation> findByClientUsername(String username);
 }

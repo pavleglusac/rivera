@@ -1,9 +1,6 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.ClientDTO;
-import com.tim20.rivera.dto.ClientRentableDto;
-import com.tim20.rivera.dto.ClientRequestDTO;
-import com.tim20.rivera.dto.EntityDTO;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ClientRepository;
 import com.tim20.rivera.repository.RentableRepository;
@@ -19,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -125,12 +123,7 @@ public class ClientService {
         Client client = clientRepository.findByUsername(clientUsername);
         for (Rentable entity: client.getSubscribed()) {
             if(entity.getName().toLowerCase().contains(search.toLowerCase())) {
-                if (entity instanceof Adventure)
-                    entities.add(new EntityDTO(entity, EntityKind.ADVENTURE));
-                else if (entity instanceof Cottage)
-                    entities.add(new EntityDTO(entity, EntityKind.COTTAGE));
-                else if (entity instanceof Boat)
-                    entities.add(new EntityDTO(entity, EntityKind.BOAT));
+                entities.add(new EntityDTO(entity));
             }
         }
         return entities;
@@ -254,4 +247,9 @@ public class ClientService {
         return client.getSubscribed().contains(rentable);
     }
 
+    public void addReservation(String username, Reservation reservation) {
+        Client client = clientRepository.findByUsername(username);
+        client.getReservations().add(reservation);
+        clientRepository.save(client);
+    }
 }

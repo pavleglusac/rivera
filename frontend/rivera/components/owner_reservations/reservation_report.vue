@@ -36,7 +36,7 @@
                     <select
                     v-model="type"
                     class="form-control"
-                    v-bind:class="{ 'error-boarder': $v.type.$invalid }"
+                    v-bind:class="{ 'error-boarder': $v.type.$invalid && typeClicked }"
 				   @click="typeClicked = true;"
                     >
                     <option v-for="tip in types" :key="tip">{{ tip }}</option>
@@ -47,7 +47,7 @@
             <div class="form-group">
     			<label for="exampleFormControlTextarea1">Text</label>
 				<textarea class="form-control" id="exampleFormControlTextarea1" v-model="text" rows="3" placeholder="Text"
-				   v-bind:class="{ 'error-boarder': $v.text.$invalid }"
+				   v-bind:class="{ 'error-boarder': $v.text.$invalid && typeClicked }"
 				   @click="textClicked = true;"
 				></textarea>
             	<ErrorDiv v-if="textClicked" :parameter="$v.text" :name="'Text'"> </ErrorDiv>
