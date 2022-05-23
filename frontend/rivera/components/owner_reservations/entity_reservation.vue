@@ -36,7 +36,7 @@
         </div>
         <div class="d-flex justify-content-between align-items-center">
             <span class="font-1h"></span>
-            <div v-if="!isDateAfterToday(new Date(this.reservation.end))">
+            <div v-if="isDateAfterToday(new Date(this.reservation.end))">
             <div v-if="!this.reservation.report">
               <b-button variant="primary" class="book-btn" @click="fileReport">File a report</b-button>
             </div>
