@@ -147,6 +147,12 @@ public class BoatService {
         boat.setCity(dto.getCity());
         boat.setCountry(dto.getCountry());
         boat.setAdditionalServices(dto.getServices());
+        boat.setCapacity(dto.getCapacity());
+        boat.setEnginePower(dto.getEnginePower());
+        boat.setEnginesNumber(dto.getEnginesNumber());
+        boat.setType(dto.getType());
+        boat.setMaxSpeed(dto.getMaxSpeed());
+        boat.setLength(dto.getLength());
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -189,14 +195,15 @@ public class BoatService {
     public BoatDTO boatToDto(Boat boat) {
         BoatDTO dto = new BoatDTO();
         dto.setAddress(boat.getAddress());
-        StringBuilder roomsString = new StringBuilder();
         dto.setEnginePower(boat.getEnginePower());
         dto.setCapacity(boat.getCapacity());
         dto.setMaxSpeed(boat.getMaxSpeed());
         dto.setEnginesNumber(boat.getEnginesNumber());
         dto.setId(boat.getId());
+        dto.setLength(boat.getLength());
         dto.setAverageScore(boat.getAverageScore());
         dto.setDescription(boat.getDescription());
+        dto.setType(boat.getType());
         Pricelist pricelist = boat.getCurrentPricelist();
         dto.setCancellationTerms(pricelist.getCancellationTerms());
         dto.setName(boat.getName());
@@ -221,10 +228,11 @@ public class BoatService {
     private BoatProfileDTO boatToProfileDto(Boat boat) {
         BoatProfileDTO dto = new BoatProfileDTO();
         dto.setAddress(boat.getAddress());
-        StringBuilder roomsString = new StringBuilder();
+        dto.setLength(boat.getLength());
         dto.setId(boat.getId());
         dto.setAverageScore(boat.getAverageScore());
         dto.setDescription(boat.getDescription());
+        dto.setType(boat.getType());
         Pricelist pricelist = boat.getCurrentPricelist();
         dto.setCancellationTerms(pricelist.getCancellationTerms());
         dto.setName(boat.getName());
@@ -233,7 +241,13 @@ public class BoatService {
                 .stream()
                 .map(Tag::getName)
                 .collect(Collectors.toList())
-        );
+        );dto.setAddress(boat.getAddress());
+        dto.setEnginePower(boat.getEnginePower());
+        dto.setCapacity(boat.getCapacity());
+        dto.setMaxSpeed(boat.getMaxSpeed());
+        dto.setEnginesNumber(boat.getEnginesNumber());
+        dto.setId(boat.getId());
+        dto.setAverageScore(boat.getAverageScore());
         dto.setCity(boat.getCity());
         dto.setCountry(boat.getCountry());
         dto.setPerDay(pricelist.getPricePerDay());

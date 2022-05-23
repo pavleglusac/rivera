@@ -102,9 +102,9 @@
 			<div class="form-row">
 				<div class="form-group col-4">
 					<label for="inputType">Type</label>
-					<input type="text" class="form-control" v-model="type" id="inputType" placeholder="1234 Main St"
+					<input type="text" class="form-control" v-model="type" id="inputType" placeholder="Type"
 					v-bind:class="{ 'error-boarder': $v.type.$invalid }">
-            <ErrorDiv :parameter="$v.type" :name="'Adress'"> </ErrorDiv>
+            <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
 				</div>
 				<div class="form-group col-4">
 					<label for="inputLength">Length</label>

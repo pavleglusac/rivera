@@ -65,7 +65,7 @@ export default {
         },
         confirmDeletion() {
             this.$axios
-            .post('/api/delete-adventure?id=' + this.$route.params.adventure)
+            .post('/api/delete-adventure?id=' + this.$route.params.rentable)
             .then((resp) => {
                 console.log(resp);
             }).catch((err) => {
@@ -83,7 +83,7 @@ export default {
             let that = this;
             this.$axios.get('/api/auth/get-logged-username', { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
                 }).then((resp) => {
-                this.$axios.post('/api/is-subscribed?username=' + resp.data + '&id=' + this.$route.params.adventure)
+                this.$axios.post('/api/is-subscribed?username=' + resp.data + '&id=' + this.$route.params.rentable)
                     .then((resp) => {
                         that.isSubscribed = resp.data;
                     }).catch((err) => {

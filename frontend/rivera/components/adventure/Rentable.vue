@@ -28,8 +28,7 @@
             class="mt-3"
             @click="goToOwnerProfile"
             style="cursor: pointer"
-            v-b-tooltip.hover.bottom="owner.biography"
-          >
+            >
             <b-avatar
               variant="info"
               :src="owner.picture"
@@ -70,9 +69,11 @@
         ></iframe>
       </div>
       <div class="d-flex flex-column ml-5" style="width: 50%; height: 100%">
-        <h6 class="mt-4"><font-awesome-icon icon="plus" /> Equipment:</h6>
-        <div class="flex">
-          <span class="tagish" v-for="e in equipment" :key="e"> {{ e }} </span>
+        <div v-if="currentType=='adventure'">
+          <h6 class="mt-4"><font-awesome-icon icon="plus" /> Equipment:</h6>
+          <div class="flex">
+            <span class="tagish" v-for="e in equipment" :key="e"> {{ e }} </span>
+          </div>
         </div>
         <h6 class="mt-4">
           <font-awesome-icon icon="book" /> Rules of conduct:
@@ -89,6 +90,82 @@
           <span class="tagish" v-for="service in services" :key="service">
             {{ service }}
           </span>
+        </div>
+        <div v-if="currentType=='cottage'">
+        <h6 class="mt-4">
+          <font-awesome-icon icon="bell-concierge" /> Rooms:
+        </h6>
+        <div class="flex">
+          <span class="tagish" v-for="room in rooms" :key="room">
+            {{ room }}
+          </span>
+        </div>
+        </div>
+        <div v-if="currentType=='boat'">
+			  <div class="form-row">
+				  <div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Length:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{length}}
+              </span>
+            </div>
+            </div>
+				<div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Capacity:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{capacity}}
+              </span>
+            </div>
+            </div>
+				<div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Max speed:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{maxSpeed}}
+              </span>
+            </div>
+        </div>
+            </div>
+			  <div class="form-row">
+				<div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Engine Power:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{enginePower}}
+              </span>
+            </div>
+            </div>
+				<div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Number of engines:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{enginesNumber}}
+              </span>
+            </div>
+            </div>
+				<div class="form-group col-md-4">
+            <h6 class="mt-4">
+              <font-awesome-icon icon="bell-concierge" /> Type:
+            </h6>
+            <div class="flex">
+              <span class="tagish">
+              {{type}}
+              </span>
+            </div>
+            </div>
+        </div>
         </div>
       </div>
     </div>
@@ -110,7 +187,7 @@
           style="height: 80vh"
         >
           <div class="w-75">
-            <Calendar :reservations="reservations" />
+            <Calendar :reservations="reservations" :rentableType='currentType'/>
           </div>
         </div>
       </div>
@@ -207,12 +284,43 @@ export default {
       biography: "",
       reservations: [],
       canBeChanged: false,
+      currentType: "",
+      rooms: [],
+      type: "",
+      length: "",
+      capacity: "",
+      enginesNumber: "",
+      enginePower: "",
+      maxSpeed : "",
     };
   },
   mounted() {
     let that = this;
+		this.$axios
+        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .then((resp) => {
+
+          that.currentType = resp.data;
+          switch(resp.data){
+            case "cottage":  {this.loadCottage(); break;}
+            case "adventure": {this.loadAdventure(); break;}
+            case "boat": {this.loadBoat(); break;}
+          }
+          console.log(this.$route.params.rentable);
+          console.log(resp.data);
+          console.log(that.currentType);
+        })
+
+  },
+  methods: {
+    goToOwnerProfile() {
+      //this.$router.push({ path: "/owner/" + owner.id });
+    },
+    loadAdventure(){
+    console.log("AAAAAAAAAAAAABRUH");
+    let that = this;
     this.$axios
-      .get("/api/get-full-adventure?id=" + this.$route.params.adventure)
+      .get("/api/get-full-adventure?id=" + this.$route.params.rentable)
       .then((resp) => {
         let adventure = resp.data;
         console.log(adventure);
@@ -251,11 +359,89 @@ export default {
         that.owner.picture = "http://localhost:8080" + that.owner.picture;
         that.reservations = adventure.reservations;
       });
-  },
-  methods: {
-    goToOwnerProfile() {
-      //this.$router.push({ path: "/owner/" + owner.id });
     },
+    loadCottage(){
+    console.log("AAAAAAAAAAAAAKRUH");      
+		let that = this;
+		this.$axios
+        .get('/api/cottage/get-full-cottage?id=' + this.$route.params.rentable)
+        .then((resp) => {
+            let cottage = resp.data;
+            console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
+            that.reviews = cottage.reviews;
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
+            that.name = cottage.name;
+            that.location = cottage.address+","+cottage.city+","+cottage.country;
+            that.services = cottage.services;
+            that.name = cottage.name;
+            that.perHour = cottage.perHour;
+            that.perDay = cottage.perDay;
+            that.address = cottage.address;
+            that.description = cottage.description;
+            that.rulesOfConduct = cottage.rulesOfConduct;
+            that.cancellationTerms = cottage.cancellationTerms;
+            that.services = cottage.services;
+            that.tags = cottage.tags;
+            that.canBeChanged = !cottage.canBeChanged;
+            console.log(that.canBeChanged +"------");
+            that.discounts = cottage.discounts;
+            that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
+			      that.id = cottage.id;
+            that.owner = cottage.owner;
+            that.owner.picture = "http://localhost:8080" + that.owner.picture;
+            var stringRooms = cottage.rooms.split(';');
+            for(var room of stringRooms){
+              if(!room.split(',')[0]){
+                break;
+              }
+                var roomString = room.split(',')[0]+" bedded - " + room.split(',')[1];
+                (parseInt(room.split(',')[1])>1) ? roomString += " rooms" : roomString += " room"; 
+                that.rooms.push(roomString);
+              console.log(roomString+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+            }
+        });
+    },
+    loadBoat(){
+    console.log("AAAAAAAAAAAAAKRUH");      
+		let that = this;
+		this.$axios
+        .get('/api/boat/get-full-boat?id=' + this.$route.params.rentable)
+        .then((resp) => {
+            let cottage = resp.data;
+            console.log(resp.data.maxSpeed+"AUISDHIUASDHAISUDH");
+            that.reviews = cottage.reviews;
+            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
+            that.name = cottage.name;
+            that.location = cottage.address+","+cottage.city+","+cottage.country;
+            that.services = cottage.services;
+            that.name = cottage.name;
+            that.perHour = cottage.perHour;
+            that.perDay = cottage.perDay;
+            that.address = cottage.address;
+            that.description = cottage.description;
+            that.rulesOfConduct = cottage.rulesOfConduct;
+            that.cancellationTerms = cottage.cancellationTerms;
+            that.services = cottage.services;
+            that.tags = cottage.tags;
+            that.enginesNumber = cottage.enginesNumber;
+            that.enginePower = cottage.enginePower;
+            that.type= cottage.type;
+            that.maxSpeed = cottage.maxSpeed;
+            that.length= cottage.length;
+            that.capacity = cottage.capacity
+            that.canBeChanged = !cottage.canBeChanged;
+            console.log(that.canBeChanged +"------");
+            that.discounts = cottage.discounts;
+            that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
+			      that.id = cottage.id;
+            that.owner = cottage.owner;
+            that.owner.picture = "http://localhost:8080" + that.owner.picture;
+        });
+    }
   },
 };
 </script>
