@@ -1,5 +1,5 @@
 <template>
-    <div class="p-5 mt-3 ">
+    <div class="p-5 mt-3 "><script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 		<form id="addBoatForm">
 			<div class="form-row" style="text-align:center">
 				<div class="form-group col-md-12">
@@ -101,16 +101,28 @@
 
 			<div class="form-row">
 				<div class="form-group col-4">
-					<label for="inputType">Type</label>
-					<input type="text" class="form-control" v-model="type" id="inputType" placeholder="Type"
-					v-bind:class="{ 'error-boarder': $v.type.$invalid }">
+					<label for="inputType">Type</label>					
+					<select
+						id="inputType"
+						v-model="type"
+						class="form-control"
+						v-bind:class="{ 'error-boarder': $v.type.$invalid }"
+						>
+						<option
+							v-for="type in types"
+							:key="type"
+							:value="type"
+						>
+							{{ type }}
+						</option>
+					</select>
             <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
 				</div>
 				<div class="form-group col-4">
 					<label for="inputLength">Length</label>
-					<input type="text" class="form-control" v-model="length" id="inputLength" placeholder="Length"
-					v-bind:class="{ 'error-boarder': $v.length.$invalid }">
-            <ErrorDiv :parameter="$v.length" :name="'Length'"> </ErrorDiv>
+					<input type="text" class="form-control" v-model="boatLength" id="inputLength" placeholder="Length"
+					v-bind:class="{ 'error-boarder': $v.boatLength.$invalid }">
+            <ErrorDiv :parameter="$v.boatLength" :name="'Length'"> </ErrorDiv>
 				</div>
 				<div class="form-group col-4">
 					<label for="inputCapacity">Capacity</label>
@@ -172,8 +184,7 @@
 		</form>
 	</div>
 </template>
-
-<script>
+<script >
 		
 const countries = require('i18n-iso-countries')
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
@@ -217,11 +228,12 @@ export default {
 			cancellationTerms: "",
 			id: "",
             type : "",
-            length : "",
+            boatLength : "",
             capacity : "",
             enginesNumber : "",
             enginePower : "",
             maxSpeed : "",
+			types : ["YACHT","FERRY","CRUISE","CANOE","RAFT","SAILBOAT","ROWBOAT"],
 		}
 	},
 		components: {
@@ -236,7 +248,7 @@ export default {
     type: {
       required,
     },
-    length: {
+    boatLength: {
       required,
     },
     capacity: {
@@ -297,7 +309,7 @@ export default {
 	mounted() {
 		let that = this;
 		this.$axios
-        .get('/api/boat/get-boat?id=' + this.$route.params.boat)
+        .get('/api/boat/get-boat?id=' + this.$route.params.rentable)
         .then((resp) => {
 			let boat = resp.data;
 			that.name = boat.name;
@@ -317,11 +329,12 @@ export default {
 			that.tags = boat.tags;
 			that.pictures.push(...boat.pictures);
 			that.type = boat.type;
-			that.length = boat.length;
+			that.boatLength = boat.length;
 			that.capacity = boat.capacity;
 			that.enginesNumber = boat.enginesNumber;
 			that.enginePower = boat.enginePower;
 			that.maxSpeed = boat.maxSpeed;
+			that.id = boat.id;
         })
         .catch((err) => {
             console.log(err);
@@ -358,8 +371,9 @@ export default {
 			formData.append("services", this.services);
 			formData.append("id", this.id);
 			formData.append("type", this.type);
-			formData.append("pictures", this.length);
-			formData.append("pictures", this.capacity);
+			formData.append("pictures", this.pictures);
+			formData.append("capacity", this.capacity);
+			formData.append("length", this.boatLength);
 			formData.append("enginesNumber", this.enginesNumber);
 			formData.append("enginePower", this.enginePower);
 			formData.append("maxSpeed", this.maxSpeed);
@@ -370,12 +384,6 @@ export default {
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
-			var roomsString = "";
-			var table = document.getElementById("addedRooms");
-			for (var i = 1, row; row = table.rows[i]; i++) {
-				roomsString += row.cells[1].innerText+","+row.cells[0].innerText + ";";					
-			}
-			formData.append("rooms", roomsString);
 			this.$axios.post('/api/boat/update-boat', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',

@@ -111,9 +111,21 @@
             
 			<div class="form-row">
 				<div class="form-group col-4">
-					<label for="inputType">Type</label>
-					<input type="text" class="form-control" v-model="type" id="inputType" placeholder="Type"
-					v-bind:class="{ 'error-boarder': $v.type.$invalid }">
+					<label for="inputType">Type</label>					
+					<select
+						id="inputType"
+						v-model="type"
+						class="form-control"
+						v-bind:class="{ 'error-boarder': $v.type.$invalid }"
+						>
+						<option
+							v-for="type in types"
+							:key="type"
+							:value="type"
+						>
+							{{ type }}
+						</option>
+					</select>
             <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
 				</div>
 				<div class="form-group col-4">
@@ -233,6 +245,7 @@ export default {
             enginesNumber : "",
             enginePower : "",
             maxSpeed : "",
+			types : ["YACHT","FERRY","CRUISE","CANOE","RAFT","SAILBOAT","ROWBOAT"],
 		}
 	},
 	components: {
@@ -350,7 +363,7 @@ export default {
 					'Content-Type': 'multipart/form-data'
 				}
 			}).then((resp) => {
-				this.$router.push({ path: "/boat/" + resp.data });
+				this.$router.push({ path: "/rentable/" + resp.data });
 				console.log(resp);
 			}).catch((err) => {
 				console.log(err);

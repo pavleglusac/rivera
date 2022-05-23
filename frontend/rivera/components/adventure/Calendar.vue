@@ -498,8 +498,18 @@ export default {
       console.log(to_send);
       this.$axios
         .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
-        .then((resp) => {this.$axios
-        .post(`/api/${resp.data}/define-availability`, JSON.stringify(to_send), {
+        .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          if(resp.data!="adventure"){
+            dataNeeded = "/" + resp.data;
+          }
+          if(resp.data == "boat")
+            return
+          this.$axios
+        .post(`/api${dataNeeded}/define-availability`, JSON.stringify(to_send), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -607,9 +617,17 @@ export default {
       this.$axios
         .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
         .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          if(resp.data != "adventure")
+            dataNeeded = "/" + resp.data;
+          if(resp.data == "boat")
+            return
           this.$axios
         .post(
-          `/api/${resp.data}/remove-availabilities?id=${this.$route.params.rentable}` ,
+          `/api${dataNeeded}/remove-availabilities?id=${this.$route.params.rentable}` ,
           {
             headers: {
               "Content-Type": "application/json",
@@ -624,9 +642,22 @@ export default {
       calendarApi.removeAllEvents();
       this.$axios
         .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
-        .then((resp) => {this.$axios
+        .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          console.log("aaaa\n\n")
+          console.log(resp.data);
+          console.log(dataNeeded);
+          console.log("aaaa\n\n")
+          if(resp.data != "adventure")
+            dataNeeded = "/" + resp.data;
+          if(resp.data == "boat")
+            return    
+          this.$axios
         .get(
-          `/api/${resp.data}/get-availabilities`,
+          `/api${dataNeeded}/get-availabilities`,
           {
             params: {
               from: moment(calendarApi.view.currentStart).format(
@@ -635,7 +666,7 @@ export default {
               to: moment(calendarApi.view.currentEnd).format(
                 "YYYY-MM-DDT00:00"
               ),
-              adventureId: this.$route.params.rentable,
+              id: this.$route.params.rentable,
             },
           },
           {

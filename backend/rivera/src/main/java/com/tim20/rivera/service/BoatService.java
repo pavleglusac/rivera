@@ -150,9 +150,10 @@ public class BoatService {
         boat.setCapacity(dto.getCapacity());
         boat.setEnginePower(dto.getEnginePower());
         boat.setEnginesNumber(dto.getEnginesNumber());
+        boat.setLength(dto.getLength());
+        boat.setCapacity(dto.getCapacity());
         boat.setType(dto.getType());
         boat.setMaxSpeed(dto.getMaxSpeed());
-        boat.setLength(dto.getLength());
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -220,7 +221,6 @@ public class BoatService {
         dto.setServices(boat.getAdditionalServices());
         dto.setPictures(boat.getPictures());
         dto.setRulesOfConduct(boat.getRulesOfConduct());
-        dto.setId(boat.getId());
         return dto;
     }
 
@@ -246,7 +246,6 @@ public class BoatService {
         dto.setCapacity(boat.getCapacity());
         dto.setMaxSpeed(boat.getMaxSpeed());
         dto.setEnginesNumber(boat.getEnginesNumber());
-        dto.setId(boat.getId());
         dto.setAverageScore(boat.getAverageScore());
         dto.setCity(boat.getCity());
         dto.setCountry(boat.getCountry());
@@ -255,7 +254,6 @@ public class BoatService {
         dto.setServices(boat.getAdditionalServices());
         dto.setPictures(boat.getPictures());
         dto.setRulesOfConduct(boat.getRulesOfConduct());
-        dto.setId(boat.getId());
         dto.setReviews(boat.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
         dto.setDiscounts(boat.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
         dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(boat,false,LocalDateTime.now()).isEmpty());

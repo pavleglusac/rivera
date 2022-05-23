@@ -8,6 +8,7 @@
           :name="name"
           :score="score"
           :canBeChanged="!canBeChanged"
+          :currentType = "currentType"
         />
         <div class="mt-10 h-25">
           <h6 class="mb-3">
@@ -109,7 +110,7 @@
             </h6>
             <div class="flex">
               <span class="tagish">
-              {{length}}
+              {{boatLength}}
               </span>
             </div>
             </div>
@@ -187,7 +188,7 @@
           style="height: 80vh"
         >
           <div class="w-75">
-            <Calendar :reservations="reservations" :rentableType='currentType'/>
+            <Calendar :reservations="reservations" :currentType='currentType'/>
           </div>
         </div>
       </div>
@@ -287,8 +288,7 @@ export default {
       currentType: "",
       rooms: [],
       type: "",
-      length: "",
-      capacity: "",
+      boatLength: "",
       enginesNumber: "",
       enginePower: "",
       maxSpeed : "",
@@ -409,36 +409,36 @@ export default {
 		this.$axios
         .get('/api/boat/get-full-boat?id=' + this.$route.params.rentable)
         .then((resp) => {
-            let cottage = resp.data;
+            let boat = resp.data;
             console.log(resp.data.maxSpeed+"AUISDHIUASDHAISUDH");
-            that.reviews = cottage.reviews;
+            that.reviews = boat.reviews;
             that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
-            that.name = cottage.name;
-            that.location = cottage.address+","+cottage.city+","+cottage.country;
-            that.services = cottage.services;
-            that.name = cottage.name;
-            that.perHour = cottage.perHour;
-            that.perDay = cottage.perDay;
-            that.address = cottage.address;
-            that.description = cottage.description;
-            that.rulesOfConduct = cottage.rulesOfConduct;
-            that.cancellationTerms = cottage.cancellationTerms;
-            that.services = cottage.services;
-            that.tags = cottage.tags;
-            that.enginesNumber = cottage.enginesNumber;
-            that.enginePower = cottage.enginePower;
-            that.type= cottage.type;
-            that.maxSpeed = cottage.maxSpeed;
-            that.length= cottage.length;
-            that.capacity = cottage.capacity
-            that.canBeChanged = !cottage.canBeChanged;
+            that.name = boat.name;
+            that.location = boat.address+","+boat.city+","+boat.country;
+            that.services = boat.services;
+            that.name = boat.name;
+            that.perHour = boat.perHour;
+            that.perDay = boat.perDay;
+            that.address = boat.address;
+            that.description = boat.description;
+            that.rulesOfConduct = boat.rulesOfConduct;
+            that.cancellationTerms = boat.cancellationTerms;
+            that.services = boat.services;
+            that.tags = boat.tags;
+            that.enginesNumber = boat.enginesNumber;
+            that.enginePower = boat.enginePower;
+            that.type= boat.type;
+            that.maxSpeed = boat.maxSpeed;
+            that.boatLength= boat.length;
+            that.capacity = boat.capacity
+            that.canBeChanged = !boat.canBeChanged;
             console.log(that.canBeChanged +"------");
-            that.discounts = cottage.discounts;
+            that.discounts = boat.discounts;
             that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
             that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
-            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
-			      that.id = cottage.id;
-            that.owner = cottage.owner;
+            that.pictures.push(...boat.pictures.map(x => "http://localhost:8080" + x));
+			      that.id = boat.id;
+            that.owner = boat.owner;
             that.owner.picture = "http://localhost:8080" + that.owner.picture;
         });
     }

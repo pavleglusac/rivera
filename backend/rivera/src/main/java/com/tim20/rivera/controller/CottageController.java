@@ -94,10 +94,10 @@ public class CottageController {
     }
 
     @GetMapping("get-availabilities")
-    public List<Availability> getAvailabilities(@RequestParam String from, @RequestParam String to, @RequestParam Integer cottageId) {
+    public List<Availability> getAvailabilities(@RequestParam String from, @RequestParam String to, @RequestParam Integer id) {
         LocalDateTime fromDateTime = LocalDateTime.parse(from);
         LocalDateTime toDateTime = LocalDateTime.parse(to);
-        return cottageAvailabilityService.getAvailabilities(cottageId, fromDateTime, toDateTime);
+        return cottageAvailabilityService.getAvailabilities(id, fromDateTime, toDateTime);
     }
 
     @GetMapping("test-availability")

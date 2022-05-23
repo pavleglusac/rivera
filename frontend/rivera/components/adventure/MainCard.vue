@@ -21,8 +21,17 @@
             {{description}}
         </div>
 
-        <b-modal id="update_modal" title="Update adventure data" ref="update_modal" size="xl" hide-footer>
-            <EditAdventure />
+        <b-modal id="update_modal" title="Update data" ref="update_modal" size="xl" hide-footer>
+            <div  v-if="currentType=='adventure'">
+                <EditAdventure/>
+            </div>
+            <div  v-if="currentType=='boat'">
+                <EditBoat/>
+            </div>
+            <div  v-if="currentType=='cottage'">
+                <EditCottage/>
+            </div>
+            
         </b-modal>
 
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -48,9 +57,11 @@
 </template>
 
 <script>
+import EditBoat from '../add_boat/EditBoat.vue';
+import EditCottage from '../add_cottage/EditCottage.vue';
 import EditAdventure from './../add-adventure/EditAdventure.vue'
 export default {
-    components: { EditAdventure },
+    components: { EditAdventure, EditBoat, EditCottage },
     data() {
         return {
             isSubscribed: false,
@@ -64,8 +75,13 @@ export default {
 			$("#deleteModal").modal('show');		
         },
         confirmDeletion() {
+            var temp = "/" + this.currentType;
+            let that = this;
+            if (temp == "/adventure"){
+                temp = ""
+            };
             this.$axios
-            .post('/api/delete-adventure?id=' + this.$route.params.rentable)
+            .post(`/api${temp}/delete-${that.currentType}?id=` + this.$route.params.rentable)
             .then((resp) => {
                 console.log(resp);
             }).catch((err) => {
@@ -116,7 +132,7 @@ export default {
                 });
         }
     },
-    props: ['location', 'name', 'score', 'description', 'canBeChanged']
+    props: ['location', 'name', 'score', 'description', 'canBeChanged','currentType']
 }
 </script>
 
