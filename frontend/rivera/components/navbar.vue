@@ -35,7 +35,6 @@ export default {
             this.$axios.get('/api/auth/getRole', {
                                 headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
                             }).then((resp) => {
-                console.log(that.role);
                 that.role = resp.data;
             }).catch((err) => {
                 console.log(err);

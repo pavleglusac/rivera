@@ -1,6 +1,7 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
+import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
@@ -12,10 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Double.min;
 
 @Service
 public class ReservationService {
@@ -100,7 +106,6 @@ public class ReservationService {
     }
 
     public List<ClientReservationDTO> getReservations(String username, ReservationSearch search) {
-        System.out.println(search.getDate());
         List<ClientReservationDTO> reservations = this.getClientReservations(username);
         return getReservationsByDate(reservations.stream().
                 filter(a -> a.getEntity().getName().toLowerCase().contains(search.getSearch().toLowerCase())).toList(), search);
@@ -120,5 +125,35 @@ public class ReservationService {
 
     private List<ReservationDTO> getReservationsOfOwner(String ownerUsername) {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
+    }
+
+    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
+        Reservation reservation = new Reservation();
+        reservation.setPrice(calculatePriceForReservation(client, rentableId, start, end));
+        reservation.setRentable(rentableRepository.getById(rentableId));
+        reservation.setStartDateTime(start);
+        reservation.setEndDateTime(end);
+        reservation.setCancelled(false);
+        reservation.setClient(client);
+        reservationRepository.save(reservation);
+        return reservation;
+    }
+
+    public Double calculatePriceForReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
+        long hours = ChronoUnit.HOURS.between(start, end);
+        if (ChronoUnit.MINUTES.between(start, end) % 60 > 0)
+            hours++;
+        System.out.println("HOURS:" + hours);
+        long days = ChronoUnit.DAYS.between(start, end);
+        if (hours % 24 > 0)
+            days++;
+        System.out.println("DAYS:" +days);
+        Rentable rentable = rentableRepository.getById(rentableId);
+        double pricePerHour = hours * rentable.getCurrentPricelist().getPricePerHour();
+        System.out.println("PRICE PER HOUR:" +pricePerHour);
+        double pricePerDay = days * rentable.getCurrentPricelist().getPricePerHour();
+        System.out.println("PRICE PER DAY:" + pricePerDay);
+        // add discount for client
+        return min(pricePerHour, pricePerDay);
     }
 }

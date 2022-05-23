@@ -248,4 +248,9 @@ public class ClientService {
         return client.getSubscribed().contains(rentable);
     }
 
+    public void addReservation(String username, Reservation reservation) {
+        Client client = clientRepository.findByUsername(username);
+        client.getReservations().add(reservation);
+        clientRepository.save(client);
+    }
 }

@@ -3,6 +3,7 @@ package com.tim20.rivera.controller;
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Person;
+import com.tim20.rivera.model.Reservation;
 import com.tim20.rivera.service.ClientService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -89,5 +93,23 @@ public class ClientController {
     @GetMapping(path = "get-reservations")
     public List<ClientReservationDTO> getReservations(@RequestParam("username") String username, ReservationSearch search) {
         return reservationService.getReservations(username, search);
+    }
+
+    @GetMapping(path = "get-reservation-price")
+    public Double getReservationPrice(@RequestParam("username") String username, Integer rentableId, String start, String end) {
+        Client client = clientService.findByUsername(username);
+        LocalDateTime startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return reservationService.calculatePriceForReservation(client, rentableId, startDateTime, endDateTime);
+    }
+
+    @PostMapping(path = "reserve")
+    public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId, String start, String end) {
+        Client client = clientService.findByUsername(username);
+        LocalDateTime startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Reservation reservation = reservationService.addReservation(client, rentableId, startDateTime, endDateTime);
+        clientService.addReservation(username, reservation);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

@@ -248,49 +248,8 @@
     </div>
 
     <FullCalendar ref="fullCalendar" :options="calendarOptions" />
-
     <b-modal ref="reservationModal" hide-header hide-footer>
-      <h5><font-awesome-icon icon="calendar-check" /> Reservation</h5>
-      <p>You can reserve the whole appointment or just the part of it.</p>
-      <b-form-radio-group v-model="selectedAppointment">
-        <b-form-radio id="whole-appointment" value="whole" checked
-          >I want the whole appointment.</b-form-radio
-        >
-        <b-form-radio id="part-appointment" value="part"
-          >I want to choose date and time.</b-form-radio
-        >
-      </b-form-radio-group>
-      <div v-if="selectedAppointment == 'part'">
-        <hr />
-        <label>Choose starting time:</label>
-        <b-form inline>
-          <b-form-datepicker
-            v-model="chosenStartDate"
-            :min="appointment.startDate"
-            :max="chosenEndDate"
-            locale="en"
-          ></b-form-datepicker>
-          <b-form-input v-model="chosenStartTime" type="time"></b-form-input>
-        </b-form>
-        <label class="mt-2">Choose ending time:</label>
-        <b-form inline>
-          <b-form-datepicker
-            v-model="chosenEndDate"
-            :min="chosenStartDate"
-            :max="appointment.endDate"
-            locale="en"
-          ></b-form-datepicker>
-          <b-form-input v-model="chosenEndTime" type="time"></b-form-input>
-        </b-form>
-      </div>
-      <hr />
-      <p>Total price for your reservation:</p>
-      <div style="float: right">
-        <b-button @click="closeModal">Cancel</b-button>
-        <b-button @click="reserveAppointment" class="prime-btn"
-          >Reserve now</b-button
-        >
-      </div>
+      <ReservationForm :appointment="appointment" :close="closeModal"/>
     </b-modal>
   </div>
 </template>
@@ -301,26 +260,21 @@ import FullCalendar from "@fullcalendar/vue";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import ReservationForm from "./ReservationForm.vue";
 
 export default {
   props: ["reservations"],
   components: {
-    FullCalendar, // make the <FullCalendar> tag available
-  },
+    FullCalendar,
+    ReservationForm
+},
   data() {
     return {
-      createAvailabilityModal: true,
-      selectedAppointment: "whole",
-      chosenStartDate: null,
-      chosenStartTime: null,
-      chosenEndDate: null,
-      chosenEndTime: null,
       appointment: {
-        startDate: null,
-        endDate: null,
-        startTime: null,
-        endTime: null
+        start: null,
+        end: null,
       },
+      createAvailabilityModal: true,
       options: [
         { text: "No repeat", value: "norepeat" },
         { text: "Every week", value: "everyweek" },
@@ -434,8 +388,6 @@ export default {
     closeModal() {
       this.$refs["reservationModal"].hide();
     },
-    reserveAppointment() {},
-    calculateReservationPrice() {},
     handleDateSelect(selectInfo) {
       console.log("SELECT INFO:", selectInfo);
       let calendarApi = this.$refs.fullCalendar.getApi();
@@ -482,9 +434,9 @@ export default {
     },
     handleEventClick(clickInfo) {
       //confirm(`Clicked event '${clickInfo.event.title}'`);
-      console.log();
-      this.appointment.startDate = clickInfo.event.start;
-      this.appointment.endDate = clickInfo.event.end;
+      this.appointment.start = clickInfo.event.start;
+      this.appointment.end = clickInfo.event.end;
+
       this.$refs["reservationModal"].show();
     },
     handleEvents(events) {
@@ -506,8 +458,8 @@ export default {
       if (calendarApi.view.type == "dayGridMonth") {
         this.$refs.time_modal.show();
       } else {
-        this.startTime = moment(this.select_info.start).format("HH:mm:ss");
-        this.endTime = moment(this.select_info.end).format("HH:mm:ss");
+        this.startTime = moment(this.select_info.start).format("HH:mm");
+        this.endTime = moment(this.select_info.end).format("HH:mm");
         this.timePicked();
       }
     },
