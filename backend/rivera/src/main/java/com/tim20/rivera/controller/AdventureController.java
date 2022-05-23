@@ -85,10 +85,10 @@ public class AdventureController {
     }
 
     @GetMapping("get-availabilities")
-    public List<Availability> getAvailabilities(@RequestParam String from, @RequestParam String to, @RequestParam Integer adventureId) {
+    public List<Availability> getAvailabilities(@RequestParam String from, @RequestParam String to, @RequestParam Integer id) {
         LocalDateTime fromDateTime = LocalDateTime.parse(from);
         LocalDateTime toDateTime = LocalDateTime.parse(to);
-        return adventureAvailabilityService.getAvailabilities(adventureId, fromDateTime, toDateTime);
+        return adventureAvailabilityService.getAvailabilities(id, fromDateTime, toDateTime);
     }
 
     @GetMapping("test-availability")

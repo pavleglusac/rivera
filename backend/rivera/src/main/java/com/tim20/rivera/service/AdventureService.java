@@ -330,4 +330,9 @@ public class AdventureService {
             default -> adventures;
         };
     }
+
+    public AdventureDTO getById(Integer id) {
+        Optional<Adventure> opt = adventureRepository.findById(id);
+        return (opt.isEmpty() ? null : adventureToDto(opt.get()));
+    }
 }

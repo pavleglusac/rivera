@@ -40,7 +40,7 @@ public class Rentable {
     private List<Discount> discounts;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Pricelist> pricelists;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Pricelist currentPricelist;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Calendar> calendars;

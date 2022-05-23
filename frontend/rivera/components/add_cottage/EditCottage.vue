@@ -283,7 +283,7 @@ export default {
 	mounted() {
 		let that = this;
 		this.$axios
-        .get('/api/cottage/get-cottage?id=' + this.$route.params.cottage)
+        .get('/api/cottage/get-cottage?id=' + this.$route.params.rentable)
         .then((resp) => {
 			let cottage = resp.data;
 			that.name = cottage.name;

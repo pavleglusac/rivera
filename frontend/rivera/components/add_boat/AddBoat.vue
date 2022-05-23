@@ -12,10 +12,10 @@
   <b-container class="bv-example-row">
     <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
     <div class="p-5">  
-		<form id="addCottageForm">
+		<form id="addBoatForm">
 			<div class="form-row" style="text-align:center">
 				<div class="form-group col-md-12">
-			<h3>Cottage addition</h3>
+			<h3>Boat addition</h3>
 				</div>
 			</div>
 			<div class="form-row">
@@ -107,67 +107,72 @@
             <ErrorDiv :parameter="$v.country" :name="'Country'"> </ErrorDiv>
 				</div>
 			</div>
+
+            
 			<div class="form-row">
-				
-				<div class="form-group col-md-2">
-					<label for="name">Number of rooms</label>
-					<input type="number" class="form-control" id="numberOfRooms" name="numberOfRooms" min="1" placeholder="Number of rooms">
-					</div>
-	
-					<div class="form-group col-md-2">
-					<label for="name">Number of beds</label>
-					<input type="number" class="form-control"  id="numberOfBeds" name="numberOfBeds" min="1" placeholder="Number of beds">
-					</div>
-					<div class="form-group col-md-0.5">
-						<label for="name" ><br></label>
-					<button type="button" id="addRoom" class="form-control"  >Add</button>
-					</div>
-					<div class="form-group col-md-1">
-					</div>
-	
 				<div class="form-group col-4">
-				<table class="table" id="addedRooms">
-					<thead>
-					  <tr>
-						<th scope="col">Number of rooms</th>
-						<th scope="col">Number of beds</th>
-						<th scope="col">Remove entry</th>	
-					  </tr>
-					</thead>
-					<tbody>
-					</tbody>
-				  </table>
+					<label for="inputType">Type</label>					
+					<select
+						id="inputType"
+						v-model="type"
+						class="form-control"
+						v-bind:class="{ 'error-boarder': $v.type.$invalid }"
+						>
+						<option
+							v-for="type in types"
+							:key="type"
+							:value="type"
+						>
+							{{ type }}
+						</option>
+					</select>
+            <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
+				</div>
+				<div class="form-group col-4">
+					<label for="inputLength">Length</label>
+					<input type="text" class="form-control" v-model="length" id="inputLength" placeholder="Length"
+					v-bind:class="{ 'error-boarder': $v.length.$invalid }">
+            <ErrorDiv :parameter="$v.length" :name="'Length'"> </ErrorDiv>
+				</div>
+				<div class="form-group col-4">
+					<label for="inputCapacity">Capacity</label>
+					<input type="text" class="form-control" v-model="capacity" id="inputCapacity" placeholder="Capacity"
+					v-bind:class="{ 'error-boarder': $v.capacity.$invalid }">
+            <ErrorDiv :parameter="$v.capacity" :name="'Capacity'"> </ErrorDiv>
+			    </div>
+			</div>
+
+
+			<div class="form-row">
+				<div class="form-group col-4">
+					<label for="inputEnginesNumber">EnginesNumber</label>
+					<input type="text" class="form-control" v-model="enginesNumber" id="inputEnginesNumber" placeholder="EnginesNumber"
+					v-bind:class="{ 'error-boarder': $v.enginesNumber.$invalid }">
+            <ErrorDiv :parameter="$v.enginesNumber" :name="'EnginesNumber'"> </ErrorDiv>
+				</div>
+				<div class="form-group col-4">
+					<label for="inputEnginePower">EnginePower</label>
+					<input type="text" class="form-control" v-model="enginePower" id="inputEnginePower" placeholder="EnginePower"
+					v-bind:class="{ 'error-boarder': $v.enginePower.$invalid }">
+            <ErrorDiv :parameter="$v.enginePower" :name="'EnginePower'"> </ErrorDiv>
+				</div>
+				<div class="form-group col-4">
+					<label for="inputMaxSpeed">MaxSpeed</label>
+					<input type="text" class="form-control" v-model="maxSpeed" id="inputMaxSpeed" placeholder="MaxSpeed"
+					v-bind:class="{ 'error-boarder': $v.maxSpeed.$invalid }">
+            <ErrorDiv :parameter="$v.maxSpeed" :name="'MaxSpeed'"> </ErrorDiv>
 				</div>
 			</div>
+
 			<div class="d-flex">
 		 		<PictureUpload /> 
 			</div>
-			<button type="button" @click="upload" class="btn btn-primary float-right">Add cottage</button>
+			<button type="button" @click="upload" class="btn btn-primary float-right">Add boat</button>
 
 
 
 
 
-			<!-- Modal -->
-			<div class="modal fade" id="roomsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-				<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">Entry already exists</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					</div>
-					<div class="modal-body">
-					Would you like to overwrite it?
-					</div>
-					<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="roomUpdate" >Yes</button>
-					<button type="button" class="btn btn-secondary" id="modalClosure" >No</button>
-					</div>
-				</div>
-				</div>
-			</div>
 
 			<div class="modal fade" id="emptyErrorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 				<div class="modal-dialog" role="document">
@@ -233,7 +238,14 @@ export default {
 			perHour: 0,
 			perDay: 0,
 			description: "",
-			cancellationTerms: ""
+			cancellationTerms: "",
+            type : "",
+            length : "",
+            capacity : "",
+            enginesNumber : "",
+            enginePower : "",
+            maxSpeed : "",
+			types : ["YACHT","FERRY","CRUISE","CANOE","RAFT","SAILBOAT","ROWBOAT"],
 		}
 	},
 	components: {
@@ -242,6 +254,24 @@ export default {
   },
   validations: {
     cancellationTerms: {
+      required,
+    },
+    type: {
+      required,
+    },
+    length: {
+      required,
+    },
+    capacity: {
+      required,
+    },
+    enginesNumber: {
+      required,
+    },
+    enginePower: {
+      required,
+    },
+    maxSpeed: {
       required,
     },
     description: {
@@ -288,56 +318,7 @@ export default {
     },
   },
 	mounted() {
-		document.getElementById('addRoom').onclick = function() {addRoom();}
-		document.getElementById('roomUpdate').onclick = function() {updateRoom();}
-		document.getElementById('modalClosure').onclick = function() {closeModal("roomsModal");}
-		document.getElementById('errorModalClosure').onclick = function() {closeModal("emptyErrorModal");}
 				
-		function addRoom(){
-			var tbodyRef = document.getElementById('addedRooms').getElementsByTagName('tbody')[0];
-			var numberOfRoomsText = document.createTextNode(document.getElementById('numberOfRooms').value);
-			var numberOfBedsText = document.createTextNode(document.getElementById('numberOfBeds').value);
-			var removeText = document.createTextNode("Remove");
-
-			var table = document.getElementById("addedRooms");
-			for (var i = 1, row; row = table.rows[i]; i++) {
-				if(numberOfBedsText.textContent == row.cells[1].innerText){
-					$('#roomsModal').modal('show');
-					return;
-				}
-			}
-
-			var newRow = tbodyRef.insertRow();
-
-			var numberOfRooms = newRow.insertCell();
-			var numberOfBeds = newRow.insertCell();
-			var remove = newRow.insertCell();
-
-
-			numberOfRooms.appendChild(numberOfRoomsText);
-			numberOfBeds.appendChild(numberOfBedsText);
-			remove.appendChild(removeText);
-			remove.onclick = function(){
-				tbodyRef.removeChild(newRow);
-			}
-		}
-
-		function updateRoom(){
-			var tbodyRef = document.getElementById('addedRooms').getElementsByTagName('tbody')[0];
-			var numberOfRoomsText = document.createTextNode(document.getElementById('numberOfRooms').value);
-			var numberOfBedsText = document.createTextNode(document.getElementById('numberOfBeds').value);
-			var removeText = document.createTextNode("Remove");
-
-			var table = document.getElementById("addedRooms");
-			for (var i = 1, row; row = table.rows[i]; i++) {
-				if(numberOfBedsText.textContent == row.cells[1].innerText){
-					row.cells[0].innerText = numberOfRoomsText.textContent; 
-					$('#roomsModal').modal('hide');
-					return;
-				}
-			}
-		}
-
 		function closeModal(id){
 			$("#"+id).modal('hide');
 		}
@@ -351,7 +332,7 @@ export default {
 			if (this.$v.$invalid) {
 				console.log(this.$v);
 				$('#emptyErrorModal').modal('show');
-					$("#addCottageForm").submit(function(e) {
+					$("#addBoatForm").submit(function(e) {
     					e.preventDefault();
 					});
 					return;
@@ -367,20 +348,19 @@ export default {
 			formData.append("cancellationTerms", this.cancellationTerms);
 			formData.append("rulesOfConduct", this.rulesOfConduct);
 			formData.append("services", this.services);
+			formData.append("type", this.type);
+			formData.append("length", this.length);
+			formData.append("capacity", this.capacity);
+			formData.append("enginesNumber", this.enginesNumber);
+			formData.append("enginePower", this.enginePower);
+			formData.append("maxSpeed", this.maxSpeed);
 			console.log(formData);
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);
 			}
-			var roomsString = "";
-			var table = document.getElementById("addedRooms");
-			for (var i = 1, row; row = table.rows[i]; i++) {
-				roomsString += row.cells[1].innerText+","+row.cells[0].innerText + ";";					
-			}
-			formData.append("rooms", roomsString);
-			this.$axios.post('/api/cottage/add-cottage', formData, {
+			this.$axios.post('/api/boat/add-boat', formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data',
-					'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT")
+					'Content-Type': 'multipart/form-data'
 				}
 			}).then((resp) => {
 				this.$router.push({ path: "/rentable/" + resp.data });

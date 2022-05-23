@@ -247,7 +247,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 
 export default {
-  props: ["reservations"],
+  props: ["reservations","rentableType"],
   components: {
     FullCalendar, // make the <FullCalendar> tag available
   },
@@ -492,12 +492,24 @@ export default {
         selectedEndDate: moment(this.select_info.end).format("YYYY-MM-DD")+"T00:00:00",
         repeat: this.selected_repeat,
         addition: this.mode=="add",
-        rentableId: this.$route.params.adventure,
+        rentableId: this.$route.params.rentable,
       };
       let that=this;
       console.log(to_send);
       this.$axios
-        .post("/api/define-availability", JSON.stringify(to_send), {
+        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          if(resp.data!="adventure"){
+            dataNeeded = "/" + resp.data;
+          }
+          if(resp.data == "boat")
+            return
+          this.$axios
+        .post(`/api${dataNeeded}/define-availability`, JSON.stringify(to_send), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -506,6 +518,8 @@ export default {
           console.log(response);
           that.getAvailabilities();
         });
+        })
+      
     },
     create_repeat_week_patterns() {
       let startDate = moment(this.select_info.start);
@@ -601,21 +615,49 @@ export default {
     removeAvailabilities() {
       let that = this;
       this.$axios
+        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          if(resp.data != "adventure")
+            dataNeeded = "/" + resp.data;
+          if(resp.data == "boat")
+            return
+          this.$axios
         .post(
-          `/api/remove-availabilities?id=${this.$route.params.adventure}` ,
+          `/api${dataNeeded}/remove-availabilities?id=${this.$route.params.rentable}` ,
           {
             headers: {
               "Content-Type": "application/json",
             },
           }
         ).then(that.getAvailabilities());
+        })
+      
     },
     async getAvailabilities() {
       let calendarApi = this.$refs.fullCalendar.getApi();
       calendarApi.removeAllEvents();
       this.$axios
+        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .then((resp) => {
+          var dataNeeded = ""
+          if(!resp.data){
+            return
+          }
+          console.log("aaaa\n\n")
+          console.log(resp.data);
+          console.log(dataNeeded);
+          console.log("aaaa\n\n")
+          if(resp.data != "adventure")
+            dataNeeded = "/" + resp.data;
+          if(resp.data == "boat")
+            return    
+          this.$axios
         .get(
-          "/api/get-availabilities",
+          `/api${dataNeeded}/get-availabilities`,
           {
             params: {
               from: moment(calendarApi.view.currentStart).format(
@@ -624,7 +666,7 @@ export default {
               to: moment(calendarApi.view.currentEnd).format(
                 "YYYY-MM-DDT00:00"
               ),
-              adventureId: this.$route.params.adventure,
+              id: this.$route.params.rentable,
             },
           },
           {
@@ -650,6 +692,8 @@ export default {
             });
           }
         });
+        })
+      
     },
   },
 };
