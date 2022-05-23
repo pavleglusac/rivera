@@ -211,7 +211,7 @@ public class RiveraApplication {
 		adventureRepository.save(adventure);
 	}
 
-	@EventListener(ApplicationReadyEvent.class)
+	// @EventListener(ApplicationReadyEvent.class)
 	private void initializeData() {
 		Role role = new Role();
 		Role role2 = new Role();

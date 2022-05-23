@@ -55,7 +55,7 @@ public class CottageService {
     private CottageOwner temporaryOwner;
 
 
-    @PostConstruct
+    //@PostConstruct
     private void setTemporaryOwner() {
         temporaryOwner = new CottageOwner();
         temporaryOwner.setName("Marko");

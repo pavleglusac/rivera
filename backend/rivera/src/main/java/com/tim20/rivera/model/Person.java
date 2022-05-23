@@ -33,9 +33,11 @@ public class Person implements UserDetails {
     private String photo;
     private Boolean deleted;
     private Timestamp lastPasswordResetDate;
+    private AccountStatus status;
 
-    @OneToMany
-    private List<MemberCategoryCalendar> categories;
+
+    @OneToOne
+    private MemberCategory category;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)

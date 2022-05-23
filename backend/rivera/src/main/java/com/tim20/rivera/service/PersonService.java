@@ -94,10 +94,10 @@ public class PersonService{
         } else {
             dto.setDescription("");
         }
-        List<MemberCategoryCalendar> calendars = person.getCategories();
-        if(calendars.size() > 0) {
-            dto.setMembership(calendars.get(calendars.size() - 1).getCategory().getName());
-            dto.setMembershipColor(calendars.get(calendars.size() - 1).getCategory().getColor());
+        MemberCategory category = person.getCategory();
+        if(category != null) {
+            dto.setMembership(category.getName());
+            dto.setMembershipColor(category.getColor());
         } else {
             dto.setMembership("No category");
             dto.setMembershipColor("#000000");

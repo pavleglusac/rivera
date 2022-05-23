@@ -114,6 +114,8 @@ public class OwnerService {
     }
 
     public OwnerRequestDTO ownerToOwnerRequestDTO(Owner owner){
+        if(owner == null)
+            return null;
         OwnerRequestDTO ownerRequestDTO = new OwnerRequestDTO();
         ownerRequestDTO.setAddress(owner.getAddress());
         ownerRequestDTO.setCity(owner.getCity());
@@ -143,10 +145,7 @@ public class OwnerService {
 
     public void deactivateOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
-        System.out.println(owner.getUsername());
-        System.out.println(owner.getStatus());
         owner.setStatus(AccountStatus.TERMINATED);
-        System.out.println(owner.getStatus());
         ownerRepository.save(owner);
     }
 

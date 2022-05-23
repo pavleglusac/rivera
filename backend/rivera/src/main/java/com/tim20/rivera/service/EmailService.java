@@ -131,11 +131,7 @@ public class EmailService {
 
     @Async
     public void sendNotificaitionToOwnerUsername(String username, String subject, String text) throws MailException, InterruptedException {
-        System.out.println("Async metoda se izvrsava u drugom Threadu u odnosu na prihvaceni zahtev. Thread id: " + Thread.currentThread().getId());
-        System.out.println("Slanje emaila...");
-
         SimpleMailMessage mail = new SimpleMailMessage();
-
         Owner owner = ownerService.findByUsername(username);
         mail.setTo(owner.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));

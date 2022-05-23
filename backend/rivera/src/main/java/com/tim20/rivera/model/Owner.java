@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class Owner extends Person {
     private String signUpDescription;
-    private AccountStatus status;
+    private Integer numberOfPoints;
 
     @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private List<Rentable> rentables;

@@ -104,27 +104,12 @@
 				</div>
 				<div class="form-row">
 					<div class="form-group col-12">
-						<label>Description</label>
+						<label>Reason</label>
 						<textarea
 							placeholder="Enter description"
 							class="form-control form-control-lg"
 							id="description"
 							v-model="description"
-							disabled
-						/>
-					</div>
-				</div>
-
-				<div class="form-row">
-					<div class="form-group col-3"></div>
-					<div class="form-group col-6">
-						<label>Status</label>
-						<input
-							type="text"
-							placeholder="Status"
-							class="form-control form-control-lg"
-							id="status"
-							v-model="status"
 							disabled
 						/>
 					</div>
@@ -150,7 +135,7 @@
 					>
 				</b-modal>
 
-				<div v-if="status == 'WAITING'">
+				<div>
 					<b-button block id="login-btn" variant="primary" @click="accept"
 						>Accept</b-button
 					>
@@ -179,10 +164,10 @@ import {
 	sameAs,
 } from "vuelidate/lib/validators";
 import useValidate from "@vuelidate/core";
-import ErrorDiv from "./ErrorDiv.vue";
+import ErrorDiv from "../registration/ErrorDiv.vue";
 
 export default {
-	props: ["usernameToRegister"],
+	props: ["request"],
 	data() {
 		return {
 			email: "",
@@ -217,8 +202,8 @@ export default {
 		accept() {
 			this.$axios
 				.post(
-					"/api/admin/activate-owner?username=" +
-						this.usernameToRegister
+					"/api/admin/terminate-person?username=" +
+						this.request.username
 				)
 				.then((resp) => {
 					console.log("Uspesno");
@@ -234,8 +219,8 @@ export default {
 		send_decline() {
 			this.$axios
 				.post(
-					"/api/admin/deactivate-owner?username=" +
-						this.usernameToRegister +
+					"/api/admin/reject-termination?username=" +
+						this.request.username +
 						"&reason=" +
 						this.reason
 				)
@@ -250,7 +235,7 @@ export default {
 		getUser() {
 			let that = this;
 			this.$axios
-				.get("/api/admin/get-owner?username=" + this.usernameToRegister)
+				.get("/api/person-by-username?username=" + this.request.username)
 				.then((resp) => {
 					let owner = resp.data;
 					that.email = owner.email;
@@ -263,17 +248,19 @@ export default {
 					that.country = owner.country;
 					that.city = owner.city;
 					that.address = owner.address;
-					that.status = owner.status;
-					that.description = owner.description;
-					console.log(owner);
+					that.status = "ACTIVE";
 				})
 				.catch((err) => {
 					console.log(err);
 				});
+            this.description = this.request.description;
 		},
+        getTerminationRequest() {
+
+        },
 	},
 	watch: {
-		usernameToRegister: function(newVal, oldVal) {
+		request: function(newVal, oldVal) {
 			console.log(newVal);
 			this.getUser();
 		}
