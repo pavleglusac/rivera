@@ -33,6 +33,8 @@ public class Person implements UserDetails {
     private String photo;
     private Boolean deleted;
     private Timestamp lastPasswordResetDate;
+    private AccountStatus status;
+
 
     @OneToOne
     private MemberCategory category;

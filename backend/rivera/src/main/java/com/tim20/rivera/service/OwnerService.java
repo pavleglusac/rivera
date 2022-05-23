@@ -145,10 +145,7 @@ public class OwnerService {
 
     public void deactivateOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
-        System.out.println(owner.getUsername());
-        System.out.println(owner.getStatus());
         owner.setStatus(AccountStatus.TERMINATED);
-        System.out.println(owner.getStatus());
         ownerRepository.save(owner);
     }
 

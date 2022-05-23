@@ -2,9 +2,11 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.OwnerRequestDTO;
+import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.MemberCategory;
 import com.tim20.rivera.model.Person;
 import com.tim20.rivera.model.Rules;
+import com.tim20.rivera.model.TerminationRequest;
 import com.tim20.rivera.service.AdminService;
 import com.tim20.rivera.service.EmailService;
 import com.tim20.rivera.service.OwnerService;
@@ -39,13 +41,13 @@ public class AdminController {
     }
 
     @PostMapping(path = "activate-owner")
-    public void activatePerson(@RequestParam("username") String username) throws IOException {
+    public void activateOwner(@RequestParam("username") String username) throws IOException {
         System.out.println("activate");
         ownerService.activateOwner(username);
     }
 
     @PostMapping(path = "deactivate-owner")
-    public void deactivatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
+    public void deactivateOwner(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
         System.out.println("deactivate");
         System.out.println(reason);
         System.out.println(username);
@@ -94,5 +96,22 @@ public class AdminController {
     @GetMapping(path ="registered-stats")
     public HashMap<String, Integer> getRegisteredStats() {
         return adminService.getRegisteredStats();
+    }
+
+    @GetMapping("pending-termination-requests")
+    public List<TerminationRequestDTO> getTerminationRequests() {
+        return adminService.getTerminationRequests();
+    }
+
+    @PostMapping(path = "terminate-person")
+    public void terminatePerson(@RequestParam("username") String username) throws IOException, InterruptedException {
+        emailService.sendNotificaitionToUsername(username, "Termination accepted", "Your termination request has been accepted");
+        adminService.terminatePerson(username);
+    }
+
+    @PostMapping(path = "reject-termination")
+    public void terminatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
+        emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
+        adminService.rejectTerminationRequest(username);
     }
 }
