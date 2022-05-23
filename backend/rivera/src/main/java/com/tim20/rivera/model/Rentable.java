@@ -16,8 +16,11 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonIgnoreProperties("rentable")
 public class Rentable {
+    static final String SQ_CLIENT = "mysequence";
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SQ_CLIENT)
+    @SequenceGenerator(name = SQ_CLIENT, sequenceName = SQ_CLIENT,
+            allocationSize = 1,initialValue=1)
     private Integer id;
     private String name;
     private String description;

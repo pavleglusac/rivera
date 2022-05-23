@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@JsonIgnoreProperties("reservations")
 public class Reservation {
 
     @Id

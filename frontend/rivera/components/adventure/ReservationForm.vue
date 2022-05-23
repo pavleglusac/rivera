@@ -103,7 +103,7 @@ export default {
           console.log(resp.data);
           this.$axios
             .post(
-              `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.adventure}&start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`
+              `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`
             )
             .then((response) => {
               console.log(response.data);
@@ -126,7 +126,7 @@ export default {
           console.log(resp.data);
           this.$axios
             .get(
-              `/api/get-reservation-price?&username=${resp.data}&rentableId=${this.$route.params.adventure}&start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`
+              `/api/get-reservation-price?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}`
             )
             .then((response) => {
               this.price = response.data;

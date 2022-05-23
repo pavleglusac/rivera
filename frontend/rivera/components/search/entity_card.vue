@@ -44,12 +44,7 @@ export default {
   },
   methods: {
     detailedOffer() {
-      if(this.offerType == "adventure")
-        this.$router.push({ path: "/adventure/" + this.entity.id });
-      else if(this.offerType == "cottage")
-        this.$router.push({ path: "/cottage/" + this.entity.id });
-      else if(this.offerType == "boat")
-        this.$router.push({ path: "/boat/" + this.entity.id });
+      this.$router.push({ path: "/rentable/" + this.entity.id });
     },
   },
   props: {

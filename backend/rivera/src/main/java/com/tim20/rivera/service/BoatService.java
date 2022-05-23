@@ -69,7 +69,8 @@ public class BoatService {
         temporaryOwner.setEmail("marko2@gmail.com");
         temporaryOwner.setPassword("sifra");
         temporaryOwner.setPhoneNumber("+3845135535");
-        temporaryOwner.setUsername("marko2");
+        temporaryOwner.setUsername("marko3");
+        temporaryOwner.setNumberOfPoints(0);
         temporaryOwner.setPhoto("/images/clients/" + temporaryOwner.getUsername() + ".jpg");
         temporaryOwner.setRentables(new ArrayList<Rentable>());
         boatOwnerRepository.save(temporaryOwner);

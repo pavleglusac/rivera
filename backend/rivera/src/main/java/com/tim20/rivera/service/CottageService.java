@@ -55,24 +55,6 @@ public class CottageService {
     private CottageOwner temporaryOwner;
 
 
-    //@PostConstruct
-    private void setTemporaryOwner() {
-        temporaryOwner = new CottageOwner();
-        temporaryOwner.setName("Marko");
-        temporaryOwner.setSurname("Markovic");
-        temporaryOwner.setAddress("Njegoseva 35");
-        temporaryOwner.setCity("Zrenjanin");
-        temporaryOwner.setCountry("Serbia");
-        temporaryOwner.setStatus(AccountStatus.ACTIVE);
-        temporaryOwner.setDeleted(false);
-        temporaryOwner.setEmail("marko2@gmail.com");
-        temporaryOwner.setPassword("sifra");
-        temporaryOwner.setPhoneNumber("+3845135535");
-        temporaryOwner.setUsername("marko2");
-        temporaryOwner.setPhoto("/images/clients/" + temporaryOwner.getUsername() + ".jpg");
-        temporaryOwner.setRentables(new ArrayList<Rentable>());
-        cottageOwnerRepository.save(temporaryOwner);
-    }
 
     public Integer insert(CottageDTO cottageDto,
                           @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
@@ -91,7 +73,7 @@ public class CottageService {
         cottage.setPictures(paths);
         cottage.setProfilePicture(paths.get(0));
         cottageRepository.save(cottage);
-        cottageOwnerRepository.save(temporaryOwner);
+        cottageOwnerRepository.save(cottageOwnerRepository.findById("cowner").get());
         return cottage.getId();
     }
 
@@ -159,8 +141,8 @@ public class CottageService {
         cottage.setCurrentPricelist(pricelist);
         tagService.addTagsIfNotPresent(dto.getTags());
         cottage.setTags(tagService.getTagsByNames(dto.getTags()));
-        cottage.setOwner(temporaryOwner);
-        temporaryOwner.getRentables().add(cottage);
+        cottage.setOwner(cottageOwnerRepository.findById("cowner").get());
+        cottageOwnerRepository.findById("cowner").get().getRentables().add(cottage);
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
@@ -279,7 +261,7 @@ public class CottageService {
         List<CottageDTO> cottages = checkTags(this.getCottages(), searchParams.getTags());
         return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(),
                 cottages.stream().limit(searchParams.getNumberOfResults())
-                .collect(Collectors.toList())));
+                        .collect(Collectors.toList())));
     }
 
     public List<CottageDTO> getCottages() {
@@ -308,15 +290,15 @@ public class CottageService {
     }
 
     public List<CottageDTO> sortCottages(String sortParam, List<CottageDTO> cottages) {
-        switch (sortParam) {
-            case "name-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getName)).toList();
-            case "name-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getName, Comparator.reverseOrder())).toList();
-            case "price-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour)).toList();
-            case "price-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour, Comparator.reverseOrder())).toList();
-            case "score-a": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore)).toList();
-            case "score-d": return cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
-            default: return cottages;
-        }
+        return switch (sortParam) {
+            case "name-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName)).toList();
+            case "name-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getName, Comparator.reverseOrder())).toList();
+            case "price-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour)).toList();
+            case "price-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "score-a" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore)).toList();
+            case "score-d" -> cottages.stream().sorted(Comparator.comparing(CottageDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            default -> cottages;
+        };
     }
 
     public List<CottageDTO> searchCottagesForOwner(SearchParams searchParams) {
