@@ -249,7 +249,10 @@
 
     <FullCalendar ref="fullCalendar" :options="calendarOptions" />
     <b-modal ref="reservationModal" hide-header hide-footer>
-      <ReservationForm :appointment="appointment" :close="closeModal"/>
+      <ReservationForm :appointment="appointment" :close="closeModal" :openModal="openModal"/>
+    </b-modal>
+    <b-modal id="reservedModal" title="Congratulations!">
+      <p class="my-4">You have successfully reserved your appointment.</p>
     </b-modal>
   </div>
 </template>
@@ -387,6 +390,9 @@ export default {
     },
     closeModal() {
       this.$refs["reservationModal"].hide();
+    },
+    openModal() {
+      this.$bvModal.show('reservedModal');
     },
     handleDateSelect(selectInfo) {
       console.log("SELECT INFO:", selectInfo);

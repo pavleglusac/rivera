@@ -204,12 +204,16 @@
               v-for="discount in discounts"
               :key="discount.id"
               :discount="discount"
+              :openModal="openModal"
             />
           </div>
         </div>
         <div v-else class="d-flex flex-column h-100">
           <p>There are no offers on discount right now. If you want to receive email notification when owner creates a special offer, please subscribe to this entity.</p>
         </div>
+            <b-modal id="reservedDiscountModal" title="Congratulations!">
+      <p class="my-4">You have successfully reserved your appointment.</p>
+    </b-modal>
       </div>
     </div>
 
@@ -315,6 +319,9 @@ export default {
   methods: {
     goToOwnerProfile() {
       //this.$router.push({ path: "/owner/" + owner.id });
+    },
+    openModal() {
+      this.$bvModal.show('reservedDiscountModal');
     },
     loadAdventure(){
     console.log("AAAAAAAAAAAAABRUH");

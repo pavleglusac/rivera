@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class DiscountOfferDTO {
     Integer id;
+    Integer rentableId;
     String name;
     LocalDateTime start;
     LocalDateTime end;

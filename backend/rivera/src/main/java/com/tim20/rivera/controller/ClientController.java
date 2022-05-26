@@ -104,11 +104,18 @@ public class ClientController {
     }
 
     @PostMapping(path = "reserve")
-    public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId, String start, String end) {
+    public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId, String start, String end, Double price) {
         Client client = clientService.findByUsername(username);
-        LocalDateTime startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Reservation reservation = reservationService.addReservation(client, rentableId, startDateTime, endDateTime);
+        LocalDateTime startDateTime;
+        LocalDateTime endDateTime;
+        try {
+            startDateTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+            endDateTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+        } catch(Exception e) {
+            startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        Reservation reservation = reservationService.addReservation(client, rentableId, startDateTime, endDateTime, price);
         clientService.addReservation(username, reservation);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }

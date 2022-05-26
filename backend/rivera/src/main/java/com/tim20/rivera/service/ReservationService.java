@@ -95,8 +95,10 @@ public class ReservationService {
     private ClientReservationDTO reservationToClientReservationDTO(Reservation reservation) {
         ClientReservationDTO clientReservationDTO = new ClientReservationDTO();
         clientReservationDTO.setCancelled(reservation.getCancelled());
+        clientReservationDTO.setRentableId(reservation.getRentable().getId());
         clientReservationDTO.setStartDateTime(reservation.getStartDateTime());
         clientReservationDTO.setEndDateTime(reservation.getEndDateTime());
+        clientReservationDTO.setPrice(reservation.getPrice());
         clientReservationDTO.setEntity(new EntityReservationDTO(reservation.getRentable()));
         return clientReservationDTO;
     }
@@ -127,9 +129,9 @@ public class ReservationService {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
-    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
+    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price) {
         Reservation reservation = new Reservation();
-        reservation.setPrice(calculatePriceForReservation(client, rentableId, start, end));
+        reservation.setPrice(price);
         reservation.setRentable(rentableRepository.getById(rentableId));
         reservation.setStartDateTime(start);
         reservation.setEndDateTime(end);
@@ -140,6 +142,8 @@ public class ReservationService {
     }
 
     public Double calculatePriceForReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
+        System.out.println("START: " + start);
+        System.out.println("END: " + end);
         long hours = ChronoUnit.HOURS.between(start, end);
         if (ChronoUnit.MINUTES.between(start, end) % 60 > 0)
             hours++;
@@ -151,7 +155,7 @@ public class ReservationService {
         Rentable rentable = rentableRepository.getById(rentableId);
         double pricePerHour = hours * rentable.getCurrentPricelist().getPricePerHour();
         System.out.println("PRICE PER HOUR:" +pricePerHour);
-        double pricePerDay = days * rentable.getCurrentPricelist().getPricePerHour();
+        double pricePerDay = days * rentable.getCurrentPricelist().getPricePerDay();
         System.out.println("PRICE PER DAY:" + pricePerDay);
         // add discount for client
         return min(pricePerHour, pricePerDay);

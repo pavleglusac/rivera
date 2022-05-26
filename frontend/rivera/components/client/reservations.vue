@@ -3,6 +3,11 @@
     <b-card style="margin-bottom: 10px; margin-top: 10px">
         <b-row>
           <b-col>
+            <h4>My Calendar</h4>
+              <p>You can finally track all your reservations easier!</p>
+              <b-calendar v-model="selectedDate" v-on:input="loadReservationsCalendar" :date-info-fn="dateClass" block locale="en-US"></b-calendar>
+          </b-col>
+          <b-col>
             <h4>Reservation history</h4>
             <b-form-input
                 id="search-filter"
@@ -17,11 +22,6 @@
               :reservation="reservation"
               v-bind:key="reservation.entity.name + index"
             />
-          </b-col>
-          <b-col>
-            <h4>My Calendar</h4>
-              <p>Date: {{ selectedDate }}</p>
-              <b-calendar v-model="selectedDate" v-on:input="loadReservationsCalendar" block locale="en-US"></b-calendar>
           </b-col>
         </b-row>
     </b-card>
@@ -54,6 +54,32 @@ export default {
     loadReservationsCalendar() {
       if(this.selected == "date")
         this.loadReservations();
+    },
+    dateClass(ymd, date) {
+        return this.dateHasReservation(ymd) ? 'table-info' : ''
+    },
+    dateHasReservation(date) {
+      var dayStarts = new Date(date);
+      dayStarts.setHours(0,0,0,0);
+      var dayEnds = new Date(date);
+      dayEnds.setHours(23,59,59,999);
+      for(const r of this.reservations) {
+        var start = new Date(r.startDateTime);
+        var end = new Date(r.endDateTime);
+        // appointment started in this day
+        if(dayStarts <= start && start <= dayEnds) {
+          return true;
+        }
+        // appointment ended in this day
+        if(dayStarts <= end && end <= dayEnds) {
+          return true;
+        }
+        // appointment lasted whole day and more
+        if(start <= dayStarts && end >= dayEnds) {
+          return true;
+        }
+      }
+      return false;
     }
   },
   data() {

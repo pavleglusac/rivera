@@ -1,10 +1,6 @@
 <template>
     <div class="mt-5">
-        <p style="font-size: 1em; font-weight: 500;" class="p-0 mb-1">
-            {{location}}&nbsp;&nbsp;&nbsp; <font-awesome-icon icon="star" />&nbsp;{{ score }}
-        </p>
-        <h2 id="name" class="mb-4">{{name}}</h2>
-        <div class="float-left mr-1">
+        <div class="float-left mr-1" v-if="logged">
             <b-button size="sm" class="btn btn-light" style="font-weight: 500" :disabled='!canBeChanged' @click="updateRentable">
                 <font-awesome-icon icon="pen-to-square" /> Update</b-button>
             <b-button size="sm" class="btn btn-light" style="font-weight: 500" :disabled='!canBeChanged' @click="deleteRentable">
@@ -15,7 +11,14 @@
             <b-button size="sm" v-else class="subscribe-btn" @click="unsubscribe">
                 - Unsubscribe
             </b-button>
-        </div><br>
+        </div>
+        <div v-if="logged">
+            <br><br>
+        </div>
+        <p style="font-size: 1em; font-weight: 500;" class="p-0 mb-1">
+            {{location}}&nbsp;&nbsp;&nbsp; <font-awesome-icon icon="star" />&nbsp;{{ score }}
+        </p>
+        <h2 id="name" class="mb-4">{{name}}</h2>
 
         <div id="desc" class="mt-4 mb-4">
             {{description}}
@@ -65,6 +68,7 @@ export default {
     data() {
         return {
             isSubscribed: false,
+            logged: true
         };
     },
     mounted() {
@@ -99,12 +103,14 @@ export default {
             let that = this;
             this.$axios.get('/api/auth/get-logged-username', { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
                 }).then((resp) => {
-                this.$axios.post('/api/is-subscribed?username=' + resp.data + '&id=' + this.$route.params.rentable)
-                    .then((resp) => {
-                        that.isSubscribed = resp.data;
-                    }).catch((err) => {
-                        console.log(err);   
-                    });
+                    if(resp.data === "") {
+                        that.logged = false;   
+                    } else {
+                        this.$axios.post('/api/is-subscribed?username=' + resp.data + '&id=' + this.$route.params.rentable)
+                            .then((resp) => {
+                                that.isSubscribed = resp.data;
+                            });
+                    }
             });
         },
         subscribe() {

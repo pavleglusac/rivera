@@ -36,12 +36,7 @@ export default {
   },
   methods: {
     goToProfile(entity) {
-        if(entity.kind == "ADVENTURE")
-            this.$router.push({ path: "/adventure/" + entity.id });
-        else if(entity.kind == "COTTAGE")
-            this.$router.push({ path: "/cottage/" + entity.id });
-        else
-            this.$router.push({ path: "/boat/" + entity.id });
+      this.$router.push({ path: "/rentable/" + entity.id });
     },
     loadSubscribed() {
         this.subscribed = [];

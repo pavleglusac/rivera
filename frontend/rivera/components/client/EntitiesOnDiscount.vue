@@ -9,7 +9,7 @@
             <entity-on-discount
               v-for="e in lastMinuteOffers"
               :entity="e"
-              v-bind:key="e.name"
+              :openModal="openModal"
             />
         </b-row>
     </b-container>
@@ -22,7 +22,7 @@
             <entity-on-discount
               v-for="e in popularOffers"
               :entity="e"
-              v-bind:key="e.name"
+              :openModal="openModal"
             />
         </b-row>
     </b-container>
@@ -35,7 +35,7 @@
             <entity-on-discount
               v-for="e in bestPriceOffers"
               :entity="e"
-              v-bind:key="e.name"
+              :openModal="openModal"
             />
         </b-row>
     </b-container>
@@ -48,10 +48,13 @@
             <entity-on-discount
               v-for="e in recommendedOffers"
               :entity="e"
-              v-bind:key="e.name"
+              :openModal="openModal"
             />
         </b-row>
     </b-container>
+    <b-modal id="reservedModal" title="Congratulations!">
+      <p class="my-4">You have successfully reserved your appointment.</p>
+    </b-modal>
 </div>
 </template>
 
@@ -111,6 +114,9 @@ export default {
         that.bestPriceOffers = response.data;
       });
     },
+    openModal() {
+      this.$bvModal.show('reservedModal');
+    }
    }
 }
 </script>

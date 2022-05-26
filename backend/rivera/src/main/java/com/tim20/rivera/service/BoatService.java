@@ -97,8 +97,6 @@ public class BoatService {
         return boat.getId();
     }
 
-
-
     private List<String> savePictures(Boat boat, MultipartFile[] multipartFiles) throws IOException {
         List<String> paths = new ArrayList<>();
 

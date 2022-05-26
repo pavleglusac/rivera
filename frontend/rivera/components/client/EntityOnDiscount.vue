@@ -8,8 +8,8 @@
       img-height="200"
       class="mb-2"
       :img-src='"http://localhost:8080" + entity.picture'
-      :title="entity.name"
     >
+      <b-card-title style="cursor: pointer;" @click="goToProfile(entity.rentableId)">{{entity.name}}</b-card-title>
       <b-card-body style="padding: 0; align-text: center">
         <div class="text-secondary" style="font-size: 1em">
           <font-awesome-icon icon="star" />&nbsp;{{ entity.averageScore }}&nbsp;
@@ -25,7 +25,7 @@
         <div class="text-secondary" style="font-size: 1em">
           &nbsp;&nbsp;&nbsp;&nbsp; End: {{ new Date(entity.end).toDateString() }}
         </div>
-        <b-button href="#" class="prime-btn mt-2" variant="primary"
+        <b-button @click="reserveAppointment" class="prime-btn mt-2" variant="primary"
           >Book now for only {{ entity.price }} $</b-button
         >
       </b-card-body>
@@ -41,12 +41,38 @@ export default {
   data() {
     return { entity: this.entity, };
   },
-  props: {
-    entity: {
-      type: Object,
-      required: true,
+  methods: {
+    reserveAppointment() {
+      var startDateTime = this.entity.start;
+      var endDateTime = this.entity.end;
+      var price = this.entity.price;
+      var id = this.entity.rentableId;
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+          this.$axios
+            .post(
+              `/api/reserve?&username=${resp.data}&rentableId=${id}&start=${startDateTime}&end=${endDateTime}&price=${price}`
+            )
+            .then((response) => {
+              console.log(response.data);
+              this.openModal();
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
+    goToProfile(id) {
+      this.$router.push({ path: "/rentable/" + id });
+    }
   },
+  props: ["entity", "openModal"],
 };
 </script>
 

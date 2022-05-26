@@ -14,17 +14,44 @@
         </div>
       </div>
     </b-card-text>
-    <b-button href="#" class="prime-btn mt-2" variant="primary">Book now</b-button>
+    <b-button @click="reserve" class="prime-btn mt-2" variant="primary">Book now</b-button>
   </b-card>
 </template>
 
 <script>
 export default {
-  props: ["discount"],
+  props: ["discount", "openModal"],
   mounted() {
   },
   data() {
     return {};
+  },
+  methods: {
+      reserve() {
+      var startDateTime = this.discount.start;
+      var endDateTime = this.discount.end;
+      var price = this.discount.price;
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+          this.$axios
+            .post(
+              `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime}&end=${endDateTime}&price=${price}`
+            )
+            .then((response) => {
+              console.log(response.data);
+              this.openModal();
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>

@@ -13,19 +13,23 @@
       class="mr-2"
     ></b-avatar>
     <span
-      @click="goToProfile(reservation.entity.id)"
+      @click="goToProfile(reservation.rentableId)"
       style="cursor: pointer; font-weight: 500; font-size: 17px"
       class="mr-auto"
     >
       {{ reservation.entity.name }}</span
     >
     <b-card-text style="margin-top: 10px"
-      ><font-awesome-icon icon="clock" />&nbsp;{{ new Date(reservation.endDateTime).toDateString() }} -
-      {{ new Date(reservation.endDateTime).toDateString() }}<br />
+      ><font-awesome-icon icon="clock" />&nbsp;{{
+        new Date(reservation.startDateTime).toString().slice(0, 21)
+      }}
+      - {{ new Date(reservation.endDateTime).toString().slice(0, 21) }}<br />
       <font-awesome-icon icon="location-dot" />&nbsp;&nbsp;{{
         reservation.entity.address
-      }}, {{ reservation.entity.city }},
-      {{ reservation.entity.country }}</b-card-text
+      }}, {{ reservation.entity.city }}, {{ reservation.entity.country }} <br />
+      <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost: {{
+        reservation.price 
+      }}$</b-card-text
     >
     <b-button size="sm" disabled>Cancel reservation</b-button>
     <b-button size="sm" disabled>Review</b-button>
@@ -35,18 +39,19 @@
 <script>
 export default {
   props: {
-      reservation: {
-          type: Object,
-          required: true
-      }
+    reservation: {
+      type: Object,
+      required: true,
     },
+  },
   methods: {
+    goToProfile(id) {
+      this.$router.push({ path: "/rentable/" + id });
+    }
   },
   data() {
-    return {
-    };
+    return {};
   },
-  methods: {},
 };
 </script>
 

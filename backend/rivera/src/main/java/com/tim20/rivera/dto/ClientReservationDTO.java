@@ -13,6 +13,8 @@ public class ClientReservationDTO {
     LocalDateTime endDateTime;
     Boolean cancelled;
     EntityReservationDTO entity;
+    Integer rentableId;
+    Double price;
 
     public boolean isUpcoming() {
         return this.startDateTime.isBefore(LocalDateTime.now());
