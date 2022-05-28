@@ -34,6 +34,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             "              inner join fishing_instructor as o on ren.owner_username=o.username WHERE o.username= ?1 \n" +
             "             and res.start_date_time>= ?2 and res.start_date_time<  ?3 and res.cancelled= ?4 \n" +
             "             group by date_trunc('week',res.start_date_time) order by date_trunc('week',res.start_date_time) ",nativeQuery = true)
-    Map<Timestamp,Integer> findAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
+    List<Object[]> findAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
     List<Reservation> findByClientUsername(String username);
 }

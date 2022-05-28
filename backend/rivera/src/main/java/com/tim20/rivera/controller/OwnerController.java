@@ -38,7 +38,7 @@ public class OwnerController {
     }
 
     @GetMapping(path = "get-attendance")
-    public Map<Timestamp,Integer> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type){
+    public List<AttendanceDTO> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type){
         return ownerService.getAttendance(startDate, endDate, type);
     }
     @GetMapping(path = "get-income")

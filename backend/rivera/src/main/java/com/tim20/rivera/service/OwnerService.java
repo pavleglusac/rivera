@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -166,17 +169,14 @@ public class OwnerService {
         return reviews.stream().map(reviewService::reviewToRPDTO).collect(Collectors.toList());
     }
 
-    public Map<Timestamp,Integer> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type) {
-        Map<Timestamp,Integer> t = reservationRepository.findAttendance("marko",LocalDateTime.now().minusDays(50),LocalDateTime.now().plusDays(50), false, "week");
-        System.out.println("A");
-        return t;
+    public List<AttendanceDTO> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type) {
+        return reservationRepository.findAttendance("marko",LocalDateTime.now().minusDays(50),LocalDateTime.now().plusDays(50)
+                        , false, "week").stream().map(e -> new AttendanceDTO(((Timestamp)e[0]).toLocalDateTime(),((BigInteger) e[1]).intValue())).collect(Collectors.toList());
     }
 
     public List<IncomeFrontDTO> getIncome(LocalDateTime startDate, LocalDateTime endDate) {
-        List<IncomeFrontDTO> t = reservationRepository.findIncome("marko",
-                LocalDateTime.now().minusDays(500),LocalDateTime.now().plusDays(500)).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList());
-        System.out.println("A");
-        return t;}
+        return  reservationRepository.findIncome("marko", LocalDateTime.now().minusDays(500),LocalDateTime.now().plusDays(500)).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList());
+    }
 
     public IncomeFrontDTO incomeDTOToIncomeFrontDTO(IncomeDTO incomeDTO){
         IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
@@ -184,4 +184,5 @@ public class OwnerService {
         incomeFrontDTO.setRentableDTO(rentableService.rentableToDto(incomeDTO.getRentable()));
         return incomeFrontDTO;
     }
+
 }
