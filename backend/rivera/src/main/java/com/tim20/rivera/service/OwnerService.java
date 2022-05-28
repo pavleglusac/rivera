@@ -1,15 +1,17 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.OwnerRequestDTO;
-import com.tim20.rivera.dto.ReviewProfileDTO;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +29,9 @@ public class OwnerService {
 
     @Autowired
     private RentableService rentableService;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -161,4 +166,22 @@ public class OwnerService {
         return reviews.stream().map(reviewService::reviewToRPDTO).collect(Collectors.toList());
     }
 
+    public Map<Timestamp,Integer> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type) {
+        Map<Timestamp,Integer> t = reservationRepository.findAttendance("marko",LocalDateTime.now().minusDays(50),LocalDateTime.now().plusDays(50), false, "week");
+        System.out.println("A");
+        return t;
+    }
+
+    public List<IncomeFrontDTO> getIncome(LocalDateTime startDate, LocalDateTime endDate) {
+        List<IncomeFrontDTO> t = reservationRepository.findIncome("marko",
+                LocalDateTime.now().minusDays(500),LocalDateTime.now().plusDays(500)).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList());
+        System.out.println("A");
+        return t;}
+
+    public IncomeFrontDTO incomeDTOToIncomeFrontDTO(IncomeDTO incomeDTO){
+        IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
+        incomeFrontDTO.setIncome(incomeDTO.getIncome());
+        incomeFrontDTO.setRentableDTO(rentableService.rentableToDto(incomeDTO.getRentable()));
+        return incomeFrontDTO;
+    }
 }
