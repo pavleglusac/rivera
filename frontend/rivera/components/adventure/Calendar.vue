@@ -439,8 +439,9 @@ export default {
       }
     },
     handleEventClick(clickInfo) {
-      //confirm(`Clicked event '${clickInfo.event.title}'`);
+      console.log("POCETNO VREME "+ clickInfo.event.start);
       this.appointment.start = clickInfo.event.start;
+      console.log("KRAJNJE VREME "+ clickInfo.event.end);
       this.appointment.end = clickInfo.event.end;
 
       this.$refs["reservationModal"].show();
@@ -737,10 +738,8 @@ export default {
           if(!resp.data){
             return
           }
-          console.log("aaaa\n\n")
           console.log(resp.data);
           console.log(dataNeeded);
-          console.log("aaaa\n\n")
           if(resp.data != "adventure")
             dataNeeded = "/" + resp.data;
           if(resp.data == "boat")
@@ -766,8 +765,8 @@ export default {
           }
         )
         .then((response) => {
+          console.log(response);
           for (let temp of response.data) {
-            // console.log(temp);
             calendarApi.addEvent({
               id: temp.startDateTime + temp.endDateTime,
               title:

@@ -13,7 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-        <navbar :currentPage="'adventures'" />
+        <navbar :currentPage="'rentables'" />
         <b-card class="mb-3 card-shadow center" style="margin-left: 60px; margin-right: 60px; margin-top: 10px">
             <Rentable />
         </b-card>

@@ -21,5 +21,4 @@ public class AvailabilityPattern {
     private Boolean addition;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-
 }

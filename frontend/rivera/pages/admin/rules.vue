@@ -3,10 +3,10 @@
 		<Navbar :currentPage="'rules'" />
 		<div
 			class="d-flex flex-column mt-1"
-			style="width: 70vw; margin-left: auto; margin-right: auto"
+			style="margin-left: auto; margin-right: auto"
 		>
 			<b-card
-				class="mx-auto my-auto card w-50 mt-2 mb-5"
+				class="mx-auto my-auto card w-75 mt-2 mb-5"
 				style="margin-top: 0; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px"
 				title="Site rules"
 			>
@@ -53,7 +53,7 @@
 				</b-form>
 			</b-card>
 			<b-card
-				class="mx-auto my-auto card mt-5 w-50 mt-5"
+				class="mx-auto my-auto card mt-5 w-75 mt-5"
 				style="
 					margin-top: 30px !important;
 					box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -63,7 +63,7 @@
 				<b-row class="mt-2 p-2">
 					<b-col cols="4"> Name </b-col>
 					<b-col cols="2"> Points </b-col>
-					<b-col cols="2"> Income </b-col>
+					<b-col cols="2"> Income (%)</b-col>
 					<b-col cols="2" class="ml-2"> Color </b-col>
 				</b-row>
 				<div v-for="tier in ownerTiers" :key="tier.name">
@@ -109,7 +109,7 @@
 							/>
 						</b-col>
 						<b-col cols="2">
-							<b-button variant="light" v-on:click="removeOwnerTier(tier)">Remove</b-button>
+							<b-button variant="light" class="w-100" v-on:click="removeOwnerTier(tier)">Remove</b-button>
 						</b-col>
 					</b-row>
 				</div>
@@ -164,7 +164,7 @@
 				</b-row>
 			</b-card>
 			<b-card
-				class="mx-auto my-auto card mt-5 w-50 mt-5 mb-5"
+				class="mx-auto my-auto card mt-5 w-75 mt-5 mb-5"
 				style="
 					margin-top: 30px !important;
 					margin-bottom: 30px !important;
@@ -175,7 +175,7 @@
 				<b-row class="mt-2 p-2">
 					<b-col cols="4"> Name </b-col>
 					<b-col cols="2"> Points </b-col>
-					<b-col cols="2"> Discount </b-col>
+					<b-col cols="2"> Discount (%)</b-col>
 					<b-col cols="2" class="ml-2"> Color </b-col>
 				</b-row>
 				<div v-for="tier in clientTiers" :key="tier.name + 'c'">
@@ -221,7 +221,7 @@
 							/>
 						</b-col>
 						<b-col cols="2">
-							<b-button variant="light" v-on:click="removeClientTier(tier)">Remove</b-button>
+							<b-button variant="light" class="w-100" v-on:click="removeClientTier(tier)">Remove</b-button>
 						</b-col>
 					</b-row>
 				</div>

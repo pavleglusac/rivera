@@ -19,6 +19,7 @@ public class CottageDTO {
     private Double perHour;
     private Double perDay;
     private Double averageScore;
+    private int capacity;
     private String address;
     private String city;
     private String country;

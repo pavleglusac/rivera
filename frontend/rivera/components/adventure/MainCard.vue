@@ -1,14 +1,16 @@
 <template>
     <div class="mt-5">
         <div class="float-left mr-1" v-if="logged">
+            <b-button size="sm" class="btn btn-light" style="font-weight: 500" @click="viewReservations">
+                <font-awesome-icon icon="calendar-check" /> View reservations</b-button>
             <b-button size="sm" class="btn btn-light" style="font-weight: 500" :disabled='!canBeChanged' @click="updateRentable">
                 <font-awesome-icon icon="pen-to-square" /> Update</b-button>
             <b-button size="sm" class="btn btn-light" style="font-weight: 500" :disabled='!canBeChanged' @click="deleteRentable">
                 <font-awesome-icon icon="trash" /> Delete</b-button>
-            <b-button size="sm" v-if="!isSubscribed" class="subscribe-btn" @click="subscribe">
+            <b-button size="sm" v-if="!isSubscribed && isClient" class="subscribe-btn" @click="subscribe">
                 + Subscribe
             </b-button>
-            <b-button size="sm" v-else class="subscribe-btn" @click="unsubscribe">
+            <b-button size="sm" v-else-if="isClient" class="subscribe-btn" @click="unsubscribe">
                 - Unsubscribe
             </b-button>
         </div>
@@ -24,7 +26,7 @@
             {{description}}
         </div>
 
-        <b-modal id="update_modal" title="Update data" ref="update_modal" size="xl" hide-footer>
+        <b-modal id="update_modal" title="Update data" ref="update_modal" size="xl" hide-footer hide-header>
             <div  v-if="currentType=='adventure'">
                 <EditAdventure/>
             </div>
@@ -68,6 +70,7 @@ export default {
     data() {
         return {
             isSubscribed: false,
+            isClient: true,
             logged: true
         };
     },
@@ -93,6 +96,9 @@ export default {
             });
             this.closeModal("deleteModal");
         },
+        viewReservations() {
+            this.openReservationsModal();
+        },
         closeModal(id) {
 			$("#"+id).modal('hide');
 		},
@@ -106,9 +112,18 @@ export default {
                     if(resp.data === "") {
                         that.logged = false;   
                     } else {
-                        this.$axios.post('/api/is-subscribed?username=' + resp.data + '&id=' + this.$route.params.rentable)
-                            .then((resp) => {
-                                that.isSubscribed = resp.data;
+                        var username = resp.data;
+                        this.$axios.get('/api/auth/getRoleByUsername?username=' + username)
+                            .then((r) => {
+                                if(r.data == "CLIENT") {
+                                that.client = true;
+                                this.$axios.post('/api/is-subscribed?username=' + username + '&id=' + this.$route.params.rentable)
+                                    .then((response) => {
+                                        that.isSubscribed = response.data;
+                                    });
+                                } else {
+                                    this.isClient = false;
+                                }
                             });
                     }
             });
@@ -138,7 +153,7 @@ export default {
                 });
         }
     },
-    props: ['location', 'name', 'score', 'description', 'canBeChanged','currentType']
+    props: ['location', 'name', 'score', 'description', 'canBeChanged','currentType', 'openReservationsModal']
 }
 </script>
 

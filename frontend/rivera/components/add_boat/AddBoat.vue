@@ -1,17 +1,5 @@
 <template>
-  <div
-    class="
-      rentable-manipulation
-      fixed-top
-      d-flex
-      align-items-center
-      justify-content-center
-    "
-    style="bottom: 0; overflow-y: auto"
-  >
-  <b-container class="bv-example-row">
-    <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
-    <div class="p-5">  
+    <div>  
 		<form id="addBoatForm">
 			<div class="form-row" style="text-align:center">
 				<div class="form-group col-md-12">
@@ -194,18 +182,14 @@
 			</div>
 		</form>
 	</div>
-		</b-card>
-		</b-container>
-	</div>
 </template>
 
 <script>
-	
-const countries = require('i18n-iso-countries')
-countries.registerLocale(require('i18n-iso-countries/langs/en.json'))
+const countries = require("i18n-iso-countries");
+countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import Vue from "vue";
 import Vuelidate from "vuelidate";
-import PictureUpload from './../add-adventure/PictureUpload.vue';
+import PictureUpload from "./../add-adventure/PictureUpload.vue";
 Vue.use(Vuelidate);
 import {
   required,
@@ -217,40 +201,48 @@ import {
 import useValidate from "@vuelidate/core";
 import ErrorDiv from "./../registration/ErrorDiv.vue";
 export default {
-	computed: {
-    countries () {
-      const list = countries.getNames('en', { select: 'official' })
-      return Object.keys(list).map((key) => ({ value: key, label: list[key] }))
-    }
+  computed: {
+    countries() {
+      const list = countries.getNames("en", { select: "official" });
+      return Object.keys(list).map((key) => ({ value: key, label: list[key] }));
+    },
   },
-  data () {
-    	return {
-			selected: null,
-			result: null,
-			tags: [],
-			rulesOfConduct: [],
-			equipment: [],
-			services: [],
-			name: "",
-			country: "",
-			city: "",
-			address: "",
-			perHour: 0,
-			perDay: 0,
-			description: "",
-			cancellationTerms: "",
-            type : "",
-            length : "",
-            capacity : "",
-            enginesNumber : "",
-            enginePower : "",
-            maxSpeed : "",
-			types : ["YACHT","FERRY","CRUISE","CANOE","RAFT","SAILBOAT","ROWBOAT"],
-		}
-	},
-	components: {
+  data() {
+    return {
+      selected: null,
+      result: null,
+      tags: [],
+      rulesOfConduct: [],
+      equipment: [],
+      services: [],
+      name: "",
+      country: "",
+      city: "",
+      address: "",
+      perHour: 0,
+      perDay: 0,
+      description: "",
+      cancellationTerms: "",
+      type: "",
+      length: "",
+      capacity: "",
+      enginesNumber: "",
+      enginePower: "",
+      maxSpeed: "",
+      types: [
+        "YACHT",
+        "FERRY",
+        "CRUISE",
+        "CANOE",
+        "RAFT",
+        "SAILBOAT",
+        "ROWBOAT",
+      ],
+    };
+  },
+  components: {
     ErrorDiv: ErrorDiv,
-	PictureUpload,
+    PictureUpload,
   },
   validations: {
     cancellationTerms: {
@@ -317,62 +309,62 @@ export default {
       maxLength: maxLength(20),
     },
   },
-	mounted() {
-				
-		function closeModal(id){
-			$("#"+id).modal('hide');
-		}
-	},
-	methods: {
-		upload() {
-			var formData = new FormData();
-			var images = document.getElementById('files');
-			
-			
-			if (this.$v.$invalid) {
-				console.log(this.$v);
-				$('#emptyErrorModal').modal('show');
-					$("#addBoatForm").submit(function(e) {
-    					e.preventDefault();
-					});
-					return;
-			}
-			formData.append("name", this.name);
-			formData.append("description", this.description);
-			formData.append("perHour", this.perHour);
-			formData.append("perDay", this.perDay);
-			formData.append("tags", this.tags);
-			formData.append("country", this.country);
-			formData.append("city", this.city);
-			formData.append("address", this.address);
-			formData.append("cancellationTerms", this.cancellationTerms);
-			formData.append("rulesOfConduct", this.rulesOfConduct);
-			formData.append("services", this.services);
-			formData.append("type", this.type);
-			formData.append("length", this.length);
-			formData.append("capacity", this.capacity);
-			formData.append("enginesNumber", this.enginesNumber);
-			formData.append("enginePower", this.enginePower);
-			formData.append("maxSpeed", this.maxSpeed);
-			console.log(formData);
-			for (let index = 0; index < images.files.length; index++) {
-				formData.append("images", images.files[index]);
-			}
-			this.$axios.post('/api/boat/add-boat', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			}).then((resp) => {
-				this.$router.push({ path: "/rentable/" + resp.data });
-				console.log(resp);
-			}).catch((err) => {
-				console.log(err);
-			});
-		}
-	}
-}
+  mounted() {
+    function closeModal(id) {
+      $("#" + id).modal("hide");
+    }
+  },
+  methods: {
+    upload() {
+      var formData = new FormData();
+      var images = document.getElementById("files");
+
+      if (this.$v.$invalid) {
+        console.log(this.$v);
+        $("#emptyErrorModal").modal("show");
+        $("#addBoatForm").submit(function (e) {
+          e.preventDefault();
+        });
+        return;
+      }
+      formData.append("name", this.name);
+      formData.append("description", this.description);
+      formData.append("perHour", this.perHour);
+      formData.append("perDay", this.perDay);
+      formData.append("tags", this.tags);
+      formData.append("country", this.country);
+      formData.append("city", this.city);
+      formData.append("address", this.address);
+      formData.append("cancellationTerms", this.cancellationTerms);
+      formData.append("rulesOfConduct", this.rulesOfConduct);
+      formData.append("services", this.services);
+      formData.append("type", this.type);
+      formData.append("length", this.length);
+      formData.append("capacity", this.capacity);
+      formData.append("enginesNumber", this.enginesNumber);
+      formData.append("enginePower", this.enginePower);
+      formData.append("maxSpeed", this.maxSpeed);
+      console.log(formData);
+      for (let index = 0; index < images.files.length; index++) {
+        formData.append("images", images.files[index]);
+      }
+      this.$axios
+        .post("/api/boat/add-boat", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((resp) => {
+          this.$router.push({ path: "/rentable/" + resp.data });
+          console.log(resp);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

@@ -188,6 +188,24 @@ public class AdventureAvailabilityService {
         for (var a : availabilityPerDay.values()) {
             availabilities.addAll(a);
         }
+        availabilities.sort(Comparator.comparing(Availability::getStartDateTime));
+        fixOverlaps(availabilities);
+        //
+        adventure.getReservations().forEach(res -> {
+            Availability av = new Availability();
+            av.setStartDateTime(res.getStartDateTime());
+            av.setEndDateTime(res.getEndDateTime());
+            subtractAvailability(av, availabilities);
+        });
+
+        adventure.getDiscounts().forEach(
+                res -> {
+                    Availability av = new Availability();
+                    av.setStartDateTime(res.getStartDateTime());
+                    av.setEndDateTime(res.getEndDateTime());
+                    subtractAvailability(av, availabilities);
+                }
+        );
         return availabilities;
     }
 
@@ -256,6 +274,10 @@ public class AdventureAvailabilityService {
                 }
                 to_remove.add(i - 1);
             }
+            if(midnightOverlap(prev, curr)) {
+                curr.setStartDateTime(prev.getStartDateTime());
+                to_remove.add(i - 1);
+            }
         }
         for (int i = availabilities.size() - 1; i >= 0; i--)
         {
@@ -263,6 +285,18 @@ public class AdventureAvailabilityService {
                 availabilities.remove(i);
             }
         }
+    }
+
+    private boolean midnightOverlap(Availability prev, Availability curr) {
+        var prevEnd = prev.getEndDateTime();
+        var currStart = curr.getStartDateTime();
+        if(!prevEnd.plusMinutes(2).isAfter(currStart)) {
+            return false;
+        }
+        if(prevEnd.getHour() == 23 && prevEnd.getMinute() == 59) {
+            return currStart.getHour() == 0 && currStart.getMinute() == 0;
+        }
+        return false;
     }
 
     private void subtractAndSplitPatterns(AvailabilityPattern pattern, HashMap<LocalDate, List<Availability>> availabilitiesPerDay, LocalDateTime start, LocalDateTime end) {
@@ -279,6 +313,14 @@ public class AdventureAvailabilityService {
         Availability availability = new Availability();
         availability.setStartDateTime(patStart);
         availability.setEndDateTime(patEnd);
+        subtractAvailability(availability, availabilities);
+        availabilities = availabilities.stream().sorted(Comparator.comparing(Availability::getStartDateTime)).collect(Collectors.toList());
+        availabilitiesPerDay.put(LocalDate.from(start), availabilities);
+    }
+
+    private void subtractAvailability(Availability availability, List<Availability> availabilities) {
+        var patStart = availability.getStartDateTime();
+        var patEnd = availability.getEndDateTime();
         ArrayList<Availability> to_remove = new ArrayList<>();
         ArrayList<Availability> to_add = new ArrayList<>();
 
@@ -313,8 +355,7 @@ public class AdventureAvailabilityService {
 
         availabilities.removeAll(to_remove);
         availabilities.addAll(to_add);
-        availabilities = availabilities.stream().sorted((a, b) -> a.getStartDateTime().compareTo(b.getStartDateTime())).collect(Collectors.toList());
-        availabilitiesPerDay.put(LocalDate.from(start), availabilities);
+        availabilities = availabilities.stream().sorted(Comparator.comparing(Availability::getStartDateTime)).collect(Collectors.toList());
     }
 
 
@@ -322,14 +363,8 @@ public class AdventureAvailabilityService {
         date = date.minusSeconds(1);
         CronExpression cronStart = CronExpression.parse(pattern.getPatternStart());
         CronExpression cronEnd = CronExpression.parse(pattern.getPatternEnd());
-        System.out.println(date);
-        System.out.println(pattern.getPatternStart());
-        System.out.println(pattern.getPatternEnd());
         LocalDateTime start = cronStart.next(date);
         LocalDateTime end = cronEnd.next(date);
-        System.out.println(start);
-        System.out.println(end);
-        System.out.println("-----");
         return Pair.of(start, end);
     }
 
@@ -340,7 +375,7 @@ public class AdventureAvailabilityService {
     private Boolean isAfterOrEquals(LocalDateTime t1, LocalDateTime t2) {
         return (t1.isAfter(t2) || t1.isEqual(t2));
     }
-    
+
 
     public void testBigAvailability() {
         Adventure adventure = adventureRepository.getById(1);

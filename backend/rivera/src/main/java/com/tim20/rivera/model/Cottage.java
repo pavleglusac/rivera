@@ -14,4 +14,11 @@ import java.util.Map;
 public class Cottage extends Rentable {
     @ElementCollection
     Map<Integer, Integer> rooms;
+
+    public int capacity() {
+        int cap = 0;
+        for (var entry : rooms.entrySet())
+            cap += entry.getKey() * entry.getValue();
+        return cap;
+    }
 }

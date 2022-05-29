@@ -54,8 +54,6 @@ public class CottageService {
 
     private CottageOwner temporaryOwner;
 
-
-
     public Integer insert(CottageDTO cottageDto,
                           @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
@@ -76,8 +74,6 @@ public class CottageService {
         cottageOwnerRepository.save(cottageOwnerRepository.findById("cowner").get());
         return cottage.getId();
     }
-
-
 
     private List<String> savePictures(Cottage cottage, MultipartFile[] multipartFiles) throws IOException {
         List<String> paths = new ArrayList<>();
@@ -184,6 +180,7 @@ public class CottageService {
         Pricelist pricelist = cottage.getCurrentPricelist();
         dto.setCancellationTerms(pricelist.getCancellationTerms());
         dto.setName(cottage.getName());
+        dto.setCapacity(cottage.capacity());
         dto.setTags(cottage
                 .getTags()
                 .stream()
@@ -214,6 +211,7 @@ public class CottageService {
         dto.setRooms(roomsString.toString());
         dto.setId(cottage.getId());
         dto.setAverageScore(cottage.getAverageScore());
+        dto.setCapacity(cottage.capacity());
         dto.setDescription(cottage.getDescription());
         Pricelist pricelist = cottage.getCurrentPricelist();
         dto.setCancellationTerms(pricelist.getCancellationTerms());
@@ -238,8 +236,6 @@ public class CottageService {
         dto.setOwner(cottageOwnerService.CottageOwnerToCottageOwnerCPDto(cottage.getOwner()));
         return dto;
     }
-
-
 
     public void update(CottageDTO cottageDTO, MultipartFile[] multipartFiles) throws IOException {
         Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());

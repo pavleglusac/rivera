@@ -14,9 +14,8 @@
             <ul>
                 <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Homepage</li></nuxt-link>
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
-                <nuxt-link to="/cottage"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><font-awesome-icon icon="house" /> Add Cottage</li></nuxt-link>
-                <nuxt-link to="/myRentables"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><font-awesome-icon icon="house-circle-check" />  My cottages</li></nuxt-link>
-                <nuxt-link to="/ownerReservations"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><font-awesome-icon icon="house" />  Reservations</li></nuxt-link>
+                <nuxt-link to="/myRentables"><li class="menu-link" :class="currentPage=='rentables' ? 'active' : ''"><font-awesome-icon icon="house-circle-check" />  My cottages</li></nuxt-link>
+                <nuxt-link to="/ownerReservations"><li class="menu-link" :class="currentPage=='reservations' ? 'active' : ''"><font-awesome-icon icon="calendar-check" />  Reservations</li></nuxt-link>
                 <nuxt-link to="/owner/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
