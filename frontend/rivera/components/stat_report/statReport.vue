@@ -26,6 +26,9 @@
         <div v-if="activeIncomeGraph">
             <IncomeGraph />
         </div>
+        <div v-if="activeAverageGrade">
+            <MyRentables />
+        </div>
     </div>
 </template>
 
@@ -33,8 +36,9 @@
 <script>
 import AttendanceGraph from './attendanceGraph.vue'
 import IncomeGraph from './incomeGraph.vue'
+import myRentables from './../../components/myRentables.vue'
 export default {
-    components: { AttendanceGraph, IncomeGraph },
+    components: { AttendanceGraph, IncomeGraph, myRentables },
     data() {
         return {
             activeAverageGrade: true,

@@ -28,12 +28,27 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +
             " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 group by rentable")
     List<IncomeDTO> findIncome(String username, LocalDateTime startDateTime, LocalDateTime endDateTime);
-    @Query(value = "SELECT   date_trunc('week',res.start_date_time), COUNT (date_trunc('week',res.start_date_time))\n" +
+    @Query(value = "SELECT   function('date_trunc', 'week',reservation.startDateTime), COUNT (reservation)\n" +
             "            FROM \n" +
-            "                reservation as res  inner join adventure as ren on res.rentable_id=ren.id\n" +
-            "              inner join fishing_instructor as o on ren.owner_username=o.username WHERE o.username= ?1 \n" +
-            "             and res.start_date_time>= ?2 and res.start_date_time<  ?3 and res.cancelled= ?4 \n" +
-            "             group by date_trunc('week',res.start_date_time) order by date_trunc('week',res.start_date_time) ",nativeQuery = true)
-    List<Object[]> findAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
+            "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +
+            " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 \n and reservation.cancelled= ?4 \n" +
+            "      group by function('date_trunc', 'week',reservation.startDateTime) order by function('date_trunc','week',reservation.startDateTime)" +
+            " ")
+    List<Object[]> findWeeklyAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
+    @Query(value = "SELECT   function('date_trunc', 'month',reservation.startDateTime), COUNT (reservation)\n" +
+            "            FROM \n" +
+            "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +
+            " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 \n and reservation.cancelled= ?4 \n" +
+            "      group by function('date_trunc', 'month',reservation.startDateTime) order by function('date_trunc','month',reservation.startDateTime)" +
+            " ")
+    List<Object[]> findMonthlyAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
+    @Query(value = "SELECT   function('date_trunc', 'year',reservation.startDateTime), COUNT (reservation)\n" +
+            "            FROM \n" +
+            "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +
+            " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 \n and reservation.cancelled= ?4 \n" +
+            "      group by function('date_trunc', 'year',reservation.startDateTime) order by function('date_trunc','year',reservation.startDateTime)" +
+            " ")
+    List<Object[]> findYearlyAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
+
     List<Reservation> findByClientUsername(String username);
 }

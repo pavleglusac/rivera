@@ -48,6 +48,8 @@ INSERT INTO admin (username, address, city, country, deleted, email, last_passwo
 
 INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage', NULL, 4, 'cowner');
 
+INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage2', NULL, 4, 'cowner');
+
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points) VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko2@gmail.com', NULL, 'Marko', 'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0);
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points) VALUES ('cowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0);
 
@@ -135,7 +137,13 @@ INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (4, 2);
 
 
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-05-21 19:44:47.521598', 130, '2022-05-21 18:44:47.521546', 'pera', 1);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-05-21 19:44:47.521598', 130, '2022-05-21 18:44:47.521546', 'pera', 1);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-06-21 19:44:47.521598', 130, '2022-06-21 18:44:47.521546', 'pera', 1);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2023-05-21 19:44:47.521598', 1300, '2023-05-21 18:44:47.521546', 'pera', 4);
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-05-21 19:44:48.250883', 130, '2022-05-21 18:44:48.250856', 'mika', 4);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-06-21 19:44:48.250883', 130, '2022-06-21 18:44:48.250856', 'mika', 4);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-05-21 19:44:48.250883', 130, '2022-05-21 18:44:48.250856', 'mika', 5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id) VALUES (false, '2022-09-21 19:44:48.250883', 130, '2022-09-21 18:44:48.250856', 'mika', 4);
 
 
 

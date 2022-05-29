@@ -38,11 +38,11 @@ public class OwnerController {
     }
 
     @GetMapping(path = "get-attendance")
-    public List<AttendanceDTO> getAttendance(LocalDateTime startDate, LocalDateTime endDate, String type){
+    public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type){
         return ownerService.getAttendance(startDate, endDate, type);
     }
     @GetMapping(path = "get-income")
-    public List<IncomeFrontDTO> getIncome(LocalDateTime startDate, LocalDateTime endDate){
+    public List<IncomeFrontDTO> getIncome(String startDate, String endDate){
         return ownerService.getIncome(startDate, endDate);
     }
 
