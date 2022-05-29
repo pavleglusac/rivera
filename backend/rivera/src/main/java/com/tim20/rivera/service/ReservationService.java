@@ -5,10 +5,7 @@ import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
-import com.tim20.rivera.repository.ClientRepository;
-import com.tim20.rivera.repository.CottageRepository;
-import com.tim20.rivera.repository.RentableRepository;
-import com.tim20.rivera.repository.ReservationRepository;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +34,9 @@ public class ReservationService {
     private RentableService rentableService;
     @Autowired
     private RentableRepository rentableRepository;
+
+    @Autowired
+    private RulesRepository rulesRepository;
 
     public List<ReservationDTO> getReservationsByOwner() {
         return null;
@@ -137,6 +137,8 @@ public class ReservationService {
         reservation.setEndDateTime(end);
         reservation.setCancelled(false);
         reservation.setClient(client);
+        Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
+        reservation.setOwnerIncomePercentage(ownerPercentage);
         reservationRepository.save(reservation);
         return reservation;
     }
