@@ -1,15 +1,26 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.OwnerRequestDTO;
-import com.tim20.rivera.dto.ReviewProfileDTO;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +38,9 @@ public class OwnerService {
 
     @Autowired
     private RentableService rentableService;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -159,6 +173,89 @@ public class OwnerService {
         List<Review> reviews = new ArrayList<>();
         rentables.forEach(x -> reviews.addAll(x.getReviews()));
         return reviews.stream().map(reviewService::reviewToRPDTO).collect(Collectors.toList());
+    }
+
+    public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type) {
+        startDate+= "T00:00:00";
+        endDate+= "T00:00:00";
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Owner loggedPerson = ((Owner) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        List<AttendanceDTO> attendanceDTOS = null;
+        switch (type){
+            case "month":
+                attendanceDTOS = addMonths(reservationRepository.findMonthlyAttendance(loggedPerson.getUsername(),startDateTime,endDateTime
+                    , false, type).stream().map(e -> new AttendanceDTO(((Timestamp)e[0]).toLocalDateTime(),((Long) e[1]).intValue())).collect(Collectors.toList()),startDateTime,endDateTime); break;
+            case "year":
+                attendanceDTOS = addYears(reservationRepository.findYearlyAttendance(loggedPerson.getUsername(),startDateTime,endDateTime
+                    , false, type).stream().map(e -> new AttendanceDTO(((Timestamp)e[0]).toLocalDateTime(),((Long) e[1]).intValue())).collect(Collectors.toList()),startDateTime,endDateTime); break;
+            case "week":
+                attendanceDTOS = addWeeks(reservationRepository.findWeeklyAttendance(loggedPerson.getUsername(),startDateTime,endDateTime
+                    , false, type).stream().map(e -> new AttendanceDTO(((Timestamp)e[0]).toLocalDateTime(),((Long) e[1]).intValue())).collect(Collectors.toList()),startDateTime,endDateTime); break;
+        }
+        return attendanceDTOS.stream().sorted(Comparator.comparing(AttendanceDTO::getTimestamp)).collect(Collectors.toList());
+       }
+    private List<AttendanceDTO>  addYears(List<AttendanceDTO> attendanceDTOS,LocalDateTime startDate, LocalDateTime endDate){
+        startDate = startDate.withMonth(1);
+        startDate = startDate.withDayOfMonth(1);
+        while (startDate.isBefore(endDate)){
+            LocalDateTime finalStartDate = startDate;
+            if(attendanceDTOS.stream().noneMatch(e -> e.getTimestamp().isEqual(finalStartDate))){
+                attendanceDTOS.add(new AttendanceDTO(startDate,0));
+            }
+            startDate = startDate.plusYears(1);
+        }
+        return attendanceDTOS;
+    }
+    private List<AttendanceDTO>  addMonths(List<AttendanceDTO> attendanceDTOS,LocalDateTime startDate, LocalDateTime endDate){
+        startDate = startDate.withDayOfMonth(1);
+        while (startDate.isBefore(endDate)){
+            LocalDateTime finalStartDate = startDate;
+            if(attendanceDTOS.stream().noneMatch(e -> e.getTimestamp().isEqual(finalStartDate))){
+                attendanceDTOS.add(new AttendanceDTO(startDate,0));
+            }
+            startDate = startDate.plusMonths(1);
+        }
+        return attendanceDTOS;
+    }
+    private List<AttendanceDTO>  addWeeks(List<AttendanceDTO> attendanceDTOS,LocalDateTime startDate, LocalDateTime endDate){
+        startDate = startDate.with(DayOfWeek.MONDAY);
+        while (startDate.isBefore(endDate)){
+            LocalDateTime finalStartDate = startDate;
+            if(attendanceDTOS.stream().noneMatch(e -> e.getTimestamp().isEqual(finalStartDate))){
+                attendanceDTOS.add(new AttendanceDTO(startDate,0));
+            }
+            startDate = startDate.plusWeeks(1);
+        }
+        return attendanceDTOS;
+    }
+
+    public List<IncomeFrontDTO> getIncome(String  startDate, String endDate) {
+        Owner loggedPerson = ((Owner) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        startDate+= "T00:00:00";
+        endDate+= "T00:00:00";
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return  addRentables(reservationRepository.findIncome(loggedPerson.getUsername(), startDateTime,endDateTime).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList()));
+    }
+
+    private List<IncomeFrontDTO> addRentables(List<IncomeFrontDTO> collect) {
+        Owner loggedPerson = ((Owner) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        for(Rentable r : loggedPerson.getRentables()){
+            if(collect.stream().noneMatch(e -> e.getRentableId().equals(r.getId()))){
+                collect.add(new IncomeFrontDTO(r.getId(),r.getName(),0d));
+            }
+        }
+        return collect;
+    }
+
+
+    public IncomeFrontDTO incomeDTOToIncomeFrontDTO(IncomeDTO incomeDTO){
+        IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
+        incomeFrontDTO.setIncome(incomeDTO.getIncome());
+        incomeFrontDTO.setRentableId(incomeDTO.getRentable().getId());
+        incomeFrontDTO.setRentableName(incomeDTO.getRentable().getName());
+        return incomeFrontDTO;
     }
 
 }

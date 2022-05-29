@@ -1,7 +1,9 @@
 package com.tim20.rivera.controller;
 
+import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.BoatDTO;
 import com.tim20.rivera.dto.BoatProfileDTO;
+import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.Boat;
 import com.tim20.rivera.model.Boat;
 import com.tim20.rivera.repository.RentableRepository;
@@ -62,6 +64,12 @@ public class BoatController {
     public ResponseEntity<String> deleteBoat(@RequestParam Integer id) {
         boatService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+
+    @PostMapping(path="/search-boats")
+    public List<BoatDTO> searchAdventures(SearchParams searchParams) {
+        return boatService.searchBoats(searchParams);
     }
 
 }

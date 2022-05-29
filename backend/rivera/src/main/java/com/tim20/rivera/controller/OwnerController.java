@@ -1,8 +1,7 @@
 package com.tim20.rivera.controller;
 
 
-import com.tim20.rivera.dto.DiscountOfferDTO;
-import com.tim20.rivera.dto.ReviewProfileDTO;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.OwnerService;
@@ -11,7 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -34,5 +36,15 @@ public class OwnerController {
         if (owner == null) return null;
         return discountService.getDiscountsForOwner(owner);
     }
+
+    @GetMapping(path = "get-attendance")
+    public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type){
+        return ownerService.getAttendance(startDate, endDate, type);
+    }
+    @GetMapping(path = "get-income")
+    public List<IncomeFrontDTO> getIncome(String startDate, String endDate){
+        return ownerService.getIncome(startDate, endDate);
+    }
+
 
 }

@@ -128,7 +128,7 @@ export default {
 								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
 							}).then((resp) => {
                 console.log(resp.data);
-              this.$axios.post(`/api/search-boats?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
+              this.$axios.post(`/api/boat/search-boats?&numberOfResults=10&orderBy=${that.sort}&search=${that.searchText.trim()}&tags=${that.tags}&ownerUsername=${resp.data}`)
                 .then(response => {
                   that.offers = response.data;
                    that.loadingRentables=false;
