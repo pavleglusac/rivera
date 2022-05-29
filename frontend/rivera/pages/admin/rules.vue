@@ -3,7 +3,7 @@
 		<Navbar :currentPage="'rules'" />
 		<div
 			class="d-flex flex-column mt-1"
-			style="width: 70vw; margin-left: auto; margin-right: auto"
+			style="width: 100vw; margin-left: auto; margin-right: auto"
 		>
 			<b-card
 				class="mx-auto my-auto card w-50 mt-2 mb-5"

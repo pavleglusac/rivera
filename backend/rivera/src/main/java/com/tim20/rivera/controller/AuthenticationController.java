@@ -107,6 +107,17 @@ public class AuthenticationController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @PostMapping("/signupAdmin")
+    public ResponseEntity<Person> addAdmin(ClientRequestDTO clientRequestDTO) {
+        Person existUser = personService.findByUsername(clientRequestDTO.getUsername());
+        if (existUser != null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        Person user = adminService.save(clientRequestDTO);
+        // emailService.sendNotificaitionClientAsync(clientRequestDTO);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
     @GetMapping(path = "check-if-username-exists")
     public Boolean ifExists(String username) {
         Person existUser = personService.findByUsername(username);

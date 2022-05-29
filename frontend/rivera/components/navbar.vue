@@ -33,12 +33,19 @@ export default {
     methods: {
         getRole() {
             let that = this;
-            console.log(window.localStorage.getItem("JWT"));
-            this.$axios.get('/api/auth/getRole').then((resp) => {
-                that.role = resp.data;
-            }).catch((err) => {
-                console.log(err);
-            });
+            let role = this.$store.getters.getRole;
+            if(role == 'unauthenticated') {
+                console.log(window.localStorage.getItem("JWT"));
+                this.$axios.get('/api/auth/getRole').then((resp) => {
+                    that.role = resp.data;
+                    that.$store.commit('setRole', resp.data);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            } else {
+                this.role = role;
+            }
+            
         },
     },
     mounted() {
