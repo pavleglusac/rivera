@@ -17,6 +17,7 @@
                 <nuxt-link to="/admin/terminations"><li class="menu-link" :class="currentPage=='terminations' ? 'active' : ''"><font-awesome-icon icon="user-minus" /> Termination requests</li></nuxt-link>
                 <nuxt-link to="/admin/registrations"><li class="menu-link" :class="currentPage=='registrations' ? 'active' : ''"><font-awesome-icon icon="user-plus" /> Registration requests</li></nuxt-link>
                 <nuxt-link to="/admin/rules"><li class="menu-link" :class="currentPage=='rules' ? 'active' : ''"><font-awesome-icon icon="briefcase" /> Site rules</li></nuxt-link>
+                <nuxt-link to="/admin/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
                 <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
       </b-navbar-nav>

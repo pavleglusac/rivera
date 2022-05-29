@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -145,5 +146,26 @@ public class AuthenticationController {
         if(admin != null)
             return "ADMIN";
         return "";
+    }
+
+    @GetMapping("last-password-change")
+    public LocalDateTime getLastPasswordChange(@RequestParam String username) {
+        return personService.getLastPasswordChange(username);
+    }
+
+    @GetMapping("logged-user-info")
+    public LoggedUserInfoDTO getLoggedUserInfo() {
+        try {
+            LoggedUserInfoDTO info = new LoggedUserInfoDTO();
+            Person loggedPerson = (Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            String role = loggedPerson.getRoles().get(0).getName();
+            info.setRole(role);
+            info.setUsername(loggedPerson.getUsername());
+            if(loggedPerson.getLastPasswordResetDate() != null)
+                info.setLastPasswordChange(loggedPerson.getLastPasswordResetDate().toLocalDateTime());
+            return info;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
