@@ -2,6 +2,7 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.BoatDTO;
 import com.tim20.rivera.dto.BoatProfileDTO;
+import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
@@ -279,10 +280,10 @@ public class BoatService {
     }
 
     public List<BoatDTO> searchBoats(SearchParams searchParams) {
-        List<BoatDTO> boats = checkTags(this.getBoats(), searchParams.getTags());
-        return filter(searchParams.getSearch().toLowerCase(), sortBoats(searchParams.getOrderBy(),
-                boats.stream().limit(searchParams.getNumberOfResults())
-                        .collect(Collectors.toList())));
+        List<BoatDTO> cottages = checkTags(this.getBoatsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        return sortBoats(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
+                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
+                .collect(Collectors.toList()));
     }
 
     public List<BoatDTO> getBoats() {

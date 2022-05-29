@@ -116,9 +116,10 @@ public class AuthenticationController {
     @GetMapping(path = "getRole")
     public String getRole() {
         try {
+            System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles().get(0).getName();
         } catch (Exception e) {
-            return "unauthenticated";
+            return "unauthenticateddd";
         }
     }
 

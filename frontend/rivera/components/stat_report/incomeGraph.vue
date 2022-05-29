@@ -1,19 +1,34 @@
 <template>
     <div>
         <div class="form-row align-items-center">
+              <div class="form-group col-md-3 m-1">
+        </div>
             
-              <div class="form-group col-md-2 m-1">
+              <div class="form-group col-md-3 m-1">
                 <b-form-datepicker size="sm"  v-model="startDate" placeholder="Start date"></b-form-datepicker>
         </div>
-              <div class="form-group col-md-2 m-1">
+              <div class="form-group col-md-3 m-1">
                 <b-form-datepicker size="sm"  v-model="endDate" placeholder="End date"></b-form-datepicker>
         </div>
-            <div class="form-group col-md-2 m-1">
+        </div>
+        <div class="form-row align-items-center">
+              <div class="form-group col-md-5 m-1">
+        </div>        
+            <div class="form-group col-md-2 m-1 mt-3 align-items-center" style="text-align:center">
                 <b-button pill variant="success" @click="loadAttendance" class="w-25">Load</b-button>
             </div>
         </div>
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-    <div>
+        
+        <div class="form-row align-items-center">
+              <div class="form-group col-md-3 m-1">
+            </div>
+            <div class="form-group col-md-6 m-1">
+<canvas id="myChart" style="max-width=100%"></canvas>
+            </div>
+              <div class="form-group col-md-3 m-1">
+            </div>
+        </div>
+    <div style="text-align:center">
        Full income: {{fullIncome}}
     </div>
     </div>
