@@ -15,4 +15,5 @@ public class ReservationDTO {
     Integer id;
     RentableDTO rentable;
     ReservationReportDTO report;
+    Double price;
 }

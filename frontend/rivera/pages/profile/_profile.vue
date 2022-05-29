@@ -21,6 +21,7 @@
               max-height: 25vh;
               object-fit: cover;
               margin-top: -10vh;
+              border: 2px solid white;
             "
             @error="noProfilePhoto"
           />
@@ -38,7 +39,19 @@
           class="d-flex justify-content-center"
           style="font-size: 1.4em; font-weight: 400"
         >
-          <span><font-awesome-icon icon="fish" /> {{ role }} &nbsp;</span>
+          <span>
+            <font-awesome-icon
+              v-if="role == 'Fishing Instructor'"
+              icon="fish"
+            />
+            <font-awesome-icon
+              v-else-if="role == 'Cottage Owner'"
+              icon="house"
+            />
+            <font-awesome-icon v-else-if="role == 'Boat Owner'" icon="boat" />
+            <font-awesome-icon v-else icon="fish" />
+            {{ role }} &nbsp;</span
+          >
           <span :style="'color: ' + memberColor + ';'"
             ><font-awesome-icon icon="user" /> {{ member }}</span
           >
@@ -53,8 +66,8 @@
         </div>
       </div>
       <!--  -->
-        <OwnerBody v-if="role != 'Client'" :role="role" />
-        <ClientBody v-else />
+      <OwnerBody v-if="role != 'Client'" :role="role" />
+      <ClientBody v-else />
       <!--  -->
     </b-card>
   </div>
@@ -63,7 +76,7 @@
 <script>
 import Navbar from "../../components/navbar.vue";
 import OwnerBody from "../../components/profile/OwnerBody.vue";
-import ClientBody from "../../components/profile/ClientBody.vue"
+import ClientBody from "../../components/profile/ClientBody.vue";
 
 export default {
   components: { Navbar, OwnerBody, ClientBody },
@@ -82,14 +95,13 @@ export default {
       role: "Fishing Instructor",
       member: "Gold member",
       memberColor: "#fca311",
-      host: 'http://localhost:8080'
+      host: "http://localhost:8080",
     };
   },
   mounted() {
     let id = this.$route.params.profile;
     let that = this;
-    this.$axios.get("/api/profile?id=" + id)
-    .then((resp) => {
+    this.$axios.get("/api/profile?id=" + id).then((resp) => {
       that.name = resp.data.name;
       that.username = "@" + resp.data.username;
       that.surname = resp.data.surname;
@@ -103,43 +115,40 @@ export default {
       console.log(that.memberColor);
       that.setCoverPhoto();
     });
-    
   },
 
   methods: {
     prettierRoleName(name) {
-      if(name == 'ROLE_FISHING_INSTRUCTOR') {
-        return 'Fishing Instructor';
-      } else if(name == 'ROLE_COTTAGE_OWNER') {
-        return 'Cottage Owner';
-      } else if(name == 'ROLE_BOAT_OWNER') {
-        return 'Boat Owner';
-      } else if(name == 'ROLE_CLIENT') {
-        return 'Client';
+      if (name == "ROLE_FISHING_INSTRUCTOR") {
+        return "Fishing Instructor";
+      } else if (name == "ROLE_COTTAGE_OWNER") {
+        return "Cottage Owner";
+      } else if (name == "ROLE_BOAT_OWNER") {
+        return "Boat Owner";
+      } else if (name == "ROLE_CLIENT") {
+        return "Client";
       }
     },
     noProfilePhoto() {
-      this.$refs.profilePhoto.src = "https://www.innovaxn.eu/wp-content/uploads/blank-profile-picture-973460_1280.png";
+      this.$refs.profilePhoto.src =
+        "https://www.innovaxn.eu/wp-content/uploads/blank-profile-picture-973460_1280.png";
     },
-    setCoverPhoto(){
-      console.log("THIS IS THE ROLE");
-      console.log(this.role);
+    setCoverPhoto() {
       if (this.role == "Fishing Instructor") {
         this.cover =
           "https://images.unsplash.com/photo-1499403474843-04e72c14df8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
       } else if (this.role == "Cottage Owner") {
         this.cover =
-          "https://images.unsplash.com/photo-1519506194248-1c575e89adb9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+          "https://images.unsplash.com/photo-1580202313707-46a966af5c6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=862&q=80";
       } else if (this.role == "Boat Owner") {
         this.cover =
           "https://images.unsplash.com/photo-1499403474843-04e72c14df8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
       } else {
         this.cover =
-          "https://images.unsplash.com/photo-1508325739122-c57a76313bf4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80";
+          "https://images.unsplash.com/photo-1527549993586-dff825b37782?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
       }
     },
-
-  }
+  },
 };
 </script>
 

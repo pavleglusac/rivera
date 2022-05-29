@@ -15,6 +15,7 @@
           <div class="form-group col-md-3">
             <b-form-datepicker
               size="sm"
+              v-model="selectedStartDate"
               v-on:input="loadReservations"
               placeholder="Start date"
             ></b-form-datepicker>
@@ -22,6 +23,7 @@
           <div class="form-group col-md-3">
             <b-form-datepicker
               size="sm"
+              v-model="selectedEndDate"
               v-on:input="loadReservations"
               placeholder="End date"
             ></b-form-datepicker>
@@ -72,6 +74,8 @@ export default {
       reservations: [],
       entities: [],
       filteredOffers: [],
+      selectedStartDate: '',
+      selectedEndDate: '',
       isFiltering: false,
       activeCottages: false,
       activeBoats: false,
@@ -113,28 +117,12 @@ export default {
       let that = this;
       that.reservations = [];
       this.$axios
-        .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
-        })
-        .then((resp) => {
-          console.log(resp.data);
-          this.$axios
-            .post(
-              `/api/cottage/search-reservations-for-owner?&numberOfResults=10&orderBy=${
-                that.sort
-              }&search=${that.searchText.trim()}&tags=${
-                that.tags
-              }&ownerUsername=${resp.data}`
-            )
-            .then((response) => {
-              that.reservations = response.data;
-              that.loadingReservations = false;
-            });
-        })
-        .catch((err) => {
-          console.log(err);
+        .post(
+          `/api/cottage/search-reservations-for-entity?id=${this.$route.params.rentable}&search=${that.searchText}&start=${that.selectedStartDate}&end=${that.selectedEndDate}`
+        )
+        .then((response) => {
+          that.reservations = response.data;
+          that.loadingReservations = false;
         });
     },
     getActiveOffers() {

@@ -8,13 +8,15 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class ClientReservationDTO {
+public class OwnerReservationDTO {
     LocalDateTime startDateTime;
     LocalDateTime endDateTime;
     Boolean cancelled;
-    EntityReservationDTO entity;
-    Integer rentableId;
+    RentableDTO rentable;
+    ClientRentableDto client;
     Double price;
+    ReservationReportDTO report;
+    Integer reservationId;
 
     public boolean isUpcoming() {
         return !this.startDateTime.isBefore(LocalDateTime.now());
