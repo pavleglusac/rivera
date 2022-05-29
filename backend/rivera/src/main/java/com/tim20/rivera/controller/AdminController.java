@@ -1,8 +1,6 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dto.CottageDTO;
-import com.tim20.rivera.dto.OwnerRequestDTO;
-import com.tim20.rivera.dto.TerminationRequestDTO;
+import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.MemberCategory;
 import com.tim20.rivera.model.Person;
 import com.tim20.rivera.model.Rules;
@@ -12,10 +10,12 @@ import com.tim20.rivera.service.EmailService;
 import com.tim20.rivera.service.OwnerService;
 import com.tim20.rivera.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -113,5 +113,16 @@ public class AdminController {
     public void terminatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
         emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
         adminService.rejectTerminationRequest(username);
+    }
+
+    @GetMapping("system-income")
+    public List<IncomeSystemDTO> getSystemIncome(@RequestParam("type") String type,
+                                                 @RequestParam("startDate")
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                 LocalDateTime from,
+                                                 @RequestParam("endDate")
+                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                                 LocalDateTime to) {
+        return adminService.getSystemIncome(type, from, to);
     }
 }

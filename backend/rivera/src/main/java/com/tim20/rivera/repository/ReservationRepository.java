@@ -23,9 +23,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByRentableOwnerUsername(String username);
     List<Reservation> findByRentableOwnerUsernameAndCancelledAndStartDateTimeAfterAndEndDateTimeBefore(String username, boolean cancelled, LocalDateTime startDateTime, LocalDateTime endDateTime);
     @Query("SELECT " +
-            "    new com.tim20.rivera.dto.IncomeDTO(rentable, SUM(reservation.price)) " +
+            "   new com.tim20.rivera.dto.IncomeDTO(rentable, SUM(reservation.ownerIncomePercentage*reservation.price)) " +
             "FROM " +
-            "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +
+            "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username like ?1" +
             " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 group by rentable")
     List<IncomeDTO> findIncome(String username, LocalDateTime startDateTime, LocalDateTime endDateTime);
     @Query(value = "SELECT   function('date_trunc', 'week',reservation.startDateTime), COUNT (reservation)\n" +
@@ -51,4 +51,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Object[]> findYearlyAttendance(String username, LocalDateTime startDateTime, LocalDateTime endDateTime, boolean cancelled, String type);
 
     List<Reservation> findByClientUsername(String username);
+
+    @Query("SELECT SUM((1-reservation.ownerIncomePercentage)*reservation.price) " +
+            "FROM " +
+            " Reservation reservation where reservation.startDateTime >= ?1 and reservation.startDateTime < ?2 ")
+    Double findTotalSystemIncome(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

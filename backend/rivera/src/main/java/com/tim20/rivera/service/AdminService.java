@@ -1,6 +1,7 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.ClientRequestDTO;
+import com.tim20.rivera.dto.IncomeSystemDTO;
 import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
@@ -8,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +47,9 @@ public class AdminService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
@@ -169,5 +177,46 @@ public class AdminService {
         Admin admin = clientRequestDTOToAdmin(clientRequestDTO);
         adminRepository.save(admin);
         return admin;
+    }
+
+    public List<IncomeSystemDTO> getSystemIncome(String type, LocalDateTime from, LocalDateTime to) {
+        if(from.isAfter(to)) return null;
+        LocalDateTime nextVal = from;
+        String label = "";
+        List<IncomeSystemDTO> incomes = new ArrayList<>();
+        while(from.isBefore(to)) {
+            switch (type) {
+                case "week" -> { nextVal = nextVal.plusDays(7);
+                    label = String.format("%s", from.format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+                }
+                case "day" -> { nextVal = nextVal.plusDays(1);
+                    label = String.format("%s", from.format(DateTimeFormatter.ISO_LOCAL_DATE));
+                }
+                case "month" -> {
+                    nextVal = nextVal.plusMonths(1);
+                    nextVal = nextVal.withDayOfMonth(1);
+                    label = String.format("%s %d", from.getMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()), from.getYear());
+                }
+                case "year" -> {
+                    nextVal = nextVal.plusYears(1);
+                    nextVal = nextVal.withDayOfMonth(1);
+                    nextVal = nextVal.withMonth(1);
+                    label = String.format("%d", from.getYear());
+                }
+            }
+
+            if(nextVal.isAfter(to)) {
+                nextVal = to;
+            }
+            //
+            Double income = reservationRepository.findTotalSystemIncome(from, nextVal);
+            if(income == null) income = 0.0;
+            IncomeSystemDTO incomeDto = new IncomeSystemDTO();
+            incomeDto.setIncome(income);
+            incomeDto.setLabel(label);
+            incomes.add(incomeDto);
+            from = nextVal;
+        }
+        return incomes;
     }
 }

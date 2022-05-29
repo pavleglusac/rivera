@@ -24,6 +24,7 @@ public class Reservation {
     private Rentable rentable;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    private Double ownerIncomePercentage;
     private Boolean cancelled;
 
     public static Integer pointsPerReservation;
