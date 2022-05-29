@@ -237,6 +237,7 @@ import Navbar from '../components/navbar.vue';
 export default {
   components: { Navbar },
   mounted() {
+    this.redirectAdmin();
     AOS.init();
   },
   data() {
@@ -267,13 +268,23 @@ export default {
   methods: {
     redirect() {
       console.log(window.localStorage.getItem("JWT"));
-      this.$axios.get('/api/auth/getRole', {
-                          headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
-                      }).then((resp) => {
+      this.$axios.get('/api/auth/getRole').then((resp) => {
           if(resp.data == "unauthenticated") {
             this.$router.push({ path: "/login" });
           } else {
             this.$router.push({ path: "/offers" });
+          }
+      }).catch((err) => {
+          console.log(err);
+      });
+    },
+    redirectAdmin() {
+      this.$axios.get('/api/auth/logged-user-info').then((resp) => {
+          console.log(resp.data);
+          if(resp.data != null) {
+            if(resp.data.role == 'ROLE_ADMIN' && resp.data.lastPasswordChange == null) {
+              this.$router.push({ path: "/admin/profile" });
+            }
           }
       }).catch((err) => {
           console.log(err);

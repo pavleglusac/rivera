@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -107,6 +108,17 @@ public class AuthenticationController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @PostMapping("/signupAdmin")
+    public ResponseEntity<Person> addAdmin(ClientRequestDTO clientRequestDTO) {
+        Person existUser = personService.findByUsername(clientRequestDTO.getUsername());
+        if (existUser != null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        Person user = adminService.save(clientRequestDTO);
+        // emailService.sendNotificaitionClientAsync(clientRequestDTO);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
     @GetMapping(path = "check-if-username-exists")
     public Boolean ifExists(String username) {
         Person existUser = personService.findByUsername(username);
@@ -135,5 +147,26 @@ public class AuthenticationController {
         if(admin != null)
             return "ADMIN";
         return "";
+    }
+
+    @GetMapping("last-password-change")
+    public LocalDateTime getLastPasswordChange(@RequestParam String username) {
+        return personService.getLastPasswordChange(username);
+    }
+
+    @GetMapping("logged-user-info")
+    public LoggedUserInfoDTO getLoggedUserInfo() {
+        try {
+            LoggedUserInfoDTO info = new LoggedUserInfoDTO();
+            Person loggedPerson = (Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            String role = loggedPerson.getRoles().get(0).getName();
+            info.setRole(role);
+            info.setUsername(loggedPerson.getUsername());
+            if(loggedPerson.getLastPasswordResetDate() != null)
+                info.setLastPasswordChange(loggedPerson.getLastPasswordResetDate().toLocalDateTime());
+            return info;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

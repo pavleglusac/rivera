@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,6 +171,8 @@ public class PersonService{
                 return null;
             }
             user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+            user.setLastPasswordResetDate(Timestamp.valueOf(LocalDateTime.now()));
+
             personRepository.save(user);
 
             Authentication newAuthentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -197,5 +201,11 @@ public class PersonService{
         terminationRequest.setStatus(TerminationStatus.PENDING);
         terminationRepository.save(terminationRequest);
         return true;
+    }
+
+    public LocalDateTime getLastPasswordChange(String username) {
+        Person person = personRepository.findByUsername(username);
+        if(person == null) return null;
+        return person.getLastPasswordResetDate().toLocalDateTime();
     }
 }

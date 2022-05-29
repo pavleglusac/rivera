@@ -48,6 +48,7 @@ export default {
         }
     },
     mounted() {
+        this.redirectAdmin();
         this.getToTerminateUsernames();
         this.getStats();
     },
@@ -78,7 +79,19 @@ export default {
                 that.totalRequests = typeof resp.data.WAITING !== 'undefined' ? resp.data.WAITING : 0;
                 that.terminatedAccounts = typeof resp.data.TERMINATED !== 'undefined' ? resp.data.TERMINATED : 0;
             });
-        }
+        },
+        redirectAdmin() {
+			this.$axios.get('/api/auth/logged-user-info').then((resp) => {
+				console.log(resp.data);
+				if(resp.data != null) {
+					if(resp.data.role == 'ROLE_ADMIN' && resp.data.lastPasswordChange == null) {
+					this.$router.push({ path: "/admin/profile" });
+					}
+				}
+			}).catch((err) => {
+				console.log(err);
+			});
+		}
     }
 
 };

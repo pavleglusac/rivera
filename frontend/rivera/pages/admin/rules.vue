@@ -3,7 +3,7 @@
 		<Navbar :currentPage="'rules'" />
 		<div
 			class="d-flex flex-column mt-1"
-			style="width: 70vw; margin-left: auto; margin-right: auto"
+			style="width: 100vw; margin-left: auto; margin-right: auto"
 		>
 			<b-card
 				class="mx-auto my-auto card w-50 mt-2 mb-5"
@@ -404,10 +404,23 @@ export default {
 			.then(resp => {
 				
 			});
+		},
+		redirectAdmin() {
+		this.$axios.get('/api/auth/logged-user-info').then((resp) => {
+			console.log(resp.data);
+			if(resp.data != null) {
+				if(resp.data.role == 'ROLE_ADMIN' && resp.data.lastPasswordChange == null) {
+				this.$router.push({ path: "/admin/profile" });
+				}
+			}
+		}).catch((err) => {
+			console.log(err);
+		});
 		}
 	},
 	
 	mounted() {
+		this.redirectAdmin();
 		this.getRules();
 		this.getCategories();
 	},

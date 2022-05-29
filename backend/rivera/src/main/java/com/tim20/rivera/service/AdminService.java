@@ -1,9 +1,11 @@
 package com.tim20.rivera.service;
 
+import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,6 +36,15 @@ public class AdminService {
 
     @Autowired
     private TerminationRepository terminationRepository;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
+
 
     public Admin findByUsername(String username) {
         return adminRepository.findById(username)
@@ -134,5 +145,29 @@ public class AdminService {
         List<TerminationRequest> requests = terminationRepository.findAllByPersonAndStatus(person, TerminationStatus.PENDING);
         requests.forEach(request -> request.setStatus(TerminationStatus.DENIED));
         terminationRepository.saveAll(requests);
+    }
+
+    private Admin clientRequestDTOToAdmin(ClientRequestDTO clientRequestDTO) {
+        Admin admin = new Admin();
+        admin.setPassword(passwordEncoder.encode(clientRequestDTO.getPassword()));
+        admin.setName(clientRequestDTO.getName());
+        admin.setUsername(clientRequestDTO.getUsername());
+        admin.setSurname(clientRequestDTO.getSurname());
+        admin.setPhoneNumber(clientRequestDTO.getPhoneNumber());
+        admin.setAddress(clientRequestDTO.getAddress());
+        admin.setCity(clientRequestDTO.getCity());
+        admin.setEmail(clientRequestDTO.getEmail());
+        admin.setCountry(clientRequestDTO.getCountry());
+        admin.setPhoto(DEFAULT_PHOTO_PATH);
+        admin.setStatus(AccountStatus.WAITING);
+        List<Role> roles = roleService.findByName("ROLE_ADMIN");
+        admin.setRoles(roles);
+        return admin;
+    }
+
+    public Person save(ClientRequestDTO clientRequestDTO) {
+        Admin admin = clientRequestDTOToAdmin(clientRequestDTO);
+        adminRepository.save(admin);
+        return admin;
     }
 }
