@@ -8,7 +8,8 @@
           :name="name"
           :score="score"
           :canBeChanged="!canBeChanged"
-          :currentType = "currentType"
+          :currentType="currentType"
+          :openReservationsModal="openReservationsModal"
         />
         <div class="mt-10 h-25">
           <h6 class="mb-3">
@@ -25,15 +26,8 @@
             <span class="tag">{{ tag }}</span>
           </li>
           <br />
-          <div
-            class="mt-3"
-            @click="goToOwnerProfile"
-            style="cursor: pointer"
-            >
-            <b-avatar
-              variant="info"
-              :src="owner.picture"
-            ></b-avatar>
+          <div class="mt-3" @click="goToOwnerProfile" style="cursor: pointer">
+            <b-avatar variant="info" :src="owner.picture"></b-avatar>
             <span class="mr-auto" style="font-weight: 500"
               >{{ owner.name }} {{ owner.surname }}</span
             >
@@ -70,10 +64,12 @@
         ></iframe>
       </div>
       <div class="d-flex flex-column ml-5" style="width: 50%; height: 100%">
-        <div v-if="currentType=='adventure'">
+        <div v-if="currentType == 'adventure'">
           <h6 class="mt-4"><font-awesome-icon icon="plus" /> Equipment:</h6>
           <div class="flex">
-            <span class="tagish" v-for="e in equipment" :key="e"> {{ e }} </span>
+            <span class="tagish" v-for="e in equipment" :key="e">
+              {{ e }}
+            </span>
           </div>
         </div>
         <h6 class="mt-4">
@@ -92,81 +88,81 @@
             {{ service }}
           </span>
         </div>
-        <div v-if="currentType=='cottage'">
-        <h6 class="mt-4">
-          <font-awesome-icon icon="bell-concierge" /> Rooms:
-        </h6>
-        <div class="flex">
-          <span class="tagish" v-for="room in rooms" :key="room">
-            {{ room }}
-          </span>
+        <div v-if="currentType == 'cottage'">
+          <h6 class="mt-4">
+            <font-awesome-icon icon="bell-concierge" /> Rooms:
+          </h6>
+          <div class="flex">
+            <span class="tagish" v-for="room in rooms" :key="room">
+              {{ room }}
+            </span>
+          </div>
         </div>
-        </div>
-        <div v-if="currentType=='boat'">
-			  <div class="form-row">
-				  <div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Length:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{boatLength}}
-              </span>
+        <div v-if="currentType == 'boat'">
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Length:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ boatLength }}
+                </span>
+              </div>
             </div>
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Capacity:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ capacity }}
+                </span>
+              </div>
             </div>
-				<div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Capacity:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{capacity}}
-              </span>
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Max speed:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ maxSpeed }}
+                </span>
+              </div>
             </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Engine Power:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ enginePower }}
+                </span>
+              </div>
             </div>
-				<div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Max speed:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{maxSpeed}}
-              </span>
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Number of engines:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ enginesNumber }}
+                </span>
+              </div>
             </div>
-        </div>
+            <div class="form-group col-md-4">
+              <h6 class="mt-4">
+                <font-awesome-icon icon="bell-concierge" /> Type:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ type }}
+                </span>
+              </div>
             </div>
-			  <div class="form-row">
-				<div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Engine Power:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{enginePower}}
-              </span>
-            </div>
-            </div>
-				<div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Number of engines:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{enginesNumber}}
-              </span>
-            </div>
-            </div>
-				<div class="form-group col-md-4">
-            <h6 class="mt-4">
-              <font-awesome-icon icon="bell-concierge" /> Type:
-            </h6>
-            <div class="flex">
-              <span class="tagish">
-              {{type}}
-              </span>
-            </div>
-            </div>
-        </div>
+          </div>
         </div>
       </div>
     </div>
@@ -188,7 +184,7 @@
           style="height: 80vh"
         >
           <div class="w-75">
-            <Calendar :reservations="reservations" :currentType='currentType'/>
+            <Calendar :reservations="reservations" :currentType="currentType" />
           </div>
         </div>
       </div>
@@ -209,16 +205,26 @@
           </div>
         </div>
         <div v-else class="d-flex flex-column h-100">
-          <p>There are no offers on discount right now. If you want to receive email notification when owner creates a special offer, please subscribe to this entity.</p>
+          <p>
+            There are no offers on discount right now. If you want to receive
+            email notification when owner creates a special offer, please
+            subscribe to this entity.
+          </p>
         </div>
-            <b-modal id="reservedDiscountModal" title="Congratulations!">
-      <p class="my-4">You have successfully reserved your appointment.</p>
-    </b-modal>
+
+        <b-modal id="reservedDiscountModal" title="Congratulations!">
+          <p class="my-4">You have successfully reserved your appointment.</p>
+        </b-modal>
+
+        <b-modal id="reservationModal" size="xl" hide-header hide-footer>
+          <reservation-history/>
+        </b-modal>
+
       </div>
     </div>
 
     <div class="mt-5 w-100 mb-5">
-    <h3 class="subtitle">Reviews</h3>
+      <h3 class="subtitle">Reviews</h3>
       <div v-if="reviews.length > 0" class="row h-100 gx-0">
         <div class="col-6 gx-0 pr-0">
           <div>
@@ -258,9 +264,10 @@ import Carousel from "./Carousel.vue";
 import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
 import Review from "./Review.vue";
+import ReservationHistory from "../owner_reservations/reservation_history.vue";
 
 export default {
-  components: { MainCard, Carousel, Calendar, Discount, Review },
+  components: { MainCard, Carousel, Calendar, Discount, Review, ReservationHistory },
   data() {
     return {
       id: "",
@@ -295,160 +302,179 @@ export default {
       boatLength: "",
       enginesNumber: "",
       enginePower: "",
-      maxSpeed : "",
+      maxSpeed: "",
     };
   },
   mounted() {
     let that = this;
-		this.$axios
-        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
-        .then((resp) => {
-
-          that.currentType = resp.data;
-          switch(resp.data){
-            case "cottage":  {this.loadCottage(); break;}
-            case "adventure": {this.loadAdventure(); break;}
-            case "boat": {this.loadBoat(); break;}
+    this.$axios
+      .get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
+      .then((resp) => {
+        that.currentType = resp.data;
+        switch (resp.data) {
+          case "cottage": {
+            this.loadCottage();
+            break;
           }
-          console.log(this.$route.params.rentable);
-          console.log(resp.data);
-          console.log(that.currentType);
-        })
-
+          case "adventure": {
+            this.loadAdventure();
+            break;
+          }
+          case "boat": {
+            this.loadBoat();
+            break;
+          }
+        }
+      });
   },
   methods: {
     goToOwnerProfile() {
       //this.$router.push({ path: "/owner/" + owner.id });
     },
     openModal() {
-      this.$bvModal.show('reservedDiscountModal');
+      this.$bvModal.show("reservedDiscountModal");
     },
-    loadAdventure(){
-    console.log("AAAAAAAAAAAAABRUH");
-    let that = this;
-    this.$axios
-      .get("/api/get-full-adventure?id=" + this.$route.params.rentable)
-      .then((resp) => {
-        let adventure = resp.data;
-        console.log(adventure);
-        that.reviews = adventure.reviews;
-        that.reviews.forEach(
-          (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
-        );
-        that.name = adventure.name;
-        that.location = adventure.city + ", " + adventure.country;
-        that.address = adventure.address;
-        that.services = adventure.services;
-        that.name = adventure.name;
-        that.perHour = adventure.perHour;
-        that.perDay = adventure.perDay;
-        that.description = adventure.description;
-        that.rulesOfConduct = adventure.rulesOfConduct;
-        that.cancellationTerms = adventure.cancellationTerms;
-        that.services = adventure.services;
-        that.tags = adventure.tags;
-        that.canBeChanged = !adventure.canBeChanged;
-        that.discounts = adventure.discounts;
-        that.discounts.forEach(
-          (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
-        );
-        that.discounts.forEach(
-          (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
-        );
-        that.score = adventure.averageScore;
-        that.pictures.push(
-          ...adventure.pictures.map((x) => "http://localhost:8080" + x)
-        );
-        that.id = adventure.id;
-        that.equipment = adventure.equipment;
-        that.owner = adventure.owner;
-        that.capacity = adventure.capacity;
-        that.owner.picture = "http://localhost:8080" + that.owner.picture;
-        that.reservations = adventure.reservations;
-      });
+    openReservationsModal() {
+      this.$bvModal.show("reservationModal");
     },
-    loadCottage(){
-    console.log("AAAAAAAAAAAAAKRUH");      
-		let that = this;
-		this.$axios
-        .get('/api/cottage/get-full-cottage?id=' + this.$route.params.rentable)
+    loadAdventure() {
+      let that = this;
+      this.$axios
+        .get("/api/get-full-adventure?id=" + this.$route.params.rentable)
         .then((resp) => {
-            let cottage = resp.data;
-            console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
-            that.reviews = cottage.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
-            that.name = cottage.name;
-            that.location = cottage.address+","+cottage.city+","+cottage.country;
-            that.services = cottage.services;
-            that.name = cottage.name;
-            that.perHour = cottage.perHour;
-            that.perDay = cottage.perDay;
-            that.address = cottage.address;
-            that.description = cottage.description;
-            that.rulesOfConduct = cottage.rulesOfConduct;
-            that.cancellationTerms = cottage.cancellationTerms;
-            that.services = cottage.services;
-            that.tags = cottage.tags;
-            that.canBeChanged = !cottage.canBeChanged;
-            console.log(that.canBeChanged +"------");
-            that.discounts = cottage.discounts;
-            that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
-            that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
-            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
-			      that.id = cottage.id;
-            that.owner = cottage.owner;
-            that.owner.picture = "http://localhost:8080" + that.owner.picture;
-            var stringRooms = cottage.rooms.split(';');
-            for(var room of stringRooms){
-              if(!room.split(',')[0]){
-                break;
-              }
-                var roomString = room.split(',')[0]+" bedded - " + room.split(',')[1];
-                (parseInt(room.split(',')[1])>1) ? roomString += " rooms" : roomString += " room"; 
-                that.rooms.push(roomString);
-              console.log(roomString+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+          let adventure = resp.data;
+          that.reviews = adventure.reviews;
+          that.reviews.forEach(
+            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+          );
+          that.name = adventure.name;
+          that.location = adventure.city + ", " + adventure.country;
+          that.address = adventure.address;
+          that.services = adventure.services;
+          that.name = adventure.name;
+          that.perHour = adventure.perHour;
+          that.perDay = adventure.perDay;
+          that.description = adventure.description;
+          that.rulesOfConduct = adventure.rulesOfConduct;
+          that.cancellationTerms = adventure.cancellationTerms;
+          that.services = adventure.services;
+          that.tags = adventure.tags;
+          that.canBeChanged = !adventure.canBeChanged;
+          that.discounts = adventure.discounts;
+          that.discounts.forEach(
+            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+          );
+          that.discounts.forEach(
+            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+          );
+          that.score = adventure.averageScore;
+          that.pictures.push(
+            ...adventure.pictures.map((x) => "http://localhost:8080" + x)
+          );
+          that.id = adventure.id;
+          that.equipment = adventure.equipment;
+          that.owner = adventure.owner;
+          that.capacity = adventure.capacity;
+          that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          that.reservations = adventure.reservations;
+        });
+    },
+    loadCottage() {
+      let that = this;
+      this.$axios
+        .get("/api/cottage/get-full-cottage?id=" + this.$route.params.rentable)
+        .then((resp) => {
+          let cottage = resp.data;
+          that.reviews = cottage.reviews;
+          that.reviews.forEach(
+            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+          );
+          that.name = cottage.name;
+          that.location =
+            cottage.address + "," + cottage.city + "," + cottage.country;
+          that.services = cottage.services;
+          that.name = cottage.name;
+          that.perHour = cottage.perHour;
+          that.perDay = cottage.perDay;
+          that.capacity = cottage.capacity;
+          that.address = cottage.address;
+          that.description = cottage.description;
+          that.rulesOfConduct = cottage.rulesOfConduct;
+          that.cancellationTerms = cottage.cancellationTerms;
+          that.services = cottage.services;
+          that.tags = cottage.tags;
+          that.canBeChanged = !cottage.canBeChanged;
+          that.discounts = cottage.discounts;
+          that.discounts.forEach(
+            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+          );
+          that.discounts.forEach(
+            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+          );
+          that.pictures.push(
+            ...cottage.pictures.map((x) => "http://localhost:8080" + x)
+          );
+          that.id = cottage.id;
+          that.owner = cottage.owner;
+          that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          var stringRooms = cottage.rooms.split(";");
+          for (var room of stringRooms) {
+            if (!room.split(",")[0]) {
+              break;
             }
+            var roomString =
+              room.split(",")[0] + " bedded - " + room.split(",")[1];
+            parseInt(room.split(",")[1]) > 1
+              ? (roomString += " rooms")
+              : (roomString += " room");
+            that.rooms.push(roomString);
+          }
         });
     },
-    loadBoat(){
-    console.log("AAAAAAAAAAAAAKRUH");      
-		let that = this;
-		this.$axios
-        .get('/api/boat/get-full-boat?id=' + this.$route.params.rentable)
+    loadBoat() {
+      let that = this;
+      this.$axios
+        .get("/api/boat/get-full-boat?id=" + this.$route.params.rentable)
         .then((resp) => {
-            let boat = resp.data;
-            console.log(resp.data.maxSpeed+"AUISDHIUASDHAISUDH");
-            that.reviews = boat.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
-            that.name = boat.name;
-            that.location = boat.address+","+boat.city+","+boat.country;
-            that.services = boat.services;
-            that.name = boat.name;
-            that.perHour = boat.perHour;
-            that.perDay = boat.perDay;
-            that.address = boat.address;
-            that.description = boat.description;
-            that.rulesOfConduct = boat.rulesOfConduct;
-            that.cancellationTerms = boat.cancellationTerms;
-            that.services = boat.services;
-            that.tags = boat.tags;
-            that.enginesNumber = boat.enginesNumber;
-            that.enginePower = boat.enginePower;
-            that.type= boat.type;
-            that.maxSpeed = boat.maxSpeed;
-            that.boatLength= boat.length;
-            that.capacity = boat.capacity
-            that.canBeChanged = !boat.canBeChanged;
-            console.log(that.canBeChanged +"------");
-            that.discounts = boat.discounts;
-            that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
-            that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
-            that.pictures.push(...boat.pictures.map(x => "http://localhost:8080" + x));
-			      that.id = boat.id;
-            that.owner = boat.owner;
-            that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          let boat = resp.data;
+          that.reviews = boat.reviews;
+          that.reviews.forEach(
+            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+          );
+          that.name = boat.name;
+          that.location = boat.address + "," + boat.city + "," + boat.country;
+          that.services = boat.services;
+          that.name = boat.name;
+          that.perHour = boat.perHour;
+          that.perDay = boat.perDay;
+          that.address = boat.address;
+          that.description = boat.description;
+          that.rulesOfConduct = boat.rulesOfConduct;
+          that.cancellationTerms = boat.cancellationTerms;
+          that.services = boat.services;
+          that.tags = boat.tags;
+          that.enginesNumber = boat.enginesNumber;
+          that.enginePower = boat.enginePower;
+          that.type = boat.type;
+          that.maxSpeed = boat.maxSpeed;
+          that.boatLength = boat.length;
+          that.capacity = boat.capacity;
+          that.canBeChanged = !boat.canBeChanged;
+          that.discounts = boat.discounts;
+          that.discounts.forEach(
+            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+          );
+          that.discounts.forEach(
+            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+          );
+          that.pictures.push(
+            ...boat.pictures.map((x) => "http://localhost:8080" + x)
+          );
+          that.id = boat.id;
+          that.owner = boat.owner;
+          that.owner.picture = "http://localhost:8080" + that.owner.picture;
         });
-    }
+    },
   },
 };
 </script>

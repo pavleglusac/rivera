@@ -11,10 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchParams {
     String search;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    LocalDateTime start;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    LocalDateTime end;
+    String start;
+    String end;
     String orderBy;
     List<String> tags;
     int numberOfResults;

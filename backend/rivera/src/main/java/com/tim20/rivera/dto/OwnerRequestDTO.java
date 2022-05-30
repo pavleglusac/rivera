@@ -23,9 +23,6 @@ public class OwnerRequestDTO {
     private String biography;
     private AccountStatus status;
 
-
-
-
     public AccountStatus getStatus() {
         return status;
     }
@@ -43,15 +40,15 @@ public class OwnerRequestDTO {
     }
 
     public String mailPrint(){
-        String x ="\n";
-        x += "Email:" + email+ "\n";
-        x += "Username:" + username+ "\n";
-        x += "Name:" + name+ "\n";
-        x += "Surname:" + surname+ "\n";
-        x += "PhoneNumber:" + phoneNumber+ "\n";
-        x += "Address:" + address+ "\n";
-        x += "City:" + city+ "\n";
-        x += "Country:" + country + "\n";
+        String x ="";
+        x += "Email: " + email+ "<br>";
+        x += "Username: " + username+ "<br>";
+        x += "Name: " + name+ "<br>";
+        x += "Surname: " + surname+ "<br>";
+        x += "PhoneNumber: " + phoneNumber+ "<br>";
+        x += "Address: " + address+ "<br>";
+        x += "City: " + city+ "<br>";
+        x += "Country: " + country + "<br>";
         return x;
     }
 

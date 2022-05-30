@@ -117,7 +117,7 @@ INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (3, '/images/advent
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img5.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img4.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img3.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventuresFishing/1/img2.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img2.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img1.jpg');
 
 

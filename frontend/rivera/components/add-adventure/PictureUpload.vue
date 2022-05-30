@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="mt-5">
-      <label for="files">Add new photos: </label>
-      <input id="files" type="file" multiple />
-    </div>
+      <b-form-file id="files" class="mb-2 mt-2"></b-form-file>
     <div style="margin: auto">
       <div id="sortableImgThumbnailPreview"></div>
     </div>
@@ -101,8 +98,8 @@ export default {
 .IMGthumbnail img {
   max-width: 100%;
   max-height: 100%;
-  width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 .imgThumbContainer {
   margin: 4px;

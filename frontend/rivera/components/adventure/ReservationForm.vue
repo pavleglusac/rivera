@@ -57,9 +57,6 @@
       <b-button @click="reserveAppointment" class="prime-btn"
         >Reserve now</b-button
       >
-      <b-modal id="reservedModal" title="Congratulations!">
-        <p class="my-4">You have successfully reserved your appointment.</p>
-      </b-modal>
     </div>
   </div>
 </template>
@@ -82,13 +79,19 @@ export default {
     };
   },
   mounted() {
+    console.log("POSLATO START VREME: " + this.appointment.start)
+    console.log("POSLATO KRAJNJE VREME: " + this.appointment.end)
     this.calculateReservationPrice();
   },
   methods: {
     getStartDateTime() {
+      console.log("GETTING START DATE TIME")
+      console.log(this.appointment.start)
+      console.log(new Date(this.appointment.start))
       if (this.selectedAppointment == "whole") {
         return new Date(this.appointment.start);
       }
+      console.log(this.chosenStartDate)
       return new Date(
         this.chosenStartDate.toISOString().slice(0, 10) +
           " " +
@@ -114,6 +117,12 @@ export default {
         return true;
       return false;
     },
+    isoDateWithoutTimeZone(date) {
+      if (date == null) return date;
+      var timestamp = date.getTime() - date.getTimezoneOffset() * 60000;
+      var correctDate = new Date(timestamp);
+      return correctDate.toISOString();
+    },
     reserveAppointment() {
       var startDateTime = this.getStartDateTime();
       var endDateTime = this.getEndDateTime();
@@ -125,12 +134,15 @@ export default {
           },
         })
         .then((resp) => {
-          console.log(resp.data);
+          console.log("SENDING TO BACK")
+          console.log(startDateTime);
+          console.log(this.isoDateWithoutTimeZone(startDateTime));
+          console.log(endDateTime.toString());
           this.$axios
             .post(
               `/api/reserve?&username=${resp.data}&rentableId=${
                 this.$route.params.rentable
-              }&start=${startDateTime.toISOString()}&end=${endDateTime.toISOString()}&price=${price}`
+              }&start=${this.isoDateWithoutTimeZone(startDateTime)}&end=${this.isoDateWithoutTimeZone(endDateTime)}&price=${price}`
             )
             .then((response) => {
               console.log(response.data);

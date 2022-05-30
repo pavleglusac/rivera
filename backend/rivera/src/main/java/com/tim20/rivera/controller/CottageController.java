@@ -127,6 +127,15 @@ public class CottageController {
         return reservationService.searchReservationsForOwner(searchParams);
     }
 
+    @PostMapping(path="/search-all-reservations-for-owner")
+    public List<OwnerReservationDTO> searchAllReservationsForOwner(String username, ReservationSearch search) {
+        return reservationService.searchAllReservationsForOwner(username.trim(), search);
+    }
+
+    @PostMapping(path="/search-reservations-for-entity")
+    public List<ReservationDTO> searchReservationsForEntity(Integer id, SearchParams search) {
+        return reservationService.searchReservationsForEntity(id, search);
+    }
 
     @GetMapping(path= "/get-reservations-by-owner")
     public List<ReservationDTO> getReservationsByOwner(){

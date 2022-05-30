@@ -1,12 +1,10 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.exception.ResourceConflictException;
 import com.tim20.rivera.model.Admin;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
-import com.tim20.rivera.repository.ClientRepository;
 import com.tim20.rivera.service.*;
 import com.tim20.rivera.util.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +16,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping(value = "/api/auth")
@@ -32,8 +30,6 @@ public class AuthenticationController {
     private TokenUtils tokenUtils;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private PersonService userService;
     @Autowired
     private ClientService clientService;
     @Autowired
@@ -85,7 +81,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Person> addOwner(OwnerRequestDTO ownerRequestDTO) throws InterruptedException {
+    public ResponseEntity<Person> addOwner(OwnerRequestDTO ownerRequestDTO) throws MessagingException {
 
         Owner existUser = this.ownerService.findByUsername(ownerRequestDTO.getUsername());
 
@@ -98,7 +94,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signupClient")
-    public ResponseEntity<Person> addClient(ClientRequestDTO clientRequestDTO) {
+    public ResponseEntity<Person> addClient(ClientRequestDTO clientRequestDTO) throws MessagingException {
         Client existUser = this.clientService.findByUsername(clientRequestDTO.getUsername());
         if (existUser != null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

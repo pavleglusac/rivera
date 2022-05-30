@@ -22,6 +22,7 @@ public class CottageProfileDTO {
     private String city;
     private String country;
     private String rooms;
+    private int capacity;
     private String cancellationTerms;
     private Boolean canBeChanged;
     private List<String> pictures;

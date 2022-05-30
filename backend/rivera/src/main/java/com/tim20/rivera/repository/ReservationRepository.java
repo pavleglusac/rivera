@@ -19,7 +19,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByRentable(Rentable rentable);
     List<Reservation> findByCancelled(Boolean cancelled);
     List<Reservation> findByStartDateTimeIsAfter(LocalDateTime dateTime);
-    List<ReservationRepository>  findByRentableId(String id);
+    List<Reservation> findByRentableId(Integer id);
     List<Reservation> findByRentableOwnerUsername(String username);
     List<Reservation> findByRentableOwnerUsernameAndCancelledAndStartDateTimeAfterAndEndDateTimeBefore(String username, boolean cancelled, LocalDateTime startDateTime, LocalDateTime endDateTime);
     @Query("SELECT " +

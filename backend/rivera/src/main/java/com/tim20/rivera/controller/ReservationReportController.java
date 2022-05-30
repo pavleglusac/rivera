@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping("/api/reservationReport")
 public class ReservationReportController {
@@ -17,10 +19,11 @@ public class ReservationReportController {
     ReservationReportService reservationReportService;
 
     @PostMapping(path = "file-report")
-    public ResponseEntity<String> fileReport(ReservationReportDTO reservationReportDTO) throws InterruptedException {
+    public ResponseEntity<String> fileReport(ReservationReportDTO reservationReportDTO) throws MessagingException {
         reservationReportService.fileReport(reservationReportDTO);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
+
     @GetMapping(path = "get-report")
     public ReservationReportDTO getDTO(@RequestParam("id") Integer id) {
         return reservationReportService.getById(id);

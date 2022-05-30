@@ -2,18 +2,16 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.MemberCategory;
-import com.tim20.rivera.model.Person;
 import com.tim20.rivera.model.Rules;
-import com.tim20.rivera.model.TerminationRequest;
 import com.tim20.rivera.service.AdminService;
 import com.tim20.rivera.service.EmailService;
 import com.tim20.rivera.service.OwnerService;
-import com.tim20.rivera.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ public class AdminController {
     }
 
     @PostMapping(path = "deactivate-owner")
-    public void deactivateOwner(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
+    public void deactivateOwner(@RequestParam("username") String username, @RequestParam("reason") String reason) throws MessagingException {
         System.out.println("deactivate");
         System.out.println(reason);
         System.out.println(username);
@@ -104,13 +102,13 @@ public class AdminController {
     }
 
     @PostMapping(path = "terminate-person")
-    public void terminatePerson(@RequestParam("username") String username) throws IOException, InterruptedException {
+    public void terminatePerson(@RequestParam("username") String username) throws MessagingException {
         emailService.sendNotificaitionToUsername(username, "Termination accepted", "Your termination request has been accepted");
         adminService.terminatePerson(username);
     }
 
     @PostMapping(path = "reject-termination")
-    public void terminatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws IOException, InterruptedException {
+    public void terminatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws MessagingException {
         emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
         adminService.rejectTerminationRequest(username);
     }

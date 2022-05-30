@@ -11,26 +11,6 @@
 								id="adventures-btn"
 								v-on:click="activeSection = 0"
 							>
-								<span><font-awesome-icon icon="fish" /> Rentables</span>
-							</p>
-						</li>
-						<li class="nav-item">
-							<p
-								class="nav-link nav-mn"
-								v-bind:class="{ active: activeSection == 1 }"
-								id="cottages-btn"
-								v-on:click="activeSection = 1"
-							>
-								<span><font-awesome-icon icon="percent" /> Discounts</span>
-							</p>
-						</li>
-						<li class="nav-item">
-							<p
-								class="nav-link nav-mn"
-								v-bind:class="{ active: activeSection == 2 }"
-								id="boats-btn"
-								v-on:click="activeSection = 2"
-							>
 								<span><font-awesome-icon icon="star" /> Reviews</span>
 							</p>
 						</li>

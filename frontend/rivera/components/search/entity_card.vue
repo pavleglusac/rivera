@@ -29,7 +29,8 @@
             
         <div class="d-flex justify-content-between align-items-center">
             <span class="font-1h">{{entity.perHour}}$ per hour / {{entity.perDay}}$ per day</span>
-            <b-button variant="primary" class="book-btn">Book Now</b-button>
+            <b-button variant="primary" v-if="myRentable" class="book-btn">Edit rentable</b-button>
+            <b-button variant="primary" v-else class="book-btn">Book Now</b-button>
         </div>
     </b-card-body>
   </b-card>
@@ -55,6 +56,10 @@ export default {
     offerType: {
       type: String,
       required: true,
+    },
+    myRentable: {
+      type: Boolean,
+      required: false
     }
   },
 };

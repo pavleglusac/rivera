@@ -242,7 +242,6 @@ public class ClientService {
 
     public Boolean isSubscribed(String username, Integer id) {
         Client client = clientRepository.findByUsername(username);
-        System.out.println(client.getSubscribed().toString());
         Rentable rentable = rentableRepository.getById(id);
         return client.getSubscribed().contains(rentable);
     }

@@ -1,38 +1,34 @@
 <template>
   <b-card
     class="mb-2 reservation-card"
-    :class="{
-      'adventure-reservation-card': reservation.entity.kind == 'ADVENTURE',
-      'boat-reservation-card': reservation.entity.kind == 'BOAT',
-      'cottage-reservation-card': reservation.entity.kind == 'COTTAGE',
-    }"
+    img-top
+    no-body
   >
-    <b-avatar
-      variant="info"
+    <b-card-img
+      class="reservation-img-top"
       :src="'http://localhost:8080' + reservation.entity.profilePicture"
-      class="mr-2"
-    ></b-avatar>
-    <span
-      @click="goToProfile(reservation.rentableId)"
-      style="cursor: pointer; font-weight: 500; font-size: 17px"
-      class="mr-auto"
-    >
-      {{ reservation.entity.name }}</span
-    >
-    <b-card-text style="margin-top: 10px"
-      ><font-awesome-icon icon="clock" />&nbsp;{{
-        new Date(reservation.startDateTime).toString().slice(0, 21)
-      }}
-      - {{ new Date(reservation.endDateTime).toString().slice(0, 21) }}<br />
-      <font-awesome-icon icon="location-dot" />&nbsp;&nbsp;{{
-        reservation.entity.address
-      }}, {{ reservation.entity.city }}, {{ reservation.entity.country }} <br />
-      <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost: {{
-        reservation.price 
-      }}$</b-card-text
-    >
-    <b-button size="sm" disabled>Cancel reservation</b-button>
-    <b-button size="sm" disabled>Review</b-button>
+    />
+    <h5 style="margin-top: -2.5rem; color: white; margin-left: 10px">
+      <font-awesome-icon v-if="reservation.entity.kind == 'ADVENTURE'" icon="fish" />
+      <font-awesome-icon v-else-if="reservation.entity.kind == 'COTTAGE'" icon="house" />
+      <font-awesome-icon v-else icon="sailboat" /> {{ reservation.entity.name }}
+    </h5>
+    <b-card-body>
+      <b-card-text style="margin: 10px"
+        ><font-awesome-icon icon="clock" />&nbsp;{{
+          new Date(reservation.startDateTime).toString().slice(0, 21)
+        }}
+        - {{ new Date(reservation.endDateTime).toString().slice(0, 21) }}<br />
+        <font-awesome-icon icon="location-dot" />&nbsp;&nbsp;{{
+          reservation.entity.address
+        }}, {{ reservation.entity.city }}, {{ reservation.entity.country }}
+        <br />
+        <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost:
+        {{ reservation.price }}$</b-card-text
+      >
+      <b-button size="sm" disabled>Cancel reservation</b-button>
+      <b-button size="sm" disabled>Review</b-button>
+    </b-card-body>
   </b-card>
 </template>
 
@@ -47,7 +43,7 @@ export default {
   methods: {
     goToProfile(id) {
       this.$router.push({ path: "/rentable/" + id });
-    }
+    },
   },
   data() {
     return {};
