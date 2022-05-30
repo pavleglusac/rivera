@@ -274,6 +274,7 @@ public class AdventureService {
         dto.setName(owner.getName());
         dto.setBiography(owner.getBiography());
         dto.setPicture(owner.getPhoto());
+        dto.setUsername(owner.getUsername());
         return dto;
     }
 

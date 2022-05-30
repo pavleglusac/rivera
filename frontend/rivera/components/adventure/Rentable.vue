@@ -283,6 +283,7 @@ export default {
         name: "",
         surname: "",
         biography: "",
+        username: ""
       },
       discounts: [],
       reviews: [],
@@ -329,7 +330,7 @@ export default {
   },
   methods: {
     goToOwnerProfile() {
-      //this.$router.push({ path: "/owner/" + owner.id });
+      this.$router.push({ path: "/person/" + this.owner.username });
     },
     openModal() {
       this.$bvModal.show("reservedDiscountModal");

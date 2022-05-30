@@ -208,4 +208,9 @@ public class PersonService{
         if(person == null) return null;
         return person.getLastPasswordResetDate().toLocalDateTime();
     }
+
+    public boolean checkIfApprovedOrNonExistent(String username) {
+        Person person = personRepository.findByUsername(username);
+        return person == null || person.getStatus()==AccountStatus.ACTIVE;
+    }
 }

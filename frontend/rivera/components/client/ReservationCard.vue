@@ -8,7 +8,7 @@
       class="reservation-img-top"
       :src="'http://localhost:8080' + reservation.entity.profilePicture"
     />
-    <h5 style="margin-top: -2.5rem; color: white; margin-left: 10px">
+    <h5 style="margin-top: -2.5rem; cursor: pointer; color: white; margin-left: 10px" @click="goToProfile(reservation.entity.id)" >
       <font-awesome-icon v-if="reservation.entity.kind == 'ADVENTURE'" icon="fish" />
       <font-awesome-icon v-else-if="reservation.entity.kind == 'COTTAGE'" icon="house" />
       <font-awesome-icon v-else icon="sailboat" /> {{ reservation.entity.name }}

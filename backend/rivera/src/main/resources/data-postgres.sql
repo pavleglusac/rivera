@@ -41,8 +41,8 @@ INSERT INTO adventure_fishing_equipment (adventure_id, fishing_equipment) VALUES
 
 
 
-INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'pera@gmail.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, NULL);
-INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('mika', 'Dobrovoljacka 37', 'Zrenjanin', 'Serbia', false, 'mika@gmail.com', NULL, 'Mika', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Mikic', 0, 0, NULL);
+INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'pera@gmail.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, 0);
+INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('mika', 'Dobrovoljacka 37', 'Zrenjanin', 'Serbia', false, 'mika@gmail.com', NULL, 'Mika', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Mikic', 0, 0, 0);
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname) VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'admin@gmail.com', NULL, 'Branislav', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Bakic');
 
@@ -56,9 +56,9 @@ INSERT INTO boat (id,address, average_score, city, country, description, name, p
 
 INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 3', NULL, 4, 'bowner');
 
-INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points) VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko2@gmail.com', NULL, 'Marko', 'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0);
-INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points) VALUES ('cowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0);
-INSERT INTO boat_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points) VALUES ('bowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'bowner@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0);
+INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko2@gmail.com', NULL, 'Marko', 'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0, 5);
+INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('cowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0, 5);
+INSERT INTO boat_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('bowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'bowner@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0, 5);
 
 
 
@@ -91,7 +91,7 @@ INSERT INTO discount_tags (discount_id, tags_id) VALUES (7, 4);
 
 
 
-INSERT INTO fishing_instructor (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, biography, number_of_points) VALUES ('marko', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$dmCJKPVedSm8ZPAGGgcyXubDfVXEghPgnbfGX0wZlPrDTO5iL4h4C', '+3845135535', '/images/clients/marko.jpg', 'Markovic', NULL, 0, 'Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam tellus ex non nislx diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.', 0);
+INSERT INTO fishing_instructor (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, biography, number_of_points, category_id) VALUES ('marko', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$dmCJKPVedSm8ZPAGGgcyXubDfVXEghPgnbfGX0wZlPrDTO5iL4h4C', '+3845135535', '/images/clients/marko.jpg', 'Markovic', NULL, 0, 'Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam tellus ex non nislx diam, sed euismod augue dignissim ut. Aenean non rhoncus ante.', 0, 5);
 
 
 
