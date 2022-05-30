@@ -7,6 +7,8 @@ import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+
 @Service
 public class ReservationReportService {
 
@@ -17,7 +19,7 @@ public class ReservationReportService {
     @Autowired
     EmailService emailService;
 
-    public Integer fileReport(ReservationReportDTO reservationReportDTO) throws InterruptedException {
+    public Integer fileReport(ReservationReportDTO reservationReportDTO) throws MessagingException {
         ReservationReport reservationReport = new ReservationReport();
         reservationReport.setReservation(reservationRepository.findById(reservationReportDTO.getId()).get());
         reservationReport.setReservationReportType(reservationReportDTO.getReservationReportType());
@@ -37,7 +39,7 @@ public class ReservationReportService {
         return reservationReportToDTO(reservationReportRepository.getById(id));
     }
 
-    public ReservationReportDTO reservationReportToDTO(ReservationReport reservationReport){
+    public ReservationReportDTO reservationReportToDTO(ReservationReport reservationReport) {
             ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
             reservationReportDTO.setId(reservationReport.getId());
             reservationReportDTO.setReservationReportType(reservationReport.getReservationReportType());
