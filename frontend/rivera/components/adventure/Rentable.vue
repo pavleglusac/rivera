@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="d-flex flex-column mt-5" style="width: 50%; height: 100%">
-        <img
+        <!--<img
           :src="pictures[0]"
           alt=""
           style="
@@ -44,9 +44,35 @@
             height: 100%;
             max-height: 500px;
           "
-        />
+        />-->
+        <Carousel2 :pictures="pictures.slice(0, pictures.lenght)" />
+        <p
+          @click="openGalerry"
+          style="
+            background-color: #11698E;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+            color: white
+          "
+        >
+          View gallery
+        </p>
       </div>
     </div>
+
+    <b-modal id="gallery" size="xl" hide-footer>
+      <div class="gallery-row">
+        <div class="gallery-column">
+          <img v-for="pic in firstColumn" style="width: 100%" :src="pic" />
+        </div>
+        <div class="gallery-column">
+          <img v-for="pic in secondColumn" style="width: 100%" :src="pic" />
+        </div>
+      </div>
+    </b-modal>
 
     <h3 class="subtitle">Details</h3>
 
@@ -169,15 +195,6 @@
 
     <div class="w-100 pb-0 d-flex mt-5">
       <div class="d-flex flex-column" style="width: 100%; height: 100%">
-        <h3 class="subtitle">Gallery</h3>
-        <div class="d-flex flex-column h-100">
-          <Carousel2 :pictures="pictures.slice(1, pictures.lenght)" />
-        </div>
-      </div>
-    </div>
-
-    <div class="w-100 pb-0 d-flex mt-5">
-      <div class="d-flex flex-column" style="width: 100%; height: 100%">
         <h3 class="subtitle">Calendar</h3>
         <div
           class="pl-5 w-100 justify-content-center d-flex mb-5"
@@ -218,13 +235,16 @@
         </b-modal>
 
         <b-modal id="reservationModal" size="xl" hide-header hide-footer>
-          <reservation-history/>
+          <reservation-history />
         </b-modal>
 
         <b-modal id="cantReserve" title="You can't make reservations.">
-          <p class="my-4">Because of your 3 penalties, we have to stop you from making a reservation. You will have to wait till the end of month to be able to reserve something again.</p>
+          <p class="my-4">
+            Because of your 3 penalties, we have to stop you from making a
+            reservation. You will have to wait till the end of month to be able
+            to reserve something again.
+          </p>
         </b-modal>
-
       </div>
     </div>
 
@@ -273,7 +293,15 @@ import Review from "./Review.vue";
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
 
 export default {
-  components: { MainCard, Carousel2,Carousel, Calendar, Discount, Review, ReservationHistory },
+  components: {
+    MainCard,
+    Carousel2,
+    Carousel,
+    Calendar,
+    Discount,
+    Review,
+    ReservationHistory,
+  },
   data() {
     return {
       id: "",
@@ -289,13 +317,15 @@ export default {
         name: "",
         surname: "",
         biography: "",
-        username: ""
+        username: "",
       },
       discounts: [],
       reviews: [],
       services: [],
       rulesOfConduct: [],
       cancellationTerms: [],
+      firstColumn: [],
+      secondColumn: [],
       equipment: [],
       address: "",
       perHour: 0,
@@ -344,6 +374,9 @@ export default {
     openCantReserve() {
       this.$bvModal.show("cantReserve");
     },
+    openGalerry() {
+      this.$bvModal.show("gallery");
+    },
     openReservationsModal() {
       this.$bvModal.show("reservationModal");
     },
@@ -381,6 +414,11 @@ export default {
           that.pictures.push(
             ...adventure.pictures.map((x) => "http://localhost:8080" + x)
           );
+          var half = Math.ceil(that.pictures.length / 2);
+          console.log(half);
+          that.firstColumn = that.pictures.slice(0, half-1);
+          console.log(that.firstColumn);
+          that.secondColumn = that.pictures.slice(-half);
           that.id = adventure.id;
           that.equipment = adventure.equipment;
           that.owner = adventure.owner;
@@ -424,6 +462,11 @@ export default {
           that.pictures.push(
             ...cottage.pictures.map((x) => "http://localhost:8080" + x)
           );
+          var half = Math.ceil(that.pictures.length / 2);
+          console.log(half);
+          that.firstColumn = that.pictures.slice(0, half-1);
+          console.log(that.firstColumn);
+          that.secondColumn = that.pictures.slice(-half);
           that.id = cottage.id;
           that.owner = cottage.owner;
           that.owner.picture = "http://localhost:8080" + that.owner.picture;
@@ -480,6 +523,9 @@ export default {
           that.pictures.push(
             ...boat.pictures.map((x) => "http://localhost:8080" + x)
           );
+          var half = Math.ceil(that.pictures.length / 2);
+          that.firstColumn = that.pictures.slice(0, half-1);
+          that.secondColumn = that.pictures.slice(-half);
           that.id = boat.id;
           that.owner = boat.owner;
           that.owner.picture = "http://localhost:8080" + that.owner.picture;
@@ -544,5 +590,25 @@ li {
   color: #fff;
   display: inline;
   font-size: 15px;
+}
+
+.gallery-row {
+  display: -ms-flexbox; /* IE 10 */
+  display: flex;
+  -ms-flex-wrap: wrap; /* IE 10 */
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+/* Create two equal columns that sits next to each other */
+.gallery-column {
+  -ms-flex: 50%; /* IE 10 */
+  flex: 50%;
+  padding: 0 4px;
+}
+
+.gallery-column img {
+  margin-top: 8px;
+  vertical-align: middle;
 }
 </style>

@@ -3,15 +3,15 @@
     <b-carousel
       id="carousel-1"
       v-model="slide"
-      :interval="4000"
+      :interval="2000"
       controls
       indicators
       background="#ababab"
-      style="max-height: 600px;"
+      style="height: 300px;"
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
-      <b-carousel-slide v-for="pic in pictures" style="max-height: 600px; object-fit: scale-down;" :img-src="pic"></b-carousel-slide>
+      <b-carousel-slide v-for="pic in pictures" style="height: 300px; object-fit: cover;" :img-src="pic"></b-carousel-slide>
     </b-carousel>
   </div>
 </template>
