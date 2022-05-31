@@ -165,4 +165,17 @@ public class AuthenticationController {
             return null;
         }
     }
+
+    @GetMapping("client-can-reserve")
+    public String canReserve() {
+        Client client;
+        try {
+            client = (Client) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        } catch (Exception e) {
+            return "no-client";
+        }
+        if(client.getNumberOfPenalties() < 3)
+            return client.getUsername();
+        return "3";
+    }
 }

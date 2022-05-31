@@ -9,7 +9,7 @@
             v-on:input="loadSubscribed"
         ></b-form-input>
     </div>
-    <b-list-group>
+    <b-list-group v-if="subscribed.length > 0">
       <b-list-group-item v-for="entity in subscribed" :key="entity.id" class="d-flex align-items-center">
         <b-avatar variant="info" :src='"http://localhost:8080" + entity.profilePicture' class="mr-3"></b-avatar>
         <span @click="goToProfile(entity)" style="cursor: pointer" class="mr-auto">
@@ -19,6 +19,7 @@
         <b-button size="sm" @click="unsubscribe(entity.id)">Unsubscribe</b-button>
       </b-list-group-item>
     </b-list-group>
+    <p v-else>You haven't subscribed to any entities yet.</p>
 </div>
 </template>
 

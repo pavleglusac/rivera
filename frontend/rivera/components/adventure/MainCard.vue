@@ -178,7 +178,8 @@ export default {
     subscribed() {
       let that = this;
       this.$axios
-        .get("/api/auth/get-logged-username", {
+        .get("/api/auth/get-logged-username",
+            { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") }
         })
         .then((resp) => {
           if (resp.data === "") {
@@ -212,7 +213,7 @@ export default {
     subscribe() {
       let that = this;
       this.$axios
-        .get("/api/auth/get-logged-username", {
+        .get("/api/auth/get-logged-username", { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") }
         })
         .then((resp) => {
           this.$axios
@@ -233,7 +234,8 @@ export default {
     unsubscribe() {
       let that = this;
       this.$axios
-        .get("/api/auth/get-logged-username", {
+        .get("/api/auth/get-logged-username", 
+            { headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") }
         })
         .then((resp) => {
           this.$axios

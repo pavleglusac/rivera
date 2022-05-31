@@ -2,7 +2,7 @@
     <div class="w-100">
             <VueSlickCarousel  v-if="images.length" v-bind="settings">
                 <div v-for="picture in images" :key="picture">
-                    <img :src="picture" class="img-fluid" alt="..." />
+                    <img :src="picture" style="height: 100px; width: 300px" alt="..." />
                 </div>
             </VueSlickCarousel>
     </div>

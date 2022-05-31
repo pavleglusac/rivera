@@ -167,11 +167,11 @@
       </div>
     </div>
 
-    <div class="w-100 pb-0 d-flex mt-5" style="max-height: 50vh">
+    <div class="w-100 pb-0 d-flex mt-5">
       <div class="d-flex flex-column" style="width: 100%; height: 100%">
         <h3 class="subtitle">Gallery</h3>
         <div class="d-flex flex-column h-100">
-          <Carousel :pictures="pictures.slice(1, pictures.lenght)" />
+          <Carousel2 :pictures="pictures.slice(1, pictures.lenght)" />
         </div>
       </div>
     </div>
@@ -200,6 +200,7 @@
               v-for="discount in discounts"
               :key="discount.id"
               :discount="discount"
+              :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />
           </div>
@@ -218,6 +219,10 @@
 
         <b-modal id="reservationModal" size="xl" hide-header hide-footer>
           <reservation-history/>
+        </b-modal>
+
+        <b-modal id="cantReserve" title="You can't make reservations.">
+          <p class="my-4">Because of your 3 penalties, we have to stop you from making a reservation. You will have to wait till the end of month to be able to reserve something again.</p>
         </b-modal>
 
       </div>
@@ -260,6 +265,7 @@
 
 <script>
 import MainCard from "./MainCard.vue";
+import Carousel2 from "./Carousel2.vue";
 import Carousel from "./Carousel.vue";
 import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
@@ -267,7 +273,7 @@ import Review from "./Review.vue";
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
 
 export default {
-  components: { MainCard, Carousel, Calendar, Discount, Review, ReservationHistory },
+  components: { MainCard, Carousel2,Carousel, Calendar, Discount, Review, ReservationHistory },
   data() {
     return {
       id: "",
@@ -334,6 +340,9 @@ export default {
     },
     openModal() {
       this.$bvModal.show("reservedDiscountModal");
+    },
+    openCantReserve() {
+      this.$bvModal.show("cantReserve");
     },
     openReservationsModal() {
       this.$bvModal.show("reservationModal");

@@ -48,12 +48,13 @@ export default {
       var price = this.entity.price;
       var id = this.entity.rentableId;
       this.$axios
-        .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
+        .get("/api/auth/client-can-reserve", {
         })
         .then((resp) => {
+          if(resp.data === "3") {
+            this.openCantReserveModal();
+          }
+          else if(resp.data != "no-client") {
           console.log(resp.data);
           this.$axios
             .post(
@@ -63,7 +64,7 @@ export default {
               console.log(response.data);
               this.openModal();
             });
-        })
+    }})
         .catch((err) => {
           console.log(err);
         });
@@ -72,7 +73,7 @@ export default {
       this.$router.push({ path: "/rentable/" + id });
     }
   },
-  props: ["entity", "openModal"],
+  props: ["entity", "openModal", "openCantReserveModal"],
 };
 </script>
 

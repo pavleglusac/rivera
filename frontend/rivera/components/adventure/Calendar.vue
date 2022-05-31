@@ -249,10 +249,21 @@
 
     <FullCalendar ref="fullCalendar" :options="calendarOptions" />
     <b-modal ref="reservationModal" hide-header hide-footer>
-      <ReservationForm :appointment="appointment" :close="closeModal" :openModal="openModal"/>
+      <ReservationForm
+        :appointment="appointment"
+        :close="closeModal"
+        :openModal="openModal"
+      />
     </b-modal>
     <b-modal id="reservedModal" title="Congratulations!">
       <p class="my-4">You have successfully reserved your appointment.</p>
+    </b-modal>
+    <b-modal id="cantReserve" title="You can't make reservations.">
+      <p class="my-4">
+        Because of your 3 penalties, we have to stop you from making a
+        reservation. You will have to wait till the end of month to be able to
+        reserve something again.
+      </p>
     </b-modal>
   </div>
 </template>
@@ -266,11 +277,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import ReservationForm from "./ReservationForm.vue";
 
 export default {
-  props: ["reservations","rentableType"],
+  props: ["reservations", "rentableType"],
   components: {
     FullCalendar,
-    ReservationForm
-},
+    ReservationForm,
+  },
   data() {
     return {
       appointment: {
@@ -392,7 +403,7 @@ export default {
       this.$refs["reservationModal"].hide();
     },
     openModal() {
-      this.$bvModal.show('reservedModal');
+      this.$bvModal.show("reservedModal");
     },
     handleDateSelect(selectInfo) {
       console.log("SELECT INFO:", selectInfo);
@@ -439,12 +450,22 @@ export default {
       }
     },
     handleEventClick(clickInfo) {
-      console.log("POCETNO VREME "+ clickInfo.event.start);
+      console.log("POCETNO VREME " + clickInfo.event.start);
       this.appointment.start = clickInfo.event.start;
-      console.log("KRAJNJE VREME "+ clickInfo.event.end);
+      console.log("KRAJNJE VREME " + clickInfo.event.end);
       this.appointment.end = clickInfo.event.end;
-
-      this.$refs["reservationModal"].show();
+      this.$axios
+        .get("/api/auth/client-can-reserve", {})
+        .then((resp) => {
+          if (resp.data === "3") {
+            this.$refs["cantReserve"].show();
+          } else if (resp.data != "no-client") {
+            this.$refs["reservationModal"].show();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     handleEvents(events) {
       this.currentEvents = events;
@@ -531,35 +552,37 @@ export default {
         selectedEndDate:
           moment(this.select_info.end).format("YYYY-MM-DD") + "T00:00:00",
         repeat: this.selected_repeat,
-        addition: this.mode=="add",
+        addition: this.mode == "add",
         rentableId: this.$route.params.rentable,
       };
       let that = this;
       console.log(to_send);
       this.$axios
-        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
         .then((resp) => {
-          var dataNeeded = ""
-          if(!resp.data){
-            return
+          var dataNeeded = "";
+          if (!resp.data) {
+            return;
           }
-          if(resp.data!="adventure"){
+          if (resp.data != "adventure") {
             dataNeeded = "/" + resp.data;
           }
-          if(resp.data == "boat")
-            return
+          if (resp.data == "boat") return;
           this.$axios
-        .post(`/api${dataNeeded}/define-availability`, JSON.stringify(to_send), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          that.getAvailabilities();
+            .post(
+              `/api${dataNeeded}/define-availability`,
+              JSON.stringify(to_send),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response);
+              that.getAvailabilities();
+            });
         });
-        })
-      
     },
     create_repeat_week_patterns() {
       let startDate = moment(this.select_info.start);
@@ -706,82 +729,77 @@ export default {
     removeAvailabilities() {
       let that = this;
       this.$axios
-        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
         .then((resp) => {
-          var dataNeeded = ""
-          if(!resp.data){
-            return
+          var dataNeeded = "";
+          if (!resp.data) {
+            return;
           }
-          if(resp.data != "adventure")
-            dataNeeded = "/" + resp.data;
-          if(resp.data == "boat")
-            return
+          if (resp.data != "adventure") dataNeeded = "/" + resp.data;
+          if (resp.data == "boat") return;
           this.$axios
-        .post(
-          `/api${dataNeeded}/remove-availabilities?id=${this.$route.params.rentable}` ,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        ).then(that.getAvailabilities());
-        })
-      
+            .post(
+              `/api${dataNeeded}/remove-availabilities?id=${this.$route.params.rentable}`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then(that.getAvailabilities());
+        });
     },
     async getAvailabilities() {
       let calendarApi = this.$refs.fullCalendar.getApi();
       calendarApi.removeAllEvents();
       this.$axios
-        .get('/api/get-type-of-rentable?id=' + this.$route.params.rentable)
+        .get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
         .then((resp) => {
-          var dataNeeded = ""
-          if(!resp.data){
-            return
+          var dataNeeded = "";
+          if (!resp.data) {
+            return;
           }
           console.log(resp.data);
           console.log(dataNeeded);
-          if(resp.data != "adventure")
-            dataNeeded = "/" + resp.data;
-          if(resp.data == "boat")
-            return    
+          if (resp.data != "adventure") dataNeeded = "/" + resp.data;
+          if (resp.data == "boat") return;
           this.$axios
-        .get(
-          `/api${dataNeeded}/get-availabilities`,
-          {
-            params: {
-              from: moment(calendarApi.view.currentStart).format(
-                "YYYY-MM-DDT00:00"
-              ),
-              to: moment(calendarApi.view.currentEnd).format(
-                "YYYY-MM-DDT00:00"
-              ),
-              id: this.$route.params.rentable,
-            },
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          for (let temp of response.data) {
-            calendarApi.addEvent({
-              id: temp.startDateTime + temp.endDateTime,
-              title:
-                temp.startDateTime.split("T")[1] +
-                " - " +
-                temp.endDateTime.split("T")[1],
-              start: temp.startDateTime,
-              end: temp.endDateTime,
-              display: "block",
-              color: "#7bb888",
+            .get(
+              `/api${dataNeeded}/get-availabilities`,
+              {
+                params: {
+                  from: moment(calendarApi.view.currentStart).format(
+                    "YYYY-MM-DDT00:00"
+                  ),
+                  to: moment(calendarApi.view.currentEnd).format(
+                    "YYYY-MM-DDT00:00"
+                  ),
+                  id: this.$route.params.rentable,
+                },
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+            .then((response) => {
+              console.log(response);
+              for (let temp of response.data) {
+                calendarApi.addEvent({
+                  id: temp.startDateTime + temp.endDateTime,
+                  title:
+                    temp.startDateTime.split("T")[1] +
+                    " - " +
+                    temp.endDateTime.split("T")[1],
+                  start: temp.startDateTime,
+                  end: temp.endDateTime,
+                  display: "block",
+                  color: "#7bb888",
+                });
+              }
             });
-          }
         });
-        })
-      
     },
   },
 };

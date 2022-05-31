@@ -100,11 +100,8 @@ public class ClientService {
     }
 
     public void updateClient(ClientDTO dto) {
-        System.out.println(dto);
         Client client = clientRepository.findByUsername(dto.getUsername());
         copyDTOToClient(client, dto);
-        System.out.println(dto.getAddress());
-        System.out.println(client.getAddress());
         clientRepository.save(client);
     }
 
@@ -239,7 +236,6 @@ public class ClientService {
     public Client activateClient(String username) {
         Client client = clientRepository.findByUsername(username);
         if (client != null) {
-            System.out.println(client.getUsername());
             client.setStatus(AccountStatus.ACTIVE);
             clientRepository.save(client);
         }
@@ -249,7 +245,11 @@ public class ClientService {
     public Boolean isSubscribed(String username, Integer id) {
         Client client = clientRepository.findByUsername(username);
         Rentable rentable = rentableRepository.getById(id);
-        return client.getSubscribed().contains(rentable);
+        for(Rentable r : client.getSubscribed()) {
+            if(r.getId().equals(rentable.getId()))
+                return true;
+        }
+        return false;
     }
 
     public void addReservation(String username, Reservation reservation) {
