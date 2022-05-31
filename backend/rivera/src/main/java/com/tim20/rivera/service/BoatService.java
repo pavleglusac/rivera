@@ -331,6 +331,9 @@ public class BoatService {
     }
 
     private List<BoatDTO> getBoatsOfOwner(String ownerUsername) {
-        return boatRepository.findByOwnerUsername(ownerUsername).stream().map(this::boatToDto).collect(Collectors.toList());
+        if(ownerUsername != null){
+            return boatRepository.findByOwnerUsername(ownerUsername).stream().map(this::boatToDto).collect(Collectors.toList());
+        }
+        else return getBoats();
     }
 }
