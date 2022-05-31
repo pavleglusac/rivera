@@ -31,20 +31,48 @@
           ></b-form-select>
           <Reservation
             v-for="(reservation, index) in reservations"
-            :reservation="reservation"
+            :reservation="reservation" :reportModal="reportModal" :viewReportModal="viewReportModal"
             v-bind:key="reservation.rentable.name + index"
           />
         </b-col>
       </b-row>
     </b-card>
+      <b-modal id="add_modal" size="xl" hide-header hide-footer>
+          <ReservationReport :selectedId="selectedId"/>
+      </b-modal>
+      <b-modal id="add_modal2" size="xl" hide-header hide-footer>
+          <ViewReservationReport :selectedId="selectedId"/>
+      </b-modal>
   </b-container>
+  
 </template>
 
 <script>
-import Reservation from "./Reservation.vue";
+import Reservation from "./reservation.vue";
+import ReservationReport from "./../owner_reservations/reservation_report";
+import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
 export default {
+  data() {
+    return {
+      reservations: [],
+			selectedId: "",
+      search: "",
+      selectedDate: new Date().toISOString().slice(0, 10),
+      selected: "all",
+      sort: "date-a",
+      tags: [],
+      options: [
+        { text: "Upcoming reservations", value: "upcoming" },
+        { text: "Past reservations", value: "past" },
+        { text: "Reservations on selected date", value: "date" },
+        { text: "Show all reservations", value: "all" },
+      ],
+    };
+  },
   name: "AllReservations",
-  components: { Reservation },
+  components: { Reservation,
+    ReservationReport,
+    ViewReservationReport, },
   mounted() {
     this.loadReservations();
   },
@@ -102,22 +130,15 @@ export default {
       }
       return false;
     },
-  },
-  data() {
-    return {
-      reservations: [],
-      search: "",
-      selectedDate: new Date().toISOString().slice(0, 10),
-      selected: "all",
-      sort: "date-a",
-      tags: [],
-      options: [
-        { text: "Upcoming reservations", value: "upcoming" },
-        { text: "Past reservations", value: "past" },
-        { text: "Reservations on selected date", value: "date" },
-        { text: "Show all reservations", value: "all" },
-      ],
-    };
+    reportModal(param){
+      this.selectedId = param;
+      console.log(this.selectedId+"aaa");
+      this.$bvModal.show("add_modal");
+    },
+    viewReportModal(param){
+      this.selectedId = param;
+      this.$bvModal.show("add_modal2");
+    }
   },
 };
 </script>

@@ -1,16 +1,6 @@
 <template>
 	<div
-		class="
-			registration-form
-			fixed-top
-			d-flex
-			align-items-center
-			justify-content-center
-		"
-		style="bottom: 0; overflow-y: auto"
 	>
-		<b-card class="text-center mx-auto my-auto card mt-5">
-			<img src="..\..\static\rivera_logo_hor.png" />
 			<form id="registrationForm">
 				<div class="form-row">
 					<div class="form-group col-4">
@@ -56,8 +46,7 @@
 						/>
 					</div>
 				</div>
-			</form>
-		</b-card>
+			</form>	
 	</div>
 </template>
 <script>
@@ -73,11 +62,12 @@ export default {
 			type: "",
 		};
 	},
+  props : ["selectedId"],
 	mounted() {
 		let that = this;
 		this.$axios
 			.get(
-				"/api/reservationReport/get-report?id=" + this.$route.params.viewReport
+				"/api/reservationReport/get-report?id=" + that.selectedId
 			)
 			.then((resp) => {
 				let data = resp.data;

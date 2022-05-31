@@ -25,7 +25,7 @@
 					></span
 				>
 				<div
-					v-if="!isDateAfterToday(new Date(this.reservation.end))"
+					v-if="!isDateAfterToday(new Date(this.reservation.endDateTime))"
 					style="float: right"
 				>
 					<b-button
@@ -59,12 +59,22 @@
 </template>
 
 <script>
+import ReservationReport from "./../owner_reservations/reservation_report";
+import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
 export default {
-	props: {
-		reservation: {
-			type: Object,
-			required: true,
-		},
+	props: [
+		'reservation',
+		'reportModal','viewReportModal'
+	],
+	components: {
+    ReservationReport: ReservationReport,
+    ViewReservationReport: ViewReservationReport,
+  },
+	mounted(){
+		console.log("-----------------------------------"+this.reservation);
+		for (var x in this.reservation){
+			console.log(x);
+		}
 	},
 	methods: {
 		goToProfile(id) {
@@ -94,16 +104,15 @@ export default {
 				strTime
 			);
 		},
-		fileReport() {
-			this.$router.push({
-				path: "/addReport/" + this.reservation.reservationId,
-			});
-		},
-		viewReport() {
-			this.$router.push({
-				path: "/viewReport/" + this.reservation.reservationId,
-			});
-		},
+    fileReport() {
+		this.reportModal(this.reservation.reservationId);
+      //this.$router.push({ path: "/addReport/" + this.reservation.id });
+    },
+    viewReport() {
+		this.viewReportModal(this.reservation.reservationId);
+      //this.$bvModal.show("add_modal2");
+      //this.$router.push({ path: "/viewReport/" + this.reservation.id });
+    },
 		isDateAfterToday(date) {
 			return (
 				new Date(date.toDateString()) > new Date(new Date().toDateString())

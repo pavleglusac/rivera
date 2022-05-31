@@ -106,7 +106,7 @@
               </h6>
               <div class="flex">
                 <span class="tagish">
-                  {{ boatLength }}
+                  {{ boatLength }} m
                 </span>
               </div>
             </div>
@@ -126,7 +126,7 @@
               </h6>
               <div class="flex">
                 <span class="tagish">
-                  {{ maxSpeed }}
+                  {{ maxSpeed }} knots 
                 </span>
               </div>
             </div>
@@ -138,7 +138,7 @@
               </h6>
               <div class="flex">
                 <span class="tagish">
-                  {{ enginePower }}
+                  {{ enginePower }} kW
                 </span>
               </div>
             </div>
@@ -217,7 +217,9 @@
         </b-modal>
 
         <b-modal id="reservationModal" size="xl" hide-header hide-footer>
-          <reservation-history/>
+          <reservation-history 
+          :reportModal="reportModal"
+          :viewReportModal="viewReportModal"/>
         </b-modal>
 
       </div>
@@ -255,6 +257,12 @@
         <p>No one reviewed this entity yet.</p>
       </div>
     </div>
+      <b-modal id="add_modal" size="xl" hide-header hide-footer>
+          <ReservationReport :selectedId="selectedId"/>
+      </b-modal>
+      <b-modal id="add_modal2" size="xl" hide-header hide-footer>
+          <ViewReservationReport :selectedId="selectedId"/>
+      </b-modal>
   </div>
 </template>
 
@@ -265,11 +273,14 @@ import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
 import Review from "./Review.vue";
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
+import ReservationReport from "./../owner_reservations/reservation_report";
+import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
 
 export default {
-  components: { MainCard, Carousel, Calendar, Discount, Review, ReservationHistory },
+  components: { MainCard, Carousel, Calendar, Discount, Review, ReservationHistory, ReservationReport, ViewReservationReport },
   data() {
     return {
+      selectedId: "",
       id: "",
       location: "",
       name: "",
@@ -475,7 +486,15 @@ export default {
           that.owner = boat.owner;
           that.owner.picture = "http://localhost:8080" + that.owner.picture;
         });
+    },    
+    reportModal(param){
+      this.selectedId = param;
+      this.$bvModal.show("add_modal");
     },
+    viewReportModal(param){
+      this.selectedId = param;
+      this.$bvModal.show("add_modal2");
+    }
   },
 };
 </script>

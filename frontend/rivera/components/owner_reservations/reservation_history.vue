@@ -46,6 +46,8 @@
           :entity="res.rentable"
           :offerType="getActiveOffers()"
           :reservation="res"
+          :reportModal="reportModalHistory"
+          :viewReportModal="viewreportModalHistory"
           class="mb-3"
           v-bind:key="res.rentable.name"
         />
@@ -92,7 +94,10 @@ export default {
         { value: "date-d", text: "Sort by date descending" },
       ],
     };
-  },
+  },  
+	props: [
+		'reportModal','viewReportModal'
+	],
   mounted() {
     let that = this;
     this.$axios
@@ -138,6 +143,12 @@ export default {
         this.doneTypingInterval
       );
     },
+    reportModalHistory(param) {
+		this.reportModal(param);
+    },
+    viewreportModalHistory(param) {
+		this.viewReportModal(param);
+    },  
   },
 };
 </script>

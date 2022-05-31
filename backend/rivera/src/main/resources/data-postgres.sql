@@ -50,11 +50,11 @@ INSERT INTO cottage (id,address, average_score, city, country, description, name
 
 INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage2', NULL, 4, 'cowner');
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat', NULL, 4, 'bowner');
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.1, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat', NULL, 4, 'bowner',5,50,3,300,60,0);
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 2', NULL, 4, 'bowner');
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 2', NULL, 4, 'bowner',5,30,3,50,70,2);
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 3', NULL, 4, 'bowner');
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.5, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 3', NULL, 4, 'bowner',5,10,2,100,50,2);
 
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'marko2@gmail.com', NULL, 'Marko', 'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0, 5);
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('cowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'marko@gmail.com', NULL, 'Marko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0, 5);
@@ -98,6 +98,12 @@ INSERT INTO fishing_instructor (username, address, city, country, deleted, email
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (1, 'massage');
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (2, 'therapy');
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (3, 'basketball');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (4, 'massage');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (5, 'therapy');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (6, 'basketball');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (7, 'massage');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (8, 'therapy');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (8, 'basketball');
 
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (1, '/images/adventures/1/img1.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (1, '/images/adventures/1/img2.jpg');
@@ -114,11 +120,37 @@ INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (3, '/images/advent
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (3, '/images/adventures/1/img3.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (3, '/images/adventures/1/img2.jpg');
 INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (3, '/images/adventures/1/img1.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img5.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img4.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img3.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img2.jpg');
-INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/adventures/1/img1.jpg');
+
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/cottages/5/img5-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/cottages/5/img4-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/cottages/5/img3-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/cottages/5/img2-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (4, '/images/cottages/5/img1-min.jpg');
+
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (5, '/images/cottages/5/img2-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (5, '/images/cottages/5/img4-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (5, '/images/cottages/5/img3-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (5, '/images/cottages/5/img5-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (5, '/images/cottages/5/img1-min.jpg');
+
+
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (6, '/images/boats/1/img5-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (6, '/images/boats/1/img4-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (6, '/images/boats/1/img3-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (6, '/images/boats/1/img2-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (6, '/images/boats/1/img1-min.jpg');
+
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (7, '/images/boats/1/img4-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (7, '/images/boats/1/img1-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (7, '/images/boats/1/img3-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (7, '/images/boats/1/img2-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (7, '/images/boats/1/img1-min.jpg');
+
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (8, '/images/boats/1/img2-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (8, '/images/boats/1/img4-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (8, '/images/boats/1/img3-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (8, '/images/boats/1/img5-min.jpg');
+INSERT INTO rentable_pictures (rentable_id, pictures) VALUES (8, '/images/boats/1/img1-min.jpg');
 
 
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (1, 'no smoking');
@@ -129,6 +161,14 @@ INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (3,
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (3, 'no destruction of property');
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (4, 'no smoking');
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (4, 'no destruction of property');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (5, 'no smoking');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (5, 'no destruction of property');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (6, 'no smoking');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (6, 'no destruction of property');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (7, 'no smoking');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (7, 'no destruction of property');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8, 'no smoking');
+INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8, 'no destruction of property');
 
 
 
@@ -141,6 +181,14 @@ INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (3, 1);
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (3, 2);
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (4, 1);
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (4, 2);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (5, 2);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (6, 2);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (7, 2);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (8, 2);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (5, 4);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (6, 1);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (7, 1);
+INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (8, 4);
 
 
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-05-21 19:44:47.521598', 130, '2022-05-21 18:44:47.521546', 'pera', 1, 0.5);

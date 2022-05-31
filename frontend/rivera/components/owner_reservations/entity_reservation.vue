@@ -94,10 +94,10 @@ export default {
       );
     },
     fileReport() {
-      this.$router.push({ path: "/addReport/" + this.reservation.id });
+		this.reportModal(this.reservation.id);
     },
     viewReport() {
-      this.$router.push({ path: "/viewReport/" + this.reservation.id });
+		this.viewReportModal(this.reservation.id);
     },
     isDateAfterToday(date) {
       return (
@@ -105,7 +105,7 @@ export default {
       );
     },
   },
-
+/*
   props: {
     entity: {
       type: Object,
@@ -119,7 +119,12 @@ export default {
       type: String,
       required: true,
     },
-  },
+  },*/
+  
+	props: ['entity','offerType',
+		'reservation',
+		'reportModal','viewReportModal'
+	],
 };
 </script>
 

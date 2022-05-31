@@ -67,7 +67,7 @@
 									size="sm"
 									v-model="sort"
 									:options="orderBy"
-									@change.native="reload"
+									@change="reload"
 								></b-form-select>
 							</div>
 						</div>

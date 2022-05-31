@@ -1,16 +1,4 @@
 <template>
-  <div
-    class="
-      rentable-manipulation
-      fixed-top
-      d-flex
-      align-items-center
-      justify-content-center
-    "
-    style="bottom: 0; overflow-y: auto"
-  >
-  <b-container class="bv-example-row">
-    <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
     <div class="p-5">  
 		<form id="addCottageForm">
 			<div class="form-row" style="text-align:center">
@@ -58,9 +46,6 @@
 
 		</form>
 	</div>
-		</b-card>
-		</b-container>
-	</div>
 </template>
 
 <script>
@@ -87,7 +72,7 @@ export default {
       return Object.keys(list).map((key) => ({ value: key, label: list[key] }))
     }
   },
-  data () {
+  data() {
     	return {
 			selected: null,
 			selectedShowedUp: 'True',
@@ -112,8 +97,9 @@ export default {
       required,
     }
   },
-  props : ['id'],
+  props : ['selectedId'],
 	mounted() {
+		console.log("asdasd"+this.selectedId);
 	},
 	methods: {
 		upload() {
@@ -127,7 +113,7 @@ export default {
 					return;
 			}
 			formData.append("text", this.text);
-			formData.append("id", this.$route.params.addReport);
+			formData.append("id", this.selectedId);
 			formData.append("sanction", this.selectedSanction);
 			formData.append("showedUp", this.selectedShowedUp);
             console.log(this.type);
