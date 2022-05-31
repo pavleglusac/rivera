@@ -191,7 +191,7 @@ export default {
           console.log(resp.data);
           this.$axios
             .post(
-              `/api/search-boats?&numberOfResults=10&orderBy=${
+              `/api/boat/search-boats?&numberOfResults=10&orderBy=${
                 that.sort
               }&search=${that.searchText.trim()}&tags=${
                 that.tags
