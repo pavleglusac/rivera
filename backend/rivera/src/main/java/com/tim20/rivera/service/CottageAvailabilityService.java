@@ -1,13 +1,8 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.model.Adventure;
-import com.tim20.rivera.model.AvailabilityPattern;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.model.Calendar;
-import com.tim20.rivera.model.Cottage;
-import com.tim20.rivera.repository.AdventureRepository;
-import com.tim20.rivera.repository.AvailabilityRepository;
-import com.tim20.rivera.repository.CalendarRepository;
-import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.repository.*;
 import com.tim20.rivera.util.Availability;
 import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +26,11 @@ public class CottageAvailabilityService {
 
     @Autowired
     AvailabilityRepository availabilityRepository;
+    @Autowired
+    RentableRepository rentableRepository;
 
     public void defineAvailability(AvailabilityRequest availabilityRequest) {
-        Cottage cottage = cottageRepository.getById(availabilityRequest.getRentableId());
+        Rentable cottage = rentableRepository.getById(availabilityRequest.getRentableId());
         List<Calendar> cals = cottage.getCalendars();
         if(cals == null) {
             cottage.setCalendars(new ArrayList<>());
@@ -61,17 +58,17 @@ public class CottageAvailabilityService {
         }
 
         calendarRepository.save(cal);
-        cottageRepository.save(cottage);
+        rentableRepository.save(cottage);
     }
 
 
     public List<Availability> getAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
-        Cottage cottage = cottageRepository.getById(id);
+        Rentable cottage = rentableRepository.getById(id);
         return getAvailabilities(cottage, fromDateTime, toDateTime);
     }
 
 
-    public List<Availability> getAvailabilities(Cottage cottage, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
+    public List<Availability> getAvailabilities(Rentable cottage, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
         List<Availability> availabilities = new ArrayList<>();
         HashMap<LocalDate, List<Availability>> availabilityPerDay = new HashMap<>();
         var start = fromDateTime;
@@ -299,7 +296,7 @@ public class CottageAvailabilityService {
     }
 
     public void removeAvailabilities(Integer cottageId) {
-        Cottage cottage = cottageRepository.getById(cottageId);
+        Rentable cottage = rentableRepository.getById(cottageId);
         List<Calendar> cals = cottage.getCalendars();
         if(cals == null) {
             cottage.setCalendars(new ArrayList<>());
@@ -309,6 +306,6 @@ public class CottageAvailabilityService {
             cals.get(0).setPatternsOfAvailability(new ArrayList<>());
             calendarRepository.save(cals.get(0));
         }
-        cottageRepository.save(cottage);
+        rentableRepository.save(cottage);
     }
 }

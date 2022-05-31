@@ -544,10 +544,8 @@ export default {
             return
           }
           if(resp.data!="adventure"){
-            dataNeeded = "/" + resp.data;
+            dataNeeded = "/cottage";
           }
-          if(resp.data == "boat")
-            return
           this.$axios
         .post(`/api${dataNeeded}/define-availability`, JSON.stringify(to_send), {
           headers: {
@@ -741,9 +739,7 @@ export default {
           console.log(resp.data);
           console.log(dataNeeded);
           if(resp.data != "adventure")
-            dataNeeded = "/" + resp.data;
-          if(resp.data == "boat")
-            return    
+            dataNeeded = "/cottage";
           this.$axios
         .get(
           `/api${dataNeeded}/get-availabilities`,

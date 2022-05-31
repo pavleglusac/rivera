@@ -67,8 +67,10 @@ public class BoatController {
     }
 
 
+
+
     @PostMapping(path="/search-boats")
-    public List<BoatDTO> searchAdventures(SearchParams searchParams) {
+    public List<BoatDTO> searchBoats(SearchParams searchParams) {
         return boatService.searchBoats(searchParams);
     }
 
