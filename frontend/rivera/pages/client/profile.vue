@@ -8,7 +8,7 @@
         <b-tab title="Personal data" active><profile-data/></b-tab>
         <b-tab title="Change password"><password-change/></b-tab>
         <b-tab title="Subscriptions"><subscriptions/></b-tab>
-        <b-tab title="Loyalty program"><p>I'm a disabled tab!</p></b-tab>
+        <b-tab title="Loyalty program"><loyalty-client/></b-tab>
       </b-tabs>
     </b-card>
   </b-container>
@@ -21,8 +21,9 @@ import ClientProfile from '../../components/client/ClientProfile.vue';
 import Subscriptions from '../../components/client/Subscriptions.vue';
 import ProfileData from '../../components/client/ProfileData.vue';
 import PasswordChange from '../../components/client/PasswordChange.vue';
+import LoyaltyClient from '../../components/client/LoyaltyClient.vue';
 export default {
-  components: { Navbar, ClientProfile, Subscriptions, ProfileData, PasswordChange },
+  components: { Navbar, ClientProfile, Subscriptions, ProfileData, PasswordChange, LoyaltyClient },
 }
 </script>
 

@@ -47,7 +47,10 @@ public class OwnerService {
 
     @Autowired
     private ReviewService reviewService;
-
+    @Autowired
+    private MemberCategoryRepository memberCategoryRepository;
+    @Autowired
+    private RulesRepository rulesRepository;
 
     public Person save(OwnerRequestDTO userRequestDTO) {
         switch (userRequestDTO.getType()){
@@ -258,4 +261,18 @@ public class OwnerService {
         return incomeFrontDTO;
     }
 
+    private OwnerLoyaltyDTO ownerToOwnerLoyaltyDTO(Owner owner) {
+        OwnerLoyaltyDTO ownerLoyaltyDTO = new OwnerLoyaltyDTO();
+        ownerLoyaltyDTO.setUsername(owner.getUsername());
+        ownerLoyaltyDTO.setNumberOfPoints(owner.getNumberOfPoints());
+        ownerLoyaltyDTO.setPointsPerReservation(rulesRepository.findAll().get(0).getPointsPerReservation());
+        ownerLoyaltyDTO.setIncomePercentage(rulesRepository.findAll().get(0).getIncomePercentage());
+        ownerLoyaltyDTO.setAllLoyalties(memberCategoryRepository.findAll().stream().filter(MemberCategory::getForOwner).collect(Collectors.toList()));
+        return ownerLoyaltyDTO;
+    }
+
+    public OwnerLoyaltyDTO getOwnerLoyalty(String username) {
+        Owner owner = ownerRepository.findByUsername(username);
+        return ownerToOwnerLoyaltyDTO(owner);
+    }
 }

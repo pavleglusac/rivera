@@ -1,37 +1,102 @@
 <template>
-<b-container class="bv-example-row">
+  <b-container class="bv-example-row">
     <b-card style="margin-bottom: 10px; margin-top: 10px">
-        <b-row>
-          <b-col>
-            <h4>My Calendar</h4>
-              <p>You can finally track all your reservations easier!</p>
-              <b-calendar v-model="selectedDate" v-on:input="loadReservationsCalendar" :date-info-fn="dateClass" block locale="en-US"></b-calendar>
-          </b-col>
-          <b-col>
-            <h4>Reservation history</h4>
-            <b-form-input
-                id="search-filter"
-                size="sm"
-                placeholder="Search reservations..."
-                v-model="search"
-                v-on:input="loadReservations"
-            ></b-form-input>
-            <b-form-select class="mt-2 mb-2" v-model="selected" v-on:input="loadReservations" size="sm" :options="options"></b-form-select>
-            <ReservationCard 
-              v-for="(reservation, index) in reservations"
-              :reservation="reservation"
-              v-bind:key="reservation.entity.name + index"
-            />
-          </b-col>
-        </b-row>
+      <b-row>
+        <b-col>
+          <h4>My Calendar</h4>
+          <p>You can finally track all your reservations easier!</p>
+          <b-calendar
+            v-model="selectedDate"
+            v-on:input="loadReservationsCalendar"
+            :date-info-fn="dateClass"
+            block
+            locale="en-US"
+          ></b-calendar>
+        </b-col>
+        <b-col>
+          <h4>Reservation history</h4>
+          <b-form-input
+            id="search-filter"
+            size="sm"
+            placeholder="Search reservations..."
+            v-model="search"
+            v-on:input="loadReservations"
+          ></b-form-input>
+          <b-form-select
+            class="mt-2 mb-2"
+            v-model="selected"
+            v-on:input="loadReservations"
+            size="sm"
+            :options="options"
+          ></b-form-select>
+          <ReservationCard
+            v-for="(reservation, index) in reservations"
+            :reservation="reservation"
+            :openCancelReservation="openCancelModal"
+            :openReviewReservation="openReviewModal"
+            :openComplaintReservation="openComplaintModal"
+            v-bind:key="reservation.entity.name + index"
+          />
+        </b-col>
+      </b-row>
     </b-card>
+
+    <b-modal
+      id="cancelModal"
+      hide-header
+      @ok="cancelReservation"
+      ok-title="Yes"
+      cancel-title="No"
+    >
+      <p>Are you sure you want to cancel your reservation?</p>
+    </b-modal>
+
+    <b-modal
+      id="reviewModal"
+      title="Submit Your Review"
+      ok-title="Submit"
+      @ok="reviewReservation"
+    >
+      <label class="form-label">Score a reservation:</label>
+      <b-form-rating color="#16C79A" v-model="rating"></b-form-rating>
+      <div class="mb-3">
+        <label class="form-label">Write a reservation review:</label>
+        <textarea class="form-control" v-model="reviewText" rows="3"></textarea>
+      </div>
+    </b-modal>
+
+    <b-modal
+      id="complaintModal"
+      ref="compaintModal"
+      title="Submit Your Complaint"
+      ok-title="Submit"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="lodgeAComplaint"
+    >
+      <form ref="form" @submit.stop.prevent="lodgeAComplaint">
+        <b-form-group
+          label="Complaint text:"
+          label-for="complaint-input"
+          invalid-feedback="Complaint text is required."
+          :state="complainState"
+        >
+          <b-form-input
+            id="complaint-input"
+            v-model="complainText"
+            :state="complainState"
+            required
+          ></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
   </b-container>
 </template>
 
 <script>
 import ReservationCard from "./ReservationCard.vue";
 export default {
-  name: 'Reservations',
+  name: "Reservations",
   components: { ReservationCard },
   mounted() {
     this.loadReservations();
@@ -41,64 +106,105 @@ export default {
       let that = this;
       that.reservations = [];
       console.log(that.selectedDate);
-      this.$axios.get('/api/auth/get-logged-username',{
-								headers: { 'Authorization' : 'Bearer ' + window.localStorage.getItem("JWT") } 
-							}).then((resp) => {
-        this.$axios.get(`/api/get-reservations?&username=${resp.data}&search=${that.search.trim()}&date=${that.selectedDate}&upcoming=${that.selected}`)
-        .then(response => {
-          that.reservations = response.data;
-          console.log(response.data);
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          this.$axios
+            .get(
+              `/api/get-reservations?&username=${
+                resp.data
+              }&search=${that.search.trim()}&date=${
+                that.selectedDate
+              }&upcoming=${that.selected}`
+            )
+            .then((response) => {
+              that.reservations = response.data;
+              console.log(response.data);
+            });
         });
-      });
+    },
+    checkFormValidity() {
+      this.complainState = this.complainText.trim() !== "";
+      return this.complainState;
+    },
+    resetModal() {
+      this.complainText = "";
+      this.complaintState = null;
     },
     loadReservationsCalendar() {
-      if(this.selected == "date")
-        this.loadReservations();
+      if (this.selected == "date") this.loadReservations();
     },
     dateClass(ymd, date) {
-        return this.dateHasReservation(ymd) ? 'table-info' : ''
+      return this.dateHasReservation(ymd) ? "table-info" : "";
     },
     dateHasReservation(date) {
       var dayStarts = new Date(date);
-      dayStarts.setHours(0,0,0,0);
+      dayStarts.setHours(0, 0, 0, 0);
       var dayEnds = new Date(date);
-      dayEnds.setHours(23,59,59,999);
-      for(const r of this.reservations) {
+      dayEnds.setHours(23, 59, 59, 999);
+      for (const r of this.reservations) {
         var start = new Date(r.startDateTime);
         var end = new Date(r.endDateTime);
         // appointment started in this day
-        if(dayStarts <= start && start <= dayEnds) {
+        if (dayStarts <= start && start <= dayEnds) {
           return true;
         }
         // appointment ended in this day
-        if(dayStarts <= end && end <= dayEnds) {
+        if (dayStarts <= end && end <= dayEnds) {
           return true;
         }
         // appointment lasted whole day and more
-        if(start <= dayStarts && end >= dayEnds) {
+        if (start <= dayStarts && end >= dayEnds) {
           return true;
         }
       }
       return false;
-    }
+    },
+    cancelReservation() {},
+    lodgeAComplaint(bvModalEvent) {
+      if (this.checkFormValidity()) {
+        
+      }
+    },
+    reviewReservation() {},
+    openComplaintModal(id) {
+      this.clickedReservationId = id;
+      this.$bvModal.show("complaintModal");
+    },
+    openCancelModal(id) {
+      this.clickedReservationId = id;
+      this.$bvModal.show("cancelModal");
+    },
+    openReviewModal(id) {
+      this.clickedReservationId = id;
+      this.$bvModal.show("reviewModal");
+    },
   },
   data() {
     return {
       reservations: [],
-      search: '',
+      search: "",
+      clickedReservationId: 0,
       selectedDate: new Date().toISOString().slice(0, 10),
-      selected: 'all',
+      selected: "all",
       options: [
-        { text: 'Upcoming reservations', value: 'upcoming' },
-        { text: 'Past reservations', value: 'past' },
-        { text: 'Reservations on selected date', value: 'date' },
-        { text: 'Show all reservations', value: 'all' }
-      ]
-    }
+        { text: "Upcoming reservations", value: "upcoming" },
+        { text: "Past reservations", value: "past" },
+        { text: "Reservations on selected date", value: "date" },
+        { text: "Show all reservations", value: "all" },
+      ],
+      complainText: "",
+      rating: 0,
+      reviewText: "",
+      complainState: null
+    };
   },
-}
+};
 </script>
 
 <style>
-
 </style>

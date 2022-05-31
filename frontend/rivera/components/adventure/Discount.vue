@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  props: ["discount", "openModal"],
+  props: ["discount", "openModal", "openCantReserveModal"],
   mounted() {
   },
   data() {
@@ -32,12 +32,13 @@ export default {
       var endDateTime = this.discount.end;
       var price = this.discount.price;
       this.$axios
-        .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
+        .get("/api/auth/client-can-reserve", {
         })
         .then((resp) => {
+          if(resp.data === "3") {
+            this.openCantReserveModal();
+          }
+          else if(resp.data != "no-client") {
           console.log(resp.data);
           this.$axios
             .post(
@@ -47,7 +48,7 @@ export default {
               console.log(response.data);
               this.openModal();
             });
-        })
+        }})
         .catch((err) => {
           console.log(err);
         });
@@ -58,7 +59,7 @@ export default {
 
 <style>
 .discount-card {
-  box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
   padding: 10px;
 }
 </style>

@@ -168,8 +168,8 @@ public class ReservationService {
         System.out.println("PRICE PER HOUR:" +pricePerHour);
         double pricePerDay = days * rentable.getCurrentPricelist().getPricePerDay();
         System.out.println("PRICE PER DAY:" + pricePerDay);
-        // add discount for client
-        return min(pricePerHour, pricePerDay);
+        Double dicount = clientService.calculateDiscount(client);
+        return min(pricePerHour, pricePerDay) * (100 - dicount) / 100;
     }
 
     public OwnerReservationDTO reservationDTOToOwnerReservationDTO(ReservationDTO reservation) {

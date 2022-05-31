@@ -430,7 +430,7 @@ export default {
 
 .admin-registration-form .card {
 	border-radius: 20;
-	filter: drop-shadow(0px 2px 3px);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
 	float: none;
 	min-width: 60rem;
 	padding: 10px;

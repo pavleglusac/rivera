@@ -1,8 +1,8 @@
 <template>
     <div class="w-100">
             <VueSlickCarousel  v-if="images.length" v-bind="settings">
-                <div v-for="picture in images" :key="picture" style="display: flex !important;">
-                    <img style="height: inherit !important;" :src="picture" class="img-thumbnail" alt="..." />
+                <div v-for="picture in images" :key="picture">
+                    <img :src="picture" style="height: 100px; width: 300px" alt="..." />
                 </div>
             </VueSlickCarousel>
     </div>

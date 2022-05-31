@@ -52,6 +52,13 @@
               v-b-modal.termination_modal
               ><b-icon icon="trash-fill"></b-icon> Delete account</b-button
             >
+            <b-button
+              pill
+              class="profile-btn"
+              size="sm"
+              @click="goToProfile"
+              ><font-awesome-icon icon="star" /> Reviews</b-button
+            >
           </b-card-text>
         </b-card-body>
       </b-col>
@@ -94,9 +101,6 @@ export default {
       console.log(window.localStorage.getItem("JWT"));
       this.$axios
         .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
         })
         .then((resp) => {
           this.$axios
@@ -143,6 +147,9 @@ export default {
           console.log(err);
         });
     },
+    goToProfile() {
+      this.$router.push({ path: "/profile/" + this.client.username });
+    },
     send_termination() {
       this.$axios
         .post(
@@ -178,7 +185,7 @@ export default {
 }
 .profile-btn {
   font-size: 12px;
-  background-color: var(--dark-blue-color);
+  background-color: var(--light-blue-color);
   border: none;
 }
 .profile-btn:hover {
