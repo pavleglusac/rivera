@@ -1,7 +1,7 @@
 <template>
 	<b-form @submit.stop.prevent>
 		<b-row>
-			<b-col>
+			<b-col style="color: #4F5051">
 				<label for="feedback-first-name">First Name</label>
 				<b-form-input
 					v-model="client.name"
@@ -131,7 +131,7 @@ export default {
 	},
 	computed: {
 		firstNameValidation() {
-			return this.client.name.length != 0;
+			return this.client.name != null && this.client.name.length != 0;
 		},
 		lastNameValidation() {
 			return this.client.surname.length != 0;

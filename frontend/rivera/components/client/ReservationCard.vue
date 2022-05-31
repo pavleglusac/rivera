@@ -92,7 +92,6 @@ export default {
         new Date(),
         new Date(this.reservation.startDateTime)
       );
-      console.log(this.numberOfDaysUntilReservation);
     },
     daysBetween(startDate, endDate) {
       return (

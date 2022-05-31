@@ -160,7 +160,7 @@ li > p .active {
 
 .nav-link {
   font-weight: bold;
-  color: var(--dark-blue-color);
+  color: var(--light-blue-color);
 }
 
 @media screen and (max-width: 768px) {

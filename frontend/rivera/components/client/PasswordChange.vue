@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="color: #4F5051">
     <label>Current Password</label>
     <div v-if="cpasswordHidden" class="bv-example-row">
         <b-input-group>

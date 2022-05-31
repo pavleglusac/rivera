@@ -178,7 +178,7 @@ export default {
 }
 .profile-btn {
   font-size: 12px;
-  background-color: var(--dark-blue-color);
+  background-color: var(--light-blue-color);
   border: none;
 }
 .profile-btn:hover {

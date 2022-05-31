@@ -95,6 +95,11 @@ public class ClientController {
         return reservationService.getReservations(username, search);
     }
 
+    @GetMapping(path="get-client-loyalty")
+    public ClientLoyaltyDTO getClientLoyalty(@RequestParam("username") String username) {
+        return clientService.getClientLoyalty(username);
+    }
+
     @GetMapping(path = "get-reservation-price")
     public Double getReservationPrice(@RequestParam("username") String username, Integer rentableId, String start, String end) {
         Client client = clientService.findByUsername(username);

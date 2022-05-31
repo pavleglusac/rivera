@@ -27,6 +27,7 @@ export default {
 .nav-link:hover {
   opacity: 0.9;
   background-color: #fff;
+  color: var(--dark-blue-color);
   cursor: pointer;
 }
 </style>

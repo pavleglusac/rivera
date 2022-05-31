@@ -41,17 +41,24 @@
       </b-row>
     </b-card>
 
-    <b-modal id="cancelModal" hide-header @ok="cancelReservation">
+    <b-modal
+      id="cancelModal"
+      hide-header
+      @ok="cancelReservation"
+      ok-title="Yes"
+      cancel-title="No"
+    >
       <p>Are you sure you want to cancel your reservation?</p>
     </b-modal>
 
     <b-modal
       id="reviewModal"
       title="Submit Your Review"
+      ok-title="Submit"
       @ok="reviewReservation"
     >
       <label class="form-label">Score a reservation:</label>
-      <b-form-rating v-model="rating"></b-form-rating>
+      <b-form-rating color="#16C79A" v-model="rating"></b-form-rating>
       <div class="mb-3">
         <label class="form-label">Write a reservation review:</label>
         <textarea class="form-control" v-model="reviewText" rows="3"></textarea>
@@ -62,11 +69,12 @@
       id="complaintModal"
       ref="compaintModal"
       title="Submit Your Complaint"
+      ok-title="Submit"
       @show="resetModal"
       @hidden="resetModal"
       @ok="lodgeAComplaint"
     >
-      <form ref="form" @submit.stop.prevent="handleSubmit">
+      <form ref="form" @submit.stop.prevent="lodgeAComplaint">
         <b-form-group
           label="Complaint text:"
           label-for="complaint-input"
@@ -120,7 +128,7 @@ export default {
         });
     },
     checkFormValidity() {
-      this.complainState = this.complainText.trim() === "";
+      this.complainState = this.complainText.trim() !== "";
       return this.complainState;
     },
     resetModal() {
@@ -157,7 +165,11 @@ export default {
       return false;
     },
     cancelReservation() {},
-    lodgeAComplaint() {},
+    lodgeAComplaint(bvModalEvent) {
+      if (this.checkFormValidity()) {
+        
+      }
+    },
     reviewReservation() {},
     openComplaintModal(id) {
       this.clickedReservationId = id;
@@ -188,6 +200,7 @@ export default {
       complainText: "",
       rating: 0,
       reviewText: "",
+      complainState: null
     };
   },
 };

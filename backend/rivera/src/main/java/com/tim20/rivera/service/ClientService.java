@@ -3,7 +3,9 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ClientRepository;
+import com.tim20.rivera.repository.MemberCategoryRepository;
 import com.tim20.rivera.repository.RentableRepository;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,10 @@ public class ClientService {
     private RoleService roleService;
     @Autowired
     RentableRepository rentableRepository;
+    @Autowired
+    private MemberCategoryRepository memberCategoryRepository;
+    @Autowired
+    private RulesRepository rulesRepository;
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -121,8 +127,8 @@ public class ClientService {
     public List<EntityDTO> getSubscribedEntities(String clientUsername, String search) {
         List<EntityDTO> entities = new ArrayList<>();
         Client client = clientRepository.findByUsername(clientUsername);
-        for (Rentable entity: client.getSubscribed()) {
-            if(entity.getName().toLowerCase().contains(search.toLowerCase())) {
+        for (Rentable entity : client.getSubscribed()) {
+            if (entity.getName().toLowerCase().contains(search.toLowerCase())) {
                 entities.add(new EntityDTO(entity));
             }
         }
@@ -232,7 +238,7 @@ public class ClientService {
 
     public Client activateClient(String username) {
         Client client = clientRepository.findByUsername(username);
-        if(client!=null) {
+        if (client != null) {
             System.out.println(client.getUsername());
             client.setStatus(AccountStatus.ACTIVE);
             clientRepository.save(client);
@@ -250,5 +256,32 @@ public class ClientService {
         Client client = clientRepository.findByUsername(username);
         client.getReservations().add(reservation);
         clientRepository.save(client);
+    }
+
+    private ClientLoyaltyDTO clientToClientLoyaltyDTO(Client client) {
+        ClientLoyaltyDTO clientLoyaltyDTO = new ClientLoyaltyDTO();
+        clientLoyaltyDTO.setUsername(client.getUsername());
+        clientLoyaltyDTO.setNumberOfPoints(client.getNumberOfPoints());
+        clientLoyaltyDTO.setNumberOfPenalties(client.getNumberOfPenalties());
+        clientLoyaltyDTO.setPointsPerReservation(rulesRepository.findAll().get(0).getPointsPerReservation());
+        clientLoyaltyDTO.setAllLoyalties(memberCategoryRepository.findAll().stream().filter(l -> !l.getForOwner()).collect(Collectors.toList()));
+        return clientLoyaltyDTO;
+    }
+
+    public ClientLoyaltyDTO getClientLoyalty(String username) {
+        Client client = clientRepository.findByUsername(username);
+        return clientToClientLoyaltyDTO(client);
+    }
+
+    public Double calculateDiscount(Client client) {
+        double min = 0;
+        double discount = 0;
+        for (MemberCategory category : memberCategoryRepository.findAll().stream().filter(l -> !l.getForOwner()).toList()) {
+            if (category.getNumberOfPoints() <= client.getNumberOfPoints() && category.getNumberOfPoints() >= min) {
+                min = category.getNumberOfPoints();
+                discount = category.getPercentage();
+            }
+        }
+        return discount;
     }
 }
