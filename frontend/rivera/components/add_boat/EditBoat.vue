@@ -196,6 +196,11 @@
 					<ErrorDiv :parameter="$v.services" :name="'Services'"> </ErrorDiv>
 				</div>
 			</div>
+
+			      <hr class="w-100" />
+      <div class="form-row">
+        <h5><font-awesome-icon icon="sailboat" /> Specifications</h5>
+      </div>
 			
 			<div class="form-row">
 				<div class="form-group col-4">
@@ -289,9 +294,9 @@
 			<div class="d-flex">
 				<PictureUpload />
 			</div>
-			<button type="button" @click="upload" class="btn btn-primary float-right">
+			<b-button type="button" @click="upload" class="prime-btn float-right">
 				Update boat
-			</button>
+			</b-button>
 
 			<div
 				class="modal fade"

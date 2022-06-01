@@ -8,7 +8,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
         <Navbar :currentPage="'statReport'" />
-        <SystemStatReport />
+        <SystemStatReport class="mt-2"/>
     </div>
 </template>
 

@@ -17,8 +17,8 @@
 					</ul>
 				</div>
 			</b-form>
-            <div>
-                <!-- Ovde telo -->
+            <div class="text-center">
+                <p style="font-size: 20px">No one reviewed you yet.</p>
             </div>
 		</div>
 	</div>

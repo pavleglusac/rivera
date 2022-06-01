@@ -9,16 +9,16 @@ INSERT INTO tag (name) VALUES ('river');
 INSERT INTO tag (name) VALUES ('canoe');
 INSERT INTO tag (name) VALUES ('extreme');
 
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#9b2437', false, 'Basic', 0, 5);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#35663D', false, 'Green', 30, 10);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#022741', false, 'Pro', 60, 15);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F4A933', false, 'Gold', 90, 20);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#293462', false, 'Basic', 0, 5);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F24C4C', false, 'Green', 30, 10);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#EC9B3B', false, 'Pro', 60, 15);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F7D716', false, 'Gold', 90, 20);
 
 
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#9b2437', true, 'Basic', 0, 5);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#35663D', true, 'Green', 30, 10);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#022741', true, 'Pro', 60, 15);
-INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F4A933', true, 'Gold', 90, 20);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#293462', true, 'Basic', 0, 5);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F24C4C', true, 'Green', 30, 10);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#EC9B3B', true, 'Pro', 60, 15);
+INSERT INTO member_category (color, for_owner, name, number_of_points, percentage) VALUES ('#F7D716', true, 'Gold', 90, 20);
 
 INSERT INTO rules (income_percentage, points_per_reservation) VALUES  (50, 5);
 
@@ -41,8 +41,8 @@ INSERT INTO adventure_fishing_equipment (adventure_id, fishing_equipment) VALUES
 
 
 
-INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'pera@gmail.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, 0);
-INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status) VALUES ('mika', 'Dobrovoljacka 37', 'Zrenjanin', 'Serbia', false, 'mika@gmail.com', NULL, 'Mika', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Mikic', 0, 0, 0);
+INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'pera@gmail.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, 0, 1);
+INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id) VALUES ('mika', 'Dobrovoljacka 37', 'Zrenjanin', 'Serbia', false, 'mika@gmail.com', NULL, 'Mika', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Mikic', 0, 0, 0, 1);
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, status) VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'admin@gmail.com', NULL, 'Branislav', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Bakic', 0);
 

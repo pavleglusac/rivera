@@ -85,6 +85,8 @@ export default {
           datasets: [
             {
               data: this.yValues,
+                            backgroundColor: "rgb(75, 192, 192)",
+
             },
           ],
         },

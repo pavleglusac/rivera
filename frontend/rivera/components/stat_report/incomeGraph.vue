@@ -18,14 +18,18 @@
           ></b-form-datepicker>
         </div>
         <div class="form-group col-2">
-          <b-button @click="loadAttendance" class="w-100 prime-btn" size="sm" style="border: 1px solid #16C79A"
+          <b-button
+            @click="loadAttendance"
+            class="w-100 prime-btn"
+            size="sm"
+            style="border: 1px solid #16c79a"
             >Load</b-button
           >
         </div>
       </div>
       <div class="form-row align-items-center">
-          <p style="font-weight: 500;">Full income: {{ fullIncome }}$</p>
-        </div>
+        <p style="font-weight: 500">Full income: {{ fullIncome }}$</p>
+      </div>
       <div class="form-row align-items-center">
         <div class="form-group col-md-12 m-1">
           <canvas id="myChart" style="max-width=100%"></canvas>
@@ -76,6 +80,7 @@ export default {
           datasets: [
             {
               data: this.yValues,
+              backgroundColor: "rgb(75, 192, 192)",
             },
           ],
         },
