@@ -6,10 +6,7 @@ import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -50,5 +47,10 @@ public class OwnerController {
     @GetMapping(path="get-owner-loyalty")
     public OwnerLoyaltyDTO getOwnerLoyalty(@RequestParam("username") String username) {
         return ownerService.getOwnerLoyalty(username);
+    }
+
+    @PostMapping(path="add-discount")
+    public void addDiscount(DiscountDTO discountDTO){
+        discountService.addDiscount(discountDTO);
     }
 }

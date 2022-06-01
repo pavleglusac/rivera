@@ -210,6 +210,11 @@
               :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />
+        <div style="text-align:center;display: flex;
+    align-items: center;" class="m-4">
+          <b-icon icon="calendar-plus" style="width:30px;height:30px;" @click="showAddDiscountModal"/>
+        </div>
+
           </div>
         </div>
         <div v-else class="d-flex flex-column h-100">
@@ -218,8 +223,11 @@
             email notification when owner creates a special offer, please
             subscribe to this entity.
           </p>
+        <div style="text-align:center;display: flex;
+    align-items: center;" class="m-4">
+          <b-icon icon="calendar-plus" style="width:30px;height:30px;" @click="showAddDiscountModal"/>
         </div>
-
+        </div>
         <b-modal id="reservedDiscountModal" title="Congratulations!">
           <p class="my-4">You have successfully reserved your appointment.</p>
         </b-modal>
@@ -278,6 +286,9 @@
       <b-modal id="add_modal2" size="xl" hide-header hide-footer>
           <ViewReservationReport :selectedId="selectedId"/>
       </b-modal>
+      <b-modal id="addDiscountModal" size="xl" hide-header hide-footer>
+          <AddDiscount />
+      </b-modal>
   </div>
 </template>
 
@@ -290,9 +301,12 @@ import Review from "./Review.vue";
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
 import ReservationReport from "./../owner_reservations/reservation_report";
 import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
+import AddDiscount from "./../owner_reservations/add_discount.vue";
+
+import { BIcon, BIconCalendarPlus} from 'bootstrap-vue'
 
 export default {
-  components: { MainCard, Carousel2, Calendar, Discount, Review, ReservationHistory, ReservationReport, ViewReservationReport },
+  components: { MainCard, Carousel2, Calendar, Discount, Review, ReservationHistory, AddDiscount, ReservationReport, ViewReservationReport,BIcon, BIconCalendarPlus },
   data() {
     return {
       selectedId: "",
@@ -372,6 +386,9 @@ export default {
     openReservationsModal() {
       this.$bvModal.show("reservationModal");
     },
+    showAddDiscountModal(){      
+      this.$bvModal.show("addDiscountModal");
+    },
     loadAdventure() {
       let that = this;
       this.$axios
@@ -397,10 +414,10 @@ export default {
           that.canBeChanged = !adventure.canBeChanged;
           that.discounts = adventure.discounts;
           that.discounts.forEach(
-            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
           );
           that.discounts.forEach(
-            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
           );
           that.score = adventure.averageScore;
           that.pictures.push(
@@ -446,11 +463,13 @@ export default {
           that.tags = cottage.tags;
           that.canBeChanged = !cottage.canBeChanged;
           that.discounts = cottage.discounts;
+          for (var x of that.discounts){
+          console.log("---------------"+x.start);}
           that.discounts.forEach(
-            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
           );
           that.discounts.forEach(
-            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
           );
           that.pictures.push(
             ...cottage.pictures.map((x) => "http://localhost:8080" + x)
@@ -509,10 +528,10 @@ export default {
           that.canBeChanged = !boat.canBeChanged;
           that.discounts = boat.discounts;
           that.discounts.forEach(
-            (x) => (x.start = moment(x.start).format("DD/MM/YY HH:MM"))
+            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
           );
           that.discounts.forEach(
-            (x) => (x.end = moment(x.end).format("DD/MM/YY HH:mm"))
+            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
           );
           that.pictures.push(
             ...boat.pictures.map((x) => "http://localhost:8080" + x)

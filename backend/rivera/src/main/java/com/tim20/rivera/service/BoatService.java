@@ -84,7 +84,7 @@ public class BoatService {
         for (var x : boat.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + boat.getId());
         }
-        boat.setOwner(boatOwnerRepository.getById("cowner")); //TODO: izvuci ownera iz jwt kad se bude slao
+        boat.setOwner(boatOwnerRepository.getById("bowner")); //TODO: izvuci ownera iz jwt kad se bude slao
         boatRepository.save(boat);
 
         List<String> paths;
