@@ -2,14 +2,18 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.RentableDTO;
+import com.tim20.rivera.dto.ReservationDTO;
+import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.OwnerRepository;
 import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +24,9 @@ public class RentableService {
 
     @Autowired
     private OwnerRepository ownerRepository;
+
+    @Autowired
+    private ClientService clientService;
 
     public List<RentableDTO> getRentablesDtoForOwner(String ownerId) {
         Owner owner = ownerRepository.findByUsername(ownerId);
@@ -59,4 +66,29 @@ public class RentableService {
         return dto;
     }
 
+    public List<ReservationDTO> getReservations(Integer id) {
+        Optional<Rentable> rentable = rentableRepository.findById(id);
+        if (rentable.isEmpty()) return new ArrayList<>();
+        return rentable.get().getReservations().stream().map(this::reservationToDto).collect(Collectors.toList());
+    }
+
+    private ReservationDTO reservationToDto(Reservation reservation) {
+        ReservationDTO dto = new ReservationDTO();
+        dto.setStart(reservation.getStartDateTime());
+        dto.setEnd(reservation.getEndDateTime());
+        dto.setCancelled(reservation.getCancelled());
+        dto.setClient(clientService.clientToCRDto(reservation.getClient()));
+        dto.setId(reservation.getId());
+        dto.setReport(null);
+        if(reservation.getReservationReport() != null) {
+            ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
+            reservationReportDTO.setId(reservation.getReservationReport().getId());
+            reservationReportDTO.setReservationReportType(reservation.getReservationReport().getReservationReportType());
+            reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
+            reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
+            reservationReportDTO.setText(reservation.getReservationReport().getText());
+            dto.setReport(reservationReportDTO);
+        }
+        return dto;
+    }
 }

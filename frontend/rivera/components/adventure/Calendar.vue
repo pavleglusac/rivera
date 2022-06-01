@@ -367,8 +367,8 @@ export default {
     };
   },
   mounted() {
-    // this.calendarOptions.events.push(...this.reservations)
-    // this.getAvailabilities();
+    //this.getAvailabilities();
+    
   },
 
   watch: {
@@ -396,6 +396,23 @@ export default {
     },
   },
   methods: {
+    getReservations() {
+      let calendarApi = this.$refs.fullCalendar.getApi();
+      this.$axios.get("/api/rentable-reservation?id=" + this.$route.params.rentable)
+      .then(resp => {
+        for(let reservation of resp.data)
+        calendarApi.addEvent({
+            id: reservation.id,
+            title: "Reservation for " + reservation.client.username,
+            start: reservation.start,
+            end: reservation.end,
+            display: "block",
+            color: "#19456B",
+          }
+        );
+
+      });
+    },
     handleWeekendsToggle() {
       this.calendarOptions.weekends = !this.calendarOptions.weekends; // update a property
     },
@@ -751,6 +768,7 @@ export default {
     async getAvailabilities() {
       let calendarApi = this.$refs.fullCalendar.getApi();
       calendarApi.removeAllEvents();
+      this.getReservations();
       this.$axios
         .get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
         .then((resp) => {

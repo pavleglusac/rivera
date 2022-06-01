@@ -1,6 +1,7 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.RentableDTO;
+import com.tim20.rivera.dto.ReservationDTO;
 import com.tim20.rivera.service.AdventureService;
 import com.tim20.rivera.service.BoatService;
 import com.tim20.rivera.service.CottageService;
@@ -8,6 +9,7 @@ import com.tim20.rivera.service.RentableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,5 +44,11 @@ public class RentableController {
             return "adventure";
         }
         return "";
+    }
+
+    @GetMapping(path = "rentable-reservation")
+    public List<ReservationDTO> getReservations(@RequestParam("id") Integer id) {
+        System.out.println("Stiglo");
+        return rentableService.getReservations(id);
     }
 }
