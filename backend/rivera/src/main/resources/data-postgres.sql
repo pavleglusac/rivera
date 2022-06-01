@@ -72,6 +72,11 @@ INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 4);
 
 
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 6);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id) VALUES (5, '2022-09-13 01:00:00', 500, '2022-09-12 16:00:00', 6);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id) VALUES (6, '2022-08-13 01:00:00', 700, '2022-08-12 16:00:00', 6);
+
+
 
 
 INSERT INTO discount_tags (discount_id, tags_id) VALUES (1, 3);
@@ -88,6 +93,12 @@ INSERT INTO discount_tags (discount_id, tags_id) VALUES (6, 3);
 INSERT INTO discount_tags (discount_id, tags_id) VALUES (6, 4);
 INSERT INTO discount_tags (discount_id, tags_id) VALUES (7, 3);
 INSERT INTO discount_tags (discount_id, tags_id) VALUES (7, 4);
+
+
+INSERT INTO discount_tags (discount_id, tags_id) VALUES (8, 3);
+INSERT INTO discount_tags (discount_id, tags_id) VALUES (9, 3);
+INSERT INTO discount_tags (discount_id, tags_id) VALUES (9, 2);
+INSERT INTO discount_tags (discount_id, tags_id) VALUES (10, 3);
 
 
 
