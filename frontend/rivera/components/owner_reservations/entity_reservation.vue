@@ -34,10 +34,11 @@
         </div>
 
         <div
-          v-if="!isDateAfterToday(new Date(this.reservation.end))"
           style="float: right"
         >
           <b-button
+            :disabled="isDateAfterToday(new Date(this.reservation.end))"
+						v-bind:class="{ 'disabled-report': isDateAfterToday(new Date(this.reservation.end)) }"
             v-if="!this.reservation.report"
             variant="primary"
             class="book-btn"
@@ -45,6 +46,8 @@
             >File a report</b-button
           >
           <b-button
+            :disabled="isDateAfterToday(new Date(this.reservation.end))"
+						v-bind:class="{ 'disabled-report': isDateAfterToday(new Date(this.reservation.end)) }"
             v-else
             variant="primary"
             class="book-btn"
@@ -171,5 +174,12 @@ li {
   width: 300px;
   height: 300px;
   object-fit: cover;
+}
+
+.disabled-report{
+  background-color: grey;
+}
+.disabled-report:hover{
+  background-color: grey;
 }
 </style>
