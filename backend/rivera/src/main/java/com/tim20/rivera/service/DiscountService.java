@@ -1,14 +1,18 @@
 package com.tim20.rivera.service;
 
+import com.tim20.rivera.dto.DiscountDTO;
 import com.tim20.rivera.dto.DiscountOfferDTO;
 import com.tim20.rivera.dto.DiscountProfileDTO;
 import com.tim20.rivera.model.Discount;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.DiscountRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -21,6 +25,10 @@ public class DiscountService {
     private final int NUMBER_OF_OFFERS_SHOWING = 4;
     @Autowired
     private DiscountRepository discountRepository;
+    @Autowired
+    private RentableRepository rentableRepository;
+    @Autowired
+    private TagService tagService;
 
     public DiscountProfileDTO discountTODPDto(Discount discount) {
         DiscountProfileDTO discountProfileDTO = new DiscountProfileDTO();
@@ -92,4 +100,22 @@ public class DiscountService {
         return discounts.stream().map(this::discountToDODTO).collect(Collectors.toList());
     }
 
+    public void addDiscount(DiscountDTO discountDTO) {
+        discountRepository.save(discountDTOToDiscount(discountDTO));
+    }
+
+    private Discount discountDTOToDiscount(DiscountDTO discountDTO){
+        Discount discount = new Discount();
+        discount.setPrice(discountDTO.getPrice());
+        System.out.println(discountDTO.getStartDateTime()+"DTO");
+        discount.setStartDateTime(LocalDateTime.parse(discountDTO.getStartDateTime().split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        discount.setEndDateTime(LocalDateTime.parse(discountDTO.getEndDateTime().split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        System.out.println(discount.getStartDateTime()+"DISCOUNT");
+        discount.setCapacity(discountDTO.getCapacity());
+        tagService.addTagsIfNotPresent(discountDTO.getTags());
+        discount.setTags(tagService.getTagsByNames(discountDTO.getTags()));
+        discount.setRentable(rentableRepository.getById(discountDTO.getRentableId()));
+        return discount;
+    }
 }
