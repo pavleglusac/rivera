@@ -20,9 +20,10 @@
             v-model="name"
             id="inputEmail4"
             placeholder="Name"
-            v-bind:class="{ 'error-boarder': $v.name.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.name.$invalid && nameClicked}"
+            @click="nameClicked = true"
           />
-          <ErrorDiv :parameter="$v.name" :name="'Name'"> </ErrorDiv>
+          <ErrorDiv v-if="nameClicked"  :parameter="$v.name" :name="'Name'"> </ErrorDiv>
         </div>
 
         <div class="form-group col-6">
@@ -33,9 +34,10 @@
             v-model="address"
             id="inputAddress"
             placeholder="1234 Main St"
-            v-bind:class="{ 'error-boarder': $v.address.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.address.$invalid && addressClicked}"
+            @click="addressClicked = true"
           />
-          <ErrorDiv :parameter="$v.address" :name="'Adress'"> </ErrorDiv>
+          <ErrorDiv v-if="addressClicked" :parameter="$v.address" :name="'Adress'"> </ErrorDiv>
         </div>
       </div>
 
@@ -48,9 +50,10 @@
             v-model="city"
             id="inputCity"
             placeholder="City"
-            v-bind:class="{ 'error-boarder': $v.city.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.city.$invalid && cityClicked }"
+            @click="cityClicked = true"
           />
-          <ErrorDiv :parameter="$v.city" :name="'City'"> </ErrorDiv>
+          <ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'"> </ErrorDiv>
         </div>
         <div class="form-group col-6">
           <label for="inputState">State</label>
@@ -58,7 +61,8 @@
             id="inputState"
             class="form-control"
             v-model="country"
-            v-bind:class="{ 'error-boarder': $v.country.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.country.$invalid && countryClicked}"
+            @click="countryClicked = true"
           >
             <option selected>Choose...</option>
             <option
@@ -69,7 +73,7 @@
               {{ country.label }}
             </option>
           </select>
-          <ErrorDiv :parameter="$v.country" :name="'Country'"> </ErrorDiv>
+          <ErrorDiv v-if="countryClicked" :parameter="$v.country" :name="'Country'"> </ErrorDiv>
         </div>
       </div>
 
@@ -82,9 +86,10 @@
             v-model="description"
             rows="3"
             placeholder="Description"
-            v-bind:class="{ 'error-boarder': $v.description.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.description.$invalid && descriptionClicked }"
+            @click="descriptionClicked = true"
           ></textarea>
-          <ErrorDiv :parameter="$v.description" :name="'Description'">
+          <ErrorDiv v-if="descriptionClicked" :parameter="$v.description" :name="'Description'">
           </ErrorDiv>
         </div>
       </div>
@@ -108,7 +113,7 @@
             placeholder="Price per hour"
             v-bind:class="{ 'error-boarder': $v.perHour.$invalid }"
           />
-          <ErrorDiv :parameter="$v.perHour" :name="'Per hour'"> </ErrorDiv>
+          <ErrorDiv  :parameter="$v.perHour" :name="'Per hour'"> </ErrorDiv>
         </div>
 
         <div class="form-group col-md-4">
@@ -138,9 +143,10 @@
             min="0"
             max="100"
             placeholder="Cancellation terms"
-            v-bind:class="{ 'error-boarder': $v.cancellationTerms.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.cancellationTerms.$invalid && cancellationTermsClicked}"
+            @click="cancellationTermsClicked = true"
           />
-          <ErrorDiv
+          <ErrorDiv v-if="cancellationTermsClicked"
             :parameter="$v.cancellationTerms"
             :name="'Cancellation terms'"
           >
@@ -163,9 +169,10 @@
             input-id="tags-basic"
             v-model="tags"
             placeholder="Tags"
-            v-bind:class="{ 'error-boarder': $v.tags.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.tags.$invalid && tagsClicked }"
+            @input="tagsClicked=true"
           ></b-form-tags>
-          <ErrorDiv :parameter="$v.tags" :name="'Tags'"> </ErrorDiv>
+          <ErrorDiv v-if="tagsClicked" :parameter="$v.tags" :name="'Tags'"> </ErrorDiv>
         </div>
       </div>
 
@@ -176,9 +183,10 @@
             input-id="tags-basic"
             v-model="rulesOfConduct"
             placeholder="Rules of conduct"
-            v-bind:class="{ 'error-boarder': $v.rulesOfConduct.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.rulesOfConduct.$invalid  && rulesClicked}"
+            @input="rulesClicked=true"
           ></b-form-tags>
-          <ErrorDiv :parameter="$v.rulesOfConduct" :name="'Rules of conduct'">
+          <ErrorDiv v-if="rulesClicked" :parameter="$v.rulesOfConduct" :name="'Rules of conduct'">
           </ErrorDiv>
         </div>
       </div>
@@ -189,9 +197,10 @@
             input-id="tags-basic"
             v-model="services"
             placeholder="Additional services"
-            v-bind:class="{ 'error-boarder': $v.services.$invalid }"
+            v-bind:class="{ 'error-boarder': $v.services.$invalid && servicesClicked }"
+            @input="servicesClicked=true"
           ></b-form-tags>
-          <ErrorDiv :parameter="$v.services" :name="'Services'"> </ErrorDiv>
+          <ErrorDiv v-if="serviceClicked" :parameter="$v.services" :name="'Services'"> </ErrorDiv>
         </div>
       </div>
 
@@ -365,7 +374,15 @@ export default {
       perHour: 0,
       perDay: 0,
       description: "",
-      cancellationTerms: "",
+      nameClicked: false,
+      addressClicked: false,
+      cityClicked: false,
+      countryClicked: false,
+      descriptionClicked: false,
+      tagsClicked: false,
+      rulesClicked: false,
+      serviceClicked: false,
+      cancellationTermsClicked: false,
     };
   },
   components: {

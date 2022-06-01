@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <b-modal id="gallery" size="xl" hide-footer>
+    <b-modal id="gallery" size="xl" hide-footer title="Gallery">
       <div class="gallery-row">
         <div class="gallery-column">
           <img v-for="pic in firstColumn" style="width: 100%" :src="pic" />
@@ -98,7 +98,7 @@
             </span>
           </div>
         </div>
-        <h6 class="mt-4">
+        <h6 class="mt-2">
           <font-awesome-icon icon="book" /> Rules of conduct:
         </h6>
         <div class="flex">
@@ -106,7 +106,7 @@
             {{ rule }}
           </span>
         </div>
-        <h6 class="mt-4">
+        <h6 class="mt-2">
           <font-awesome-icon icon="bell-concierge" /> Additional services:
         </h6>
         <div class="flex">
@@ -115,8 +115,8 @@
           </span>
         </div>
         <div v-if="currentType == 'cottage'">
-          <h6 class="mt-4">
-            <font-awesome-icon icon="bell-concierge" /> Rooms:
+          <h6 class="mt-2">
+            <font-awesome-icon icon="door-closed" /> Rooms:
           </h6>
           <div class="flex">
             <span class="tagish" v-for="room in rooms" :key="room">
@@ -127,8 +127,8 @@
         <div v-if="currentType == 'boat'">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <h6 class="mt-4">
-                <font-awesome-icon icon="bell-concierge" /> Length:
+              <h6 class="mt-2">
+                <font-awesome-icon icon="ruler" /> Length:
               </h6>
               <div class="flex">
                 <span class="tagish">
@@ -137,18 +137,8 @@
               </div>
             </div>
             <div class="form-group col-md-4">
-              <h6 class="mt-4">
-                <font-awesome-icon icon="bell-concierge" /> Capacity:
-              </h6>
-              <div class="flex">
-                <span class="tagish">
-                  {{ capacity }}
-                </span>
-              </div>
-            </div>
-            <div class="form-group col-md-4">
-              <h6 class="mt-4">
-                <font-awesome-icon icon="bell-concierge" /> Max speed:
+              <h6 class="mt-2">
+                <font-awesome-icon icon="gauge" /> Max speed:
               </h6>
               <div class="flex">
                 <span class="tagish">
@@ -156,10 +146,20 @@
                 </span>
               </div>
             </div>
+            <div class="form-group col-md-4">
+              <h6 class="mt-2">
+                <font-awesome-icon icon="anchor" /> Type:
+              </h6>
+              <div class="flex">
+                <span class="tagish">
+                  {{ type }}
+                </span>
+              </div>
+            </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
-              <h6 class="mt-4">
+              <h6>
                 <font-awesome-icon icon="bell-concierge" /> Engine Power:
               </h6>
               <div class="flex">
@@ -169,22 +169,12 @@
               </div>
             </div>
             <div class="form-group col-md-4">
-              <h6 class="mt-4">
+              <h6>
                 <font-awesome-icon icon="bell-concierge" /> Number of engines:
               </h6>
               <div class="flex">
                 <span class="tagish">
                   {{ enginesNumber }}
-                </span>
-              </div>
-            </div>
-            <div class="form-group col-md-4">
-              <h6 class="mt-4">
-                <font-awesome-icon icon="bell-concierge" /> Type:
-              </h6>
-              <div class="flex">
-                <span class="tagish">
-                  {{ type }}
                 </span>
               </div>
             </div>
@@ -294,7 +284,6 @@
 <script>
 import MainCard from "./MainCard.vue";
 import Carousel2 from "./Carousel2.vue";
-import Carousel from "./Carousel.vue";
 import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
 import Review from "./Review.vue";
@@ -303,7 +292,7 @@ import ReservationReport from "./../owner_reservations/reservation_report";
 import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
 
 export default {
-  components: { MainCard, Carousel, Calendar, Discount, Review, ReservationHistory, ReservationReport, ViewReservationReport },
+  components: { MainCard, Carousel2, Calendar, Discount, Review, ReservationHistory, ReservationReport, ViewReservationReport },
   data() {
     return {
       selectedId: "",
@@ -418,8 +407,9 @@ export default {
             ...adventure.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
+          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
           console.log(half);
-          that.firstColumn = that.pictures.slice(0, half-1);
+          that.firstColumn = that.pictures.slice(0, first);
           console.log(that.firstColumn);
           that.secondColumn = that.pictures.slice(-half);
           that.id = adventure.id;
@@ -466,8 +456,9 @@ export default {
             ...cottage.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
+          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
           console.log(half);
-          that.firstColumn = that.pictures.slice(0, half-1);
+          that.firstColumn = that.pictures.slice(0, first);
           console.log(that.firstColumn);
           that.secondColumn = that.pictures.slice(-half);
           that.id = cottage.id;
@@ -527,7 +518,8 @@ export default {
             ...boat.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
-          that.firstColumn = that.pictures.slice(0, half-1);
+          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
+          that.firstColumn = that.pictures.slice(0, first);
           that.secondColumn = that.pictures.slice(-half);
           that.id = boat.id;
           that.owner = boat.owner;
