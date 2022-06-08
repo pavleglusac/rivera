@@ -6,7 +6,7 @@
 			
 			<div class="form-row" style="text-align: center">
 				<div class="form-group col-md-12">
-					<h3>Edit Cottage</h3>
+					<h3>Edit Boat</h3>
 				</div>
 			</div>
 
@@ -160,7 +160,7 @@
 			<div class="form-row">
 				<div class="form-group col-12">
 					<label for="inputAddress"
-						>Tags - key words that describe your cottage</label
+						>Tags - key words that describe your boat</label
 					>
 					<b-form-tags
 						input-id="tags-basic"

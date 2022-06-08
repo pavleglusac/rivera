@@ -1,10 +1,7 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.Client;
-import com.tim20.rivera.model.Cottage;
-import com.tim20.rivera.model.Rentable;
-import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ClientRepository;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.RentableRepository;
@@ -34,6 +31,8 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private OwnerService ownerService;
     @Autowired
     private CottageRepository cottageRepository;
     @Autowired
@@ -96,6 +95,7 @@ public class ReservationService {
             reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
             reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
             reservationReportDTO.setText(reservation.getReservationReport().getText());
+            reservationReportDTO.setPosted(reservation.getReservationReport().getPosted());
             dto.setReport(reservationReportDTO);
         }
         return dto;
@@ -107,6 +107,7 @@ public class ReservationService {
         clientReservationDTO.setRentableId(reservation.getRentable().getId());
         clientReservationDTO.setStartDateTime(reservation.getStartDateTime());
         clientReservationDTO.setEndDateTime(reservation.getEndDateTime());
+        clientReservationDTO.setReservationId(reservation.getId());
         clientReservationDTO.setPrice(reservation.getPrice());
         clientReservationDTO.setEntity(new EntityReservationDTO(reservation.getRentable()));
         return clientReservationDTO;
@@ -119,6 +120,7 @@ public class ReservationService {
     public List<ClientReservationDTO> getReservations(String username, ReservationSearch search) {
         List<ClientReservationDTO> reservations = this.getClientReservations(username);
         return getReservationsByDate(reservations.stream().
+                filter(a -> !a.getCancelled()).
                 filter(a -> a.getEntity().getName().toLowerCase().contains(search.getSearch().toLowerCase())).toList(), search);
     }
 
@@ -238,4 +240,19 @@ public class ReservationService {
         String surname = client.getSurname().toLowerCase();
         return username.contains(search) || name.contains(search) || surname.contains(search);
     }
+
+    public void cancelReservation(Integer reservationId) {
+        Reservation reservation = reservationRepository.getById(reservationId);
+        reservation.setCancelled(true);
+        reservationRepository.save(reservation);
+    }
+
+    public void addReview(Integer reservationId, Client client, String reviewFor, String reviewText, double rating) {
+        Reservation reservation = reservationRepository.getById(reservationId);
+        if(reviewFor.equals("entity"))
+            rentableService.addReview(reservation.getRentable(), client, reviewText, rating);
+        else
+            ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating);
+    }
+
 }

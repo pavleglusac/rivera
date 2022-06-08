@@ -14,7 +14,8 @@ import java.util.List;
 public class Owner extends Person {
     private String signUpDescription;
     private Integer numberOfPoints;
-
+    @OneToMany(mappedBy = "owner")
+    private List<Review> reviews;
     @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private List<Rentable> rentables;
 }

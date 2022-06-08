@@ -25,6 +25,7 @@ export default {
             this.$axios.get(`/api/reviews-for-owner?ownerId=${this.id}`)
             .then(resp => {
                 that.reviews = resp.data;
+                console.log(resp.data);
                 that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
             });
         }

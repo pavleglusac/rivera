@@ -57,6 +57,11 @@
       ok-title="Submit"
       @ok="reviewReservation"
     >
+      <label class="form-label">Who are you reviewing?</label>
+        <b-form-radio-group
+          v-model="selectedReview"
+          :options="ReviewOptions"
+        ></b-form-radio-group>
       <label class="form-label">Score a reservation:</label>
       <b-form-rating color="#16C79A" v-model="rating"></b-form-rating>
       <div class="mb-3">
@@ -65,9 +70,27 @@
       </div>
     </b-modal>
 
+    <Popup
+      ref="reservation_canceled"
+      id="reservation_canceled"
+      title="Reservation canceled"
+      text="You have successfully canceled your reservation. Reservation can be canceled only 3 days in advance."
+    />
+    <Popup
+      ref="review_sent"
+      id="review_sent"
+      title="Sent!"
+      text="You have successfully reviewed reservation."
+    />
+    <Popup
+      ref="complain_sent"
+      id="complain_sent"
+      title="Sent!"
+      text="You have successfully complained on your reservation."
+    />
+
     <b-modal
       id="complaintModal"
-      ref="compaintModal"
       title="Submit Your Complaint"
       ok-title="Submit"
       @show="resetModal"
@@ -75,6 +98,11 @@
       @ok="lodgeAComplaint"
     >
       <form ref="form" @submit.stop.prevent="lodgeAComplaint">
+        <label class="form-label">Who are you complaining to?</label>
+        <b-form-radio-group
+          v-model="selectedComplaint"
+          :options="ComplaintOptions"
+        ></b-form-radio-group>
         <b-form-group
           label="Complaint text:"
           label-for="complaint-input"
@@ -95,9 +123,10 @@
 
 <script>
 import ReservationCard from "./ReservationCard.vue";
+import Popup from "../popup.vue";
 export default {
   name: "Reservations",
-  components: { ReservationCard },
+  components: { ReservationCard, Popup },
   mounted() {
     this.loadReservations();
   },
@@ -164,18 +193,58 @@ export default {
       }
       return false;
     },
-    cancelReservation() {},
+    cancelReservation() {
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          console.log(resp.data);
+          console.log(this.clickedReservationId);
+          this.$axios
+            .post(
+              `/api/cancelReservation?&username=${resp.data}&reservationId=${this.clickedReservationId}`
+            )
+            .then((response) => {
+              this.$refs.reservation_canceled.show();
+              this.loadReservations();
+            });
+        });
+    },
+    reviewReservation() {
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          console.log("REVIEW");
+          console.log(resp.data);
+          console.log(this.clickedReservationId);
+          console.log(this.rating);
+          this.$axios
+            .post(
+              `/api/reviewReservation?&username=${resp.data}&reservationId=${this.clickedReservationId}&reviewFor=${this.selectedReview}&rating=${this.rating}&reviewText=${this.reviewText}`
+            )
+            .then((response) => {
+              this.$refs.review_sent.show();
+            });
+        });
+    },
     lodgeAComplaint(bvModalEvent) {
       if (this.checkFormValidity()) {
-        
       }
     },
-    reviewReservation() {},
     openComplaintModal(id) {
+      console.log(id);
       this.clickedReservationId = id;
       this.$bvModal.show("complaintModal");
     },
     openCancelModal(id) {
+      console.log(id);
       this.clickedReservationId = id;
       this.$bvModal.show("cancelModal");
     },
@@ -191,16 +260,28 @@ export default {
       clickedReservationId: 0,
       selectedDate: new Date().toISOString().slice(0, 10),
       selected: "all",
+      complaintFor: null,
+      reviewFor: null,
       options: [
         { text: "Upcoming reservations", value: "upcoming" },
         { text: "Past reservations", value: "past" },
         { text: "Reservations on selected date", value: "date" },
         { text: "Show all reservations", value: "all" },
       ],
+      selectedReview: "owner",
+      ReviewOptions: [
+        { text: "Onwer", value: "owner" },
+        { text: "Entity", value: "entity" },
+      ],
+      selectedComplaint: "owner",
+      ComplaintOptions: [
+        { text: "Onwer", value: "owner" },
+        { text: "Entity", value: "entity" },
+      ],
       complainText: "",
       rating: 0,
       reviewText: "",
-      complainState: null
+      complainState: null,
     };
   },
 };

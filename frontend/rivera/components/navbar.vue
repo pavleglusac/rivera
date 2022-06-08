@@ -45,7 +45,6 @@ export default {
             } else {
                 this.role = role;
             }
-            
         },
     },
     mounted() {

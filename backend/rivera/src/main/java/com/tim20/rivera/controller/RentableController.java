@@ -2,6 +2,7 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.RentableDTO;
 import com.tim20.rivera.dto.ReservationDTO;
+import com.tim20.rivera.model.Review;
 import com.tim20.rivera.service.AdventureService;
 import com.tim20.rivera.service.BoatService;
 import com.tim20.rivera.service.CottageService;
@@ -48,7 +49,11 @@ public class RentableController {
 
     @GetMapping(path = "rentable-reservation")
     public List<ReservationDTO> getReservations(@RequestParam("id") Integer id) {
-        System.out.println("Stiglo");
         return rentableService.getReservations(id);
+    }
+
+    @GetMapping(path = "get-reviews")
+    public List<Review> getReviews(@RequestParam("id") Integer id) {
+        return rentableService.getReviews(id);
     }
 }

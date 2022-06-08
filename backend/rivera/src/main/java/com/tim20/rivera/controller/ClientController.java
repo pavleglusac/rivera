@@ -2,19 +2,16 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Client;
-import com.tim20.rivera.model.Person;
 import com.tim20.rivera.model.Reservation;
 import com.tim20.rivera.service.ClientService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -123,5 +120,25 @@ public class ClientController {
         Reservation reservation = reservationService.addReservation(client, rentableId, startDateTime, endDateTime, price);
         clientService.addReservation(username, reservation);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping(path = "cancelReservation")
+    public ResponseEntity<String> cancelReservation(@RequestParam("username") String username, Integer reservationId) {
+        Client client = clientService.findByUsername(username);
+        clientService.cancelReservation(client, reservationId);
+        reservationService.cancelReservation(reservationId);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping(path = "reviewReservation")
+    public ResponseEntity<String> reviewReservation(@RequestParam("username") String username, Integer reservationId, String reviewFor, String rating, String reviewText) {
+        Client client = clientService.findByUsername(username);
+        reservationService.addReview(reservationId, client, reviewFor, reviewText, Double.parseDouble(rating));
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @GetMapping(path = "getClientReviews")
+    public List<ClientReviewDTO> getReviews(@RequestParam("username") String username) {
+        return clientService.getReviews(username);
     }
 }

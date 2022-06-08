@@ -1,6 +1,6 @@
 <template>
   <b-card no-body class="shadow-sm" :class="{cancelledCard : reservation.cancelled}">
-	<span v-if="reservation.cancelled" class="cancelled-tag">Cancelled</span>
+	<span v-if="reservation.cancelled == 'true'" class="cancelled-tag">Cancelled</span>
     <b-card-body class="h-100">
       <b-container>
       <div class="d-flex align-items-center justify-content-between">
@@ -64,7 +64,7 @@
 <script>
 export default {
   mounted() {
-    console.log(this.reservation);
+    console.log(this.reservation.cancelled);
   },
   name: "EntityReservation",
   components: {},
@@ -108,22 +108,6 @@ export default {
       );
     },
   },
-/*
-  props: {
-    entity: {
-      type: Object,
-      required: true,
-    },
-    reservation: {
-      type: Object,
-      required: true,
-    },
-    offerType: {
-      type: String,
-      required: true,
-    },
-  },*/
-  
 	props: ['entity','offerType',
 		'reservation',
 		'reportModal','viewReportModal'

@@ -25,4 +25,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "rentable_id")
     private Rentable rentable;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private Owner owner;
 }

@@ -22,5 +22,4 @@ public class ProfileController {
         if(person == null) return null;
         return personService.personToProfileDTO(person);
     }
-
 }

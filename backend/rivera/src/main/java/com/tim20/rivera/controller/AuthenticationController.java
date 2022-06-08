@@ -44,20 +44,17 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<UserTokenState> createAuthenticationToken(
             JwtAuthenticationRequestDTO authenticationRequest) {
-
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-            System.out.println(authenticationRequest.getUsername() + ", " + authenticationRequest.getPassword());
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        System.out.println(authentication.getPrincipal());
-        Person user = (Person) authentication.getPrincipal();
-        if(!personService.checkIfApprovedOrNonExistent(user.getUsername())){
-            return null;
-        }
-        String jwt = tokenUtils.generateToken(user.getUsername());
-        int expiresIn = tokenUtils.getExpiredIn();
+            Person user = (Person) authentication.getPrincipal();
+            System.out.println(user.getUsername());
+            if (!personService.checkIfApprovedOrNonExistent(user.getUsername())) {
+                return null;
+            }
+            String jwt = tokenUtils.generateToken(user.getUsername());
+            int expiresIn = tokenUtils.getExpiredIn();
             return ResponseEntity.ok(new UserTokenState(jwt, expiresIn));
         } catch (AuthenticationException ae) {
             return null;
@@ -127,6 +124,7 @@ public class AuthenticationController {
             System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             return ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles().get(0).getName();
         } catch (Exception e) {
+            e.printStackTrace();
             return "unauthenticated";
         }
     }
@@ -140,7 +138,7 @@ public class AuthenticationController {
         if (owner != null)
             return "OWNER";
         Admin admin = adminService.findByUsername(username);
-        if(admin != null)
+        if (admin != null)
             return "ADMIN";
         return "";
     }
@@ -158,7 +156,7 @@ public class AuthenticationController {
             String role = loggedPerson.getRoles().get(0).getName();
             info.setRole(role);
             info.setUsername(loggedPerson.getUsername());
-            if(loggedPerson.getLastPasswordResetDate() != null)
+            if (loggedPerson.getLastPasswordResetDate() != null)
                 info.setLastPasswordChange(loggedPerson.getLastPasswordResetDate().toLocalDateTime());
             return info;
         } catch (Exception e) {
@@ -174,7 +172,7 @@ public class AuthenticationController {
         } catch (Exception e) {
             return "no-client";
         }
-        if(client.getNumberOfPenalties() < 3)
+        if (client.getNumberOfPenalties() < 3)
             return client.getUsername();
         return "3";
     }

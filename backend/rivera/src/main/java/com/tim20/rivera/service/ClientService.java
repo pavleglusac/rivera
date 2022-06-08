@@ -2,10 +2,7 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.ClientRepository;
-import com.tim20.rivera.repository.MemberCategoryRepository;
-import com.tim20.rivera.repository.RentableRepository;
-import com.tim20.rivera.repository.RulesRepository;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -284,4 +281,38 @@ public class ClientService {
         }
         return discount;
     }
+
+    public void cancelReservation(Client client, Integer reservationId) {
+        for(int i=0; i<client.getReservations().size(); i++) {
+            if(Objects.equals(client.getReservations().get(i).getId(), reservationId)) {
+                client.getReservations().get(i).setCancelled(true);
+                break;
+            }
+        }
+        clientRepository.save(client);
+    }
+
+    public ClientReviewDTO reportToDTO(ReservationReport report) {
+        ClientReviewDTO reviewDTO = new ClientReviewDTO();
+        reviewDTO.setId(report.getId());
+        reviewDTO.setPosted(report.getPosted());
+        reviewDTO.setText(report.getText());
+        reviewDTO.setOwner(report.getReservation().getRentable().getOwner());
+        return reviewDTO;
+    }
+
+    public List<ClientReviewDTO> getReviews(String username) {
+        Client client = clientRepository.findByUsername(username);
+        return getReports(client).stream().map(this::reportToDTO).collect(Collectors.toList());
+    }
+
+    private List<ReservationReport> getReports(Client client) {
+        List<ReservationReport> reports = new ArrayList<>();
+        for(Reservation reservation : client.getReservations()) {
+            if(reservation.getReservationReport().getReservationReportType().equals(ReservationReportType.COMMENT))
+                reports.add(reservation.getReservationReport());
+        }
+        return reports;
+    }
+
 }

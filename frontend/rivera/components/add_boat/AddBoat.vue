@@ -12,7 +12,7 @@
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="name">Cottage Name</label>
+          <label for="name">Boat Name</label>
           <input
             type="text"
             class="form-control"
@@ -188,7 +188,7 @@
       <div class="form-row">
         <div class="form-group col-12">
           <label for="inputAddress"
-            >Tags - key words that describe your cottage</label
+            >Tags - key words that describe your boat</label
           >
           <b-form-tags
             input-id="tags-basic"

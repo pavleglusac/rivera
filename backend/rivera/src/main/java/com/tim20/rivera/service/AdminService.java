@@ -56,7 +56,7 @@ public class AdminService {
 
     public Admin findByUsername(String username) {
         return adminRepository.findById(username)
-                              .orElse(null);
+                .orElse(null);
     }
 
     public List<MemberCategory> getCategories() {
@@ -65,24 +65,24 @@ public class AdminService {
 
     public Rules getRules() {
         return rulesRepository.findAll()
-                              .get(0);
+                .get(0);
     }
 
     public void updateCategories(ArrayList<MemberCategory> categories) {
         clientRepository.findAll()
-                        .forEach(client -> client.setCategory(null));
+                .forEach(client -> client.setCategory(null));
         ownerRepository.findAll()
-                       .forEach(owner -> owner.setCategory(null));
+                .forEach(owner -> owner.setCategory(null));
         clientRepository.saveAll(clientRepository.findAll());
         ownerRepository.saveAll(ownerRepository.findAll());
         memberCategoryRepository.deleteAll();
         memberCategoryRepository.saveAll(categories);
         clientRepository.findAll()
-                        .forEach(client -> client
-                                .setCategory(getMaxCategory(categories, client.getNumberOfPoints(), false)));
+                .forEach(client -> client
+                        .setCategory(getMaxCategory(categories, client.getNumberOfPoints(), false)));
         ownerRepository.findAll()
-                       .forEach(owner -> owner
-                               .setCategory(getMaxCategory(categories, owner.getNumberOfPoints(), true)));
+                .forEach(owner -> owner
+                        .setCategory(getMaxCategory(categories, owner.getNumberOfPoints(), true)));
         clientRepository.saveAll(clientRepository.findAll());
         ownerRepository.saveAll(ownerRepository.findAll());
     }
@@ -112,7 +112,7 @@ public class AdminService {
                 .findAll()
                 .stream()
                 .filter(owner -> owner.getStatus()
-                                      .equals(AccountStatus.WAITING))
+                        .equals(AccountStatus.WAITING))
                 .map(Person::getUsername)
                 .collect(Collectors.toList());
     }
@@ -120,15 +120,15 @@ public class AdminService {
     public HashMap<String, Integer> getRegisteredStats() {
         HashMap<String, Integer> stats = new HashMap<>();
         ownerRepository.findAll()
-                       .forEach(x -> stats.put(x.getStatus().name(), stats.getOrDefault(x.getStatus().name(), 0) + 1));
+                .forEach(x -> stats.put(x.getStatus().name(), stats.getOrDefault(x.getStatus().name(), 0) + 1));
         return stats;
     }
 
     public List<TerminationRequestDTO> getTerminationRequests() {
         return terminationRepository.findAllByStatus(TerminationStatus.PENDING)
-                                    .stream()
-                                    .map(this::terminationRequestToDto)
-                                    .collect(Collectors.toList());
+                .stream()
+                .map(this::terminationRequestToDto)
+                .collect(Collectors.toList());
     }
 
     public TerminationRequestDTO terminationRequestToDto(TerminationRequest request) {
@@ -180,16 +180,18 @@ public class AdminService {
     }
 
     public List<IncomeSystemDTO> getSystemIncome(String type, LocalDateTime from, LocalDateTime to) {
-        if(from.isAfter(to)) return null;
+        if (from.isAfter(to)) return null;
         LocalDateTime nextVal = from;
         String label = "";
         List<IncomeSystemDTO> incomes = new ArrayList<>();
-        while(from.isBefore(to)) {
+        while (from.isBefore(to)) {
             switch (type) {
-                case "week" -> { nextVal = nextVal.plusDays(7);
+                case "week" -> {
+                    nextVal = nextVal.plusDays(7);
                     label = String.format("%s", from.format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
                 }
-                case "day" -> { nextVal = nextVal.plusDays(1);
+                case "day" -> {
+                    nextVal = nextVal.plusDays(1);
                     label = String.format("%s", from.format(DateTimeFormatter.ISO_LOCAL_DATE));
                 }
                 case "month" -> {
@@ -205,12 +207,12 @@ public class AdminService {
                 }
             }
 
-            if(nextVal.isAfter(to)) {
+            if (nextVal.isAfter(to)) {
                 nextVal = to;
             }
             //
             Double income = reservationRepository.findTotalSystemIncome(from, nextVal);
-            if(income == null) income = 0.0;
+            if (income == null) income = 0.0;
             IncomeSystemDTO incomeDto = new IncomeSystemDTO();
             incomeDto.setIncome(income);
             incomeDto.setLabel(label);
