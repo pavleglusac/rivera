@@ -36,7 +36,7 @@ public class OwnerService {
     @Autowired
     private FishingInstructorRepository fishingInstructorRepository;
     @Autowired
-    private RentableService rentableService;
+    private ReviewRepository reviewRepository;
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
@@ -301,16 +301,20 @@ public class OwnerService {
         return ownerToOwnerLoyaltyDTO(owner);
     }
 
-    public void addReview(Owner owner, Client client, String reviewText, double rating) {
+    public void addReview(Owner owner, Client client, String reviewText, double rating, ReviewType type) {
         Review review = new Review();
         review.setClient(client);
         review.setText(reviewText);
+        review.setType(type);
         review.setPosted(LocalDateTime.now());
         review.setScore(rating);
         review.setStatus(ReviewStatus.ACCEPTED);
         review.setRentable(null);
         review.setOwner(owner);
-        owner.getReviews().add(review);
+        List<Review> reviews = owner.getReviews();
+        reviews.add(review);
+        owner.setReviews(reviews);
         ownerRepository.save(owner);
+        reviewRepository.save(review);
     }
 }

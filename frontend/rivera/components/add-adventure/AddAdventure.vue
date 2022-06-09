@@ -61,12 +61,12 @@
       <div class="form-row">
         <div class="form-group col-12">
           <label for="exampleFormControlTextarea1">Description</label>
-          <textarea
+          <b-textarea
             class="form-control"
             v-model="description"
             id="exampleFormControlTextarea1"
             rows="3"
-          ></textarea>
+          ></b-textarea>
         </div>
       </div>
 

@@ -247,12 +247,12 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
-    public void addReview(Integer reservationId, Client client, String reviewFor, String reviewText, double rating) {
+    public void addReview(Integer reservationId, Client client, String reviewFor, String reviewText, double rating, ReviewType type) {
         Reservation reservation = reservationRepository.getById(reservationId);
         if(reviewFor.equals("entity"))
-            rentableService.addReview(reservation.getRentable(), client, reviewText, rating);
+            rentableService.addReview(reservation.getRentable(), client, reviewText, rating, type);
         else
-            ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating);
+            ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating, type);
     }
 
 }

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <b-card>
       <div class="form-row align-items-center">
         <div class="form-group col-2"></div>
         <div class="form-group col-3">
@@ -28,14 +27,15 @@
         </div>
       </div>
       <div class="form-row align-items-center">
-        <p style="font-weight: 500">Full income: {{ fullIncome }}$</p>
+        <div class="form-group col-md-12 m-1">
+          <p style="font-weight: 500; text-align: center;">Full income: {{ fullIncome }}$</p>
+      </div>
       </div>
       <div class="form-row align-items-center">
         <div class="form-group col-md-12 m-1">
           <canvas id="myChart" style="max-width=100%"></canvas>
         </div>
       </div>
-    </b-card>
   </div>
 </template>
 

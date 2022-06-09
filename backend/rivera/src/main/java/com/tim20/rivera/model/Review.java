@@ -18,6 +18,7 @@ public class Review {
     private Double score;
     private ReviewStatus status;
     private LocalDateTime posted;
+    private ReviewType type;
     private String text;
     @ManyToOne
     @JoinColumn(name = "client_id")

@@ -3,6 +3,7 @@ package com.tim20.rivera.controller;
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.ReviewType;
 import com.tim20.rivera.service.ClientService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,14 @@ public class ClientController {
     @PostMapping(path = "reviewReservation")
     public ResponseEntity<String> reviewReservation(@RequestParam("username") String username, Integer reservationId, String reviewFor, String rating, String reviewText) {
         Client client = clientService.findByUsername(username);
-        reservationService.addReview(reservationId, client, reviewFor, reviewText, Double.parseDouble(rating));
+        reservationService.addReview(reservationId, client, reviewFor, reviewText, Double.parseDouble(rating), ReviewType.REVIEW_WITH_RATING);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
+    }
+
+    @PostMapping(path = "complainOnReservation")
+    public ResponseEntity<String> complainOnReservation(@RequestParam("username") String username, Integer reservationId, String reviewFor, String reviewText) {
+        Client client = clientService.findByUsername(username);
+        reservationService.addReview(reservationId, client, reviewFor, reviewText, 0, ReviewType.COMPLAINT);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

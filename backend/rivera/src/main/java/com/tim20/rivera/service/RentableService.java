@@ -94,7 +94,7 @@ public class RentableService {
         return dto;
     }
 
-    public void addReview(Rentable rentable, Client client, String reviewText, double rating) {
+    public void addReview(Rentable rentable, Client client, String reviewText, double rating, ReviewType type) {
         Review review = new Review();
         review.setRentable(rentable);
         review.setClient(client);
@@ -102,6 +102,7 @@ public class RentableService {
         review.setPosted(LocalDateTime.now());
         review.setScore(rating);
         review.setStatus(ReviewStatus.ACCEPTED);
+        review.setType(type);
         rentable.getReviews().add(review);
         rentableRepository.save(rentable);
     }

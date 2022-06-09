@@ -79,14 +79,14 @@
 			<div class="form-row">
 				<div class="form-group col-md-12">
 					<label for="exampleFormControlTextarea1">Description</label>
-					<textarea
+					<b-textarea
 						class="form-control"
 						id="exampleFormControlTextarea1"
 						v-model="description"
 						rows="3"
 						placeholder="Description"
 						v-bind:class="{ 'error-boarder': $v.description.$invalid }"
-					></textarea>
+					></b-textarea>
 					<ErrorDiv :parameter="$v.description" :name="'Description'">
 					</ErrorDiv>
 				</div>

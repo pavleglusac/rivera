@@ -114,6 +114,7 @@ public class RiveraApplication {
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
 				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
+		review1.setType(ReviewType.REVIEW_WITH_RATING);
 		review1.setClient(clientRepository.findByUsername("pera"));
 		review1.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review1);
@@ -203,6 +204,7 @@ public class RiveraApplication {
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
 				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
+		review1.setType(ReviewType.REVIEW_WITH_RATING);
 		review1.setClient(clientRepository.findByUsername("pera"));
 		review1.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review1);
@@ -380,6 +382,7 @@ public class RiveraApplication {
 		review1.setText("Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, " +
 				"in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ");
 		review1.setScore(3.3);
+		review1.setType(ReviewType.REVIEW_WITH_RATING);
 		review1.setClient(client1);
 		review1.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review1);
@@ -391,6 +394,7 @@ public class RiveraApplication {
 				"risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis");
 		review2.setScore(3.3);
 		review2.setClient(client2);
+		review2.setType(ReviewType.REVIEW_WITH_RATING);
 		review2.setStatus(ReviewStatus.ACCEPTED);
 		reviewRepository.save(review2);
 

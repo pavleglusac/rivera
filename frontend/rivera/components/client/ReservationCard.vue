@@ -74,13 +74,13 @@ export default {
   },
   methods: {
     openCancel() {
-      this.openCancelReservation(this.reservation.reservationId);
+      this.openCancelReservation(this.reservation);
     },
     openReview() {
-      this.openReviewReservation(this.reservation.reservationId);
+      this.openReviewReservation(this.reservation);
     },
     openComplaint() {
-      this.openComplaintReservation(this.reservation.reservationId);
+      this.openComplaintReservation(this.reservation);
     },
     goToProfile(id) {
       this.$router.push({ path: "/rentable/" + id });
