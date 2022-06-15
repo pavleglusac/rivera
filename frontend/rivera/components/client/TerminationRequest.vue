@@ -4,7 +4,7 @@
 		style="bottom: 0; overflow-y: auto"
 	>
 		<b-card class="text-center mx-auto my-auto card mt-5">
-			<img src="..\..\static\rivera_logo_hor.png" style="height: 100px;" />
+			<img src="@/static/rivera_logo_hor.png" style="height: 100px;" />
 			<form id="registrationForm">
 				<div class="form-row">
 					<div class="form-group col-6">

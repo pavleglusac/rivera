@@ -10,7 +10,7 @@
     style="bottom: 0; overflow-y: auto"
   >
     <b-card class="text-center mx-auto my-auto card mt-5">
-      <img src="..\..\static\rivera_logo_ver.png" />
+      <img src="@/static/rivera_logo_ver.png" />
       <form>
         <div class="form-group">
           <label>Username</label>

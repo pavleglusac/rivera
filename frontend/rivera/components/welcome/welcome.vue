@@ -1,7 +1,7 @@
 <template>
   <div class="login-form">
     <b-card class="text-center mx-auto my-auto card">
-      <img src="..\..\static\rivera_logo_ver.png" />
+      <img src="@/static/rivera_logo_ver.png" />
 
         <form>
         <text>
