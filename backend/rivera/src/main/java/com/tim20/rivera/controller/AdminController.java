@@ -8,6 +8,7 @@ import com.tim20.rivera.service.EmailService;
 import com.tim20.rivera.service.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class AdminController {
 
     @GetMapping(path = "get-owner")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username) throws IOException {
-        if(username == null || username.isBlank())
+        if (username == null || username.isBlank())
             return null;
         return ownerService.findByUsernameDTO(username);
     }
@@ -53,18 +54,18 @@ public class AdminController {
         ownerService.deactivateOwner(username);
     }
 
-    @GetMapping(path="categories")
+    @GetMapping(path = "categories")
     public List<MemberCategory> getCategories() {
         return adminService.getCategories();
     }
 
-    @PostMapping(path="categories")
+    @PostMapping(path = "categories")
     public ResponseEntity<String> updateCategories(@RequestBody ArrayList<MemberCategory> categories) {
-        if(categories.stream().noneMatch(x -> x.getNumberOfPoints() == 0 && x.getForOwner())) {
+        if (categories.stream().noneMatch(x -> x.getNumberOfPoints() == 0 && x.getForOwner())) {
             return ResponseEntity.badRequest().body("Must have zero point category!");
         }
 
-        if(categories.stream().noneMatch(x -> x.getNumberOfPoints() == 0 && !x.getForOwner())) {
+        if (categories.stream().noneMatch(x -> x.getNumberOfPoints() == 0 && !x.getForOwner())) {
             return ResponseEntity.badRequest().body("Must have zero point category!");
         }
 
@@ -72,26 +73,26 @@ public class AdminController {
         return ResponseEntity.ok().body("Ok");
     }
 
-    @GetMapping(path="rules")
+    @GetMapping(path = "rules")
     public Rules getRules() {
         return adminService.getRules();
     }
 
-    @PostMapping(path="rules")
+    @PostMapping(path = "rules")
     public ResponseEntity<String> postRules(@RequestBody Rules rules) {
-        if(rules.getIncomePercentage() > 100 || rules.getIncomePercentage() < 0) {
+        if (rules.getIncomePercentage() > 100 || rules.getIncomePercentage() < 0) {
             return ResponseEntity.badRequest().body("Must be in range [0, 100]!");
         }
         adminService.updateRules(rules);
         return ResponseEntity.ok().body("ok");
     }
 
-    @GetMapping(path="unregistered-usernames")
+    @GetMapping(path = "unregistered-usernames")
     public List<String> getUnregisteredUsernames() {
         return adminService.getUnregisteredUsernames();
     }
 
-    @GetMapping(path ="registered-stats")
+    @GetMapping(path = "registered-stats")
     public HashMap<String, Integer> getRegisteredStats() {
         return adminService.getRegisteredStats();
     }
@@ -123,4 +124,21 @@ public class AdminController {
                                                  LocalDateTime to) {
         return adminService.getSystemIncome(type, from, to);
     }
+
+    @GetMapping("pending-reports")
+    public List<AdminReservationReportDTO> getPendingReprots() {
+        return adminService.getPendingReports();
+    }
+
+
+    @PostMapping(value = "resolve-report",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public void resolveReport(@RequestBody ReportResolve resolve) throws MessagingException {
+        System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
+
+        adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+    }
+
 }
+

@@ -1,5 +1,7 @@
 package com.tim20.rivera.service;
 
+import com.tim20.rivera.controller.AdminController;
+import com.tim20.rivera.dto.AdminReservationReportDTO;
 import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.IncomeSystemDTO;
 import com.tim20.rivera.dto.TerminationRequestDTO;
@@ -7,8 +9,10 @@ import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -50,6 +54,12 @@ public class AdminService {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReservationReportRepository reservationReportRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
@@ -218,5 +228,66 @@ public class AdminService {
             from = nextVal;
         }
         return incomes;
+    }
+
+    public List<AdminReservationReportDTO> getPendingReports() {
+        return reservationReportRepository
+                .findAllByResolved(false)
+                .stream()
+                .map(this::reportToAdminReportDTO)
+                .collect(Collectors.toList());
+    }
+
+    private AdminReservationReportDTO reportToAdminReportDTO(ReservationReport report) {
+        AdminReservationReportDTO dto = new AdminReservationReportDTO();
+        dto.setOwnerName(report.getReservation().getRentable().getOwner().getName());
+        dto.setOwnerImage(report.getReservation().getRentable().getOwner().getPhoto());
+        dto.setClientName(report.getReservation().getClient().getName());
+        dto.setClientImage(report.getReservation().getClient().getPhoto());
+        dto.setText(report.getText());
+        dto.setType(report.getReservationReportType().name());
+        dto.setId(report.getId());
+        dto.setSanction(report.getSanction());
+        return dto;
+    }
+
+
+    public void resolveReport(int reportId, String responseText, boolean assignPenalty) throws MessagingException {
+        ReservationReport report = reservationReportRepository.getById(reportId);
+        Client client = report.getReservation().getClient();
+        Owner owner = report.getReservation().getRentable().getOwner();
+        if (assignPenalty)  {
+            int totalPenalties = client.getNumberOfPenalties();
+            report.getReservation().getClient().setNumberOfPenalties(totalPenalties + 1);
+            try {
+                emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
+                        "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
+                                "you that you have been assigned a penalty. Three of these penalties per month " +
+                                "will stop you from using our services. Reason: " + responseText +
+                                "\n\nSincerely,\n Rivera.");
+
+                emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
+                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                                + client.getUsername() + " was assigned a penalty as per your request." +
+                                "\n\nSincerely,\n Rivera.");
+            } catch (Exception e) {
+                System.out.println("email not sent");
+            }
+
+        } else if(report.getSanction()) {
+            try {
+                emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
+                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                                + client.getUsername() + " will not be assigned a penalty. Reason:\n"
+                                +responseText+
+                                "\n\nSincerely,\n Rivera.");
+            } catch (Exception e) {
+                System.out.println("email not sent");
+            }
+
+        }
+
+        report.setResolved(true);
+        reservationReportRepository.save(report);
     }
 }

@@ -3,16 +3,14 @@ package com.tim20.rivera.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class ReservationReport {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
     @OneToOne
@@ -27,7 +25,7 @@ public class ReservationReport {
 
     String text;
 
-
+    Boolean resolved;
 
 
 }

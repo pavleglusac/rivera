@@ -237,3 +237,12 @@ INSERT INTO user_role (user_id, role_id) VALUES ('marko', 3);
 INSERT INTO user_role (user_id, role_id) VALUES ('cowner', 1);
 INSERT INTO user_role (user_id, role_id) VALUES ('admin', 5);
 INSERT INTO user_role (user_id, role_id) VALUES ('bowner', 2);
+
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
+                        VALUES (0, false, true, false, 'Client didnt show up', 1);
+
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
+                        VALUES (1, false, true, false, 'Client didnt show up', 2);
+
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
+                        VALUES (2, false, false, false, 'Client did show up', 3);
