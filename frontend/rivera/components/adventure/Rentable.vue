@@ -372,7 +372,7 @@ export default {
   },
   methods: {
     goToOwnerProfile() {
-      this.$router.push({ path: "/person/" + this.owner.username });
+      this.$router.push({ path: "/profile/" + this.owner.username });
     },
     openModal() {
       this.$bvModal.show("reservedDiscountModal");

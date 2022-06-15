@@ -53,41 +53,96 @@
 
     <b-modal
       id="reviewModal"
-      title="Submit Your Review"
-      ok-title="Submit"
-      @ok="reviewReservation"
+      hide-header
+      hide-footer
+      @show="resetModal"
+      @hidden="resetModal"
     >
-      <label class="form-label">Score a reservation:</label>
-      <b-form-rating color="#16C79A" v-model="rating"></b-form-rating>
-      <div class="mb-3">
-        <label class="form-label">Write a reservation review:</label>
-        <textarea class="form-control" v-model="reviewText" rows="3"></textarea>
-      </div>
+      <h4><font-awesome-icon icon="star" /> Submit Your Review</h4>
+      <form ref="form">
+        <label class="form-label">Who are you reviewing?</label>
+        <div @click="reviewOwnerSelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedReview == 'owner'}">
+          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
+          <span class="mr-auto">{{clickedReservation.entity.owner.name}} {{clickedReservation.entity.owner.surname}}</span>
+        </div>
+        <div @click="reviewEntitySelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedReview == 'entity'}">
+          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.photo' class="mr-3"></b-avatar>
+          <span class="mr-auto">{{clickedReservation.entity.name}}</span>
+        </div>
+        <label class="form-label">Score a reservation:</label>
+        <b-form-rating color="#16C79A" v-model="rating"></b-form-rating>
+        <b-form-group
+          label="Do you have any comments?"
+          label-for="review-input"
+        >
+          <b-textarea
+            id="review-input"
+            v-model="reviewText"
+            rows="3"
+          ></b-textarea>
+        </b-form-group>
+        <div style="float: right">
+          <b-button @click="closeReviewModal">Cancel</b-button>
+          <b-button class="prime-btn" @click="reviewReservation">Review</b-button>
+        </div>
+      </form>
     </b-modal>
+
+    <Popup
+      ref="reservation_canceled"
+      id="reservation_canceled"
+      title="Reservation canceled"
+      text="You have successfully canceled your reservation. Reservation can be canceled only 3 days in advance."
+    />
+    <Popup
+      ref="review_sent"
+      id="review_sent"
+      title="Sent!"
+      text="You have successfully reviewed reservation."
+    />
+    <Popup
+      ref="complain_sent"
+      id="complain_sent"
+      title="Sent!"
+      text="You have successfully complained on your reservation."
+    />
 
     <b-modal
       id="complaintModal"
-      ref="compaintModal"
-      title="Submit Your Complaint"
-      ok-title="Submit"
+      hide-header
+      hide-footer
       @show="resetModal"
       @hidden="resetModal"
-      @ok="lodgeAComplaint"
     >
-      <form ref="form" @submit.stop.prevent="lodgeAComplaint">
+      <h4><font-awesome-icon icon="heart-crack" /> Submit Your Complaint</h4>
+      <form ref="form">
+        <label class="form-label">Who are you complaining to?</label>
+        <div @click="complaintOwnerSelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedComplaint == 'owner'}">
+          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
+          <span class="mr-auto">{{clickedReservation.entity.owner.name}} {{clickedReservation.entity.owner.surname}}</span>
+        </div>
+        <div @click="complaintEntitySelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedComplaint == 'entity'}">
+          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.photo' class="mr-3"></b-avatar>
+          <span class="mr-auto">{{clickedReservation.entity.name}}</span>
+        </div>
         <b-form-group
-          label="Complaint text:"
+          label="What was wrong with your reservation? Please tell us in a few sentances."
           label-for="complaint-input"
           invalid-feedback="Complaint text is required."
           :state="complainState"
         >
-          <b-form-input
+          <b-textarea
             id="complaint-input"
             v-model="complainText"
+            rows="3"
             :state="complainState"
             required
-          ></b-form-input>
+          ></b-textarea>
         </b-form-group>
+        <div style="float: right">
+          <b-button @click="closeComplaintModal">Cancel</b-button>
+          <b-button class="prime-btn" @click="lodgeAComplaint">Submit</b-button>
+        </div>
       </form>
     </b-modal>
   </b-container>
@@ -95,9 +150,10 @@
 
 <script>
 import ReservationCard from "./ReservationCard.vue";
+import Popup from "../popup.vue";
 export default {
   name: "Reservations",
-  components: { ReservationCard },
+  components: { ReservationCard, Popup },
   mounted() {
     this.loadReservations();
   },
@@ -130,6 +186,12 @@ export default {
     checkFormValidity() {
       this.complainState = this.complainText.trim() !== "";
       return this.complainState;
+    },
+    closeReviewModal() {
+      this.$bvModal.hide("reviewModal");
+    },
+    closeComplaintModal() {
+      this.$bvModal.hide("complaintModal");
     },
     resetModal() {
       this.complainText = "";
@@ -164,47 +226,131 @@ export default {
       }
       return false;
     },
-    cancelReservation() {},
+    cancelReservation() {
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          this.$axios
+            .post(
+              `/api/cancelReservation?&username=${resp.data}&reservationId=${this.clickedReservation.reservationId}`
+            )
+            .then((response) => {
+              this.$refs.reservation_canceled.show();
+              this.loadReservations();
+            });
+        });
+    },
+    reviewReservation() {
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          console.log(this.clickedReservation);
+          this.$axios
+            .post(
+              `/api/reviewReservation?&username=${resp.data}&reservationId=${this.clickedReservation.reservationId}&reviewFor=${this.selectedReview}&rating=${this.rating}&reviewText=${this.reviewText}`
+            )
+            .then((response) => {
+              this.$refs.review_sent.show();
+              this.closeReviewModal();
+            });
+        });
+    },
     lodgeAComplaint(bvModalEvent) {
       if (this.checkFormValidity()) {
-        
+        this.$axios
+        .get("/api/auth/get-logged-username", {
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+          },
+        })
+        .then((resp) => {
+          this.$axios
+            .post(
+              `/api/complainOnReservation?&username=${resp.data}&reservationId=${this.clickedReservation.reservationId}&reviewFor=${this.selectedComplaint}&reviewText=${this.complainText}`
+            )
+            .then((response) => {
+              this.$refs.complain_sent.show();
+              this.closeComplaintModal();
+            });
+        });
       }
     },
-    reviewReservation() {},
     openComplaintModal(id) {
-      this.clickedReservationId = id;
+      this.clickedReservation = id;
       this.$bvModal.show("complaintModal");
     },
     openCancelModal(id) {
-      this.clickedReservationId = id;
+      this.clickedReservation = id;
       this.$bvModal.show("cancelModal");
     },
     openReviewModal(id) {
-      this.clickedReservationId = id;
+      this.clickedReservation = id;
       this.$bvModal.show("reviewModal");
     },
+    complaintOwnerSelected() {
+      this.selectedComplaint = "owner";
+    },
+    complaintEntitySelected() {
+      this.selectedComplaint = "entity";
+    },
+    reviewOwnerSelected() {
+      this.selectedReview = "owner";
+    },
+    reviewEntitySelected() {
+      this.selectedReview = "entity";
+    }
   },
   data() {
     return {
       reservations: [],
       search: "",
-      clickedReservationId: 0,
+      clickedReservation: {
+        entity: {
+          owner: {
+            name: "",
+            surname: "",
+            photo: ""
+          },
+          name: "",
+          photo: ""
+        }
+      },
       selectedDate: new Date().toISOString().slice(0, 10),
       selected: "all",
+      complaintFor: null,
+      reviewFor: null,
       options: [
         { text: "Upcoming reservations", value: "upcoming" },
         { text: "Past reservations", value: "past" },
         { text: "Reservations on selected date", value: "date" },
         { text: "Show all reservations", value: "all" },
       ],
+      selectedReview: "owner",
+      ReviewOptions: [
+        { text: "Onwer", value: "owner" },
+        { text: "Entity", value: "entity" },
+      ],
+      selectedComplaint: "owner",
       complainText: "",
       rating: 0,
       reviewText: "",
-      complainState: null
+      complainState: null,
     };
   },
 };
 </script>
 
 <style>
+.selectedClass {
+  background-color: var(--prime-color);
+  color: white;
+}
 </style>

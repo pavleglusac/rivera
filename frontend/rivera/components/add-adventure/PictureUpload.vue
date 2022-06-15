@@ -1,6 +1,6 @@
 <template>
   <div>
-      <b-form-file id="files" class="mb-2 mt-2"></b-form-file>
+      <b-form-file multiple id="files" class="mb-2 mt-2"></b-form-file>
     <div style="margin: auto">
       <div id="sortableImgThumbnailPreview"></div>
     </div>

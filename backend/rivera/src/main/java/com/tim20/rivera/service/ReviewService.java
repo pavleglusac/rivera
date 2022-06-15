@@ -6,8 +6,6 @@ import com.tim20.rivera.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ReviewService {
     @Autowired
@@ -24,4 +22,5 @@ public class ReviewService {
         reviewProfileDTO.setText(review.getText());
         return reviewProfileDTO;
     }
+
 }

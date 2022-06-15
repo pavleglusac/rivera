@@ -80,7 +80,7 @@
       <div class="form-row">
         <div class="form-group col-md-12">
           <label for="exampleFormControlTextarea1">Description</label>
-          <textarea
+          <b-textarea
             class="form-control"
             id="exampleFormControlTextarea1"
             v-model="description"
@@ -88,7 +88,7 @@
             placeholder="Description"
             v-bind:class="{ 'error-boarder': $v.description.$invalid && descriptionClicked }"
             @click="descriptionClicked = true"
-          ></textarea>
+          ></b-textarea>
           <ErrorDiv v-if="descriptionClicked" :parameter="$v.description" :name="'Description'">
           </ErrorDiv>
         </div>

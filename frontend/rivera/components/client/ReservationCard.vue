@@ -65,24 +65,22 @@
 export default {
   props: [
     "reservation",
-    "reservationId",
     "openCancelReservation",
     "openReviewReservation",
     "openComplaintReservation",
   ],
   mounted() {
     this.calculateNumberOfDaysUntilReservation();
-    this.reservationId = this.reservation.id;
   },
   methods: {
     openCancel() {
-      this.openCancelReservation(this.reservation.id);
+      this.openCancelReservation(this.reservation);
     },
     openReview() {
-      this.openReviewReservation(this.reservation.id);
+      this.openReviewReservation(this.reservation);
     },
     openComplaint() {
-      this.openComplaintReservation(this.reservation.id);
+      this.openComplaintReservation(this.reservation);
     },
     goToProfile(id) {
       this.$router.push({ path: "/rentable/" + id });

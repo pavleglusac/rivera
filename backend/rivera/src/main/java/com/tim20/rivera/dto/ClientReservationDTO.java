@@ -14,6 +14,7 @@ public class ClientReservationDTO {
     Boolean cancelled;
     EntityReservationDTO entity;
     Integer rentableId;
+    Integer reservationId;
     Double price;
 
     public boolean isUpcoming() {

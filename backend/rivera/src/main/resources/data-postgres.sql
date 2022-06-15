@@ -233,6 +233,7 @@ INSERT INTO role (name) VALUES ('ROLE_ADMIN');
 
 
 INSERT INTO user_role (user_id, role_id) VALUES ('pera', 4);
+INSERT INTO user_role (user_id, role_id) VALUES ('mika', 4);
 INSERT INTO user_role (user_id, role_id) VALUES ('marko', 3);
 INSERT INTO user_role (user_id, role_id) VALUES ('cowner', 1);
 INSERT INTO user_role (user_id, role_id) VALUES ('admin', 5);

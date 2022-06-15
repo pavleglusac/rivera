@@ -49,7 +49,7 @@
               icon="house"
             />
             <font-awesome-icon v-else-if="role == 'Boat Owner'" icon="boat" />
-            <font-awesome-icon v-else icon="fish" />
+            <font-awesome-icon v-else icon="person" />
             {{ role }} &nbsp;</span
           >
           <span :style="'color: ' + memberColor + ';'"
@@ -60,14 +60,14 @@
           class="d-flex justify-content-center mt-4"
           style="font-size: 1.2em; font-weight: 450"
         >
-          <div style="text-align: center; max-width: 33vw">
+          <div style="text-align: center; max-width: 90%">
             {{ description }}
           </div>
         </div>
       </div>
       <!--  -->
       <OwnerBody v-if="role != 'Client'" :role="role" />
-      <ClientBody v-else />
+      <ClientBody :name='name' v-else />
       <!--  -->
     </b-card>
   </div>

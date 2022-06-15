@@ -35,18 +35,14 @@ public class OwnerService {
     private RoleService roleService;
     @Autowired
     private FishingInstructorRepository fishingInstructorRepository;
-
     @Autowired
-    private RentableService rentableService;
-
+    private ReviewRepository reviewRepository;
     @Autowired
     private ReservationRepository reservationRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
-    private ReviewService reviewService;
+    private ClientService clientService;
     @Autowired
     private MemberCategoryRepository memberCategoryRepository;
     @Autowired
@@ -147,6 +143,18 @@ public class OwnerService {
         return ownerRequestDTO;
     }
 
+    public OwnerDTO ownerToDTO(Owner owner) {
+        if(owner == null)
+            return null;
+        OwnerDTO ownerDTO = new OwnerDTO();
+        ownerDTO.setEmail(owner.getEmail());
+        ownerDTO.setSurname(owner.getSurname());
+        ownerDTO.setUsername(owner.getUsername());
+        ownerDTO.setName(owner.getName());
+        ownerDTO.setPhoto(owner.getPhoto());
+        return ownerDTO;
+    }
+
     public OwnerRequestDTO findByUsernameDTO(String username) {
         return ownerToOwnerRequestDTO(ownerRepository.findByUsername(username));
     }
@@ -171,11 +179,28 @@ public class OwnerService {
         return owner == null || owner.getStatus()==AccountStatus.ACTIVE;
     }
 
-    public List<ReviewProfileDTO> getReviewsForOwner(String username) {
+    /*public List<ReviewProfileDTO> getReviewsForOwner(String username) {
         List<Rentable> rentables = rentableService.getRentablesForOwner(username);
         List<Review> reviews = new ArrayList<>();
         rentables.forEach(x -> reviews.addAll(x.getReviews()));
         return reviews.stream().map(reviewService::reviewToRPDTO).collect(Collectors.toList());
+    }*/
+
+    public ReviewProfileDTO reviewToDTO(Review review) {
+        ReviewProfileDTO reviewProfileDTO = new ReviewProfileDTO();
+        reviewProfileDTO.setId(review.getId());
+        reviewProfileDTO.setClient(clientService.clientToCRDto(review.getClient()));
+        reviewProfileDTO.setPosted(review.getPosted());
+        reviewProfileDTO.setScore(review.getScore());
+        reviewProfileDTO.setText(review.getText());
+        reviewProfileDTO.setOwner(ownerToDTO(review.getOwner()));
+        return reviewProfileDTO;
+    }
+
+    public List<ReviewProfileDTO> getReviewsForOwner(String username) {
+        Owner owner = ownerRepository.findByUsername(username);
+        System.out.println(owner.getReviews().size());
+        return owner.getReviews().stream().map(this::reviewToDTO).collect(Collectors.toList());
     }
 
     public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type) {
@@ -274,5 +299,22 @@ public class OwnerService {
     public OwnerLoyaltyDTO getOwnerLoyalty(String username) {
         Owner owner = ownerRepository.findByUsername(username);
         return ownerToOwnerLoyaltyDTO(owner);
+    }
+
+    public void addReview(Owner owner, Client client, String reviewText, double rating, ReviewType type) {
+        Review review = new Review();
+        review.setClient(client);
+        review.setText(reviewText);
+        review.setType(type);
+        review.setPosted(LocalDateTime.now());
+        review.setScore(rating);
+        review.setStatus(ReviewStatus.ACCEPTED);
+        review.setRentable(null);
+        review.setOwner(owner);
+        List<Review> reviews = owner.getReviews();
+        reviews.add(review);
+        owner.setReviews(reviews);
+        ownerRepository.save(owner);
+        reviewRepository.save(review);
     }
 }

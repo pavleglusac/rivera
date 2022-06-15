@@ -37,10 +37,10 @@
         </b-col>
       </b-row>
     </b-card>
-      <b-modal id="add_modal" size="xl" hide-header hide-footer>
+      <b-modal id="add_modal" size="md" hide-header hide-footer>
           <ReservationReport :selectedId="selectedId"/>
       </b-modal>
-      <b-modal id="add_modal2" size="xl" hide-header hide-footer>
+      <b-modal id="add_modal2" size="md" hide-header hide-footer>
           <ViewReservationReport :selectedId="selectedId"/>
       </b-modal>
   </b-container>

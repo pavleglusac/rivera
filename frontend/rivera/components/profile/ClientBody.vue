@@ -18,7 +18,7 @@
 				</div>
 			</b-form>
             <div class="text-center">
-                <p style="font-size: 20px">No one reviewed you yet.</p>
+                <p style="font-size: 20px">No one reviewed {{name}} yet.</p>
             </div>
 		</div>
 	</div>
@@ -28,7 +28,7 @@
 
 export default {
     components: {},
-	props: ["role"],
+	props: ["role", "name"],
 	data() {
 		return {
 			id: "",

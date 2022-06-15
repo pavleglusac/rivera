@@ -10,6 +10,7 @@ import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +88,26 @@ public class RentableService {
             reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
             reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
             reservationReportDTO.setText(reservation.getReservationReport().getText());
+            reservationReportDTO.setPosted(reservation.getReservationReport().getPosted());
             dto.setReport(reservationReportDTO);
         }
         return dto;
+    }
+
+    public void addReview(Rentable rentable, Client client, String reviewText, double rating, ReviewType type) {
+        Review review = new Review();
+        review.setRentable(rentable);
+        review.setClient(client);
+        review.setText(reviewText);
+        review.setPosted(LocalDateTime.now());
+        review.setScore(rating);
+        review.setStatus(ReviewStatus.ACCEPTED);
+        review.setType(type);
+        rentable.getReviews().add(review);
+        rentableRepository.save(rentable);
+    }
+
+    public List<Review> getReviews(Integer id) {
+        return rentableRepository.findById(id).get().getReviews();
     }
 }

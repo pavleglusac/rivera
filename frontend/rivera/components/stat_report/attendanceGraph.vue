@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <b-card>
       <div class="form-row align-items-center">
         <div class="form-group col-1"></div>
         <div class="form-group col-3">
@@ -35,7 +34,6 @@
           <canvas id="myChart" style="max-width=100%"></canvas>
         </div>
       </div>
-    </b-card>
   </div>
 </template>
 

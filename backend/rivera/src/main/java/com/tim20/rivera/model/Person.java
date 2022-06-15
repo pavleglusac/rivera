@@ -35,7 +35,6 @@ public class Person implements UserDetails {
     private Timestamp lastPasswordResetDate;
     private AccountStatus status;
 
-
     @OneToOne
     private MemberCategory category;
 
