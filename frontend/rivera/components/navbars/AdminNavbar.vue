@@ -13,11 +13,12 @@
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
                 <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Home</li></nuxt-link>
+                <nuxt-link to="/admin/entities"><li class="menu-link" :class="currentPage=='entities' ? 'active' : ''"><font-awesome-icon icon="box" /> Entities</li></nuxt-link>
                 <nuxt-link to="/admin/reports"><li class="menu-link" :class="currentPage=='reports' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Reports</li></nuxt-link>
-                <nuxt-link to="/admin/reviews"><li class="menu-link" :class="currentPage=='reviews' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Reviews</li></nuxt-link>
-                <nuxt-link to="/admin/registrate"><li class="menu-link" :class="currentPage=='registrate' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Registrate admins</li></nuxt-link>
-                <nuxt-link to="/admin/terminations"><li class="menu-link" :class="currentPage=='terminations' ? 'active' : ''"><font-awesome-icon icon="user-minus" /> Terminations</li></nuxt-link>
-                <nuxt-link to="/admin/registrations"><li class="menu-link" :class="currentPage=='registrations' ? 'active' : ''"><font-awesome-icon icon="user-plus" /> Registrations</li></nuxt-link>
+                <nuxt-link to="/admin/reviews"><li class="menu-link" :class="currentPage=='reviews' ? 'active' : ''"><font-awesome-icon icon="star" /> Reviews</li></nuxt-link>
+                <nuxt-link to="/admin/registrate"><li class="menu-link" :class="currentPage=='registrate' ? 'active' : ''"><font-awesome-icon icon="id-card" /> New admins</li></nuxt-link>
+                <nuxt-link to="/admin/terminations"><li class="menu-link" :class="currentPage=='terminations' ? 'active' : ''"><font-awesome-icon icon="user-minus" /> Termination</li></nuxt-link>
+                <nuxt-link to="/admin/registrations"><li class="menu-link" :class="currentPage=='registrations' ? 'active' : ''"><font-awesome-icon icon="user-plus" /> Registration</li></nuxt-link>
                 <nuxt-link to="/admin/stats"><li class="menu-link" :class="currentPage=='stats' ? 'active' : ''"><font-awesome-icon icon="chart-line" /> Income</li></nuxt-link>
                 <nuxt-link to="/admin/rules"><li class="menu-link" :class="currentPage=='rules' ? 'active' : ''"><font-awesome-icon icon="briefcase" /> Site rules</li></nuxt-link>
                 <nuxt-link to="/admin/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>

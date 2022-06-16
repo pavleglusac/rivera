@@ -1,6 +1,7 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.controller.AdminController;
+import com.tim20.rivera.controller.AdminReviewDTO;
 import com.tim20.rivera.dto.AdminReservationReportDTO;
 import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.IncomeSystemDTO;
@@ -16,10 +17,7 @@ import javax.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +58,9 @@ public class AdminService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
@@ -291,5 +292,84 @@ public class AdminService {
 
         report.setResolved(true);
         reservationReportRepository.save(report);
+    }
+
+    public List<AdminReviewDTO> getPendingReviews() {
+        return reviewRepository
+                .getReviewsByStatus(ReviewStatus.PENDING)
+                .stream()
+                .map(this::reviewToAdminReviewDTO)
+                .collect(Collectors.toList());
+    }
+
+    public AdminReviewDTO reviewToAdminReviewDTO(Review review) {
+        AdminReviewDTO dto = new AdminReviewDTO();
+        dto.setId(review.getId());
+        dto.setScore(review.getScore());
+        dto.setClientName(review.getClient().getName());
+        dto.setClientSurname(review.getClient().getSurname());
+        dto.setClientImage(review.getClient().getPhoto());
+        dto.setText(review.getText());
+        dto.setComplaint(review.getType() == ReviewType.COMPLAINT);
+        if(review.getOwner() != null) {
+            dto.setReviewedName(review.getOwner().getName() + " " + review.getOwner().getSurname());
+            dto.setReviewedImage(review.getOwner().getPhoto());
+        } else {
+            dto.setReviewedName(review.getRentable().getName());
+            dto.setReviewedImage(review.getRentable().getPictures().get(0));
+        }
+        return dto;
+    }
+
+    public void resolveReview(int reviewId, String responseText, boolean allowed) {
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        if(optionalReview.isEmpty()) return;
+        Review review = optionalReview.get();
+        Client client = review.getClient();
+        Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
+        System.out.println(review.getType());
+        if (review.getType() == ReviewType.REVIEW_WITH_RATING)  {
+            if(allowed) {
+                try {
+                    emailService.sendNotificaitionToUsername(owner.getUsername(), "Review",
+                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                                + client.getUsername() + " has just review you or your rentable with a rating of " + review.getScore() + " with" +
+                                " text \"" + review.getText() + "\"." +
+                                "<br><br>Sincerely,<br>Rivera.");
+                } catch (Exception e) {
+                    System.out.println("email not sent");
+                }
+                review.setStatus(ReviewStatus.ACCEPTED);
+            } else {
+                try {
+                    emailService.sendNotificaitionToUsername(client.getUsername(), "Review",
+                            "Dear " + client.getUsername() + ",\n\nWe inform you that your review with text \" "+ review.getText()+"\" " +
+                                    "didn't get approved by the admin team. Reason: " + responseText +
+                                    "\n\nSincerely,\n Rivera.");
+                } catch (Exception e) {
+                    System.out.println("email not sent");
+                }
+                review.setStatus(ReviewStatus.DECLINED);
+            }
+
+        } else {
+            try {
+                emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
+                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                                + client.getUsername() + " has just filed a complaint on you or your rentable with " +
+                                " text \"" + review.getText() + "\". The admin team has responded with \"" + responseText + "\"" +
+                                "<br><br>Sincerely,<br> Rivera.");
+
+                emailService.sendNotificaitionToUsername(client.getUsername(), "Complaint",
+                        "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
+                                "The admin team has responded with: " + responseText +
+                                "<br><br>Sincerely,<br>Rivera.");
+
+            } catch (Exception e) {
+                System.out.println("email not sent");
+            }
+            review.setStatus(ReviewStatus.ACCEPTED);
+        }
+        reviewRepository.save(review);
     }
 }

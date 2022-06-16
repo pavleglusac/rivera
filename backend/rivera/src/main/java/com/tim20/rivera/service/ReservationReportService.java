@@ -31,6 +31,7 @@ public class ReservationReportService {
         reservationReport.setShowedUp(reservationReportDTO.getShowedUp());
         reservationReport.setText(reservationReportDTO.getText());
         reservationReport.setClient(reservationReport.getReservation().getClient());
+        reservationReport.setResolved(false);
         reservationReport.setId(reservationReportDTO.getId());
         if (reservationReportDTO.getSanction()) {
             emailService.sendReportAsync(reservationReportDTO);

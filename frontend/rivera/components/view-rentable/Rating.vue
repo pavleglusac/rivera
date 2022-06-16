@@ -20,6 +20,14 @@ export default {
             halfs : 0,
             emptys : 0
         }
+    },
+    watch: {
+      score(val, oldVal) {
+        this.score = val;
+        this.fulls = parseInt(this.score);
+        this.halfs = this.fulls == this.score ? 0 : 1;
+        this.emptys = 5 - this.halfs - this.fulls;
+      }
     }
 }
 </script>
