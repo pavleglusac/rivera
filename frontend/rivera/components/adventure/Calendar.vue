@@ -253,6 +253,7 @@
 				:appointment="appointment"
 				:close="closeModal"
 				:openModal="openModal"
+				:additionalServices="additionalServices"
 			/>
 		</b-modal>
 		<b-modal id="reservedModal" title="Congratulations!">
@@ -277,7 +278,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import ReservationForm from "./ReservationForm.vue";
 
 export default {
-	props: ["reservations", "rentableType"],
+	props: ["reservations", "rentableType", "additionalServices"],
 	components: {
 		FullCalendar,
 		ReservationForm,

@@ -22,7 +22,7 @@
                   />
                   <font-awesome-icon
                     v-else-if="role == 'Boat Owner'"
-                    icon="boat"
+                    icon="sailboat"
                   />
                   Rentables</span
                 >

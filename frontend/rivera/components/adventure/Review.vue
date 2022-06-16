@@ -11,7 +11,7 @@
               <strong
                 >{{ review.client.name }} {{ review.client.surname }}</strong
               >
-              <span>@liammendes</span>
+              <span>@{{review.client.username}}</span>
             </div>
           </div>
           <div class="reviews">

@@ -263,15 +263,15 @@ public class AdminService {
             report.getReservation().getClient().setNumberOfPenalties(totalPenalties + 1);
             try {
                 emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
-                        "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
+                        "Dear " + client.getUsername() + ",<br><br>Unfortunately we must inform" +
                                 "you that you have been assigned a penalty. Three of these penalties per month " +
                                 "will stop you from using our services. Reason: " + responseText +
-                                "\n\nSincerely,\n Rivera.");
+                                "<br><br>Sincerely,<br> Rivera.");
 
                 emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
-                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
                                 + client.getUsername() + " was assigned a penalty as per your request." +
-                                "\n\nSincerely,\n Rivera.");
+                                "<br><br>Sincerely,<br> Rivera.");
             } catch (Exception e) {
                 System.out.println("email not sent");
             }
@@ -279,10 +279,10 @@ public class AdminService {
         } else if(report.getSanction()) {
             try {
                 emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
-                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
-                                + client.getUsername() + " will not be assigned a penalty. Reason:\n"
+                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                                + client.getUsername() + " will not be assigned a penalty. Reason:<br>"
                                 +responseText+
-                                "\n\nSincerely,\n Rivera.");
+                                "<br><br>Sincerely,<br> Rivera.");
             } catch (Exception e) {
                 System.out.println("email not sent");
             }

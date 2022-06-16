@@ -56,9 +56,11 @@
         />
       </b-row>
     </b-container>
-    <b-modal id="reservedModal" title="Congratulations!">
-      <p class="my-4">You have successfully reserved your appointment.</p>
-    </b-modal>
+    <Popup
+      title="Congritulations!"
+      text="You have successfully booked your next adventure!"
+      id="reservedModal"
+    />
     <b-modal id="cantReserve" title="You can't make reservations.">
       <p class="my-4">
         Because of your 3 penalties, we have to stop you from making a

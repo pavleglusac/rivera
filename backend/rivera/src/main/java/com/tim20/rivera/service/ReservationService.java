@@ -41,7 +41,8 @@ public class ReservationService {
     private RentableService rentableService;
     @Autowired
     private RentableRepository rentableRepository;
-
+    @Autowired
+    private EmailService emailService;
     @Autowired
     private RulesRepository rulesRepository;
 
@@ -87,6 +88,7 @@ public class ReservationService {
         dto.setClient(clientService.clientToCRDto(reservation.getClient()));
         dto.setId(reservation.getId());
         dto.setPrice(reservation.getPrice());
+        dto.setAdditionalServices(reservation.getAdditionalServices());
         dto.setReport(null);
         if(reservation.getReservationReport() != null) {
             ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
@@ -108,6 +110,7 @@ public class ReservationService {
         clientReservationDTO.setStartDateTime(reservation.getStartDateTime());
         clientReservationDTO.setEndDateTime(reservation.getEndDateTime());
         clientReservationDTO.setReservationId(reservation.getId());
+        clientReservationDTO.setAdditionalServices(reservation.getAdditionalServices());
         clientReservationDTO.setPrice(reservation.getPrice());
         clientReservationDTO.setEntity(new EntityReservationDTO(reservation.getRentable()));
         return clientReservationDTO;
@@ -140,18 +143,42 @@ public class ReservationService {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
-    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price) {
+    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price, List<String> additionalServices) {
         Reservation reservation = new Reservation();
         reservation.setPrice(price);
         reservation.setRentable(rentableRepository.getById(rentableId));
         reservation.setStartDateTime(start);
         reservation.setEndDateTime(end);
         reservation.setCancelled(false);
+        reservation.setAdditionalServices(additionalServices);
         reservation.setClient(client);
         Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
         reservation.setOwnerIncomePercentage(ownerPercentage);
         reservationRepository.save(reservation);
+        sendConfirmationMail(reservation);
         return reservation;
+    }
+
+    private void sendConfirmationMail(Reservation reservation) {
+        try {
+            emailService.sendNotificaitionToUsername(reservation.getClient().getUsername(), "Reservation details",
+                    "Dear " + reservation.getClient().getUsername() + ",<br><br>We are confirming" +
+                            "that you have successfully reserved " + reservation.getRentable().getName() + " for the period of "
+                            + reservation.getStartDateTime().toString() + " to " + reservation.getEndDateTime().toString() +
+                            ". We are sure you will have good time! Remember to leave a review after your reservation." +
+                            "If you can't make it, just cancel your reservation 3 days in advance in order to avoid getting a penalty." +
+                            "<br><br>Sincerely,<br> Rivera.");
+
+            emailService.sendNotificaitionToUsername(reservation.getRentable().getOwner().getUsername(), "New Reservation!",
+                    "Dear " + reservation.getClient().getUsername() + ",<br><br>We are informing you that " +
+                            reservation.getClient().getName() + " has reserved " + reservation.getRentable().getName() + " for the period of "
+                            + reservation.getStartDateTime().toString() + " to " + reservation.getEndDateTime().toString() +
+                            ". Cost of the reservation is " + reservation.getPrice() + ". Additional services client required are: " +
+                            String.join(", ", reservation.getAdditionalServices()) +
+                            "<br><br>Sincerely,<br> Rivera.");
+        } catch (Exception e) {
+            System.out.println("emails not sent");
+        }
     }
 
     public Double calculatePriceForReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
@@ -184,6 +211,7 @@ public class ReservationService {
         dto.setReservationId(reservation.getId());
         dto.setReport(reservation.getReport());
         dto.setPrice(reservation.getPrice());
+        dto.setAdditionalServices(reservation.getAdditionalServices());
         return dto;
     }
 

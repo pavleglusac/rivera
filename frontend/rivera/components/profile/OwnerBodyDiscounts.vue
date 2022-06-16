@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="discounts.length === 0">
-			<p style="text-align: center">No offers found.</p>
+			<p style="text-align: center">There are no discounts at the moment.</p>
 		</div>
         <div v-else class="d-flex justify-content-around" >
             <div class="d-flex w-100" style="flex-wrap: wrap;">
