@@ -46,6 +46,10 @@ public class ClientService {
         Optional<Client> opt = clientRepository.findById(id);
         return (opt.isEmpty() ? null : clientToDTO(opt.get()));
     }
+    public boolean clientExists(String username) {
+        Client opt = clientRepository.findByUsername(username);
+        return (opt == null ? false : true);
+    }
 
     public ClientRequestDTO getClientByUsername(String username) {
         Client client = clientRepository.findByUsername(username);

@@ -48,6 +48,12 @@ public class ClientController {
         return clientService.getClient(id);
     }
 
+    @GetMapping(path = "check-if-client-exists")
+    public boolean checkIfClientExists(@RequestParam("username") String username) {
+        return clientService.clientExists(username);
+    }
+
+
     @PostMapping(path = "update-client")
     public ResponseEntity<String> updateClient(ClientDTO clientDTO) {
         clientService.updateClient(clientDTO);

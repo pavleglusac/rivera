@@ -1,11 +1,11 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.model.Adventure;
 import com.tim20.rivera.model.AvailabilityPattern;
 import com.tim20.rivera.model.Calendar;
-import com.tim20.rivera.repository.AdventureRepository;
+import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.repository.AvailabilityRepository;
 import com.tim20.rivera.repository.CalendarRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.util.Availability;
 import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class AdventureAvailabilityService {
+public class AvailabilityService {
 
 
     @Autowired
-    AdventureRepository adventureRepository;
+    RentableRepository rentableRepository;
 
     @Autowired
     CalendarRepository calendarRepository;
@@ -32,17 +32,17 @@ public class AdventureAvailabilityService {
     AvailabilityRepository availabilityRepository;
 
     public void defineAvailability(AvailabilityRequest availabilityRequest) {
-        Adventure adventure = adventureRepository.getById(availabilityRequest.getRentableId());
-        List<Calendar> cals = adventure.getCalendars();
+        Rentable rentable = rentableRepository.getById(availabilityRequest.getRentableId());
+        List<Calendar> cals = rentable.getCalendars();
         if(cals == null) {
-            adventure.setCalendars(new ArrayList<>());
-            cals = adventure.getCalendars();
+            rentable.setCalendars(new ArrayList<>());
+            cals = rentable.getCalendars();
         }
 
         if(cals.isEmpty()) {
             Calendar calendar = new Calendar();
             calendar.setPatternsOfAvailability(new ArrayList<>());
-            calendar.setRentable(adventure);
+            calendar.setRentable(rentable);
             calendarRepository.save(calendar);
             cals.add(calendar);
         }
@@ -60,11 +60,11 @@ public class AdventureAvailabilityService {
         }
 
         calendarRepository.save(cal);
-        adventureRepository.save(adventure);
+        rentableRepository.save(rentable);
     }
 
     public void testAvailability() {
-        Adventure adventure = adventureRepository.getById(1);
+        Rentable rentable = rentableRepository.getById(1);
         AvailabilityRequest request1 = new AvailabilityRequest();
         request1.setAddition(true);
         request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 15 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
@@ -74,7 +74,7 @@ public class AdventureAvailabilityService {
         request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request1);
 
-        List<Availability> avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        List<Availability> avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -87,7 +87,7 @@ public class AdventureAvailabilityService {
         request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request2);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -101,7 +101,7 @@ public class AdventureAvailabilityService {
         request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request3);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -114,7 +114,7 @@ public class AdventureAvailabilityService {
         request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request4);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -128,7 +128,7 @@ public class AdventureAvailabilityService {
         request5.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request5);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -164,19 +164,19 @@ public class AdventureAvailabilityService {
     }
 
     public List<Availability> getAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
-        Adventure adventure = adventureRepository.getById(id);
-        return getAvailabilities(adventure, fromDateTime, toDateTime);
+        Rentable rentable = rentableRepository.getById(id);
+        return getAvailabilities(rentable, fromDateTime, toDateTime);
     }
 
-    public List<Availability> getAvailabilities(Adventure adventure, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
+    public List<Availability> getAvailabilities(Rentable rentable, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
         List<Availability> availabilities = new ArrayList<>();
         HashMap<LocalDate, List<Availability>> availabilityPerDay = new HashMap<>();
         var start = fromDateTime;
         var end = toDateTime;
         while (start.isBefore(end) || start.isEqual(end)) {
             availabilityPerDay.put(LocalDate.from(start), new ArrayList<>());
-            if(adventure.getCalendars().size() == 0) return availabilities;
-            for (var pattern : adventure.getCalendars().get(0).getPatternsOfAvailability()) {
+            if(rentable.getCalendars().size() == 0) return availabilities;
+            for (var pattern : rentable.getCalendars().get(0).getPatternsOfAvailability()) {
                 if (pattern.getAddition()) {
                     addAndMergePatterns(pattern, availabilityPerDay, start, end);
                 } else {
@@ -191,14 +191,14 @@ public class AdventureAvailabilityService {
         availabilities.sort(Comparator.comparing(Availability::getStartDateTime));
         fixOverlaps(availabilities);
         //
-        adventure.getReservations().forEach(res -> {
+        rentable.getReservations().forEach(res -> {
             Availability av = new Availability();
             av.setStartDateTime(res.getStartDateTime());
             av.setEndDateTime(res.getEndDateTime());
             subtractAvailability(av, availabilities);
         });
 
-        adventure.getDiscounts().forEach(
+        rentable.getDiscounts().forEach(
                 res -> {
                     Availability av = new Availability();
                     av.setStartDateTime(res.getStartDateTime());
@@ -378,7 +378,7 @@ public class AdventureAvailabilityService {
 
 
     public void testBigAvailability() {
-        Adventure adventure = adventureRepository.getById(1);
+        Rentable rentable = rentableRepository.getById(1);
         AvailabilityRequest request1 = new AvailabilityRequest();
         request1.setAddition(true);
         request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 10 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
@@ -388,7 +388,7 @@ public class AdventureAvailabilityService {
         request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request1);
 
-        List<Availability> avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        List<Availability> avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -401,7 +401,7 @@ public class AdventureAvailabilityService {
         request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request2);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -415,7 +415,7 @@ public class AdventureAvailabilityService {
         request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request3);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
@@ -428,23 +428,23 @@ public class AdventureAvailabilityService {
         request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         defineAvailability(request4);
 
-        avs = getAvailabilities(adventure, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
+        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
 
         prettyPrintAvailabilities(avs);
 
     }
 
-    public void removeAvailabilities(Integer adventureId) {
-        Adventure adventure = adventureRepository.getById(adventureId);
-        List<Calendar> cals = adventure.getCalendars();
+    public void removeAvailabilities(Integer rentableId) {
+        Rentable rentable = rentableRepository.getById(rentableId);
+        List<Calendar> cals = rentable.getCalendars();
         if(cals == null) {
-            adventure.setCalendars(new ArrayList<>());
-            cals = adventure.getCalendars();
+            rentable.setCalendars(new ArrayList<>());
+            cals = rentable.getCalendars();
         }
         if(!cals.isEmpty()) {
             cals.get(0).setPatternsOfAvailability(new ArrayList<>());
             calendarRepository.save(cals.get(0));
         }
-        adventureRepository.save(adventure);
+        rentableRepository.save(rentable);
     }
 }
