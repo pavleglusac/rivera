@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReservationReport {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
     @OneToOne
     @JoinColumn(name = "reservation_id")
@@ -19,6 +20,7 @@ public class ReservationReport {
     Boolean sanction;
     Boolean showedUp;
     String text;
+    Boolean resolved;
     LocalDateTime posted;
     @ManyToOne
     @JoinColumn(name = "client_id")

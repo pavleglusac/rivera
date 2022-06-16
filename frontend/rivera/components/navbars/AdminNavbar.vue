@@ -13,6 +13,8 @@
       <b-navbar-nav class="ml-auto my-auto" align="end">
             <ul>
                 <nuxt-link to="/"><li class="menu-link" :class="currentPage=='trending' ? 'active' : ''"><font-awesome-icon icon="house" /> Home</li></nuxt-link>
+                <nuxt-link to="/admin/reports"><li class="menu-link" :class="currentPage=='reports' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Reports</li></nuxt-link>
+                <nuxt-link to="/admin/reviews"><li class="menu-link" :class="currentPage=='reviews' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Reviews</li></nuxt-link>
                 <nuxt-link to="/admin/registrate"><li class="menu-link" :class="currentPage=='registrate' ? 'active' : ''"><font-awesome-icon icon="id-card" /> Registrate admins</li></nuxt-link>
                 <nuxt-link to="/admin/terminations"><li class="menu-link" :class="currentPage=='terminations' ? 'active' : ''"><font-awesome-icon icon="user-minus" /> Terminations</li></nuxt-link>
                 <nuxt-link to="/admin/registrations"><li class="menu-link" :class="currentPage=='registrations' ? 'active' : ''"><font-awesome-icon icon="user-plus" /> Registrations</li></nuxt-link>

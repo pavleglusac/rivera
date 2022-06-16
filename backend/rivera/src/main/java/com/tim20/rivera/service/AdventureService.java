@@ -18,6 +18,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class AdventureService {
@@ -91,6 +92,10 @@ public class AdventureService {
     private void savePicturesOnPath(Adventure adventure, MultipartFile[] multipartFiles, List<String> paths, Path path) throws IOException {
         if (!Files.exists(path)) {
             Files.createDirectories(path);
+        }
+
+        try (Stream<Path> pathsWalk = Files.walk(path)) {
+            pathsWalk.forEach(System.out::println);
         }
 
         for (MultipartFile mpf : multipartFiles) {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Reservations from '../components/client/Reservations.vue';
+import Reservations from '@/components/client/reservations.vue';
 import Navbar from '../components/navbar.vue';
 export default {
   components: { Reservations, Navbar },

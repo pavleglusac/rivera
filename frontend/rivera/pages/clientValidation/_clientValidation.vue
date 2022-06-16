@@ -2,7 +2,7 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col-12 text-center">
-      <img id="logo" src="..\..\static\rivera_logo_ver.png" />
+      <img id="logo" src="@/static/rivera_logo_ver.png" />
       <h3 class="mt-1">Account successfully verified.</h3>
       <div class="divider"></div>
       <b-button class="get-started mt-5" @click="changeToLogin">Login</b-button>
