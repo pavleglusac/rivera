@@ -196,7 +196,11 @@ select,
 .login-form .error-boarder,
 .registration-form .error-boarder {
   border-color: red;
-}.error-boarder {
+}
+.reservation-form .error-boarder {
+  border-color: red;
+}
+.error-boarder {
   border-color: red;
 }
 
