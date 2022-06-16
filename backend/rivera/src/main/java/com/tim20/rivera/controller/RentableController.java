@@ -8,10 +8,7 @@ import com.tim20.rivera.service.BoatService;
 import com.tim20.rivera.service.CottageService;
 import com.tim20.rivera.service.RentableService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,5 +52,10 @@ public class RentableController {
     @GetMapping(path = "get-reviews")
     public List<Review> getReviews(@RequestParam("id") Integer id) {
         return rentableService.getReviews(id);
+    }
+
+    @DeleteMapping(path="rentable")
+    public void deleteRentable(@RequestParam("id") Integer id) {
+        rentableService.delete(id);
     }
 }

@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="shadow-sm" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
+  <b-card no-body class="shadow-sm" img-left max-height="300" style="cursor: pointer;" @click.self="detailedOffer()">
     <b-card-img class="cover-img" :src='"http://localhost:8080" + entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-center">
@@ -20,7 +20,7 @@
         <b-card-text v-if="entity.description.length<200" style="font-size: 0.8em;">{{entity.description}}</b-card-text>
         <b-card-text v-else style="font-size: 0.8em;">{{entity.description.substring(0,200)}}...</b-card-text>
         <div>
-          <li v-for="tag in entity.tags">
+          <li v-for="tag in entity.tags" :key="tag + entity.id">
               <span class="tag">{{ tag }}</span>
           </li>
         </div>
@@ -30,7 +30,8 @@
         <div class="d-flex justify-content-between align-items-center">
             <span class="font-1h">{{entity.perHour}}$ per hour / {{entity.perDay}}$ per day</span>
             <b-button variant="primary" v-if="myRentable" class="book-btn">Edit rentable</b-button>
-            <b-button variant="primary" v-else class="book-btn">Book Now</b-button>
+            <b-button variant="primary" v-else-if="!adminView" class="book-btn">Book Now</b-button>
+            <b-button variant="primary" v-else class="book-btn" @click="deleteRentable">Delete rentable</b-button>
         </div>
     </b-card-body>
   </b-card>
@@ -47,6 +48,22 @@ export default {
     detailedOffer() {
       this.$router.push({ path: "/rentable/" + this.entity.id });
     },
+    deleteRentable() {
+      if (confirm('Are you sure you want to delete this rentable?')) {
+        this.trulyDeleteRentable();
+      } else {
+        console.log('Not deleted.');
+      }
+    },
+    trulyDeleteRentable() {
+      this.$axios
+				.delete(
+					`/api/rentable?id=` + this.entity.id
+				)
+				.then((response) => {
+					window.location.reload();
+				});
+    }
   },
   props: {
     entity: {
@@ -60,7 +77,8 @@ export default {
     myRentable: {
       type: Boolean,
       required: false
-    }
+    },
+    adminView: false,
   },
 };
 </script>

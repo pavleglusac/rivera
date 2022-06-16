@@ -5,13 +5,13 @@
         <div class="box-top">
           <div class="profile">
             <div class="profile-img">
-              <img :src="review.client.photo" />
+              <img :src="'http://localhost:8080' + review.clientImage" />
             </div>
             <div class="name-user">
               <strong
-                >{{ review.client.name }} {{ review.client.surname }}</strong
+                >{{ review.clientName }} {{ review.clientSurname }}</strong
               >
-              <span>@liammendes</span>
+              <span>{{review.clientUsername}}</span>
             </div>
           </div>
           <div class="reviews">
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Rating from "./Rating.vue";
+import Rating from "../view-rentable/Rating.vue";
 export default {
   props: ["review"],
   components: { Rating },
@@ -35,6 +35,14 @@ export default {
   data() {
     return {};
   },
+  watch: {
+	review(val, oldVal) {
+		this.review.clientName = val.clientName;
+		this.review.clientImage = val.clientImage;
+		this.review.score = val.score;
+		this.review.text = val.text;
+	}
+  }
 };
 </script>
 
@@ -50,7 +58,7 @@ a {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 50%;
+  width: 50vw;
 }
 
 .testimonial-box-container {

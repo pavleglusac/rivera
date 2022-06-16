@@ -140,5 +140,20 @@ public class AdminController {
         adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
     }
 
+    @GetMapping("pending-reviews")
+    public List<AdminReviewDTO> getPendingReviews() {
+        return adminService.getPendingReviews();
+    }
+
+
+    @PostMapping(value = "resolve-review",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
+    public void resolveReport(@RequestBody ReviewResolve resolve) throws MessagingException {
+        System.out.println(resolve.getReviewId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAllowed());
+
+        adminService.resolveReview(resolve.getReviewId(), resolve.getResponseText(), resolve.isAllowed());
+    }
+
 }
 
