@@ -9,6 +9,7 @@ import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +39,7 @@ public class CottageController {
     private ReservationService reservationService;
 
     @PostMapping(path = "/add-cottage")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ResponseEntity<Integer> addCottage(
             CottageDTO cottage,
             @RequestPart("images") MultipartFile[] multipartFiles
@@ -63,6 +65,7 @@ public class CottageController {
     }
 
     @PostMapping(path = "update-cottage")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ResponseEntity<String> updateCottage(
             CottageDTO cottage,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
@@ -72,6 +75,7 @@ public class CottageController {
     }
 
     @PostMapping(path = "delete-cottage")
+    @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ResponseEntity<String> deleteCottage(@RequestParam Integer id) {
         cottageService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
@@ -83,6 +87,7 @@ public class CottageController {
     }
 
     @PostMapping("define-availability")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER,BOAT_OWNER')")
     public ResponseEntity<String> defineAvailability(@RequestBody AvailabilityRequest availabilityRequest) {
         System.out.println(availabilityRequest);
         availabilityService.defineAvailability(availabilityRequest);
@@ -103,6 +108,7 @@ public class CottageController {
     }
 
     @PostMapping("remove-availabilities")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER,BOAT_OWNER')")
     public ResponseEntity removeAvailabilities(@RequestParam Integer id) {
         availabilityService.removeAvailabilities(id);
         return ResponseEntity.ok().build();

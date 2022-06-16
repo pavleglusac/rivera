@@ -11,6 +11,7 @@ import com.tim20.rivera.service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class BoatController {
 
 
     @PostMapping(path = "/add-boat")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
     public ResponseEntity<Integer> addBoat(
             BoatDTO boat,
             @RequestPart("images") MultipartFile[] multipartFiles
@@ -52,6 +54,7 @@ public class BoatController {
     }
 
     @PostMapping(path = "update-boat")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
     public ResponseEntity<String> updateBoat(
             BoatDTO boat,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
@@ -61,6 +64,7 @@ public class BoatController {
     }
 
     @PostMapping(path = "delete-boat")
+    @PreAuthorize("hasRole('BOAT_OWNER')")
     public ResponseEntity<String> deleteBoat(@RequestParam Integer id) {
         boatService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");

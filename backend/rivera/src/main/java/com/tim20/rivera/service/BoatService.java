@@ -7,6 +7,7 @@ import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,7 +85,7 @@ public class BoatService {
         for (var x : boat.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + boat.getId());
         }
-        boat.setOwner(boatOwnerRepository.getById("bowner")); //TODO: izvuci ownera iz jwt kad se bude slao
+        boat.setOwner((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
         boatRepository.save(boat);
 
         List<String> paths;
