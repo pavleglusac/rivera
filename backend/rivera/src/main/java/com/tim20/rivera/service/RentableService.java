@@ -110,4 +110,10 @@ public class RentableService {
     public List<Review> getReviews(Integer id) {
         return rentableRepository.findById(id).get().getReviews();
     }
+
+    public void delete(Integer id) {
+        Optional<Rentable> optionalRentable = rentableRepository.findById(id);
+        if(optionalRentable.isEmpty()) return;
+        rentableRepository.delete(optionalRentable.get());
+    }
 }

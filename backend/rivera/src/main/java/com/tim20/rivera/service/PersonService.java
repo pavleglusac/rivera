@@ -52,6 +52,12 @@ public class PersonService{
     @Autowired
     private OwnerService ownerService;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private OwnerRepository ownerRepository;
+
 
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
@@ -212,5 +218,21 @@ public class PersonService{
     public boolean checkIfApprovedOrNonExistent(String username) {
         Person person = personRepository.findByUsername(username);
         return person == null || person.getStatus()==AccountStatus.ACTIVE;
+    }
+
+    public List<ProfileDTO> searchPerson(int numberOfResults, String text, String type) {
+        if(text == null) text = "";
+        if(type.equals("client"))
+            return clientRepository
+                .searchClient(numberOfResults, text + "%")
+                .stream()
+                .map(this::personToProfileDTO)
+                .collect(Collectors.toList());
+        else
+            return ownerRepository
+                .searchOwner(text + "%")
+                .stream()
+                .map(this::personToProfileDTO)
+                .collect(Collectors.toList());
     }
 }

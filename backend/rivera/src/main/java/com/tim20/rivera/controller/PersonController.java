@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -78,6 +79,11 @@ public class PersonController {
         } else {
             return ResponseEntity.status(401).body("already exists!");
         }
+    }
+
+    @GetMapping(path="search-person")
+    public List<ProfileDTO> searchPerson(@RequestParam int numberOfResults, @RequestParam String search, @RequestParam String type) {
+        return personService.searchPerson(numberOfResults, search, type);
     }
 
 
