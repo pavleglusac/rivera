@@ -6,10 +6,10 @@
 			</span>
 			<span class="name-user justify-content-center">
 				<strong>{{person.name}} {{person.surname}}</strong>
-				<span> {{person.email}}</span>
+				<span> {{person.username}}</span>
 			</span>
 			<span class="d-flex justify-content-end" style="margin-top: auto; margin-bottom: auto; flex-grow: 1"> 
-				<b-button class=" book-btn" style="margin-top: auto; margin-bottom: auto;">Delete</b-button>
+				<b-button class=" book-btn" style="margin-top: auto; margin-bottom: auto;" @click="deleteConfirmation">Delete</b-button>
 			</span>
 		</div>
 	</b-card>
@@ -19,8 +19,25 @@
 export default {
 	props: ["person", "adminView"],
 	mounted() {
-
 	},
+	methods: {
+		deleteConfirmation() {
+			if (confirm('Are you sure you want to delete this person?')) {
+				this.deletePerson();
+			} else {
+				console.log('Not deleted.');
+			}
+		},
+		deletePerson() {
+			this.$axios
+				.delete(
+					`/api/person?username=` + this.person.username
+				)
+				.then((response) => {
+					window.location.reload();
+				});
+		}
+	}
 	
 }
 </script>

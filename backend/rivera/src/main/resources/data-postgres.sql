@@ -26,9 +26,9 @@ DROP SEQUENCE IF EXISTS mysequence;
 CREATE SEQUENCE mysequence
     INCREMENT 1
 START 1;
-INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity) VALUES (nextval('mysequence'), '7 Grove St.', 3.3, 'Cairns', 'Australia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Mountain Fishing', NULL, 1, 'marko', 4);
-INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity) VALUES (nextval('mysequence'), '7 Grove St.', 2.3, 'Cairns', 'New Zeland', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Some adventure', NULL, 2, 'marko', 3);
-INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Fishing', NULL, 3, 'marko', 5);
+INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, deleted) VALUES (nextval('mysequence'), '7 Grove St.', 3.3, 'Cairns', 'Australia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Mountain Fishing', NULL, 1, 'marko', 4, false);
+INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, deleted) VALUES (nextval('mysequence'), '7 Grove St.', 2.3, 'Cairns', 'New Zeland', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Some adventure', NULL, 2, 'marko', 3, false);
+INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Fishing', NULL, 3, 'marko', 5, false);
 
 
 INSERT INTO adventure_fishing_equipment (adventure_id, fishing_equipment) VALUES (3, 'Rod 123');
@@ -46,15 +46,15 @@ INSERT INTO client (username, address, city, country, deleted, email, last_passw
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, status) VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+admin@outlook.com', NULL, 'Branislav', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Bakic', 0);
 
-INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage', NULL, 4, 'cowner');
+INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage', NULL, 4, 'cowner', false);
 
-INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage2', NULL, 4, 'cowner');
+INSERT INTO cottage (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Cottage2', NULL, 4, 'cowner', false);
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.1, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat', NULL, 4, 'bowner',5,50,3,300,60,0);
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.1, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat', NULL, 4, 'bowner',5,50,3,300,60,0, false);
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 2', NULL, 4, 'bowner',5,30,3,50,70,2);
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 2', NULL, 4, 'bowner',5,30,3,50,70,2, false);
 
-INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type) VALUES (nextval('mysequence'), '1234 Main St.', 3.5, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 3', NULL, 4, 'bowner',5,10,2,100,50,2);
+INSERT INTO boat (id,address, average_score, city, country, description, name, profile_picture, current_pricelist_id, owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted) VALUES (nextval('mysequence'), '1234 Main St.', 3.5, 'Zrenjanin', 'Serbia', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat', 'Very Cool Boat 3', NULL, 4, 'bowner',5,10,2,100,50,2, false);
 
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+marko2@outlook.com', NULL, 'Marko', 'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0, 5);
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, sign_up_description, status, number_of_points, category_id) VALUES ('cowner', 'adresa', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+marko@outlook.com', NULL, 'Darko', '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/cowner.jpg', 'Markovic', NULL, 0, 0, 5);
@@ -218,16 +218,16 @@ INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, clien
 
 
 
-INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type)
+INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type, version)
 VALUES ('2022-05-21 17:44:47.41532', 3.3, 1,
         'Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ',
-        'pera', 1, null, 0);
-INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type)
+        'pera', 1, null, 0, 0);
+INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type, version)
 VALUES ('2022-05-21 17:44:47.483195', 3.4, 1,
         'Ut mollis erat non quam rhoncus sodales. Nulla facilisi. Duis sit amet pellentesque dolor. Aliquam mollis rhoncus risus vel ornare. Nulla pellentesque risus ac lorem efficitur auctor. Cras auctor turpis',
-        'mika', 1, null, 0);
-INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type) VALUES ('2022-05-21 17:44:47.948207', 2.0, 1, 'Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ', 'pera', 3, null, 1);
-INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type) VALUES ('2022-05-21 17:44:48.026171', 1.3, 1, 'Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ', 'pera', 4, null, 1);
+        'mika', 1, null, 0, 0);
+INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type, version) VALUES ('2022-05-21 17:44:47.948207', 2.0, 1, 'Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ', 'pera', 3, null, 1, 0);
+INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type, version) VALUES ('2022-05-21 17:44:48.026171', 1.3, 1, 'Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ', 'pera', 4, null, 1, 0);
 
 
 INSERT INTO role (name) VALUES ('ROLE_COTTAGE_OWNER');
@@ -245,11 +245,11 @@ INSERT INTO user_role (user_id, role_id) VALUES ('cowner', 1);
 INSERT INTO user_role (user_id, role_id) VALUES ('admin', 5);
 INSERT INTO user_role (user_id, role_id) VALUES ('bowner', 2);
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
-                        VALUES (0, false, true, false, 'Client didnt show up', 1);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
+                        VALUES (0, false, true, false, 'Client didnt show up', 1, 0);
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
-                        VALUES (1, false, true, false, 'Client didnt show up', 2);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
+                        VALUES (1, false, true, false, 'Client didnt show up', 2, 0);
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
-                        VALUES (2, false, false, false, 'Client did show up', 3);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
+                        VALUES (2, false, false, false, 'Client did show up', 3, 0);

@@ -27,6 +27,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -234,5 +235,13 @@ public class PersonService{
                 .stream()
                 .map(this::personToProfileDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void delete(String username) {
+        System.out.println(username);
+        Person person = personRepository.findByUsername(username);
+        if (person != null) {
+            personRepository.delete(person);
+        }
     }
 }

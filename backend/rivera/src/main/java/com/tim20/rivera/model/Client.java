@@ -19,9 +19,9 @@ public class Client extends Person {
     private Integer numberOfPoints;
     @OneToMany
     private List<Rentable> subscribed;
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Review> reviews;
     private AccountStatus status;
 

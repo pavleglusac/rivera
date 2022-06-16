@@ -124,7 +124,6 @@ public class AuthenticationController {
             System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             return (((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getRoles().get(0)).getName();
         } catch (Exception e) {
-            e.printStackTrace();
             return "unauthenticated";
         }
     }

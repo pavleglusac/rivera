@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import TerminationRequest from "../../components/client/TerminationRequest.vue";
+import TerminationRequest from "@/components/client/TerminationRequest.vue";
 export default {
 	components: { TerminationRequest },
 	data() {

@@ -29,4 +29,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
+
+    @Version
+    private int version;
 }

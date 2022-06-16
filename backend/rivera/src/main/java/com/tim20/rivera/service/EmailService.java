@@ -97,20 +97,24 @@ public class EmailService {
     }
 
     @Async
-    public void sendNotificaitionToUsername(String username, String subject, String text) throws MailException, MessagingException {
-        System.out.println("Sending email...");
-        Person person = personService.findByUsername(username);
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
-        String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
-        htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + subject + "</h3>";
-        htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
-        mail.setText(htmlMsg, true);
-        mail.setTo(person.getEmail());
-        mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
-        mail.setSubject(subject);
-        javaMailSender.send(mimeMessage);
-        System.out.println("Email sent!");
+    public void sendNotificaitionToUsername(String username, String subject, String text) {
+        try {
+            System.out.println("Sending email...");
+            Person person = personService.findByUsername(username);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + subject + "</h3>";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject(subject);
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
     }
 
     @Async

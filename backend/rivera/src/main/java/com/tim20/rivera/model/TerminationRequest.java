@@ -20,4 +20,7 @@ public class TerminationRequest {
     private Person person;
 
     private TerminationStatus status;
+
+    @Version
+    private int version;
 }

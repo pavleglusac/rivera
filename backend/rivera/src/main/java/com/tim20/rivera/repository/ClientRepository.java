@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, String> {
     Client findByUsername(String username);
 
-    @Query(value = "select * from Client c where CONCAT(c.name, ' ', c.surname) LIKE ?2 LIMIT ?1", nativeQuery = true)
+    @Query(value = "select * from Client c where CONCAT(c.name, ' ', c.surname) LIKE ?2 and c.deleted=false  LIMIT ?1", nativeQuery = true)
     List<Client> searchClient(int numberOfResults, String text);
 }

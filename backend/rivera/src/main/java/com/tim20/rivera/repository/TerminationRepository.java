@@ -11,4 +11,5 @@ public interface TerminationRepository extends JpaRepository<TerminationRequest,
     List<TerminationRequest> findByPerson(Person person);
     List<TerminationRequest> findAllByStatus(TerminationStatus status);
     List<TerminationRequest> findAllByPersonAndStatus(Person person, TerminationStatus status);
+    TerminationRequest findById(int id);
 }

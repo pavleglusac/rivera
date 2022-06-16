@@ -33,14 +33,14 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping(path = "get-owner")
-    public OwnerRequestDTO getPerson(@RequestParam("username") String username) throws IOException {
+    public OwnerRequestDTO getPerson(@RequestParam("username") String username){
         if (username == null || username.isBlank())
             return null;
         return ownerService.findByUsernameDTO(username);
     }
 
     @PostMapping(path = "activate-owner")
-    public void activateOwner(@RequestParam("username") String username) throws IOException {
+    public void activateOwner(@RequestParam("username") String username) {
         System.out.println("activate");
         ownerService.activateOwner(username);
     }
@@ -102,17 +102,20 @@ public class AdminController {
         return adminService.getTerminationRequests();
     }
 
-    @PostMapping(path = "terminate-person")
-    public void terminatePerson(@RequestParam("username") String username) throws MessagingException {
-        emailService.sendNotificaitionToUsername(username, "Termination accepted", "Your termination request has been accepted");
-        adminService.terminatePerson(username);
+
+    @PostMapping(path = "resolve-termination")
+    public ResponseEntity<String> resolveTerminationRequest(
+                                                    @RequestParam("username") String username,
+                                                    @RequestParam("requestId") int requestId,
+                                                    @RequestParam(value = "reason", required = false) String reason,
+                                                    @RequestParam("accept") boolean accept)  {
+        boolean ret;
+        ret = adminService.resolveTerminationRequest(username, accept, requestId, reason);
+        if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+        else return ResponseEntity.ok("ok");
     }
 
-    @PostMapping(path = "reject-termination")
-    public void terminatePerson(@RequestParam("username") String username, @RequestParam("reason") String reason) throws MessagingException {
-        emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
-        adminService.rejectTerminationRequest(username);
-    }
+
 
     @GetMapping("system-income")
     public List<IncomeSystemDTO> getSystemIncome(@RequestParam("type") String type,
@@ -126,7 +129,7 @@ public class AdminController {
     }
 
     @GetMapping("pending-reports")
-    public List<AdminReservationReportDTO> getPendingReprots() {
+    public List<AdminReservationReportDTO> getPendingReports() {
         return adminService.getPendingReports();
     }
 
@@ -134,10 +137,11 @@ public class AdminController {
     @PostMapping(value = "resolve-report",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    public void resolveReport(@RequestBody ReportResolve resolve) throws MessagingException {
+    public ResponseEntity<String> resolveReport(@RequestBody ReportResolve resolve) {
         System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
-
-        adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+        boolean ret = adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+        if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+        return ResponseEntity.ok("ok");
     }
 
     @GetMapping("pending-reviews")
@@ -149,7 +153,7 @@ public class AdminController {
     @PostMapping(value = "resolve-review",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    public void resolveReport(@RequestBody ReviewResolve resolve) throws MessagingException {
+    public void resolveReport(@RequestBody ReviewResolve resolve) {
         System.out.println(resolve.getReviewId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAllowed());
 
         adminService.resolveReview(resolve.getReviewId(), resolve.getResponseText(), resolve.isAllowed());

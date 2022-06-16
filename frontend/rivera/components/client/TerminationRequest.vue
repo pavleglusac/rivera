@@ -202,8 +202,7 @@ export default {
 		accept() {
 			this.$axios
 				.post(
-					"/api/admin/terminate-person?username=" +
-						this.request.username
+					`/api/admin/resolve-termination?username=${this.request.username}&requestId=${this.request.requestId}&accept=true`
 				)
 				.then((resp) => {
 					console.log("Uspesno");
@@ -211,6 +210,8 @@ export default {
 				})
 				.catch((err) => {
 					console.log(err);
+					alert("Couldn't proccess termination.");
+					window.location.reload();
 				});
 		},
 		decline() {
@@ -219,10 +220,7 @@ export default {
 		send_decline() {
 			this.$axios
 				.post(
-					"/api/admin/reject-termination?username=" +
-						this.request.username +
-						"&reason=" +
-						this.reason
+					`/api/admin/resolve-termination?username=${this.request.username}&requestId=${this.request.requestId}&reason=${this.reason}&accept=false`
 				)
 				.then((resp) => {
 					console.log("Uspesno");
@@ -230,6 +228,8 @@ export default {
 				})
 				.catch((err) => {
 					console.log(err);
+					alert("Couldn't proccess termination.");
+					window.location.reload();
 				});
 		},
 		getUser() {

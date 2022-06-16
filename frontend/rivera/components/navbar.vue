@@ -48,7 +48,11 @@ export default {
         },
     },
     mounted() {
+        let that = this;
         this.getRole();
+        this.$nuxt.$on('refresh-navbar', () => {
+            that.getRole();
+        })
     },
 }
 </script>

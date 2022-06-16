@@ -9,11 +9,14 @@ import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.persistence.OptimisticLockException;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -146,25 +149,43 @@ public class AdminService {
         var dto = new TerminationRequestDTO();
         dto.setUsername(request.getPerson().getUsername());
         dto.setDescription(request.getDescription());
+        dto.setRequestId(request.getId());
         return dto;
     }
 
-    public void terminatePerson(String username) {
-        Person person = personRepository.findByUsername(username);
-        if (person == null) return;
-        person.setStatus(AccountStatus.TERMINATED);
-        List<TerminationRequest> requests = terminationRepository.findAllByPersonAndStatus(person, TerminationStatus.PENDING);
-        requests.forEach(request -> request.setStatus(TerminationStatus.ACCEPTED));
-        personRepository.save(person);
+    @Transactional
+    public boolean resolveTerminationRequest(String username, boolean terminate, int requestId, String reason) {
+        try {
+            Person person = personRepository.findByUsername(username);
+            TerminationRequest request = terminationRepository.findById(requestId);
+            if (person == null || request == null) return false;
+            handlePersonTermination(terminate, person, request);
+            terminationRepository.save(request);
+            notifyUserOnTerminationRequest(username, terminate, reason);
+            return true;
+        } catch (OptimisticLockingFailureException exception) {
+            return false;
+        }
     }
 
-    public void rejectTerminationRequest(String username) {
-        Person person = personRepository.findByUsername(username);
-        if (person == null) return;
-        List<TerminationRequest> requests = terminationRepository.findAllByPersonAndStatus(person, TerminationStatus.PENDING);
-        requests.forEach(request -> request.setStatus(TerminationStatus.DENIED));
-        terminationRepository.saveAll(requests);
+    private void handlePersonTermination(boolean terminate, Person person, TerminationRequest request) {
+        if(terminate) {
+            person.setStatus(AccountStatus.TERMINATED);
+            personRepository.save(person);
+            request.setStatus(TerminationStatus.ACCEPTED);
+        } else {
+            request.setStatus(TerminationStatus.DENIED);
+        }
     }
+
+    private void notifyUserOnTerminationRequest(String username, boolean terminate, String reason) {
+        if(!terminate) {
+            emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
+        } else {
+            emailService.sendNotificaitionToUsername(username, "Terminated account", "Your account has been terminated. Thank you for using rivera");
+        }
+    }
+
 
     private Admin clientRequestDTOToAdmin(ClientRequestDTO clientRequestDTO) {
         Admin admin = new Admin();
@@ -255,43 +276,46 @@ public class AdminService {
     }
 
 
-    public void resolveReport(int reportId, String responseText, boolean assignPenalty) throws MessagingException {
-        ReservationReport report = reservationReportRepository.getById(reportId);
-        Client client = report.getReservation().getClient();
-        Owner owner = report.getReservation().getRentable().getOwner();
-        if (assignPenalty)  {
-            int totalPenalties = client.getNumberOfPenalties();
-            report.getReservation().getClient().setNumberOfPenalties(totalPenalties + 1);
-            try {
-                emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
-                        "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
-                                "you that you have been assigned a penalty. Three of these penalties per month " +
-                                "will stop you from using our services. Reason: " + responseText +
-                                "\n\nSincerely,\n Rivera.");
-
-                emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
-                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
-                                + client.getUsername() + " was assigned a penalty as per your request." +
-                                "\n\nSincerely,\n Rivera.");
-            } catch (Exception e) {
-                System.out.println("email not sent");
+    @Transactional
+    public boolean resolveReport(int reportId, String responseText, boolean assignPenalty) {
+        try {
+            ReservationReport report = reservationReportRepository.getById(reportId);
+            Client client = report.getReservation().getClient();
+            Owner owner = report.getReservation().getRentable().getOwner();
+            if (assignPenalty)  {
+                assignPenaltyAndSendEmails(responseText, report, client, owner);
+            } else if(report.getSanction()) {
+                rejectPenalytAndSendEmail(responseText, client, owner);
             }
-
-        } else if(report.getSanction()) {
-            try {
-                emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
-                        "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
-                                + client.getUsername() + " will not be assigned a penalty. Reason:\n"
-                                +responseText+
-                                "\n\nSincerely,\n Rivera.");
-            } catch (Exception e) {
-                System.out.println("email not sent");
-            }
-
+            report.setResolved(true);
+            reservationReportRepository.save(report);
+            return true;
+        } catch (OptimisticLockingFailureException exception) {
+            return false;
         }
+    }
 
-        report.setResolved(true);
-        reservationReportRepository.save(report);
+    private void rejectPenalytAndSendEmail(String responseText, Client client, Owner owner) {
+        emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
+                "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                        + client.getUsername() + " will not be assigned a penalty. Reason:\n"
+                        +responseText+
+                        "\n\nSincerely,\n Rivera.");
+    }
+
+    private void assignPenaltyAndSendEmails(String responseText, ReservationReport report, Client client, Owner owner) {
+        int totalPenalties = client.getNumberOfPenalties();
+        report.getReservation().getClient().setNumberOfPenalties(totalPenalties + 1);
+        emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
+                "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
+                        "you that you have been assigned a penalty. Three of these penalties per month " +
+                        "will stop you from using our services. Reason: " + responseText +
+                        "\n\nSincerely,\n Rivera.");
+
+        emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
+                "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                        + client.getUsername() + " was assigned a penalty as per your request." +
+                        "\n\nSincerely,\n Rivera.");
     }
 
     public List<AdminReviewDTO> getPendingReviews() {

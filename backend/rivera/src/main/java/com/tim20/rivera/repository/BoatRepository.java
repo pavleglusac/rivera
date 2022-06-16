@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BoatRepository  extends JpaRepository<Boat, Integer> {
+public interface BoatRepository extends JpaRepository<Boat, Integer> {
     List<Boat> findByOwnerUsername(String username);
 }

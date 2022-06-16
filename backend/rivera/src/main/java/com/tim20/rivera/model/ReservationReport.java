@@ -2,6 +2,7 @@ package com.tim20.rivera.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,4 +26,7 @@ public class ReservationReport {
     @ManyToOne
     @JoinColumn(name = "client_id")
     Client client;
+
+    @Version
+    private int version;
 }

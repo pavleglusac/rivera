@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PersonRepository extends JpaRepository<Person, Integer> {
+public interface PersonRepository extends JpaRepository<Person, String> {
     Person findByUsername(String username);
 
-    @Query(value = "select * from Person p where CONCAT(p.name, ' ', p.surname) LIKE ?2 LIMIT ?1", nativeQuery = true)
+    @Query(value = "select * from Person p where CONCAT(p.name, ' ', p.surname) LIKE ?2 and p.deleted=false LIMIT ?1", nativeQuery = true)
     List<Person> searchPerson(int numberOfResults, String text);
 }

@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.*;
@@ -15,6 +18,7 @@ import java.util.List;
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonIgnoreProperties("rentable")
+@SQLDelete(sql = "UPDATE rentable SET deleted = true WHERE id = ?")
 public class Rentable {
     static final String SQ_CLIENT = "mysequence";
     @Id
@@ -50,6 +54,8 @@ public class Rentable {
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
     @ManyToOne
+    @JoinColumn(name="owner_username")
     private Owner owner;
+    private boolean deleted;
 
 }

@@ -18,7 +18,7 @@
                 <nuxt-link to="/ownerReservations"><li class="menu-link" :class="currentPage=='cottages' ? 'active' : ''"><font-awesome-icon icon="house" />  Reservations</li></nuxt-link>
                  <nuxt-link to="/statReport"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="bar-chart-line-fill" /> Statistics</li></nuxt-link>
                 <nuxt-link to="/owner/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
-                <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
+                <li class="menu-link" @click="logout"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
       </b-navbar-nav>
     </b-collapse>
@@ -45,6 +45,14 @@ props: {
       required: false,
       default: 'adventures'
     },  
+  },
+  methods: {
+    logout() {
+      window.localStorage.setItem('JWT', '');
+      this.$store.commit('removeRole');
+      this.$router.push({path: "/"});
+      this.$nuxt.$emit('refresh-navbar')
+    }
   }
 };
 </script>

@@ -17,7 +17,7 @@
                 <nuxt-link to="/offers"><li class="menu-link" :class="currentPage=='offers' ? 'active' : ''"><b-icon icon="search" /> Offers</li></nuxt-link>
                 <nuxt-link to="/reservations"><li class="menu-link" :class="currentPage=='reservations' ? 'active' : ''"><b-icon icon="calendar-check-fill" /> Reservations</li></nuxt-link>
                 <nuxt-link to="/client/profile"><li class="menu-link" :class="currentPage=='profile' ? 'active' : ''"><b-icon icon="person-fill" /> My Profile</li></nuxt-link>
-                <li class="menu-link"><b-icon icon="arrow90deg-left" /> Log out</li>
+                <li class="menu-link" @click="logout"><b-icon icon="arrow90deg-left" /> Log out</li>
             </ul>
       </b-navbar-nav>
     </b-collapse>
@@ -44,6 +44,15 @@ props: {
       required: false,
       default: 'recommended'
     },  
+  },
+  methods: {
+    logout() {
+      window.localStorage.setItem('JWT', '');
+      this.$store.commit('removeRole');
+      this.$router.push({path: "/"});
+      this.$nuxt.$emit('refresh-navbar')
+
+    }
   }
 };
 </script>

@@ -6,4 +6,5 @@ import lombok.Data;
 public class TerminationRequestDTO {
     private String username;
     private String description;
+    private int requestId;
 }

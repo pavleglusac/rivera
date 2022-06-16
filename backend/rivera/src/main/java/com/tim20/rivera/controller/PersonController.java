@@ -86,5 +86,10 @@ public class PersonController {
         return personService.searchPerson(numberOfResults, search, type);
     }
 
+    @DeleteMapping(path = "person")
+    public void deletePerson(@RequestParam String username) {
+        personService.delete(username);
+    }
+
 
 }
