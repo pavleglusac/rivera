@@ -7,6 +7,7 @@ import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,7 +62,8 @@ public class CottageService {
         for (var x : cottage.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + cottage.getId());
         }
-        cottage.setOwner(cottageOwnerRepository.getById("cowner")); //TODO: izvuci ownera iz jwt kad se bude slao
+
+        cottage.setOwner((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())); //TODO: izvuci ownera iz jwt kad se bude slao
         cottageRepository.save(cottage);
 
         List<String> paths;
