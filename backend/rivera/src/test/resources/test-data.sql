@@ -253,3 +253,5 @@ VALUES (1, false, true, false, 'Client didnt show up', 2, 0);
 
 INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
 VALUES (2, false, false, false, 'Client did show up', 3, 0);
+
+INSERT INTO termination_request (id, description, status, person_id, version) values (1, 'Opis', 2, 'pera', 0);

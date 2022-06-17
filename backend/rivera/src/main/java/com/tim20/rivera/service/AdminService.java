@@ -8,15 +8,18 @@ import com.tim20.rivera.dto.IncomeSystemDTO;
 import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.mail.MessagingException;
 import javax.persistence.OptimisticLockException;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -64,6 +67,9 @@ public class AdminService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
@@ -153,17 +159,20 @@ public class AdminService {
         return dto;
     }
 
-    @Transactional
+    @Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
     public boolean resolveTerminationRequest(String username, boolean terminate, int requestId, String reason) {
         try {
             Person person = personRepository.findByUsername(username);
             TerminationRequest request = terminationRepository.findById(requestId);
             if (person == null || request == null) return false;
             handlePersonTermination(terminate, person, request);
+            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+                Thread.sleep(1000);
+            }
             terminationRepository.save(request);
             notifyUserOnTerminationRequest(username, terminate, reason);
             return true;
-        } catch (OptimisticLockingFailureException exception) {
+        } catch (Exception exception) {
             return false;
         }
     }
@@ -289,8 +298,11 @@ public class AdminService {
             }
             report.setResolved(true);
             reservationReportRepository.save(report);
+            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+                Thread.sleep(1000);
+            }
             return true;
-        } catch (OptimisticLockingFailureException exception) {
+        } catch (Exception exception) {
             return false;
         }
     }
@@ -345,39 +357,31 @@ public class AdminService {
         return dto;
     }
 
-    public void resolveReview(int reviewId, String responseText, boolean allowed) {
+    @Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
+    public boolean resolveReview(int reviewId, String responseText, boolean allowed) {
         Optional<Review> optionalReview = reviewRepository.findById(reviewId);
-        if(optionalReview.isEmpty()) return;
-        Review review = optionalReview.get();
-        Client client = review.getClient();
-        Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
-        System.out.println(review.getType());
-        if (review.getType() == ReviewType.REVIEW_WITH_RATING)  {
-            if(allowed) {
-                try {
+        if(optionalReview.isEmpty()) return false;
+        try {
+            Review review = optionalReview.get();
+            Client client = review.getClient();
+            Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
+            if (review.getType() == ReviewType.REVIEW_WITH_RATING)  {
+                if(allowed) {
                     emailService.sendNotificaitionToUsername(owner.getUsername(), "Review",
                         "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
                                 + client.getUsername() + " has just review you or your rentable with a rating of " + review.getScore() + " with" +
                                 " text \"" + review.getText() + "\"." +
                                 "<br><br>Sincerely,<br>Rivera.");
-                } catch (Exception e) {
-                    System.out.println("email not sent");
-                }
-                review.setStatus(ReviewStatus.ACCEPTED);
-            } else {
-                try {
+                    review.setStatus(ReviewStatus.ACCEPTED);
+                } else {
                     emailService.sendNotificaitionToUsername(client.getUsername(), "Review",
                             "Dear " + client.getUsername() + ",\n\nWe inform you that your review with text \" "+ review.getText()+"\" " +
                                     "didn't get approved by the admin team. Reason: " + responseText +
                                     "\n\nSincerely,\n Rivera.");
-                } catch (Exception e) {
-                    System.out.println("email not sent");
+                    review.setStatus(ReviewStatus.DECLINED);
                 }
-                review.setStatus(ReviewStatus.DECLINED);
-            }
 
-        } else {
-            try {
+            } else {
                 emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
                         "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
                                 + client.getUsername() + " has just filed a complaint on you or your rentable with " +
@@ -388,12 +392,17 @@ public class AdminService {
                         "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
                                 "The admin team has responded with: " + responseText +
                                 "<br><br>Sincerely,<br>Rivera.");
-
-            } catch (Exception e) {
-                System.out.println("email not sent");
+                review.setStatus(ReviewStatus.ACCEPTED);
             }
-            review.setStatus(ReviewStatus.ACCEPTED);
+            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+                Random random = new Random();
+                int r = random.nextInt(1, 10);
+                Thread.sleep(r* 100L);
+            }
+            reviewRepository.save(review);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
-        reviewRepository.save(review);
     }
 }
