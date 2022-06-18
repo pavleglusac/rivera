@@ -9,6 +9,10 @@
     "generate": "nuxt generate",
     "serve": "npm run dev"
   },
+  "engines": {
+    "npm": "8.5.1",
+    "node": "12.22.9"
+  },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fullcalendar/core": "^5.11.0",
