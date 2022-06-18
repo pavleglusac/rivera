@@ -32,7 +32,7 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @GetMapping(path = "get-owner")
+    @GetMapping(path = "owner-request")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username){
         if (username == null || username.isBlank())
             return null;

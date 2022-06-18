@@ -14,7 +14,7 @@ public class ReservationReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "reservation_id")
     Reservation reservation;
     ReservationReportType reservationReportType;
