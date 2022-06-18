@@ -6,9 +6,15 @@ import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
+import org.springframework.lang.NonNullApi;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;

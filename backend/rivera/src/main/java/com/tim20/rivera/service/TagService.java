@@ -4,6 +4,7 @@ import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class TagService {
         return tags;
     }
 
+    @Transactional(readOnly = false)
     public void addTagsIfNotPresent(List<String> names) {
         for (String name : names) {
             if (tagRepository.findByName(name).isEmpty()) {

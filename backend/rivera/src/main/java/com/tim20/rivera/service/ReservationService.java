@@ -10,6 +10,7 @@ import org.apache.tomcat.jni.Local;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.Format;
 import java.time.LocalDate;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 import static java.lang.Double.min;
 
 @Service
+@Transactional(readOnly = true)
 public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
@@ -140,10 +142,13 @@ public class ReservationService {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
+
+    @Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price) {
+        Rentable rentable = rentableRepository.getByIdAndLock(rentableId);
         Reservation reservation = new Reservation();
         reservation.setPrice(price);
-        reservation.setRentable(rentableRepository.getById(rentableId));
+        reservation.setRentable(rentable);
         reservation.setStartDateTime(start);
         reservation.setEndDateTime(end);
         reservation.setCancelled(false);

@@ -7,8 +7,11 @@ import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = false)
 public class CottageService {
 
     @Autowired
@@ -48,6 +52,10 @@ public class CottageService {
 
     @Autowired
     private CottageOwnerRepository cottageOwnerRepository;
+
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     final String STATIC_PATH = "src/main/resources/static/";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -116,17 +124,26 @@ public class CottageService {
         return cottage;
     }
 
-    private void copyDtoToCottage(CottageDTO dto, Cottage cottage) {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void copyDtoToCottage(CottageDTO dto, Cottage cottage) {
+        List<String> tagsCopy = new ArrayList<>(dto.getTags());
+        List<String> tagsCopy2 = new ArrayList<>(dto.getTags());
+        List<String> servicesCopy = new ArrayList<>(dto.getServices());
+        List<String> pictuesCopy = new ArrayList<>(dto.getPictures());
+        List<String> rulesCopy = new ArrayList<>(dto.getRulesOfConduct());
+        tagService.addTagsIfNotPresent(tagsCopy);
+        cottage.setTags(tagService.getTagsByNames(tagsCopy2));
+        cottage.setOwner(cottageOwnerRepository.findById("cowner").get());
         cottage.setName(dto.getName());
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
         cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
-        cottage.setRulesOfConduct(dto.getRulesOfConduct());
+        cottage.setRulesOfConduct(rulesCopy);
         cottage.setAddress(dto.getAddress());
-        cottage.setPictures(dto.getPictures());
+        cottage.setPictures(pictuesCopy);
         cottage.setCity(dto.getCity());
         cottage.setCountry(dto.getCountry());
-        cottage.setAdditionalServices(dto.getServices());
+        cottage.setAdditionalServices(servicesCopy);
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
@@ -137,9 +154,6 @@ public class CottageService {
 
         cottage.getPricelists().add(pricelist);
         cottage.setCurrentPricelist(pricelist);
-        tagService.addTagsIfNotPresent(dto.getTags());
-        cottage.setTags(tagService.getTagsByNames(dto.getTags()));
-        cottage.setOwner(cottageOwnerRepository.findById("cowner").get());
         cottageOwnerRepository.findById("cowner").get().getRentables().add(cottage);
     }
 
@@ -239,16 +253,27 @@ public class CottageService {
         return dto;
     }
 
-    public void update(CottageDTO cottageDTO, MultipartFile[] multipartFiles) throws IOException {
-        Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
-        if (opt.isEmpty()) return;
-        Cottage cottage = opt.get();
-        List<String> paths = savePictures(cottage, multipartFiles);
+    @Transactional(readOnly = false)
+    public boolean update(CottageDTO cottageDTO, MultipartFile[] multipartFiles){
+        try
+        {
+            Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
+            if (opt.isEmpty()) return false;
+            Cottage cottage = opt.get();
+            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+                Thread.sleep(1000);
+            }
+            List<String> paths = savePictures(cottage, multipartFiles);
 
-        cottageDTO.getPictures().addAll(paths);
+            cottageDTO.getPictures().addAll(paths);
 
-        copyDtoToCottage(cottageDTO, cottage);
-        cottageRepository.save(cottage);
+            copyDtoToCottage(cottageDTO, cottage);
+            cottageRepository.save(cottage);
+            return true;
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     public void delete(Integer id){

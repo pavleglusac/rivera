@@ -20,6 +20,8 @@ import java.util.List;
 @JsonIgnoreProperties("rentable")
 @SQLDelete(sql = "UPDATE rentable SET deleted = true WHERE id = ?")
 public class Rentable {
+    @Version
+    private int version;
     static final String SQ_CLIENT = "mysequence";
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SQ_CLIENT)

@@ -14,8 +14,10 @@ import java.util.Map;
 @NoArgsConstructor
 @Where(clause="deleted=false and (select o.deleted from cottage_owner o where o.username = owner_username) = false")
 public class Cottage extends Rentable {
+
     @ElementCollection
     Map<Integer, Integer> rooms;
+
 
     public int capacity() {
         int cap = 0;
