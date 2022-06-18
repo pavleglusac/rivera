@@ -4,6 +4,7 @@ import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +45,8 @@ public class OwnerService {
     private MemberCategoryRepository memberCategoryRepository;
     @Autowired
     private RulesRepository rulesRepository;
+    @Autowired
+    private ConfigurableEnvironment env;
 
     public Person save(OwnerRequestDTO userRequestDTO) {
         switch (userRequestDTO.getType()){
@@ -208,7 +208,13 @@ public class OwnerService {
         endDate+= "T00:00:00";
         LocalDateTime startDateTime = LocalDateTime.parse(startDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDateTime = LocalDateTime.parse(endDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        Owner loggedPerson = ((Owner) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Owner loggedPerson;
+        if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            loggedPerson = cottageOwnerRepository.getById("cowner");
+        }
+        else {
+            loggedPerson = ((Owner) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        }
         List<AttendanceDTO> attendanceDTOS = null;
         switch (type){
             case "month":

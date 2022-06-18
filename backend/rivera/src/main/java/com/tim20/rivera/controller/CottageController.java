@@ -49,9 +49,9 @@ public class CottageController {
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
-    @GetMapping(path = "/get-cottages")
-    public List<Cottage> getCottages() {
-        return cottageService.findAll();
+    @GetMapping(path = "get-cottages")
+    public List<CottageDTO> getCottages() {
+        return cottageService.getCottages();
     }
 
     @GetMapping(path = "get-cottage")

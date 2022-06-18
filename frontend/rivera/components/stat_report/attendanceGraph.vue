@@ -55,6 +55,7 @@ export default {
   methods: {
     loadAttendance() {
       var that = this;
+      console.log(`/api/get-attendance?&startDate=${this.startDate}&endDate=${this.endDate}&type=${this.type}`+"ajsdfgbakjsdfhaslkjfdhasjdf");
       this.$axios
         .get(
           `/api/get-attendance?&startDate=${this.startDate}&endDate=${this.endDate}&type=${this.type}`
