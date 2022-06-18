@@ -16,7 +16,7 @@ jobs:
       - run: ls -l
       - run:
           name: Build
-          command: cd backend/rivera && mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=mrsisatim20 -DskipTests=true
+          command: cd backend/rivera && mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=mrsisatim20 -DskipTests clean package
   deploy_backend:
      docker:
        - image: cimg/openjdk:17.0
