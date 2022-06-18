@@ -29,22 +29,26 @@
             size="sm"
             :options="options"
           ></b-form-select>
-          <Reservation
-            v-for="(reservation, index) in reservations"
-            :reservation="reservation" :reportModal="reportModal" :viewReportModal="viewReportModal"
-            v-bind:key="reservation.rentable.name + index"
-          />
+          <div v-if="reservations.length > 0">
+            <Reservation
+              v-for="(reservation, index) in reservations"
+              :reservation="reservation"
+              :reportModal="reportModal"
+              :viewReportModal="viewReportModal"
+              v-bind:key="reservation.rentable.name + index"
+            />
+          </div>
+          <p v-else>There are no reservations at the moment.</p>
         </b-col>
       </b-row>
     </b-card>
-      <b-modal id="add_modal" size="md" hide-header hide-footer>
-          <ReservationReport :selectedId="selectedId"/>
-      </b-modal>
-      <b-modal id="add_modal2" size="md" hide-header hide-footer>
-          <ViewReservationReport :selectedId="selectedId"/>
-      </b-modal>
+    <b-modal id="add_modal" size="md" hide-header hide-footer>
+      <ReservationReport :selectedId="selectedId" />
+    </b-modal>
+    <b-modal id="add_modal2" size="md" hide-header hide-footer>
+      <ViewReservationReport :selectedId="selectedId" />
+    </b-modal>
   </b-container>
-  
 </template>
 
 <script>
@@ -55,7 +59,7 @@ export default {
   data() {
     return {
       reservations: [],
-			selectedId: "",
+      selectedId: "",
       search: "",
       selectedDate: new Date().toISOString().slice(0, 10),
       selected: "all",
@@ -70,9 +74,7 @@ export default {
     };
   },
   name: "AllReservations",
-  components: { Reservation,
-    ReservationReport,
-    ViewReservationReport, },
+  components: { Reservation, ReservationReport, ViewReservationReport },
   mounted() {
     this.loadReservations();
   },
@@ -90,7 +92,11 @@ export default {
           console.log(resp.data);
           this.$axios
             .post(
-              `/api/cottage/search-all-reservations-for-owner?&username=${resp.data}&search=${that.search.trim()}&date=${that.selectedDate}&upcoming=${that.selected}`
+              `/api/cottage/search-all-reservations-for-owner?&username=${
+                resp.data
+              }&search=${that.search.trim()}&date=${
+                that.selectedDate
+              }&upcoming=${that.selected}`
             )
             .then((response) => {
               that.reservations = response.data;
@@ -130,15 +136,15 @@ export default {
       }
       return false;
     },
-    reportModal(param){
+    reportModal(param) {
       this.selectedId = param;
-      console.log(this.selectedId+"aaa");
+      console.log(this.selectedId + "aaa");
       this.$bvModal.show("add_modal");
     },
-    viewReportModal(param){
+    viewReportModal(param) {
       this.selectedId = param;
       this.$bvModal.show("add_modal2");
-    }
+    },
   },
 };
 </script>

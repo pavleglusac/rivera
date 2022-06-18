@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -16,6 +17,7 @@ public class ClientReservationDTO {
     Integer rentableId;
     Integer reservationId;
     Double price;
+    List<String> additionalServices;
 
     public boolean isUpcoming() {
         return !this.startDateTime.isBefore(LocalDateTime.now());

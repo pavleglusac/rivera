@@ -48,7 +48,7 @@
               v-else-if="role == 'Cottage Owner'"
               icon="house"
             />
-            <font-awesome-icon v-else-if="role == 'Boat Owner'" icon="boat" />
+            <font-awesome-icon v-else-if="role == 'Boat Owner'" icon="sailboat" />
             <font-awesome-icon v-else icon="person" />
             {{ role }} &nbsp;</span
           >
@@ -136,7 +136,7 @@ export default {
     setCoverPhoto() {
       if (this.role == "Fishing Instructor") {
         this.cover =
-          "https://images.unsplash.com/photo-1499403474843-04e72c14df8e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80";
+          "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80";
       } else if (this.role == "Cottage Owner") {
         this.cover =
           "https://images.unsplash.com/photo-1580202313707-46a966af5c6f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=862&q=80";

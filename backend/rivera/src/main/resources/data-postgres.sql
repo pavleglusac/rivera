@@ -107,6 +107,8 @@ INSERT INTO fishing_instructor (username, address, city, country, deleted, email
 
 
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (1, 'massage');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (1, 'pool');
+INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (1, 'tv');
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (2, 'therapy');
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (3, 'basketball');
 INSERT INTO rentable_additional_services (rentable_id, additional_services) VALUES (4, 'massage');
@@ -180,7 +182,6 @@ INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (7,
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (7, 'no destruction of property');
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8, 'no smoking');
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8, 'no destruction of property');
-
 
 
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (1, 1);

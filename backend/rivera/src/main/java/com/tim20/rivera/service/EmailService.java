@@ -6,6 +6,7 @@ import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
+import com.tim20.rivera.model.Reservation;
 import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -115,6 +116,54 @@ public class EmailService {
         } catch (Exception e) {
             System.out.println("email not sent");
         }
+    }
+
+    @Async
+    public void sendReservationNotificaition(Reservation reservation) throws MailException, MessagingException {
+        System.out.println("Sending email to client...");
+        MimeMessage mimeMessageClient = javaMailSender.createMimeMessage();
+        MimeMessageHelper mailClient = new MimeMessageHelper(mimeMessageClient, "utf-8");
+        String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+        htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>Reservation details</h3>";
+        htmlMsg += "<p style='font-size: 15px; font-family: sans-serif;'>" + getReservationTextClient(reservation) + "</p></div>";
+        mailClient.setText(htmlMsg, true);
+        mailClient.setTo(reservation.getClient().getEmail());
+        mailClient.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+        mailClient.setSubject("Reservation Details");
+        javaMailSender.send(mimeMessageClient);
+        System.out.println("Email to client sent!");
+
+        System.out.println("Sending email to owner...");
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+        htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+        htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>New Reservation</h3>";
+        htmlMsg += "<p style='font-size: 15px; font-family: sans-serif;'>" + getReservationTextOwner(reservation) + "</p></div>";
+        mail.setText(htmlMsg, true);
+        mail.setTo(reservation.getRentable().getOwner().getEmail());
+        mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+        mail.setSubject("New Reservation");
+        javaMailSender.send(mimeMessage);
+        System.out.println("Email to owner sent!");
+    }
+
+    private String getReservationTextClient(Reservation reservation) {
+        return "Dear " + reservation.getClient().getUsername() + ",<br><br>We are confirming " +
+                "that you have successfully reserved " + reservation.getRentable().getName() + " for the period of "
+                + reservation.getStartDateTime().toString().replace("T", " ") + " to " + reservation.getEndDateTime().toString().replace("T", " ") +
+                ". Cost of your reservation was " + reservation.getPrice() +
+                "$.<br><br>We are sure you will have good time!<br>Remember to leave a review after your reservation." +
+                "If you can't make it, just cancel your reservation 3 days in advance in order to avoid getting a penalty." +
+                "<br><br>Sincerely,<br> Rivera.";
+    }
+
+    private String getReservationTextOwner(Reservation reservation) {
+        return "Dear " + reservation.getRentable().getOwner().getUsername() + ",<br><br>We are informing you that " +
+                reservation.getClient().getName() + " has reserved " + reservation.getRentable().getName() + " for the period of "
+                + reservation.getStartDateTime().toString().replace("T", " ") + " to " + reservation.getEndDateTime().toString().replace("T", " ") +
+                ".<br>Cost of the reservation is " + reservation.getPrice() + "$.<br>Additional services client required are: " +
+                String.join(", ", reservation.getAdditionalServices()) +
+                ".<br><br>Sincerely,<br> Rivera.";
     }
 
     @Async

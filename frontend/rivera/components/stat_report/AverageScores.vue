@@ -63,7 +63,7 @@
         ></b-form-rating>
       </b-list-group-item>
     </b-list-group>
-    <p v-else>You don't have any rentables yet.</p>
+    <p v-else>No rentables found.</p>
   </div>
 </template>
 

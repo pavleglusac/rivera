@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,6 +29,8 @@ public class Reservation {
     private LocalDateTime endDateTime;
     private Double ownerIncomePercentage;
     private Boolean cancelled;
+    @ElementCollection
+    private List<String> additionalServices;
 
     public static Integer pointsPerReservation;
     public static Integer ownerPoints;

@@ -35,27 +35,17 @@
         </div>
       </div>
       <div class="d-flex flex-column mt-5" style="width: 50%; height: 100%">
-        <!--<img
-          :src="pictures[0]"
-          alt=""
-          style="
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            max-height: 500px;
-          "
-        />-->
         <Carousel2 :pictures="pictures.slice(0, pictures.lenght)" />
         <p
           @click="openGalerry"
           style="
-            background-color: #11698E;
+            background-color: #11698e;
             cursor: pointer;
             padding: 15px;
             width: 100%;
             text-align: center;
             font-weight: 500;
-            color: white
+            color: white;
           "
         >
           View gallery
@@ -115,9 +105,7 @@
           </span>
         </div>
         <div v-if="currentType == 'cottage'">
-          <h6 class="mt-2">
-            <font-awesome-icon icon="door-closed" /> Rooms:
-          </h6>
+          <h6 class="mt-2"><font-awesome-icon icon="door-closed" /> Rooms:</h6>
           <div class="flex">
             <span class="tagish" v-for="room in rooms" :key="room">
               {{ room }}
@@ -127,13 +115,9 @@
         <div v-if="currentType == 'boat'">
           <div class="form-row">
             <div class="form-group col-md-4">
-              <h6 class="mt-2">
-                <font-awesome-icon icon="ruler" /> Length:
-              </h6>
+              <h6 class="mt-2"><font-awesome-icon icon="ruler" /> Length:</h6>
               <div class="flex">
-                <span class="tagish">
-                  {{ boatLength }} m
-                </span>
+                <span class="tagish"> {{ boatLength }} m </span>
               </div>
             </div>
             <div class="form-group col-md-4">
@@ -141,15 +125,11 @@
                 <font-awesome-icon icon="gauge" /> Max speed:
               </h6>
               <div class="flex">
-                <span class="tagish">
-                  {{ maxSpeed }} knots 
-                </span>
+                <span class="tagish"> {{ maxSpeed }} knots </span>
               </div>
             </div>
             <div class="form-group col-md-4">
-              <h6 class="mt-2">
-                <font-awesome-icon icon="anchor" /> Type:
-              </h6>
+              <h6 class="mt-2"><font-awesome-icon icon="anchor" /> Type:</h6>
               <div class="flex">
                 <span class="tagish">
                   {{ type }}
@@ -159,13 +139,9 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-4">
-              <h6>
-                <font-awesome-icon icon="bell-concierge" /> Engine Power:
-              </h6>
+              <h6><font-awesome-icon icon="bell-concierge" /> Engine Power:</h6>
               <div class="flex">
-                <span class="tagish">
-                  {{ enginePower }} kW
-                </span>
+                <span class="tagish"> {{ enginePower }} kW </span>
               </div>
             </div>
             <div class="form-group col-md-4">
@@ -191,7 +167,11 @@
           style="height: 80vh"
         >
           <div class="w-75">
-            <Calendar :reservations="reservations" :currentType="currentType" />
+            <Calendar
+              :reservations="reservations"
+              :currentType="currentType"
+              :additionalServices="services"
+            />
           </div>
         </div>
       </div>
@@ -210,11 +190,16 @@
               :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />
-        <div style="text-align:center;display: flex;
-    align-items: center;" class="m-4">
-          <b-icon icon="calendar-plus" style="width:30px;height:30px;" @click="showAddDiscountModal"/>
-        </div>
-
+            <div
+              style="text-align: center; display: flex; align-items: center"
+              class="m-4"
+            >
+              <font-awesome-icon
+              icon="calendar-plus"
+                style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
+                @click="showAddDiscountModal"
+              />
+            </div>
           </div>
         </div>
         <div v-else class="d-flex flex-column h-100">
@@ -223,19 +208,29 @@
             email notification when owner creates a special offer, please
             subscribe to this entity.
           </p>
-        <div style="text-align:center;display: flex;
-    align-items: center;" class="m-4">
-          <b-icon icon="calendar-plus" style="width:30px;height:30px;" @click="showAddDiscountModal"/>
+          <div
+            style="text-align: center; display: flex; align-items: center"
+            class="m-4"
+          >
+            <font-awesome-icon
+              icon="calendar-plus"
+              style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
+              @click="showAddDiscountModal"
+            />
+          </div>
         </div>
-        </div>
-        <b-modal id="reservedDiscountModal" title="Congratulations!">
-          <p class="my-4">You have successfully reserved your appointment.</p>
-        </b-modal>
+        <Popup
+          ref="reservedDiscountModal"
+          id="reservedDiscountModal"
+          title="Congratulations!"
+          text="You have successfully reserved an appointment."
+        />
 
         <b-modal id="reservationModal" size="xl" hide-header hide-footer>
-          <reservation-history 
-          :reportModal="reportModal"
-          :viewReportModal="viewReportModal"/>
+          <reservation-history
+            :reportModal="reportModal"
+            :viewReportModal="viewReportModal"
+          />
         </b-modal>
 
         <b-modal id="cantReserve" title="You can't make reservations.">
@@ -280,15 +275,15 @@
         <p>No one reviewed this entity yet.</p>
       </div>
     </div>
-      <b-modal id="add_modal" size="xl" hide-header hide-footer>
-          <ReservationReport :selectedId="selectedId"/>
-      </b-modal>
-      <b-modal id="add_modal2" size="xl" hide-header hide-footer>
-          <ViewReservationReport :selectedId="selectedId"/>
-      </b-modal>
-      <b-modal id="addDiscountModal" size="xl" hide-header hide-footer>
-          <AddDiscount />
-      </b-modal>
+    <b-modal id="add_modal" size="xl" hide-header hide-footer>
+      <ReservationReport :selectedId="selectedId" />
+    </b-modal>
+    <b-modal id="add_modal2" size="xl" hide-header hide-footer>
+      <ViewReservationReport :selectedId="selectedId" />
+    </b-modal>
+    <b-modal id="addDiscountModal" size="md" hide-header hide-footer>
+      <AddDiscount />
+    </b-modal>
   </div>
 </template>
 
@@ -298,15 +293,29 @@ import Carousel2 from "./Carousel2.vue";
 import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
 import Review from "./Review.vue";
+import Popup from "../popup.vue"
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
 import ReservationReport from "./../owner_reservations/reservation_report";
 import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
 import AddDiscount from "./../owner_reservations/add_discount.vue";
 
-import { BIcon, BIconCalendarPlus} from 'bootstrap-vue'
+import { BIcon, BIconCalendarPlus } from "bootstrap-vue";
 
 export default {
-  components: { MainCard, Carousel2, Calendar, Discount, Review, ReservationHistory, AddDiscount, ReservationReport, ViewReservationReport,BIcon, BIconCalendarPlus },
+  components: {
+    MainCard,
+    Carousel2,
+    Calendar,
+    Discount,
+    Review,
+    ReservationHistory,
+    AddDiscount,
+    ReservationReport,
+    ViewReservationReport,
+    BIcon,
+    BIconCalendarPlus,
+    Popup
+  },
   data() {
     return {
       selectedId: "",
@@ -386,7 +395,7 @@ export default {
     openReservationsModal() {
       this.$bvModal.show("reservationModal");
     },
-    showAddDiscountModal(){      
+    showAddDiscountModal() {
       this.$bvModal.show("addDiscountModal");
     },
     loadAdventure() {
@@ -414,17 +423,25 @@ export default {
           that.canBeChanged = !adventure.canBeChanged;
           that.discounts = adventure.discounts;
           that.discounts.forEach(
-            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
+            (x) => (
+              (x.start = x.start.replaceAll("T", " ")),
+              (x.start = x.start.replaceAll("-", "/")),
+              (x.start = x.start.split(":")[0] + ":" + x.start.split(":")[1])
+            )
           );
           that.discounts.forEach(
-            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
+            (x) => (
+              (x.end = x.end.replaceAll("T", " ")),
+              (x.end = x.end.replaceAll("-", "/")),
+              (x.end = x.end.split(":")[0] + ":" + x.end.split(":")[1])
+            )
           );
           that.score = adventure.averageScore;
           that.pictures.push(
             ...adventure.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
-          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
+          var first = that.pictures.length % 2 == 1 ? half - 1 : half;
           console.log(half);
           that.firstColumn = that.pictures.slice(0, first);
           console.log(that.firstColumn);
@@ -463,19 +480,28 @@ export default {
           that.tags = cottage.tags;
           that.canBeChanged = !cottage.canBeChanged;
           that.discounts = cottage.discounts;
-          for (var x of that.discounts){
-          console.log("---------------"+x.start);}
+          for (var x of that.discounts) {
+            console.log("---------------" + x.start);
+          }
           that.discounts.forEach(
-            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
+            (x) => (
+              (x.start = x.start.replaceAll("T", " ")),
+              (x.start = x.start.replaceAll("-", "/")),
+              (x.start = x.start.split(":")[0] + ":" + x.start.split(":")[1])
+            )
           );
           that.discounts.forEach(
-            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
+            (x) => (
+              (x.end = x.end.replaceAll("T", " ")),
+              (x.end = x.end.replaceAll("-", "/")),
+              (x.end = x.end.split(":")[0] + ":" + x.end.split(":")[1])
+            )
           );
           that.pictures.push(
             ...cottage.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
-          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
+          var first = that.pictures.length % 2 == 1 ? half - 1 : half;
           console.log(half);
           that.firstColumn = that.pictures.slice(0, first);
           console.log(that.firstColumn);
@@ -528,31 +554,39 @@ export default {
           that.canBeChanged = !boat.canBeChanged;
           that.discounts = boat.discounts;
           that.discounts.forEach(
-            (x) => (x.start = (x.start).replaceAll("T",' '),x.start = (x.start).replaceAll("-",'/'),x.start = (x.start).split(":")[0] +":"+ (x.start).split(":")[1])
+            (x) => (
+              (x.start = x.start.replaceAll("T", " ")),
+              (x.start = x.start.replaceAll("-", "/")),
+              (x.start = x.start.split(":")[0] + ":" + x.start.split(":")[1])
+            )
           );
           that.discounts.forEach(
-            (x) => (x.end = (x.end).replaceAll("T",' '),x.end = (x.end).replaceAll("-",'/'),x.end = (x.end).split(":")[0] +":"+ (x.end).split(":")[1])
+            (x) => (
+              (x.end = x.end.replaceAll("T", " ")),
+              (x.end = x.end.replaceAll("-", "/")),
+              (x.end = x.end.split(":")[0] + ":" + x.end.split(":")[1])
+            )
           );
           that.pictures.push(
             ...boat.pictures.map((x) => "http://localhost:8080" + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
-          var first = (that.pictures.length % 2 == 1) ? half - 1 : half;
+          var first = that.pictures.length % 2 == 1 ? half - 1 : half;
           that.firstColumn = that.pictures.slice(0, first);
           that.secondColumn = that.pictures.slice(-half);
           that.id = boat.id;
           that.owner = boat.owner;
           that.owner.picture = "http://localhost:8080" + that.owner.picture;
         });
-    },    
-    reportModal(param){
+    },
+    reportModal(param) {
       this.selectedId = param;
       this.$bvModal.show("add_modal");
     },
-    viewReportModal(param){
+    viewReportModal(param) {
       this.selectedId = param;
       this.$bvModal.show("add_modal2");
-    }
+    },
   },
 };
 </script>

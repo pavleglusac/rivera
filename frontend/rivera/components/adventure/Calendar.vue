@@ -253,6 +253,7 @@
 				:appointment="appointment"
 				:close="closeModal"
 				:openModal="openModal"
+				:additionalServices="additionalServices"
 			/>
 		</b-modal>
 		<b-modal id="reservedModal" title="Congratulations!">
@@ -277,7 +278,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import ReservationForm from "./ReservationForm.vue";
 
 export default {
-	props: ["reservations", "rentableType"],
+	props: ["reservations", "rentableType", "additionalServices"],
 	components: {
 		FullCalendar,
 		ReservationForm,
@@ -354,9 +355,9 @@ export default {
 				eventOverlap: false,
 				eventDurationEditable: false,
 				eventStartEditable: false,
-				background: "green",
-				eventBackgroundColor: "#7bb888",
-				eventBorderColor: "#7bb888",
+				background: "#16C79A",
+				eventBackgroundColor: "#16C79A",
+				eventBorderColor: "#16C79A",
 				/* you can update a remote database when these fire:
         eventAdd:
         eventChange:
@@ -384,8 +385,8 @@ export default {
 				this.calendarOptions.selectable = false;
 				this.calendarOptions.dateClick = this.handleDayClick;
 			} else if (val == "add") {
-				calendarApi.setOption("eventBackgroundColor", "#7bb888");
-				calendarApi.setOption("eventBorderColor", "#7bb888");
+				calendarApi.setOption("eventBackgroundColor", "#16C79A");
+				calendarApi.setOption("eventBorderColor", "#16C79A");
 				this.calendarOptions.selectable = true;
 			} else {
 				calendarApi.setOption("eventBackgroundColor", "#D25034");
@@ -826,7 +827,7 @@ export default {
 									start: temp.startDateTime,
 									end: temp.endDateTime,
 									display: "block",
-									color: "#7bb888",
+									color: "#16C79A",
 								});
 							}
 						});

@@ -35,6 +35,8 @@ public class Rentable {
     private String country;
     @ElementCollection
     private List<String> pictures;
+    @ElementCollection
+    private List<String> subscribed;
     private String profilePicture;
     @ElementCollection
     private List<String> rulesOfConduct;

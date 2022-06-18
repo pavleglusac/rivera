@@ -34,26 +34,30 @@
         }}, {{ reservation.entity.city }}, {{ reservation.entity.country }}
         <br />
         <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost:
-        {{ reservation.price }}$</b-card-text
+        {{ reservation.price }}$
+        <br />
+        <span v-if="reservation.additionalServices.length != 0"><font-awesome-icon icon="plus" />&nbsp;&nbsp;Additional services:
+        {{ services }}</span>
+        </b-card-text
       >
       <b-button
         size="sm"
         class="prime-btn"
-        :disabled="numberOfDaysUntilReservation > 3"
+        :disabled="numberOfDaysUntilReservation < 3"
         @click="openCancel"
         >Cancel reservation</b-button
       >
       <b-button
         size="sm"
         class="prime-btn"
-        :disabled="numberOfDaysUntilReservation < 0"
+        :disabled="numberOfDaysUntilReservation > 0"
         @click="openReview"
         >Review</b-button
       >
       <b-button
         class="prime-btn"
         size="sm"
-        :disabled="numberOfDaysUntilReservation < 0"
+        :disabled="numberOfDaysUntilReservation > 0"
         @click="openComplaint"
         >Complain</b-button
       >
@@ -71,6 +75,7 @@ export default {
   ],
   mounted() {
     this.calculateNumberOfDaysUntilReservation();
+    this.services = this.reservation.additionalServices.join(", ")
   },
   methods: {
     openCancel() {
@@ -86,14 +91,14 @@ export default {
       this.$router.push({ path: "/rentable/" + id });
     },
     calculateNumberOfDaysUntilReservation() {
-      this.numberOfDaysUntilReservation = this.daysBetween(
+      this.numberOfDaysUntilReservation = Math.round(this.daysBetween(
         new Date(),
         new Date(this.reservation.startDateTime)
-      );
+      ));
     },
     daysBetween(startDate, endDate) {
       return (
-        (startDate.getTime() - endDate.getTime()) /
+        (endDate.getTime() - startDate.getTime()) /
         (1000 * 3600 * 24)
       );
     },
@@ -101,6 +106,7 @@ export default {
   data() {
     return {
       numberOfDaysUntilReservation: 0,
+      services: ""
     };
   },
 };

@@ -1,7 +1,7 @@
 <template>
 	<div class="p-4">
 		<div v-if="offers.length === 0">
-			<p style="text-align: center">No offers found.</p>
+			<p style="text-align: center">This owner has no rentables yet.</p>
 		</div>
 		<div v-else>
 			<EntityCard

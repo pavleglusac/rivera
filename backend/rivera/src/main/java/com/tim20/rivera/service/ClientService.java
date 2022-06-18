@@ -56,6 +56,13 @@ public class ClientService {
         return clientToCRDTO(client);
     }
 
+    public void deletePenalties() {
+        for(Client client : this.getClients()) {
+            client.setNumberOfPenalties(0);
+            clientRepository.save(client);
+        }
+    }
+
     public void addClient(ClientDTO clientDTO) {
         Client client = dtoToClient(clientDTO);
         clientRepository.save(client);
@@ -138,6 +145,8 @@ public class ClientService {
         try {
             Rentable rentable = rentableRepository.getById(id);
             client.getSubscribed().add(rentable);
+            rentable.getSubscribed().add(client.getUsername());
+            rentableRepository.save(rentable);
             clientRepository.save(client);
             System.out.println("client has subscribed");
         } catch (Exception e) {
@@ -150,6 +159,8 @@ public class ClientService {
         try {
             Rentable rentable = rentableRepository.getById(id);
             client.getSubscribed().removeIf(next -> next.getId().equals(rentable.getId()));
+            rentable.getSubscribed().removeIf(next -> next.equals(client.getUsername()));
+            rentableRepository.save(rentable);
             clientRepository.save(client);
             System.out.println("client has unsubscribed");
         } catch (Exception e) {

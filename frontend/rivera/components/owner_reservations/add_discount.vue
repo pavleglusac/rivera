@@ -1,83 +1,61 @@
 <template>
   <div class="container">
-    <b-card>
-      <div class="form-row" style="text-align: center">
-        <div class="form-group col-md-12">
-          <h3>Add discount</h3>
-        </div>
-      </div>
-      <div class="form-row align-items-center">
-          
-        <div class="form-group col-4">
-          <label for="inputType">Start date</label>
-          <b-form-datepicker
-            size="sm"
-            v-model="startDate"
-            placeholder="Start date"
-          ></b-form-datepicker>
-          <b-form-timepicker
-            size="sm"
-            v-model="startTime"
-            placeholder="Start time"
-          ></b-form-timepicker>
-        </div>
-        <div class="form-group col-4">
-          <label for="inputType">End date</label>
-          <b-form-datepicker
-            size="sm"
-            v-model="endDate"
-            placeholder="End date"
-          ></b-form-datepicker>
-          <b-form-timepicker
-            size="sm"
-            v-model="endTime"
-            placeholder="End time"
-          ></b-form-timepicker>
-        </div>        
-        <div class="form-group col-4">
-          <label for="inputAddress"
-            >Tags - key words that describe this discount</label
-          >
-          <b-form-tags
-            input-id="tags-basic"
-            v-model="tags"
-            placeholder="Tags"
-          ></b-form-tags>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-4">
-          <label for="inputPrice">Price</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="price"
-            id="inputPrice"
-            placeholder="Price"
-          />
-        </div>
-        <div class="form-group col-4">
-          <label for="inputCapacity">Capacity</label>
-          <input
-            type="text"
-            class="form-control"
-            v-model="capacity"
-            id="inputCapacity"
-            placeholder="Capacity"
-          />
-        </div>
-        <div  class="form-group col-2">
-        </div>
-        <div  class="form-group col-2">
-          <label for="btn"> <br></label>
-          <b-button @click="upload" class="prime-btn w-100" size="m"
-            >Add discount</b-button
-          >
-        </div>
-      </div>
-      
-      
-    </b-card>
+    <h3>Add discount</h3>
+    <p>Start:</p>
+    <b-row style="margin-top: -10px; margin-bottom: 5px">
+      <b-col>
+        <b-form-datepicker
+          v-model="startDate"
+          placeholder="Start date"
+        ></b-form-datepicker>
+      </b-col>
+      <b-col>
+        <b-form-timepicker
+          v-model="startTime"
+          placeholder="Start time"
+        ></b-form-timepicker>
+      </b-col>
+    </b-row>
+    <p>End:</p>
+    <b-row style="margin-top: -10px; margin-bottom: 5px">
+      <b-col>
+        <b-form-datepicker
+          v-model="endDate"
+          placeholder="End date"
+        ></b-form-datepicker>
+      </b-col>
+      <b-col>
+        <b-form-timepicker
+          v-model="endTime"
+          placeholder="End time"
+        ></b-form-timepicker>
+      </b-col>
+    </b-row>
+
+    <p>Tags (key words that describe this discount):</p>
+    <b-form-tags
+    style="margin-top: -10px; margin-bottom: 5px"
+      input-id="tags-basic"
+      v-model="tags"
+      placeholder="Tags"
+    ></b-form-tags>
+    <p>Price:</p>
+    <b-input
+    style="margin-top: -10px; margin-bottom: 5px"
+      v-model="price"
+      id="inputPrice"
+      placeholder="Price"
+    />
+    <p>Capacity:</p>
+    <b-input
+    style="margin-top: -10px; margin-bottom: 5px"
+      v-model="capacity"
+      id="inputCapacity"
+      placeholder="Capacity"
+    />
+    <b-button @click="upload" class="prime-btn w-100 mt-2" size="m"
+      >Add discount</b-button
+    >
   </div>
 </template>
 
@@ -95,12 +73,12 @@ export default {
       tags: [],
     };
   },
-  mounted(){},
+  mounted() {},
   methods: {
     upload() {
       var formData = new FormData();
-      formData.append("startDateTime", this.startDate+"T"+this.startTime);
-      formData.append("endDateTime", this.endDate+"T"+this.endTime);
+      formData.append("startDateTime", this.startDate + "T" + this.startTime);
+      formData.append("endDateTime", this.endDate + "T" + this.endTime);
       formData.append("capacity", this.capacity);
       formData.append("price", this.price);
       formData.append("tags", this.tags);
@@ -115,6 +93,6 @@ export default {
           console.log(err);
         });
     },
-    }
+  },
 };
 </script>
