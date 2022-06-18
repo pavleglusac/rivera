@@ -2,9 +2,9 @@ package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.AdventureProfileDTO;
-import com.tim20.rivera.service.AvailabilityService;
 import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.service.AdventureService;
+import com.tim20.rivera.service.AvailabilityService;
 import com.tim20.rivera.util.Availability;
 import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;

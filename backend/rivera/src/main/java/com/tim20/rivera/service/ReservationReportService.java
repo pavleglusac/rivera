@@ -1,7 +1,6 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.ReservationReportDTO;
-import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.ReservationReport;
 import com.tim20.rivera.repository.ClientRepository;
 import com.tim20.rivera.repository.ReservationReportRepository;

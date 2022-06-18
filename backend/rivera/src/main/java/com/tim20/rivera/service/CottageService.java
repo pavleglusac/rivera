@@ -1,11 +1,16 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.CottageProfileDTO;
 import com.tim20.rivera.dto.SearchParams;
-import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.*;
+import com.tim20.rivera.model.Cottage;
+import com.tim20.rivera.model.CottageOwner;
+import com.tim20.rivera.model.Pricelist;
+import com.tim20.rivera.model.Tag;
+import com.tim20.rivera.repository.CottageOwnerRepository;
+import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.repository.PricelistRepository;
+import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;

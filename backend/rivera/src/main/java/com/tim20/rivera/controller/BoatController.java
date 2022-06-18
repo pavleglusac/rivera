@@ -1,12 +1,9 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.BoatDTO;
 import com.tim20.rivera.dto.BoatProfileDTO;
 import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.Boat;
-import com.tim20.rivera.model.Boat;
-import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.service.BoatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

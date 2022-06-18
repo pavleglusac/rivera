@@ -1,8 +1,13 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.model.*;
+import com.tim20.rivera.model.AvailabilityPattern;
 import com.tim20.rivera.model.Calendar;
-import com.tim20.rivera.repository.*;
+import com.tim20.rivera.model.Cottage;
+import com.tim20.rivera.model.Rentable;
+import com.tim20.rivera.repository.AvailabilityRepository;
+import com.tim20.rivera.repository.CalendarRepository;
+import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.util.Availability;
 import com.tim20.rivera.util.AvailabilityRequest;
 import org.springframework.beans.factory.annotation.Autowired;

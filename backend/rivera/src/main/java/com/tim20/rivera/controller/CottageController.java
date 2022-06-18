@@ -1,7 +1,8 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.*;
+import com.tim20.rivera.model.Cottage;
+import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.service.*;
 import com.tim20.rivera.util.Availability;

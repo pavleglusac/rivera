@@ -1,22 +1,19 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.ClientRepository;
-import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.model.Client;
+import com.tim20.rivera.model.Rentable;
+import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.ReviewType;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.repository.ReservationRepository;
-import org.apache.tomcat.jni.Local;
-import com.tim20.rivera.repository.*;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.Format;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
