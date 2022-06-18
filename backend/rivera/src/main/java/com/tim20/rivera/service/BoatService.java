@@ -7,6 +7,7 @@ import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -42,6 +43,9 @@ public class BoatService {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private ConfigurableEnvironment env;
 
     @Autowired
     private DiscountService discountService;
@@ -85,7 +89,14 @@ public class BoatService {
         for (var x : boat.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + boat.getId());
         }
-        boat.setOwner((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
+        if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            boat.setOwner(boatOwnerRepository.getById("bowner"));
+            List<Pricelist> pricelist = new ArrayList<>();
+            boat.setPricelists(pricelist);
+        }
+        else {
+            boat.setOwner((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
+        }
         boatRepository.save(boat);
 
         List<String> paths;
@@ -93,9 +104,11 @@ public class BoatService {
         paths = savePictures(boat, multipartFiles);
 
         boat.setPictures(paths);
-        boat.setProfilePicture(paths.get(0));
+        if(paths.size() > 0) {
+            boat.setProfilePicture(paths.get(0));
+        }
         boatRepository.save(boat);
-        boatOwnerRepository.save(temporaryOwner);
+        boatOwnerRepository.save((BoatOwner) boat.getOwner());
         return boat.getId();
     }
 
