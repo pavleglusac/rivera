@@ -5,6 +5,7 @@ import com.tim20.rivera.dto.DiscountOfferDTO;
 import com.tim20.rivera.dto.DiscountProfileDTO;
 import com.tim20.rivera.model.Discount;
 import com.tim20.rivera.model.Owner;
+import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.DiscountRepository;
 import com.tim20.rivera.repository.RentableRepository;
@@ -29,6 +30,8 @@ public class DiscountService {
     private RentableRepository rentableRepository;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private EmailService emailService;
 
     public DiscountProfileDTO discountTODPDto(Discount discount) {
         DiscountProfileDTO discountProfileDTO = new DiscountProfileDTO();
@@ -102,6 +105,26 @@ public class DiscountService {
 
     public void addDiscount(DiscountDTO discountDTO) {
         discountRepository.save(discountDTOToDiscount(discountDTO));
+        sendNotificationsToSubscribed(rentableRepository.getById(discountDTO.getRentableId()), discountDTO);
+    }
+
+    private void sendNotificationsToSubscribed(Rentable rentable, DiscountDTO discountDTO) {
+        for(String username : rentable.getSubscribed()) {
+            try {
+                emailService.sendNotificaitionToUsername(username, "New Discount!",
+                        "Dear @" + username + ",<br><br>We are notifying you that there is a new special offer! " +
+                                rentable.getName() + " is available for the period of "
+                                + discountDTO.getStartDateTime().replace("T", " ") + " to " + discountDTO.getEndDateTime().replace("T", " ") +
+                                ". Cost of this reservation is " + discountDTO.getPrice() + " for " + discountDTO.getCapacity() + " people. " +
+                                "Hurry up and don't miss this opportunity!<br>" +
+                                "You are subscribed to " + rentable.getName() + " so that is why you got this email. If you " +
+                                "want to unsubscribe, please go to rentable page and click 'Unsubscribe' or go to your account settings." +
+                                "<br><br>Sincerely,<br> Rivera.");
+            }
+            catch (Exception e) {
+                System.out.println("email not sent!");
+            }
+        }
     }
 
     private Discount discountDTOToDiscount(DiscountDTO discountDTO){

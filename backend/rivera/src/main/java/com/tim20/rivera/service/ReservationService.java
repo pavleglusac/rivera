@@ -9,6 +9,7 @@ import com.tim20.rivera.repository.ReservationRepository;
 import org.apache.tomcat.jni.Local;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.text.Format;
@@ -34,10 +35,6 @@ public class ReservationService {
     @Autowired
     private OwnerService ownerService;
     @Autowired
-    private CottageRepository cottageRepository;
-    @Autowired
-    private CottageService cottageService;
-    @Autowired
     private RentableService rentableService;
     @Autowired
     private RentableRepository rentableRepository;
@@ -59,17 +56,15 @@ public class ReservationService {
                 .collect(Collectors.toList()));
     }
 
-
     private List<ReservationDTO> checkTags(List<ReservationDTO> reservationDTOS, List<String> tags) {
         List<ReservationDTO> correctRentables = new ArrayList<>();
         for (ReservationDTO r : reservationDTOS) {
-             RentableDTO c = rentableService.rentableToDto(rentableRepository.findById(r.getRentable().getId()).get());
-             if ((c.getTags().containsAll(tags) || tags.size() == 0))
+            RentableDTO c = rentableService.rentableToDto(rentableRepository.findById(r.getRentable().getId()).get());
+            if ((c.getTags().containsAll(tags) || tags.size() == 0))
                 correctRentables.add(r);
-            }
+        }
         return correctRentables;
     }
-
 
     public List<ReservationDTO> sortReservations(String sortParam, List<ReservationDTO> reservationDTOS) {
         return switch (sortParam) {
@@ -90,7 +85,7 @@ public class ReservationService {
         dto.setPrice(reservation.getPrice());
         dto.setAdditionalServices(reservation.getAdditionalServices());
         dto.setReport(null);
-        if(reservation.getReservationReport() != null) {
+        if (reservation.getReservationReport() != null) {
             ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
             reservationReportDTO.setId(reservation.getReservationReport().getId());
             reservationReportDTO.setReservationReportType(reservation.getReservationReport().getReservationReportType());
@@ -128,11 +123,11 @@ public class ReservationService {
     }
 
     private List<ClientReservationDTO> getReservationsByDate(List<ClientReservationDTO> reservations, ReservationSearch search) {
-        if(search.getUpcoming().equals("upcoming"))
+        if (search.getUpcoming().equals("upcoming"))
             return reservations.stream().filter(ClientReservationDTO::isUpcoming).toList();
-        if(search.getUpcoming().equals("past"))
-            return reservations.stream().filter(a-> !a.isUpcoming()).toList();
-        if(search.getUpcoming().equals("date")) {
+        if (search.getUpcoming().equals("past"))
+            return reservations.stream().filter(a -> !a.isUpcoming()).toList();
+        if (search.getUpcoming().equals("date")) {
             LocalDate date = LocalDate.parse(search.getDate());
             return reservations.stream().filter(a -> a.isBetween(date)).toList();
         }
@@ -155,48 +150,22 @@ public class ReservationService {
         Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
         reservation.setOwnerIncomePercentage(ownerPercentage);
         reservationRepository.save(reservation);
-        sendConfirmationMail(reservation);
+        try {
+            emailService.sendReservationNotificaition(reservation);
+        } catch (Exception e) {
+            System.out.println("Emails not sent!");
+        }
         return reservation;
     }
 
-    private void sendConfirmationMail(Reservation reservation) {
-        try {
-            emailService.sendNotificaitionToUsername(reservation.getClient().getUsername(), "Reservation details",
-                    "Dear " + reservation.getClient().getUsername() + ",<br><br>We are confirming" +
-                            "that you have successfully reserved " + reservation.getRentable().getName() + " for the period of "
-                            + reservation.getStartDateTime().toString() + " to " + reservation.getEndDateTime().toString() +
-                            ". We are sure you will have good time! Remember to leave a review after your reservation." +
-                            "If you can't make it, just cancel your reservation 3 days in advance in order to avoid getting a penalty." +
-                            "<br><br>Sincerely,<br> Rivera.");
-
-            emailService.sendNotificaitionToUsername(reservation.getRentable().getOwner().getUsername(), "New Reservation!",
-                    "Dear " + reservation.getClient().getUsername() + ",<br><br>We are informing you that " +
-                            reservation.getClient().getName() + " has reserved " + reservation.getRentable().getName() + " for the period of "
-                            + reservation.getStartDateTime().toString() + " to " + reservation.getEndDateTime().toString() +
-                            ". Cost of the reservation is " + reservation.getPrice() + ". Additional services client required are: " +
-                            String.join(", ", reservation.getAdditionalServices()) +
-                            "<br><br>Sincerely,<br> Rivera.");
-        } catch (Exception e) {
-            System.out.println("emails not sent");
-        }
-    }
-
     public Double calculatePriceForReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
-        System.out.println("START: " + start);
-        System.out.println("END: " + end);
         long hours = ChronoUnit.HOURS.between(start, end);
-        if (ChronoUnit.MINUTES.between(start, end) % 60 > 0)
-            hours++;
-        System.out.println("HOURS:" + hours);
+        if (ChronoUnit.MINUTES.between(start, end) % 60 > 0) hours++;
         long days = ChronoUnit.DAYS.between(start, end);
-        if (hours % 24 > 0)
-            days++;
-        System.out.println("DAYS:" +days);
+        if (hours % 24 > 0) days++;
         Rentable rentable = rentableRepository.getById(rentableId);
         double pricePerHour = hours * rentable.getCurrentPricelist().getPricePerHour();
-        System.out.println("PRICE PER HOUR:" +pricePerHour);
         double pricePerDay = days * rentable.getCurrentPricelist().getPricePerDay();
-        System.out.println("PRICE PER DAY:" + pricePerDay);
         Double dicount = clientService.calculateDiscount(client);
         return min(pricePerHour, pricePerDay) * (100 - dicount) / 100;
     }
@@ -226,11 +195,11 @@ public class ReservationService {
     }
 
     private List<OwnerReservationDTO> getOwnerReservationsByDate(List<OwnerReservationDTO> reservations, ReservationSearch search) {
-        if(search.getUpcoming().equals("upcoming"))
+        if (search.getUpcoming().equals("upcoming"))
             return reservations.stream().filter(OwnerReservationDTO::isUpcoming).toList();
-        if(search.getUpcoming().equals("past"))
-            return reservations.stream().filter(a-> !a.isUpcoming()).toList();
-        if(search.getUpcoming().equals("date")) {
+        if (search.getUpcoming().equals("past"))
+            return reservations.stream().filter(a -> !a.isUpcoming()).toList();
+        if (search.getUpcoming().equals("date")) {
             LocalDate date = LocalDate.parse(search.getDate());
             return reservations.stream().filter(a -> a.isBetween(date)).toList();
         }
@@ -250,12 +219,12 @@ public class ReservationService {
 
     private boolean dateInbetween(LocalDateTime startDateTime, LocalDateTime endDateTime, String searchStart, String searchEnd) {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        if(!Objects.equals(searchStart, "")) {
+        if (!Objects.equals(searchStart, "")) {
             LocalDateTime start = LocalDate.parse(searchStart, formatter).atStartOfDay();
-            if(startDateTime.isBefore(start) || endDateTime.isBefore(start))
+            if (startDateTime.isBefore(start) || endDateTime.isBefore(start))
                 return false;
         }
-        if(!Objects.equals(searchEnd, "")) {
+        if (!Objects.equals(searchEnd, "")) {
             LocalDateTime end = LocalDate.parse(searchEnd, formatter).atStartOfDay();
             return !startDateTime.isAfter(end) && !endDateTime.isAfter(end);
         }
@@ -277,7 +246,7 @@ public class ReservationService {
 
     public void addReview(Integer reservationId, Client client, String reviewFor, String reviewText, double rating, ReviewType type) {
         Reservation reservation = reservationRepository.getById(reservationId);
-        if(reviewFor.equals("entity"))
+        if (reviewFor.equals("entity"))
             rentableService.addReview(reservation.getRentable(), client, reviewText, rating, type);
         else
             ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating, type);

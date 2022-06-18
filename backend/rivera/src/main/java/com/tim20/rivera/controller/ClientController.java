@@ -118,8 +118,8 @@ public class ClientController {
         LocalDateTime startDateTime;
         LocalDateTime endDateTime;
         try {
-            startDateTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
-            endDateTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
+            startDateTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            endDateTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
         } catch(Exception e) {
             startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

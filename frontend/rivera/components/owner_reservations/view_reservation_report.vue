@@ -1,13 +1,12 @@
 <template>
 	<div
 	>
+		<h3><font-awesome-icon icon="pen"/> Report</h3>
 			<form id="registrationForm">
 				<div class="form-row">
 					<div class="form-group col-4">
 						<label>Sanction</label>
-						<input
-							type="text"
-							class="form-control form-control-lg"
+						<b-input
 							id="sanction"
 							v-model="sanction"
 							disabled
@@ -15,9 +14,7 @@
 					</div>
 					<div class="form-group col-4">
 						<label>Showed up</label>
-						<input
-							type="text"
-							class="form-control form-control-lg"
+						<b-input
 							id="showedUp"
 							v-model="showedUp"
 							disabled
@@ -25,9 +22,7 @@
 					</div>
 					<div class="form-group col-4">
 						<label>Report type</label>
-						<input
-							type="text"
-							class="form-control form-control-lg"
+						<b-input
 							id="type"
 							v-model="type"
 							disabled
@@ -37,9 +32,8 @@
 				<div class="form-row">
 					<div class="form-group col-12">
 						<label>Text</label>
-						<textarea
+						<b-textarea
 							placeholder="Enter text"
-							class="form-control form-control-lg"
 							id="text"
 							v-model="text"
 							disabled

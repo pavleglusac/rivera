@@ -28,11 +28,11 @@
           </div>
           <div class="text-secondary" style="font-size: 1em">
             <font-awesome-icon icon="calendar" />&nbsp; Start:
-            {{ new Date(entity.start).toDateString() }}
+            {{ new Date(entity.start).toString().substring(4, 21) }}
           </div>
           <div class="text-secondary" style="font-size: 1em">
             &nbsp;&nbsp;&nbsp;&nbsp; End:
-            {{ new Date(entity.end).toDateString() }}
+            {{ new Date(entity.end).toString().substring(4, 21) }}
           </div>
           <b-button
             @click="reserveAppointment"

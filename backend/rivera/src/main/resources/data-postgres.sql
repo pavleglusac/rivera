@@ -184,7 +184,6 @@ INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8,
 INSERT INTO rentable_rules_of_conduct (rentable_id, rules_of_conduct) VALUES (8, 'no destruction of property');
 
 
-
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (1, 1);
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (1, 4);
 INSERT INTO rentable_tags (rentable_id, tags_id) VALUES (1, 2);
@@ -249,3 +248,8 @@ INSERT INTO reservation_report (reservation_report_type, resolved, sanction, sho
 
 INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id)
                         VALUES (2, false, false, false, 'Client did show up', 3);
+
+INSERT INTO cottage_rooms(cottage_id,rooms,rooms_key) values (4,1,1);
+INSERT INTO cottage_rooms(cottage_id,rooms,rooms_key) values (4,3,2);
+INSERT INTO cottage_rooms(cottage_id,rooms,rooms_key) values (5,4,1);
+INSERT INTO cottage_rooms(cottage_id,rooms,rooms_key) values (5,5,2);

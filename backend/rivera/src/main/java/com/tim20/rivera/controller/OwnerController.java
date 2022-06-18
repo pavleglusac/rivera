@@ -36,21 +36,22 @@ public class OwnerController {
     }
 
     @GetMapping(path = "get-attendance")
-    public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type){
+    public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type) {
         return ownerService.getAttendance(startDate, endDate, type);
     }
+
     @GetMapping(path = "get-income")
-    public List<IncomeFrontDTO> getIncome(String startDate, String endDate){
+    public List<IncomeFrontDTO> getIncome(String startDate, String endDate) {
         return ownerService.getIncome(startDate, endDate);
     }
 
-    @GetMapping(path="get-owner-loyalty")
+    @GetMapping(path = "get-owner-loyalty")
     public OwnerLoyaltyDTO getOwnerLoyalty(@RequestParam("username") String username) {
         return ownerService.getOwnerLoyalty(username);
     }
 
-    @PostMapping(path="add-discount")
-    public void addDiscount(DiscountDTO discountDTO){
+    @PostMapping(path = "add-discount")
+    public void addDiscount(DiscountDTO discountDTO) {
         discountService.addDiscount(discountDTO);
     }
 }

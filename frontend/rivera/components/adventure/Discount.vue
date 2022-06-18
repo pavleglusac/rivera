@@ -51,6 +51,8 @@ export default {
       if (day < 10) day = "0" + day;
       var minutes = current_datetime.getMinutes();
       if (minutes < 10) minutes = "0" + minutes;
+      var hours = current_datetime.getHours();
+      if (hours < 10) hours = "0" + hours;
       return (
         day +
         "/" +
@@ -58,7 +60,7 @@ export default {
         "/" +
         current_datetime.getFullYear() +
         " " +
-        current_datetime.getHours() +
+        hours +
         ":" +
         minutes
       );
@@ -76,7 +78,7 @@ export default {
             console.log(resp.data);
             this.$axios
               .post(
-                `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime}&end=${endDateTime}&price=${price}`
+                `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=`
               )
               .then((response) => {
                 console.log(response.data);
