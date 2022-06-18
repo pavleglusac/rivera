@@ -11,7 +11,7 @@
     </div>
     <b-list-group v-if="subscribed.length > 0">
       <b-list-group-item v-for="entity in subscribed" :key="entity.id" class="d-flex align-items-center">
-        <b-avatar variant="info" :src='"http://localhost:8080" + entity.profilePicture' class="mr-3"></b-avatar>
+        <b-avatar variant="info" :src='process.env.backend + entity.profilePicture' class="mr-3"></b-avatar>
         <span @click="goToProfile(entity)" style="cursor: pointer" class="mr-auto">
         <font-awesome-icon v-if="entity.kind == 'ADVENTURE'" icon="fish" />
         <font-awesome-icon v-else-if="entity.kind == 'COTTAGE'" icon="house" />

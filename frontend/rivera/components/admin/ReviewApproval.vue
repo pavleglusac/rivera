@@ -5,7 +5,7 @@
         <div class="box-top">
           <div class="profile">
             <div class="profile-img">
-              <img :src="'http://localhost:8080' + review.clientImage" />
+              <img :src="process.env.backend + review.clientImage" />
             </div>
             <div class="name-user">
               <strong

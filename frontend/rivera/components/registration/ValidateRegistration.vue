@@ -250,7 +250,7 @@ export default {
 		getUser() {
 			let that = this;
 			this.$axios
-				.get("/api/admin/owner?username=" + this.usernameToRegister)
+				.get("/api/admin/owner-request?username=" + this.usernameToRegister)
 				.then((resp) => {
 					let owner = resp.data;
 					that.email = owner.email;

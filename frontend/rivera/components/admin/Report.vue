@@ -130,9 +130,9 @@ export default {
 		this.showedUp = this.report.showedUp;
 		this.text = this.report.text;
 		this.clientName = this.report.clientName;
-		this.clientImage = 'http://localhost:8080' + this.report.clientImage;
+		this.clientImage = process.env.backend + this.report.clientImage;
 		this.ownerName = this.report.ownerName;
-		this.ownerImage = 'http://localhost:8080' + this.report.ownerImage;
+		this.ownerImage = process.env.backend + this.report.ownerImage;
 		this.text = this.report.text;	
 		this.id = this.report.id;
 		this.sanction = this.report.sanction;
@@ -163,9 +163,9 @@ export default {
 			this.showedUp = newVal.showedUp;
 			this.text = newVal.text;
 			this.clientName = newVal.clientName;
-			this.clientImage = 'http://localhost:8080' + newVal.clientImage;
+			this.clientImage = process.env.backend + newVal.clientImage;
 			this.ownerName = newVal.ownerName;
-			this.ownerImage = 'http://localhost:8080' + newVal.ownerImage;
+			this.ownerImage = process.env.backend + newVal.ownerImage;
 			this.text = newVal.text;
 			this.id = newVal.id;
 			this.sanction = newVal.sanction;

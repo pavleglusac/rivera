@@ -38,7 +38,7 @@ export default {
           that.reviews = resp.data;
           console.log(resp.data);
           that.reviews.forEach(
-            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+            (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
         });
     },
