@@ -33,7 +33,7 @@ public class PersonController {
 
     @PostMapping(path = "update-person")
     public ResponseEntity<String> updatePerson(PersonDTO personDTO) {
-        personService.updatePerson(personDTO);
+        Boolean success = personService.updatePerson(personDTO);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

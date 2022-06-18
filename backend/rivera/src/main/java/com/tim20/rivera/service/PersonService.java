@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -43,9 +44,6 @@ public class PersonService{
 
     @Autowired
     private TokenUtils tokenUtils;
-
-    @Autowired
-    private FishingInstructorRepository fishingInstructorRepository;
 
     @Autowired
     private TerminationRepository terminationRepository;
@@ -127,13 +125,15 @@ public class PersonService{
         }
     }
 
-    public void updatePerson(PersonDTO dto) {
+    @org.springframework.transaction.annotation.Transactional(readOnly = false)
+    public boolean updatePerson(PersonDTO dto) {
         Person person = personRepository.findByUsername(dto.getUsername());
         if(person == null) {
-            return;
+            return false;
         }
         copyDTOToPerson(person, dto);
         personRepository.save(person);
+        return true;
     }
 
     public void updatePersonPhoto(String username, MultipartFile photo) throws IOException {
