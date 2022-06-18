@@ -163,7 +163,7 @@ public class AdventureService {
         adventure.setRulesOfConduct(dto.getRulesOfConduct());
         adventure.setPictures(dto.getPictures());
 
-        Pricelist pricelist = createPricelist(adventure, dto);
+        Pricelist pricelist = createPricelist(dto);
 
         if (adventure.getPricelists() != null && !adventure.getPricelists().isEmpty()) {
             Pricelist currPricelist = adventure.getCurrentPricelist();
@@ -185,7 +185,7 @@ public class AdventureService {
         adventure.setOwner(temporaryOwner);
     }
 
-    private Pricelist createPricelist(Adventure adventure, AdventureDTO dto) {
+    public Pricelist createPricelist(AdventureDTO dto) {
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
