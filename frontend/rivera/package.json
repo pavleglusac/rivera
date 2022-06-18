@@ -7,7 +7,12 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "serve": "npm run dev"
+    "serve": "npm run dev",
+    "heroku-postbuild": "nuxt build"
+  },
+  "engines": {
+    "node": "12.22.9",
+    "npm": "8.5.1"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
