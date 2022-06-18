@@ -1,26 +1,72 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+orbs: 
+  sonarcloud: sonarsource/sonarcloud@1.1.1
 
-# Define a job to be invoked later in a workflow.
-# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+  build_backend:
+    working_directory: ~/rivera
     docker:
-      - image: cimg/base:stable
-    # Add steps to the job
-    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+      - image: cimg/openjdk:17.0
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
     steps:
       - checkout
+      - run: cd backend/rivera
+      - run: ls -l
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+          name: Build
+          command: cd backend/rivera && mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=mrsisatim20
+  deploy_backend:
+     docker:
+       - image: cimg/openjdk:17.0
+         auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+     steps:
+       - checkout
+       - run:
+            name: Deploy backend
+            command: git subtree push --prefix backend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/rivera-backend-isa.git master
+  build_frontend:
+    working_directory: ~/test-rivera
+    docker:
+      - image: circleci/node:10.16.3
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+    steps:
+      - checkout
+      - run: cd frontend/rivera
+      - run: ls -l 
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@5"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+          - ./node_modules
+  deploy_frontend:
+    docker:
+      - image: circleci/node:10.16.3
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+    steps:
+       - checkout
+       - run:
+            name: Deploy frontend
+            command: git subtree push --prefix frontend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/the-rivera-app.git master
+  
 workflows:
-  say-hello-workflow:
+  sample:
     jobs:
-      - say-hello
+      - build_backend
+      - deploy_backend
+      - build_frontend
+      - deploy_frontend
