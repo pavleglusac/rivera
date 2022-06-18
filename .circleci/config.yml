@@ -27,7 +27,7 @@ jobs:
        - checkout
        - run:
             name: Deploy backend
-            command: git subtree push --prefix backend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/rivera-backend-isa.git master
+            command: git subtree push --prefix backend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/the-rivera-app-backend.git master
   build_frontend:
     working_directory: ~/rivera
     docker:
