@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-@Where(clause = "(select c.deleted from client c where c.username = client_id) = false and" +
-                "(select r.deleted from rentable r where r.id = rentable_id) = false")
 public class Reservation {
 
     @Id

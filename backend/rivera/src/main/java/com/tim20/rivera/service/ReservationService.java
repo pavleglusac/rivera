@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import static java.lang.Double.min;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;

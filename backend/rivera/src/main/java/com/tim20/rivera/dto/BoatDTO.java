@@ -1,6 +1,7 @@
 package com.tim20.rivera.dto;
 
 import com.tim20.rivera.model.BoatType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class BoatDTO {
     private Integer id;
     private String name;
@@ -29,4 +31,5 @@ public class BoatDTO {
     private Integer enginesNumber;
     private Double enginePower;
     private Double maxSpeed;
+
 }
