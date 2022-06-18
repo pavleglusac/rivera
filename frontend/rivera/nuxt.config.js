@@ -19,7 +19,7 @@ export default {
         port: process.env.PORT || 3000
     },
     env: {
-      backend: process.env.NODE_ENV !== 'production' ? 'http://localhost:8080' : 'http://test-rivera-backend.herokuapp.com'
+      backend: process.env.NODE_ENV !== 'production' ? 'http://localhost:8080' : 'http://the-rivera-app-backend.herokuapp.com'
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -72,7 +72,7 @@ export default {
     },
 
     proxy: {
-        '/api/': { target: 'http://test-rivera-backend.herokuapp.com/api', pathRewrite: { '^/api/': '' } }
+        '/api/': { target: 'http://the-rivera-app-backend.herokuapp.com/api', pathRewrite: { '^/api/': '' } }
     },
     // Build Configuration: https://go.nuxtjs.dev/config-build
 }
