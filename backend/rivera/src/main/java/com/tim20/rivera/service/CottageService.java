@@ -129,7 +129,13 @@ public class CottageService {
         List<String> tagsCopy = new ArrayList<>(dto.getTags());
         List<String> tagsCopy2 = new ArrayList<>(dto.getTags());
         List<String> servicesCopy = new ArrayList<>(dto.getServices());
-        List<String> pictuesCopy = new ArrayList<>(dto.getPictures());
+        List<String> picturesCopy;
+        if(dto.getPictures() == null){
+            picturesCopy = new ArrayList<>();
+        }
+        else{
+            picturesCopy = new ArrayList<>(dto.getPictures());
+        }
         List<String> rulesCopy = new ArrayList<>(dto.getRulesOfConduct());
         tagService.addTagsIfNotPresent(tagsCopy);
         cottage.setTags(tagService.getTagsByNames(tagsCopy2));
@@ -140,7 +146,7 @@ public class CottageService {
         cottage.setRooms(dtoRoomsToRooms(dto.getRooms()));
         cottage.setRulesOfConduct(rulesCopy);
         cottage.setAddress(dto.getAddress());
-        cottage.setPictures(pictuesCopy);
+        cottage.setPictures(picturesCopy);
         cottage.setCity(dto.getCity());
         cottage.setCountry(dto.getCountry());
         cottage.setAdditionalServices(servicesCopy);
