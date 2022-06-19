@@ -294,10 +294,10 @@ public class BoatService {
     }
 
     public List<BoatDTO> searchBoats(SearchParams searchParams) {
-        List<BoatDTO> cottages = checkTags(this.getBoatsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
-        return sortBoats(searchParams.getOrderBy(), cottages.stream().limit(searchParams.getNumberOfResults())
-                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList()));
+        List<BoatDTO> boats = checkTags(this.getBoatsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        return filter(searchParams.getSearch().toLowerCase(), sortBoats(searchParams.getOrderBy(),
+                boats.stream().limit(searchParams.getNumberOfResults())
+                        .collect(Collectors.toList())));
     }
 
     public List<BoatDTO> getBoats() {

@@ -289,9 +289,9 @@ public class AdventureService {
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
         List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventuresOfOwner(searchParams.getOwnerUsername()), searchParams.getTags()), searchParams);
-        return sortAdventures(searchParams.getOrderBy(), adventures.stream().limit(searchParams.getNumberOfResults())
-                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList()));
+        return filter(searchParams.getSearch().toLowerCase(), sortAdventures(searchParams.getOrderBy(),
+                adventures.stream().limit(searchParams.getNumberOfResults())
+                        .collect(Collectors.toList())));
     }
 
     public List<AdventureDTO> getAdventuresOfOwner(String ownerUsername) {

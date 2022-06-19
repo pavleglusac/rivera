@@ -258,7 +258,7 @@ export default {
       },
       cottage: {
         description: "Go checkout your calendar and book this adorable cottage for your next family gathering.",
-        name: "Cure family getaway",
+        name: "Cute family getaway",
         country: "Serbia",
         city: "Bajina bašta",
         averageScore: 4.8,
