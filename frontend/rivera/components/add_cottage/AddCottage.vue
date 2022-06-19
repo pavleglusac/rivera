@@ -21,7 +21,7 @@
 						id="inputEmail4"
 						placeholder="Name"
 						v-bind:class="{ 'error-boarder': $v.name.$invalid && nameClicked }"
-						@click="nameClicked = true"
+						@keydown="nameClicked = true"
 					/>
 					<ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'">
 					</ErrorDiv>
@@ -38,7 +38,7 @@
 						v-bind:class="{
 							'error-boarder': $v.address.$invalid && addressClicked,
 						}"
-						@click="addressClicked = true"
+						@keydown="addressClicked = true"
 					/>
 					<ErrorDiv
 						v-if="addressClicked"
@@ -59,7 +59,7 @@
 						id="inputCity"
 						placeholder="City"
 						v-bind:class="{ 'error-boarder': $v.city.$invalid && cityClicked }"
-						@click="cityClicked = true"
+						@keydown="cityClicked = true"
 					/>
 					<ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'">
 					</ErrorDiv>
@@ -73,7 +73,7 @@
 						v-bind:class="{
 							'error-boarder': $v.country.$invalid && countryClicked,
 						}"
-						@click="countryClicked = true"
+						@keydown="countryClicked = true"
 					>
 						<option selected>Choose...</option>
 						<option
@@ -105,7 +105,7 @@
 						v-bind:class="{
 							'error-boarder': $v.description.$invalid && descriptionClicked,
 						}"
-						@click="descriptionClicked = true"
+						@keydown="descriptionClicked = true"
 					></b-textarea>
 					<ErrorDiv
 						v-if="descriptionClicked"
@@ -169,7 +169,7 @@
 							'error-boarder':
 								$v.cancellationTerms.$invalid && cancellationTermsClicked,
 						}"
-						@click="cancellationTermsClicked = true"
+						@keydown="cancellationTermsClicked = true"
 					/>
 					<ErrorDiv
 						v-if="cancellationTermsClicked"
@@ -483,7 +483,6 @@ export default {
 			addRoom();
 		};
 
-
 		function addRoom() {
 			var tbodyRef = document
 				.getElementById("addedRooms")
@@ -494,17 +493,19 @@ export default {
 			var numberOfBedsText = document.createTextNode(
 				document.getElementById("numberOfBeds").value
 			);
-      if(!numberOfRoomsText.textContent || !numberOfBedsText.textContent){
-        alert("Number of rooms/beds can not be empty");
-        return;
-      }
+			if (!numberOfRoomsText.textContent || !numberOfBedsText.textContent) {
+				alert("Number of rooms/beds can not be empty");
+				return;
+			}
 
 			var removeText = document.createTextNode("Remove");
 
 			var table = document.getElementById("addedRooms");
 			for (var i = 1, row; (row = table.rows[i]); i++) {
 				if (numberOfBedsText.textContent == row.cells[1].innerText) {
-					let confirmAction = confirm("Entry already exists. Would you like to overwrite it?");
+					let confirmAction = confirm(
+						"Entry already exists. Would you like to overwrite it?"
+					);
 					if (confirmAction) {
 						updateRoom();
 					} else {
@@ -557,18 +558,20 @@ export default {
 		upload() {
 			var formData = new FormData();
 			var images = document.getElementById("files");
-			if (this.$v.$invalid || document.getElementById("addedRooms").rows <= 1) {
+			if (this.$v.$invalid || document.getElementById("addedRooms").rows.length <= 1) {
 				console.log(this.$v);
-        alert("Fields must not be empty! Please fill in empty fields and try again!");
-        this.nameClicked = true;
-        this.addressClicked= true;
-        this.cityClicked= true;
-        this.countryClicked= true;
-        this.descriptionClicked= true;
-        this.tagsClicked= true;
-        this.rulesClicked= true;
-        this.serviceClicked= true;
-        this.cancellationTermsClicked= true;
+				alert(
+					"Fields must not be empty! Please fill in empty fields and try again!"
+				);
+				this.nameClicked = true;
+				this.addressClicked = true;
+				this.cityClicked = true;
+				this.countryClicked = true;
+				this.descriptionClicked = true;
+				this.tagsClicked = true;
+				this.rulesClicked = true;
+				this.serviceClicked = true;
+				this.cancellationTermsClicked = true;
 				//$("#emptyErrorModal").modal("show");
 				$("#addCottageForm").submit(function (e) {
 					e.preventDefault();
