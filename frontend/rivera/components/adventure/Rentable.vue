@@ -406,6 +406,11 @@ export default {
     showAddDiscountModal() {
       this.$bvModal.show("addDiscountModal");
     },
+    isDateAfterToday(date) {
+      return (
+        new Date(date.toDateString()) > new Date(new Date().toDateString())
+      );
+    },
     loadAdventure() {
       let that = this;
       this.$axios
@@ -429,7 +434,11 @@ export default {
           that.services = adventure.services;
           that.tags = adventure.tags;
           that.canBeChanged = !adventure.canBeChanged;
-          that.discounts = adventure.discounts;
+          for(var disc in adventure.discounts){
+              var startDate = adventure.discounts[disc].start;
+              if(!adventure.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
+                that.discounts.push(adventure.discounts[disc]);
+          }
           that.discounts.forEach(
             (x) => (
               (x.start = x.start.replaceAll("T", " ")),
@@ -487,7 +496,11 @@ export default {
           that.services = cottage.services;
           that.tags = cottage.tags;
           that.canBeChanged = !cottage.canBeChanged;
-          that.discounts = cottage.discounts;
+          for(var disc in cottage.discounts){
+              var startDate = cottage.discounts[disc].start;
+              if(!cottage.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
+                that.discounts.push(cottage.discounts[disc]);
+          }
           for (var x of that.discounts) {
             console.log("---------------" + x.start);
           }
@@ -564,7 +577,11 @@ export default {
           that.boatLength = boat.length;
           that.capacity = boat.capacity;
           that.canBeChanged = !boat.canBeChanged;
-          that.discounts = boat.discounts;
+          for(var disc in boat.discounts){
+              var startDate = boat.discounts[disc].start;
+              if(!boat.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
+                that.discounts.push(boat.discounts[disc]);
+          }
           that.discounts.forEach(
             (x) => (
               (x.start = x.start.replaceAll("T", " ")),

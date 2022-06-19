@@ -15,4 +15,5 @@ public class DiscountDTO {
     Double price;
     List<String> tags;
     Integer rentableId;
+    boolean reserved;
 }

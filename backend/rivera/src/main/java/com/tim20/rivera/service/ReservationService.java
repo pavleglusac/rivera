@@ -41,6 +41,8 @@ public class ReservationService {
     private EmailService emailService;
     @Autowired
     private RulesRepository rulesRepository;
+    @Autowired
+    private DiscountService discountService;
 
     public List<ReservationDTO> getReservationsByOwner() {
         return null;
@@ -138,7 +140,8 @@ public class ReservationService {
     }
 
     //@Transactional(readOnly = false)
-    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price, List<String> additionalServices) {
+    public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start,
+                                      LocalDateTime end, Double price, List<String> additionalServices, String discountId) {
         //Rentable rentable = rentableRepository.findOneById(rentableId); TODO: fix locking
         Rentable rentable = rentableRepository.findById(rentableId).get();
         Reservation reservation = new Reservation();
@@ -151,6 +154,7 @@ public class ReservationService {
         reservation.setClient(client);
         Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
         reservation.setOwnerIncomePercentage(ownerPercentage);
+        discountService.setDiscountInactive(discountId);
         reservationRepository.save(reservation);
         try {
             emailService.sendReservationNotificaition(reservation);

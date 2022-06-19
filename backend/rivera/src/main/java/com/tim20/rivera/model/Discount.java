@@ -20,6 +20,8 @@ public class Discount {
     private LocalDateTime endDateTime;
     private Double price;
     private Integer capacity;
+    private boolean reserved;
+
     @ManyToMany
     private List<Tag> tags;
 

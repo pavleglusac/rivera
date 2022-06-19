@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +39,7 @@ public class DiscountService {
         discountProfileDTO.setTags(discount.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
         discountProfileDTO.setCapacity(discount.getCapacity());
         discountProfileDTO.setPrice(discount.getPrice());
+        discountProfileDTO.setReserved(discount.isReserved());
         return discountProfileDTO;
     }
 
@@ -58,6 +56,7 @@ public class DiscountService {
         discountOfferDTO.setCountry(discount.getRentable().getCountry());
         discountOfferDTO.setAverageScore(discount.getRentable().getAverageScore());
         discountOfferDTO.setPicture(discount.getRentable().getPictures().get(0));
+        discountOfferDTO.setReserved(discount.isReserved());
         return discountOfferDTO;
     }
 
@@ -138,7 +137,17 @@ public class DiscountService {
         discount.setCapacity(discountDTO.getCapacity());
         tagService.addTagsIfNotPresent(discountDTO.getTags());
         discount.setTags(tagService.getTagsByNames(discountDTO.getTags()));
+        discount.setReserved(discount.isReserved());
         discount.setRentable(rentableRepository.getById(discountDTO.getRentableId()));
         return discount;
+    }
+
+    public void setDiscountInactive(String discountId) {
+        if(discountId == null || discountId.isEmpty()){
+            return;
+        }
+        Discount discount = discountRepository.getById(Integer.parseInt(discountId));
+        discount.setReserved(true);
+        discountRepository.save(discount);
     }
 }

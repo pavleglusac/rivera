@@ -5,6 +5,7 @@ import com.tim20.rivera.model.Client;
 import com.tim20.rivera.model.Reservation;
 import com.tim20.rivera.model.ReviewType;
 import com.tim20.rivera.service.ClientService;
+import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,8 @@ public class ClientController {
 
     @Autowired
     private ReservationService reservationService;
+    @Autowired
+    private DiscountService discountService;
 
     @GetMapping(path = "/get-clients")
     public List<Client> getClients() {
@@ -112,7 +115,8 @@ public class ClientController {
     }
 
     @PostMapping(path = "reserve")
-    public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId, String start, String end, Double price, String additionalServices) {
+    public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId,
+                                          String start, String end, Double price, String additionalServices, String discountId) {
         Client client = clientService.findByUsername(username);
         LocalDateTime startDateTime;
         LocalDateTime endDateTime;
@@ -123,7 +127,8 @@ public class ClientController {
             startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
-        Reservation reservation = reservationService.addReservation(client, rentableId, startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")));
+        Reservation reservation = reservationService.addReservation(client, rentableId,
+                startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")),discountId);
         clientService.addReservation(username, reservation);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }

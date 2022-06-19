@@ -78,7 +78,8 @@ export default {
             console.log(resp.data);
             this.$axios
               .post(
-                `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}&start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=`
+                `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}
+                &start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=&discountId=${this.discount.id}`
               )
               .then((response) => {
                 console.log(response.data);

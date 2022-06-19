@@ -19,4 +19,5 @@ public class DiscountOfferDTO {
     String city;
     String country;
     String picture;
+    boolean reserved;
 }
