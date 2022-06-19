@@ -8,6 +8,7 @@
           :name="name"
           :score="score"
           :canBeChanged="!canBeChanged"
+          :isOwner = "canChange"
           :currentType="currentType"
           :openReservationsModal="openReservationsModal"
         />
@@ -171,6 +172,7 @@
               :reservations="reservations"
               :currentType="currentType"
               :additionalServices="services"
+              :isOwner = "canChange"
             />
           </div>
         </div>
@@ -190,11 +192,11 @@
               :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />
-            <div
+            <div v-if="canChange"
               style="text-align: center; display: flex; align-items: center"
               class="m-4"
             >
-              <font-awesome-icon
+              <font-awesome-icon v-if = "canChange"
               icon="calendar-plus"
                 style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
                 @click="showAddDiscountModal"
@@ -208,12 +210,12 @@
             email notification when owner creates a special offer, please
             subscribe to this entity.
           </p>
-          <div
+          <div  v-if="canChange"
             style="text-align: center; display: flex; align-items: center"
             class="m-4"
           >
             <font-awesome-icon
-              icon="calendar-plus"
+              icon="calendar-plus" v-if = "canChange"
               style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
               @click="showAddDiscountModal"
             />
@@ -355,6 +357,7 @@ export default {
       enginesNumber: "",
       enginePower: "",
       maxSpeed: "",
+      canChange: false
     };
   },
   mounted() {
@@ -378,6 +381,11 @@ export default {
           }
         }
       });
+      this.$axios
+      .get(`/api/check-if-rentable-from-logged-user?&rentableId=${that.$route.params.rentable}`).then((resp) => {
+        that.canChange = resp.data;
+      }
+      );
   },
   methods: {
     goToOwnerProfile() {

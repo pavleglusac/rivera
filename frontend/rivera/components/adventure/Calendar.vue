@@ -130,22 +130,24 @@
 					<font-awesome-icon icon="eye" /> View
 				</b-form-radio>
 				<b-form-radio
+					v-if = "isOwner"
 					v-model="mode"
 					value="add"
 					button
 					button-variant="light"
 					size="md"
 				>
-					<font-awesome-icon icon="plus" /> Add
+					<font-awesome-icon icon="plus" v-if = "isOwner"/> Add
 				</b-form-radio>
 				<b-form-radio
+					v-if = "isOwner"
 					v-model="mode"
 					value="subtract"
 					button
 					button-variant="light"
 					size="md"
 				>
-					<font-awesome-icon icon="minus" /> Subtract
+					<font-awesome-icon icon="minus" v-if = "isOwner" /> Subtract
 				</b-form-radio>
 
 				<b-button
@@ -278,7 +280,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import ReservationForm from "./ReservationForm.vue";
 
 export default {
-	props: ["reservations", "rentableType", "additionalServices"],
+	props: ["reservations", "rentableType", "additionalServices","isOwner"],
 	components: {
 		FullCalendar,
 		ReservationForm,

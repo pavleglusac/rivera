@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.QueryHints;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
+import java.util.List;
 
 public interface RentableRepository extends JpaRepository<Rentable, Integer> {
 
@@ -16,4 +17,6 @@ public interface RentableRepository extends JpaRepository<Rentable, Integer> {
     @Query("select r from Rentable r where r.id = ?1")
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     Rentable findOneById(int rentableId);
+
+    List<Rentable> findByIdAndOwnerUsername(Integer id, String username);
 }

@@ -30,6 +30,11 @@ public class RentableController {
         return rentableService.getRentablesDtoForOwner(ownerId);
     }
 
+    @GetMapping(path = "check-if-rentable-from-logged-user")
+    public boolean checkIfRentableFromOwner(String rentableId) {
+        return rentableService.checkIfRentableFromOwner(rentableId);
+    }
+
     @GetMapping(path = "get-type-of-rentable")
     public String getTypeOfRentable(Integer id) {
         if(cottageService.getById(id) != null){

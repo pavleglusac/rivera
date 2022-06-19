@@ -8,6 +8,7 @@ import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.OwnerRepository;
 import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,11 @@ public class RentableService {
         Owner owner = ownerRepository.findByUsername(ownerId);
         if(owner == null) return null;
         return owner.getRentables().stream().map(this::rentableToDto).collect(Collectors.toList());
+    }
+
+    public boolean checkIfRentableFromOwner(String rentableId){
+        String loggedId = ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+       return rentableRepository.findByIdAndOwnerUsername(Integer.parseInt(rentableId), loggedId).size() > 0;
     }
 
     public List<Rentable> getRentablesForOwner(String ownerId) {

@@ -146,7 +146,7 @@
           button-variant="light"
           size="lg"
         >
-          <font-awesome-icon icon="minus" />  Subtract
+          <font-awesome-icon icon="minus" />  Subtractfasdfasdfasf
         </b-form-radio>
 
 
