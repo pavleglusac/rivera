@@ -16,6 +16,7 @@ public class CottageOwnerService {
         cottageOwnerCottageProfileDto.setName(cottageOwner.getName());
         cottageOwnerCottageProfileDto.setPicture(cottageOwner.getPhoto());
         cottageOwnerCottageProfileDto.setSurname(cottageOwner.getSurname());
+        cottageOwnerCottageProfileDto.setUsername(cottageOwner.getUsername());
         return cottageOwnerCottageProfileDto;
     }
 

@@ -9,4 +9,5 @@ public class CottageOwnerCottageProfileDto {
     private String picture;
     private String name;
     private String surname;
+    private String username;
 }

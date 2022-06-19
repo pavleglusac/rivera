@@ -516,6 +516,10 @@ export default {
           that.secondColumn = that.pictures.slice(-half);
           that.id = cottage.id;
           that.owner = cottage.owner;
+          console.log("asdfhjklashdfjkl"+that.owner);
+          for(var x in that.owner){
+            console.log(x+"---"+that.owner[x]);
+          }
           that.owner.picture = "http://localhost:8080" + that.owner.picture;
           var stringRooms = cottage.rooms.split(";");
           for (var room of stringRooms) {

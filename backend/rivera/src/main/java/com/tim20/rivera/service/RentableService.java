@@ -37,6 +37,9 @@ public class RentableService {
     }
 
     public boolean checkIfRentableFromOwner(String rentableId){
+        if(SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")){
+            return false;
+        }
         String loggedId = ((Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
        return rentableRepository.findByIdAndOwnerUsername(Integer.parseInt(rentableId), loggedId).size() > 0;
     }
