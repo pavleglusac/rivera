@@ -108,7 +108,7 @@ public class CottageController {
     }
 
     @PostMapping("remove-availabilities")
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER,BOAT_OWNER')")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')")
     public ResponseEntity removeAvailabilities(@RequestParam Integer id) {
         availabilityService.removeAvailabilities(id);
         return ResponseEntity.ok().build();
