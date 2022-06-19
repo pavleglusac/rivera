@@ -8,6 +8,7 @@ import com.tim20.rivera.model.ReviewType;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.repository.ReservationRepository;
 import com.tim20.rivera.repository.RulesRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -256,6 +257,12 @@ public class ReservationService {
             rentableService.addReview(reservation.getRentable(), client, reviewText, rating, type);
         else
             ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating, type);
+    }
+
+    public boolean isPeriodReserved(String rentableId, LocalDateTime startDate, LocalDateTime endDate){
+        List<Reservation> reservations = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter
+                (Integer.parseInt(rentableId),endDate,startDate);
+        return reservations.size()>0;
     }
 
     public String getClientUsernameForCurrentReservation(String rentableId) {
