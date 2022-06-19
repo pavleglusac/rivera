@@ -32,7 +32,6 @@ public class ReservationReportService {
         reservationReport.setText(reservationReportDTO.getText());
         reservationReport.setClient(reservationReport.getReservation().getClient());
         reservationReport.setResolved(false);
-        reservationReport.setId(reservationReportDTO.getId());
         if (reservationReportDTO.getSanction()) {
             emailService.sendReportAsync(reservationReportDTO);
         }
@@ -41,7 +40,7 @@ public class ReservationReportService {
     }
 
     public ReservationReportDTO getById(Integer id) {
-        return reservationReportToDTO(reservationReportRepository.getById(id));
+        return reservationReportToDTO(reservationReportRepository.getByReservationId(id));
     }
 
     public ReservationReportDTO reservationReportToDTO(ReservationReport reservationReport) {

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ReservationReportRepository  extends JpaRepository<ReservationReport, Integer> {
     public List<ReservationReport> findAllByResolved(boolean resolved);
+
+    public ReservationReport getByReservationId(Integer id);
 }
