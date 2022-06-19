@@ -7,6 +7,7 @@ import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.OwnerService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -40,11 +41,13 @@ public class OwnerController {
     }
 
     @GetMapping(path = "get-attendance")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER','BOAT_OWNER','FISHING_INSTRUCTOR')")
     public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type) {
         return ownerService.getAttendance(startDate, endDate, type);
     }
 
     @GetMapping(path = "get-income")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER','BOAT_OWNER','FISHING_INSTRUCTOR')")
     public List<IncomeFrontDTO> getIncome(String startDate, String endDate) {
         return ownerService.getIncome(startDate, endDate);
     }

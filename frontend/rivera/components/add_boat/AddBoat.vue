@@ -20,7 +20,7 @@
 						id="inputEmail4"
 						placeholder="Name"
 						v-bind:class="{ 'error-boarder': $v.name.$invalid && nameClicked }"
-						@click="nameClicked = true"
+						@focus="nameClicked = true"
 					/>
 					<ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'">
 					</ErrorDiv>
@@ -37,7 +37,7 @@
 						v-bind:class="{
 							'error-boarder': $v.address.$invalid && addressClicked,
 						}"
-						@click="addressClicked = true"
+						@focus="addressClicked = true"
 					/>
 					<ErrorDiv
 						v-if="addressClicked"
@@ -58,7 +58,7 @@
 						id="inputCity"
 						placeholder="City"
 						v-bind:class="{ 'error-boarder': $v.city.$invalid && cityClicked }"
-						@click="cityClicked = true"
+						@focus="cityClicked = true"
 					/>
 					<ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'">
 					</ErrorDiv>
@@ -72,7 +72,7 @@
 						v-bind:class="{
 							'error-boarder': $v.country.$invalid && countryClicked,
 						}"
-						@click="countryClicked = true"
+						@focus="countryClicked = true"
 					>
 						<option selected>Choose...</option>
 						<option
@@ -104,7 +104,7 @@
 						v-bind:class="{
 							'error-boarder': $v.description.$invalid && descriptionClicked,
 						}"
-						@click="descriptionClicked = true"
+						@focus="descriptionClicked = true"
 					></textarea>
 					<ErrorDiv
 						v-if="descriptionClicked"
@@ -168,7 +168,7 @@
 							'error-boarder':
 								$v.cancellationTerms.$invalid && cancellationTermsClicked,
 						}"
-						@click="cancellationTermsClicked = true"
+						@focus="cancellationTermsClicked = true"
 					/>
 					<ErrorDiv
 						v-if="cancellationTermsClicked"
@@ -256,7 +256,7 @@
 						v-model="type"
 						class="form-control"
 						v-bind:class="{ 'error-boarder': $v.type.$invalid && typeClicked }"
-						@click="typeClicked = true"
+						@focus="typeClicked = true"
 					>
 						<option v-for="type in types" :key="type" :value="type">
 							{{ type }}
@@ -276,7 +276,7 @@
 						v-bind:class="{
 							'error-boarder': $v.length.$invalid && lengthClicked,
 						}"
-						@click="lengthClicked = true"
+						@focus="lengthClicked = true"
 					/>
 					<ErrorDiv
 						v-if="lengthClicked"
@@ -296,7 +296,7 @@
 						v-bind:class="{
 							'error-boarder': $v.capacity.$invalid && capacityClicked,
 						}"
-						@click="capacityClicked = true"
+						@focus="capacityClicked = true"
 					/>
 					<ErrorDiv
 						v-if="capacityClicked"
@@ -320,7 +320,7 @@
 							'error-boarder':
 								$v.enginesNumber.$invalid && enginesNumberClicked,
 						}"
-						@click="enginesNumberClicked = true"
+						@focus="enginesNumberClicked = true"
 					/>
 					<ErrorDiv
 						v-if="enginesNumberClicked"
@@ -340,7 +340,7 @@
 						v-bind:class="{
 							'error-boarder': $v.enginePower.$invalid && enginesPowerClicked,
 						}"
-						@click="enginesPowerClicked = true"
+						@focus="enginesPowerClicked = true"
 					/>
 					<ErrorDiv
 						v-if="enginesPowerClicked"
@@ -360,7 +360,7 @@
 						v-bind:class="{
 							'error-boarder': $v.maxSpeed.$invalid && maxSpeedClicked,
 						}"
-						@click="maxSpeedClicked = true"
+						@focus="maxSpeedClicked = true"
 					/>
 					<ErrorDiv
 						v-if="maxSpeedClicked"
