@@ -189,6 +189,7 @@
               v-for="discount in discounts"
               :key="discount.id"
               :discount="discount"
+              :isOwner="canChange"
               :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />

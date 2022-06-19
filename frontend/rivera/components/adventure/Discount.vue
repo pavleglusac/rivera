@@ -10,6 +10,7 @@
       "
       center
     >
+      <div style="float:right" v-if="isOwner" @click="deleteDiscount"> x </div>
       <font-awesome-icon icon="tag" /> Book for<br />only {{ discount.price }}$
     </b-card-title>
     <b-card-text>
@@ -37,7 +38,7 @@
 
 <script>
 export default {
-  props: ["discount", "openModal", "openCantReserveModal"],
+  props: ["discount", "openModal", "openCantReserveModal","isOwner"],
   mounted() {},
   data() {
     return {};
@@ -64,6 +65,12 @@ export default {
         ":" +
         minutes
       );
+    },
+    deleteDiscount(){
+      let that = this;
+      this.$axios.post(`/api/delete-discount?id=${that.discount.id}`).then(resp =>{
+        window.location.reload();
+      });
     },
     reserve() {
       var startDateTime = this.dateFormat(this.discount.start);

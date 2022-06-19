@@ -7,6 +7,8 @@ import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.OwnerService;
 import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,5 +68,11 @@ public class OwnerController {
     @GetMapping(path = "get-client-username-for-current-reservation")
     public String getClientUsernameForCurrentReservation(String id){
         return reservationService.getClientUsernameForCurrentReservation(id);
+    }
+
+    @PostMapping(path ="delete-discount")
+    public ResponseEntity<String> deleteDiscount(@RequestParam Integer id){
+        discountService.deleteDiscount(id);
+        return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }

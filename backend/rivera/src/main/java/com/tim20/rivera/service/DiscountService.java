@@ -150,4 +150,8 @@ public class DiscountService {
         discount.setReserved(true);
         discountRepository.save(discount);
     }
+
+    public void deleteDiscount(Integer id) {
+        discountRepository.delete(discountRepository.getById(id));
+    }
 }
