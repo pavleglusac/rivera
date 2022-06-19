@@ -1,25 +1,25 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.ClientRepository;
-import com.tim20.rivera.repository.CottageRepository;
+import com.tim20.rivera.model.Client;
+import com.tim20.rivera.model.Rentable;
+import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.ReviewType;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.repository.ReservationRepository;
-import org.apache.tomcat.jni.Local;
-import com.tim20.rivera.repository.*;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.Format;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.min;
@@ -137,7 +137,7 @@ public class ReservationService {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = false)
+    //@Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price, List<String> additionalServices) {
         //Rentable rentable = rentableRepository.findOneById(rentableId); TODO: fix locking
         Rentable rentable = rentableRepository.findById(rentableId).get();
