@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="shadow-sm discount-card" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
+  <b-card no-body class="shadow-sm discount-card" img-left style="cursor: pointer;" @click="detailedOffer()">
     <b-card-img class="cover-img" :src='"http://localhost:8080" + entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-center">
@@ -28,7 +28,7 @@
         <hr class="w-100">
             
         <div class="d-flex justify-content-between align-items-center">
-            <span class="font-1h">{{entity.perHour}}$ per hour / {{entity.perDay}}$ per day</span>
+            <span class="font-1h"><b>{{entity.perHour}}$</b> per hour / <b>{{entity.perDay}}$</b> per day</span>
             <b-button variant="primary" v-if="myRentable" class="book-btn">Edit rentable</b-button>
             <b-button variant="primary" v-else-if="!adminView" class="book-btn">Book Now</b-button>
             <b-button variant="primary" v-else class="book-btn" @click="deleteRentable">Delete rentable</b-button>

@@ -243,7 +243,7 @@ li > p .active {
 }
 
 .cover3 {
-  background-image: url(../assets/offers-background.jpg)
+  background-image: url(https://images.unsplash.com/photo-1508705152659-209db714f16f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1523&q=80)
 }
 
 .nav-link:hover {
