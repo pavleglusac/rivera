@@ -220,8 +220,8 @@
           </div>
         </div>
         <Popup
-          ref="reservedDiscountModal"
           id="reservedDiscountModal"
+          ref="reservedDiscountModal"
           title="Congratulations!"
           text="You have successfully reserved an appointment."
         />
@@ -281,9 +281,10 @@
     <b-modal id="add_modal2" size="xl" hide-header hide-footer>
       <ViewReservationReport :selectedId="selectedId" />
     </b-modal>
-    <b-modal id="addDiscountModal" size="md" hide-header hide-footer>
-      <AddDiscount />
+    <b-modal id="addDiscountModal" size="lg" hide-header hide-footer>
+      <AddDiscount :openModal="openAddedDiscountModal" />
     </b-modal>
+    <Popup title="Discount added successfully!" type="success" ref="discountAdded" id="discountAdded" />
   </div>
 </template>
 
@@ -314,8 +315,8 @@ export default {
     ViewReservationReport,
     BIcon,
     BIconCalendarPlus,
-    Popup
-  },
+    Popup,
+},
   data() {
     return {
       selectedId: "",
@@ -384,7 +385,10 @@ export default {
       this.$router.push({ path: "/profile/" + this.owner.username });
     },
     openModal() {
-      this.$bvModal.show("reservedDiscountModal");
+      this.$refs.reservedDiscountModal.show();
+    },
+    openAddedDiscountModal() {
+      this.$refs.discountAdded.show();
     },
     openCantReserve() {
       this.$bvModal.show("cantReserve");

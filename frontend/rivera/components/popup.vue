@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: "Popup",
   props: ["title", "text", "type"],
   data() {
       return {
