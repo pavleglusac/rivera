@@ -33,6 +33,7 @@ public class ClientService {
     @Autowired
     private RulesRepository rulesRepository;
 
+
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
     final String IMAGES_PATH = "\\images\\clients\\";
@@ -266,7 +267,9 @@ public class ClientService {
 
     public void addReservation(String username, Reservation reservation) {
         Client client = clientRepository.findByUsername(username);
-        client.getReservations().add(reservation);
+        List<Reservation> reservations = new ArrayList<Reservation>(client.getReservations());
+        reservations.add(reservation);
+        client.setReservations(reservations);
         clientRepository.save(client);
     }
 

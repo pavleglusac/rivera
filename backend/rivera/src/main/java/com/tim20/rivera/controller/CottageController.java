@@ -87,7 +87,7 @@ public class CottageController {
     }
 
     @PostMapping("define-availability")
-    @PreAuthorize("hasAnyRole('COTTAGE_OWNER,BOAT_OWNER')")
+    @PreAuthorize("hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')")
     public ResponseEntity<String> defineAvailability(@RequestBody AvailabilityRequest availabilityRequest) {
         System.out.println(availabilityRequest);
         availabilityService.defineAvailability(availabilityRequest);

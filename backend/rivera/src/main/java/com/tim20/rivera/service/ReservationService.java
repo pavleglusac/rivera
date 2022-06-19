@@ -19,10 +19,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Double.min;
@@ -142,14 +139,15 @@ public class ReservationService {
 
     @Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end, Double price, List<String> additionalServices) {
-        Rentable rentable = rentableRepository.getByIdAndLock(rentableId);
+        //Rentable rentable = rentableRepository.findOneById(rentableId); TODO: fix locking
+        Rentable rentable = rentableRepository.findById(rentableId).get();
         Reservation reservation = new Reservation();
         reservation.setPrice(price);
         reservation.setRentable(rentable);
         reservation.setStartDateTime(start);
         reservation.setEndDateTime(end);
         reservation.setCancelled(false);
-        reservation.setAdditionalServices(additionalServices);
+        reservation.setAdditionalServices(new ArrayList<>(additionalServices));
         reservation.setClient(client);
         Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
         reservation.setOwnerIncomePercentage(ownerPercentage);
@@ -256,4 +254,11 @@ public class ReservationService {
             ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating, type);
     }
 
+    public String getClientUsernameForCurrentReservation(String rentableId) {
+        List<Reservation> reservation = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter(Integer.parseInt(rentableId),LocalDateTime.now(),LocalDateTime.now());
+        if(reservation.size() > 0){
+            return reservation.get(0).getClient().getUsername();
+        }
+        return null;
+    }
 }

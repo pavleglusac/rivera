@@ -5,6 +5,7 @@ import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.service.DiscountService;
 import com.tim20.rivera.service.OwnerService;
+import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,9 @@ public class OwnerController {
 
     @Autowired
     private DiscountService discountService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping(path = "reviews-for-owner")
     public List<ReviewProfileDTO> getReviewsForOwner(String ownerId) {
@@ -53,5 +57,11 @@ public class OwnerController {
     @PostMapping(path = "add-discount")
     public void addDiscount(DiscountDTO discountDTO) {
         discountService.addDiscount(discountDTO);
+    }
+
+
+    @GetMapping(path = "get-client-username-for-current-reservation")
+    public String getClientUsernameForCurrentReservation(String id){
+        return reservationService.getClientUsernameForCurrentReservation(id);
     }
 }
