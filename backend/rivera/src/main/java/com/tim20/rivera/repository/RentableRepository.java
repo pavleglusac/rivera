@@ -12,7 +12,7 @@ import javax.persistence.QueryHint;
 
 public interface RentableRepository extends JpaRepository<Rentable, Integer> {
 
-    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select r from Rentable r where r.id = ?1")
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout", value ="0")})
     Rentable findOneById(int rentableId);

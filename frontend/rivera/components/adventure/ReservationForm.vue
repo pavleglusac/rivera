@@ -5,6 +5,7 @@
 			<p>Current client:</p>
 			<div style="display: flex">
 				<b-form-input
+					:disabled="true"
 					v-model="username"
 					id="inputUsername"
 					placeholder="Client Username"
