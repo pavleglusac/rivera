@@ -1,6 +1,5 @@
 package com.tim20.rivera.controllers;
 
-import com.tim20.rivera.repository.CottageRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,9 +10,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-
-import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -21,9 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class OwnerControllerTest {
     private MockMvc mockMvc;
-
-    @Autowired
-    private CottageRepository cottageRepository;
 
     @Autowired
     private WebApplicationContext webApplicationContext;

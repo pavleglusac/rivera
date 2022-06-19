@@ -81,7 +81,7 @@ export default {
     ViewReservationReport: ViewReservationReport,
   },
   mounted() {
-    console.log("-----------------------------------" + this.reservation);
+    console.log("-----------------------------------" + this.reservation); 
     for (var x in this.reservation) {
       console.log(x);
     }

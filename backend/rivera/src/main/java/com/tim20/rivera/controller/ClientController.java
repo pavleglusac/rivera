@@ -53,7 +53,6 @@ public class ClientController {
         return clientService.clientExists(username);
     }
 
-
     @PostMapping(path = "update-client")
     public ResponseEntity<String> updateClient(ClientDTO clientDTO) {
         clientService.updateClient(clientDTO);
