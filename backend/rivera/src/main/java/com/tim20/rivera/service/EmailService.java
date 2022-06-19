@@ -50,7 +50,7 @@ public class EmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
         mail.setTo(Objects.requireNonNull(env.getProperty("spring.mail.username")));
-        mail.setFrom(ownerRequestDTO.getEmail());
+        mail.setFrom("mrsisatim20@outlook.com"/*ownerRequestDTO.getEmail()*/);
         mail.setSubject("Rivera - Registration for " + ownerRequestDTO.getType());
         String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
         htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>Registration Request</h3>";
@@ -67,7 +67,7 @@ public class EmailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
         mail.setTo(Objects.requireNonNull(env.getProperty("spring.mail.username")));
-        mail.setFrom(reservationRepository.getById((reservationReportDTO.getId())).getRentable().getOwner().getEmail());
+        mail.setFrom("mrsisatim20@outlook.com"/*reservationRepository.getById((reservationReportDTO.getId())).getRentable().getOwner().getEmail()*/);
         mail.setSubject("Rivera - Sanction");
         String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
         htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>Reservation Report</h3>";
