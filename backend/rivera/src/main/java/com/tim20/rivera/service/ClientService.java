@@ -276,6 +276,8 @@ public class ClientService {
         List<Reservation> reservations = new ArrayList<Reservation>(client.getReservations());
         reservations.add(reservation);
         client.setReservations(reservations);
+        int points = client.getNumberOfPoints();
+        client.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
         clientRepository.save(client);
     }
 
@@ -313,6 +315,8 @@ public class ClientService {
                 break;
             }
         }
+        int points = client.getNumberOfPoints();
+        client.setNumberOfPoints(points - rulesRepository.findAll().get(0).getPointsPerReservation());
         clientRepository.save(client);
     }
 

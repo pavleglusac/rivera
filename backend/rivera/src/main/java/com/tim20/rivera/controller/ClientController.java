@@ -27,8 +27,6 @@ public class ClientController {
 
     @Autowired
     private ReservationService reservationService;
-    @Autowired
-    private DiscountService discountService;
 
     @GetMapping(path = "/get-clients")
     public List<Client> getClients() {

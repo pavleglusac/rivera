@@ -57,7 +57,6 @@ public class CottageService {
     @Autowired
     private CottageOwnerRepository cottageOwnerRepository;
 
-
     @Autowired
     private ConfigurableEnvironment env;
 

@@ -4,7 +4,8 @@
     <p>
       When you skip a reservation or don't follow rules of conduct, owners can
       give you a penalty. Having 3 penatiles means that you cannot make a
-      reservation. Penalties are deleted every 1st of month. Your current number of penalties is
+      reservation. Penalties are deleted every 1st of month. Your current number
+      of penalties is
       <b>{{ client.numberOfPenalties }}</b
       >.
     </p>
@@ -13,9 +14,9 @@
     <p>
       Number of points you get when you make a reservation is
       <b>{{ client.pointsPerReservation }}</b
-      >. The more points you
-      have, the more discount you get on your next reservation! Your current
-      number of points is <b>{{ client.numberOfPoints }}</b
+      >. The more points you have, the more discount you get on your next
+      reservation! Your current number of points is
+      <b>{{ client.numberOfPoints }}</b
       >.
     </p>
     <b-card
@@ -27,9 +28,11 @@
         <font-awesome-icon icon="gift" /> {{ clientLoyalty.name }}
       </h6>
       <b-card-text>
-        Discount you have with this program is <b>{{ clientLoyalty.percentage }}%</b>.<br>
-        Minimal number of points you should have is <b>
-        {{ clientLoyalty.numberOfPoints }}</b>.</b-card-text
+        Discount you have with this program is
+        <b>{{ clientLoyalty.percentage }}%</b>.<br />
+        Minimal number of points you should have is
+        <b> {{ clientLoyalty.numberOfPoints }}</b
+        >.</b-card-text
       >
     </b-card>
     <p
@@ -45,8 +48,9 @@
     </p>
     <b-modal id="loyaltyModal" hide-footer title="All Loyalty Programs">
       <b-card
-        v-for="loyalty in client.allLoyalties"
+        v-for="(loyalty, index) in client.allLoyalties"
         :style="cssCard(loyalty)"
+        v-bind:key="loyalty.name + index"
         class="loyaltyCard"
       >
         <h6 :style="cssCard(loyalty)" class="loyaltyTitle">
