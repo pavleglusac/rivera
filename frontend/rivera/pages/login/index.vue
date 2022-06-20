@@ -6,14 +6,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <navbar />
     <login-form />
   </div>
 </template>
 
 <script>
+import Navbar from '../../components/navbar.vue';
 import LoginForm from '../../components/login/LoginForm.vue'
 export default {
   name: 'loginPage',
-  components: { LoginForm }
+  components: { LoginForm, Navbar }
 }
 </script>

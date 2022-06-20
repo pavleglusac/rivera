@@ -1,8 +1,8 @@
 <template>
     <b-modal
+      v-bind:header-bg-variant="{ 'success': type == 'success', 'danger': type == 'error' }"
       class="success-modal"
       hide-footer
-      header-bg-variant="success"
       ref='modal'
     >
       <template #modal-header>

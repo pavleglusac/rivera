@@ -1,61 +1,44 @@
 <template>
-  <div
-    class="
-      login-form
-      fixed-top
-      d-flex
-      align-items-center
-      justify-content-center
-    "
-    style="bottom: 0; overflow-y: auto"
-  >
-    <b-card class="text-center mx-auto my-auto card mt-5">
-      <img src="@/static/rivera_logo_ver.png" />
-      <form>
+  <div class="register-photo">
+    <div class="form-container">
+      <div class="image-holder"></div>
+      <form v-on:keyup.enter="login">
+        <label style="font-size: 20px; margin: 10px; font-weight: 400">Welcome to</label>
+        <img
+          class="text-center"
+          style="height: 100px; margin-top: -20px"
+          src="@/static/rivera_logo_hor.png"
+        />
         <div class="form-group">
-          <label>Username</label>
           <input
-            type="username"
-            placeholder="Enter your username"
-            class="form-control form-control-lg"
-            style="font-size: 15px"
+            class="form-control"
             v-model="username"
+            placeholder="Username"
           />
         </div>
         <div class="form-group">
-          <label>Password</label>
           <input
+            class="form-control"
             type="password"
-            placeholder="Enter your password"
-            class="form-control form-control-lg"
             v-model="password"
+            placeholder="Password"
           />
-        <span v-if="nonExistent">
+        </div>
+        <div class="form-group">
+          <b-button class="prime-btn btn-block" @click="login">Log In</b-button>
+        </div>
+        <span v-if="nonExistent" class="already" style="font-size: 15px; color: #dc143c">
           Wrong email or password. Please try again.
         </span>
-        </div>
-        <b-button block id="login-btn" variant="primary" @click="login"
-          >Log In</b-button
-        >
-        <b-modal id="wrong-login-data" hide-footer>
-          <div class="text-center">
-            <h3>Wrong username or password. Try again.</h3>
-          </div>
-        </b-modal>
-        <b-button
-          block
-          id="signup-btn"
-          variant="outline-primary"
-          @click="changeToRegistration"
-          >Create an account</b-button
-        >
-        <nuxt-link to="/"
-          ><b-button block id="just-looking"
-            >Just looking...</b-button
-          ></nuxt-link
+        <span v-else><br></span>
+        <a class="already" style="font-size: 15px"
+          >You don't have an account?
+          <b @click="changeToRegistration" style="cursor: pointer"
+            >Register here.</b
+          ></a
         >
       </form>
-    </b-card>
+    </div>
   </div>
 </template>
 <script>
@@ -64,7 +47,7 @@ export default {
     return {
       username: "",
       password: "",
-      nonExistent: false
+      nonExistent: false,
     };
   },
   methods: {
@@ -81,16 +64,75 @@ export default {
           if (resp.data) {
             window.localStorage.setItem("JWT", resp.data["accessToken"]);
             this.$router.push("/");
-          }
-          else{
+          } else {
             this.nonExistent = true;
           }
         })
         .catch((err) => {
-          this.$bvModal.show('wrong-login-data');
+          this.$bvModal.show("wrong-login-data");
           console.log(err);
         });
     },
   },
 };
 </script>
+<style>
+.register-photo {
+  padding: 40px 0;
+}
+
+.register-photo .image-holder {
+  display: table-cell;
+  width: auto;
+  background: url(https://images.unsplash.com/photo-1508705152659-209db714f16f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1523&q=80);
+  background-size: cover;
+}
+
+.register-photo .form-container {
+  display: table;
+  max-width: 900px;
+  width: 90%;
+  margin: 0 auto;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
+}
+
+.register-photo form {
+  display: table-cell;
+  width: 400px;
+  background-color: #ffffff;
+  padding: 40px 60px;
+  color: #505e6c;
+}
+
+@media (max-width: 991px) {
+  .register-photo form {
+    padding: 40px;
+  }
+}
+
+.register-photo form .form-control {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #dfe7f1;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  color: inherit;
+  text-indent: 0px;
+  height: 40px;
+}
+
+.register-photo form .form-check {
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.register-photo form .already {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #6f7a85;
+  opacity: 0.9;
+  text-decoration: none;
+}
+</style>

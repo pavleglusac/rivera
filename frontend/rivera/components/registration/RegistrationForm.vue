@@ -1,146 +1,185 @@
 <template>
-  <div
-    class="
-      registration-form
-      d-flex
-      align-items-center
-      justify-content-center
-    "
-    style="bottom: 0; overflow-y: auto"
-  >
-    <b-card class="text-center mx-auto my-auto card mt-5">
-      <img src="@/static/rivera_logo_hor.png" />
-      <form id="registrationForm">
-        <div class="form-row">
-          <div class="form-group col-6">
-            <label>Email</label>
+  <div class="register-photo">
+    <div class="form-container" id="register-form-container">
+      <form>
+        <label style="font-size: 20px; margin-bottom: 20px; font-weight: 500"
+          >Registrate to Rivera</label
+        >
+
+        <!--FIRST TAB-->
+        <div class="tab">
+          <label>Please enter your login credentials.</label>
+          <div style="height: 70px">
             <input
               type="email"
               placeholder="Enter your email address"
-              class="form-control form-control-lg"
+              class="form-control"
               id="email"
               v-model="email"
-              v-bind:class="{ 'error-boarder': $v.email.$invalid && emailClicked }"
-              @click="emailClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.email.$invalid && emailClicked,
+              }"
+              @click="emailClicked = true"
             />
-            <ErrorDiv v-if="emailClicked" :parameter="$v.email" :name="'Email'"> </ErrorDiv>
+            <ErrorDiv
+              v-if="emailClicked"
+              :parameter="$v.email"
+              :name="'Email'"
+            />
           </div>
-          <div class="form-group col-6">
-            <label>Username</label>
+          <div style="height: 70px">
             <input
               type="text"
               placeholder="Enter your username"
-              class="form-control form-control-lg"
+              class="form-control"
               id="username"
-              v-model="username" @keyup="resetTimer"
-              v-bind:class="{ 'error-boarder': ($v.username.$invalid || usernameExists) && usernameClicked}"
-              @click="usernameClicked = true;"
+              v-model="username"
+              @keyup="resetTimer"
+              v-bind:class="{
+                'error-boarder':
+                  ($v.username.$invalid || usernameExists) && usernameClicked,
+              }"
+              @click="usernameClicked = true"
             />
-            <div>
-              <b-spinner small label="Small Spinner" style="float:left" class="m-1" v-if="loadingUsername"></b-spinner> 
+            <b-spinner
+              small
+              label="Small Spinner"
+              style="float: left"
+              class="m-1"
+              v-if="loadingUsername"
+            ></b-spinner>
             <div v-if="usernameClicked">
-            <span v-if="usernameExists">
-              Username already exists!
-            </span>
-            <ErrorDiv v-else :parameter="$v.username" :name="'  Username'"> </ErrorDiv>
-            </div>
+              <span
+                v-if="usernameExists"
+                style="font-size: 12px; float: left; color: #dc143c"
+              >
+                Username already exists!
+              </span>
+              <ErrorDiv v-else :parameter="$v.username" :name="'  Username'" />
             </div>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-6">
-            <label>Password</label>
+          <div style="height: 70px">
             <input
               type="password"
               placeholder="Enter your password"
-              class="form-control form-control-lg"
+              class="form-control"
               id="password"
               v-model="password"
-              v-bind:class="{ 'error-boarder': $v.password.$invalid && passwordClicked}"
-              @click="passwordClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.password.$invalid && passwordClicked,
+              }"
+              @click="passwordClicked = true"
             />
-            <ErrorDiv v-if="passwordClicked" :parameter="$v.password" :name="'Password'"> </ErrorDiv>
+            <ErrorDiv
+              v-if="passwordClicked"
+              :parameter="$v.password"
+              :name="'Password'"
+            />
           </div>
-          <div class="form-group col-6">
-            <label>Reenter password</label>
+          <div style="height: 70px">
             <input
               type="password"
-              placeholder="Reenter your password"
-              class="form-control form-control-lg"
+              placeholder="Confirm your password"
+              class="form-control"
               id="password2"
               v-model="password2"
-              v-bind:class="{ 'error-boarder': $v.password2.$invalid && password2Clicked }"
-              @click="password2Clicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.password2.$invalid && password2Clicked,
+              }"
+              @click="password2Clicked = true"
             />
-            <ErrorDiv v-if="password2Clicked" :parameter="$v.password2" :name="'Password'"> </ErrorDiv>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-6">
-            <label>Name</label>
-            <input
-              type="text"
-              placeholder="Enter your surname"
-              class="form-control form-control-lg"
-              v-model="name"
-              v-bind:class="{ 'error-boarder': $v.name.$invalid && nameClicked}"
-              @click="nameClicked = true;"
+            <ErrorDiv
+              v-if="password2Clicked"
+              :parameter="$v.password2"
+              :name="'Password'"
             />
-            <ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'"> </ErrorDiv>
-          </div>
-          <div class="form-group col-6">
-            <label>Surname</label>
-            <input
-              type="text"
-              placeholder="Enter your surname"
-              class="form-control form-control-lg"
-              id="surname"
-              v-model="surname"
-              v-bind:class="{ 'error-boarder': $v.surname.$invalid && surnameClicked}"
-              @click="surnameClicked = true;"
-            />
-            <ErrorDiv v-if="surnameClicked" :parameter="$v.surname" :name="'Surname'"> </ErrorDiv>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group col-6">
-            <label>Phone number</label>
+        <!--SECOND TAB-->
+        <div class="tab">
+          <label>Your primary data.</label>
+          <div style="height: 70px">
+            <input
+              type="text"
+              placeholder="Enter your name"
+              class="form-control"
+              v-model="name"
+              v-bind:class="{
+                'error-boarder': $v.name.$invalid && nameClicked,
+              }"
+              @click="nameClicked = true"
+            />
+            <ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'" />
+          </div>
+          <div style="height: 70px">
+            <input
+              type="text"
+              placeholder="Enter your surname"
+              class="form-control"
+              id="surname"
+              v-model="surname"
+              v-bind:class="{
+                'error-boarder': $v.surname.$invalid && surnameClicked,
+              }"
+              @click="surnameClicked = true"
+            />
+            <ErrorDiv
+              v-if="surnameClicked"
+              :parameter="$v.surname"
+              :name="'Surname'"
+            />
+          </div>
+          <div style="height: 70px">
             <input
               type="text"
               placeholder="Enter your phone number"
-              class="form-control form-control-lg"
+              class="form-control"
               id="phoneNumber"
               v-model="phoneNumber"
-              v-bind:class="{ 'error-boarder': $v.phoneNumber.$invalid && phoneNumberClicked}"
-              @click="phoneNumberClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.phoneNumber.$invalid && phoneNumberClicked,
+              }"
+              @click="phoneNumberClicked = true"
             />
-            <ErrorDiv v-if="phoneNumberClicked" :parameter="$v.phoneNumber" :name="'Phone number'">
-            </ErrorDiv>
+            <ErrorDiv
+              v-if="phoneNumberClicked"
+              :parameter="$v.phoneNumber"
+              :name="'Phone number'"
+            />
           </div>
-          <div class="form-group col-6">
-            <label>Address</label>
+        </div>
+
+        <!--THIRD TAB-->
+        <div class="tab">
+          <label>Where are you from?</label>
+          <div style="height: 70px">
             <input
               type="text"
               placeholder="Enter your address"
-              class="form-control form-control-lg"
+              class="form-control"
               id="address"
               v-model="address"
-              v-bind:class="{ 'error-boarder': $v.address.$invalid && addressClicked}"
-              @click="addressClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.address.$invalid && addressClicked,
+              }"
+              @click="addressClicked = true"
             />
-            <ErrorDiv v-if="addressClicked" :parameter="$v.address" :name="'Address'"> </ErrorDiv>
+            <ErrorDiv
+              v-if="addressClicked"
+              :parameter="$v.address"
+              :name="'Address'"
+            />
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-3">
-            <label>Country</label>
+          <div style="height: 70px">
             <select
               id="inputState"
               v-model="country"
               class="form-control"
-              v-bind:class="{ 'error-boarder': $v.country.$invalid  && countryClicked}"
-              @click="countryClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.country.$invalid && countryClicked,
+              }"
+              @click="countryClicked = true"
             >
               <option selected>Choose...</option>
               <option
@@ -151,83 +190,119 @@
                 {{ country.label }}
               </option>
             </select>
-            <ErrorDiv v-if="countryClicked" :parameter="$v.country" :name="'Country'"> </ErrorDiv>
+            <ErrorDiv
+              v-if="countryClicked"
+              :parameter="$v.country"
+              :name="'Country'"
+            />
           </div>
-          <div class="form-group col-3">
-            <label>City</label>
+          <div style="height: 70px">
             <input
               type="text"
               placeholder="Enter your city"
-              class="form-control form-control-lg"
+              class="form-control"
               id="city"
               v-model="city"
-              v-bind:class="{ 'error-boarder': $v.city.$invalid  && cityClicked}"
-              @click="cityClicked = true;"
+              v-bind:class="{
+                'error-boarder': $v.city.$invalid && cityClicked,
+              }"
+              @click="cityClicked = true"
             />
-            <ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'"> </ErrorDiv>
-          </div>
-          <div class="form-group col-6">
-            <label>Choose your Rivera role</label>
-            <select
-              v-model="type"
-              class="form-control"
-              v-bind:class="{ 'error-boarder': $v.type.$invalid  && typeClicked}"
-            >
-              <option v-for="tip in types" :key="tip">{{ tip }}</option>
-            </select>
-            <ErrorDiv :parameter="$v.type" :name="'Type'"> </ErrorDiv>
-          </div>
-        </div>
-        <div class="form-row" v-if="type == 'Fishing Instructor'">
-          <div class="form-group col-12">
-            <label>Biography</label>
-            <textarea
-              placeholder="Enter biography"
-              class="form-control form-control-lg"
-              id="biography"
-              style="font-size: 16px;"
-              v-model="biography"
-              v-bind:class="{ 'error-boarder': $v.biography.$invalid }"
-            />
-            <ErrorDiv :parameter="$v.biography" :name="'Biography'">
-            </ErrorDiv>
-          </div>
-        </div>
-        <div class="form-row" v-if="this.type != 'Regular User'">
-          <div class="form-group col-12">
-            <label>Description</label>
-            <textarea
-              placeholder="Enter description"
-              class="form-control form-control-lg"
-              id="description"
-              style="font-size: 16px;"
-              v-model="description"
-              v-bind:class="{ 'error-boarder': $v.description.$invalid }"
-            />
-            <ErrorDiv :parameter="$v.description" :name="'Description'">
-            </ErrorDiv>
+            <ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'" />
           </div>
         </div>
 
-        <b-button block id="register-btn" variant="primary" @click="register"
-          >Register</b-button
-        >
-        <b-spinner variant="success" v-if="emailSending" class="spinning m-2"></b-spinner>
+        <!--FOURTH TAB-->
+        <div class="tab">
+          <label>What is going to be your Rivera role?</label>
+          <div style="height: 70px">
+            <select
+              v-model="type"
+              class="form-control"
+              v-bind:class="{
+                'error-boarder': $v.type.$invalid && typeClicked,
+              }"
+            >
+              <option v-for="tip in types" :key="tip">{{ tip }}</option>
+            </select>
+            <ErrorDiv :parameter="$v.type" :name="'Type'" />
+          </div>
+          <div style="height: 70px">
+            <div v-if="this.type != 'Regular User'">
+              <b-form-textarea
+                placeholder="Enter description"
+                id="description"
+                rows="3"
+                no-resize
+                style="font-size: 16px"
+                v-model="description"
+                v-bind:class="{ 'error-boarder': $v.description.$invalid }"
+              />
+              <ErrorDiv :parameter="$v.description" :name="'Description'">
+              </ErrorDiv>
+            </div>
+          </div>
+          <div style="height: 70px">
+            <div v-if="type == 'Fishing Instructor'">
+              <b-form-textarea
+                lazy-formatter
+                placeholder="Enter biography"
+                id="biography"
+                rows="3"
+                no-resize
+                style="font-size: 16px"
+                v-model="biography"
+                v-bind:class="{ 'error-boarder': $v.biography.$invalid }"
+              />
+              <ErrorDiv :parameter="$v.biography" :name="'Biography'">
+              </ErrorDiv>
+            </div>
+          </div>
+        </div>
+
+        <div style="overflow: auto; margin-top: 20px">
+          <div style="float: right">
+            <b-spinner
+              variant="success"
+              v-if="emailSending"
+              class="spinning mr-5"
+            ></b-spinner>
+            <b-button id="prevBtn" style="border: none" @click="nextPrev(-1)"
+              >Previous</b-button
+            >
+            <b-button
+              v-if="currentTab != 3"
+              id="nextBtn"
+              class="prime-btn"
+              @click="nextPrev(1)"
+              >Next</b-button
+            >
+            <b-button v-else @click="register" class="prime-btn"
+              >Submit</b-button
+            >
+          </div>
+        </div>
         <b-modal id="success" hide-footer>
           <div class="d-block text-center">
-            <h4 v-if="type=='Regular User'">Your registration is almost done. Go check out your email to verify your account.</h4>
-            <h4 v-else>Your request has been sent to admin. You will get notified when he verifies your account.</h4>
+            <h4 v-if="type == 'Regular User'">
+              Your registration is almost done. Go check out your email to
+              verify your account.
+            </h4>
+            <h4 v-else>
+              Your request has been sent to admin. You will get notified when he
+              verifies your account.
+            </h4>
           </div>
         </b-modal>
-        <b-button
-          block
-          id="login-btn"
-          variant="outline-primary"
-          @click="changeToLogin"
-          >Already have an accont? Log in</b-button
-        >
+        <div style="text-align: center; margin-top: 20px">
+          <span class="step"></span>
+          <span class="step"></span>
+          <span class="step"></span>
+          <span class="step"></span>
+        </div>
       </form>
-    </b-card>
+      <div class="image-holder"></div>
+    </div>
   </div>
 </template>
 
@@ -244,13 +319,13 @@ import {
   between,
   email,
   maxLength,
-  sameAs
+  sameAs,
 } from "vuelidate/lib/validators";
 import useValidate from "@vuelidate/core";
 import ErrorDiv from "./ErrorDiv.vue";
 export default {
-  mounted(){
-
+  mounted() {
+    this.showTab(0);
   },
   computed: {
     countries() {
@@ -261,6 +336,7 @@ export default {
   data() {
     return {
       v$: useValidate(),
+      currentTab: 0,
       email: "",
       username: "",
       password: "",
@@ -286,10 +362,15 @@ export default {
       descriptionClicked: false,
       password2Clicked: false,
       usernameExists: false,
-      typingTimer : "",
+      typingTimer: "",
       doneTypingInterval: 500,
       loadingUsername: false,
-      types: ["Cottage Owner", "Boat Owner", "Fishing Instructor", "Regular User"],
+      types: [
+        "Cottage Owner",
+        "Boat Owner",
+        "Fishing Instructor",
+        "Regular User",
+      ],
       biography: "",
       emailSending: false,
     };
@@ -338,8 +419,7 @@ export default {
       minLength: minLength(2),
       maxLength: maxLength(20),
     },
-    description: {
-    },
+    description: {},
     biography: {
       required,
       minLength: minLength(5),
@@ -348,7 +428,7 @@ export default {
       required,
       minLength: minLength(2),
       maxLength: maxLength(20),
-      sameAsPassword: sameAs('password')
+      sameAsPassword: sameAs("password"),
     },
     type: {
       required,
@@ -359,10 +439,36 @@ export default {
   },
   methods: {
     register() {
-      if (this.type != "Regular User")
-        this.registerOwner();
-      else
-        this.registerClient();
+      if (this.type != "Regular User") this.registerOwner();
+      else this.registerClient();
+    },
+    showTab(n) {
+      var x = document.getElementsByClassName("tab");
+      x[n].style.display = "block";
+      if (n == 0) document.getElementById("prevBtn").style.display = "none";
+      else document.getElementById("prevBtn").style.display = "inline";
+      this.fixStepIndicator(n);
+    },
+    validateForm() {
+      return true;
+    },
+    nextPrev(n) {
+      var x = document.getElementsByClassName("tab");
+      if (n == 1 && !this.validateForm()) return false;
+      x[this.currentTab].style.display = "none";
+      this.currentTab = this.currentTab + n;
+      if (this.currentTab >= x.length) {
+        return false;
+      }
+      this.showTab(this.currentTab);
+    },
+    fixStepIndicator(n) {
+      var x = document.getElementsByClassName("step");
+      for (var i = 0; i < x.length; i++)
+        x[i].className = x[i].className.replace(" active", "");
+      x[n].className += " active";
+      document.getElementsByClassName("step")[this.currentTab].className +=
+        " finish";
     },
     getFormData() {
       var formData = new FormData();
@@ -379,7 +485,6 @@ export default {
       return formData;
     },
     registerOwner() {
-      this.emailSending = true;
       console.log(this.$v.$invalid);
       console.log(this.$v.name.$invalid);
       this.$v.$touch();
@@ -387,39 +492,43 @@ export default {
         alert("Validation failed!");
         return;
       }
+      this.emailSending = true;
       console.log("ok");
       var formData = this.getFormData();
       formData.append("type", this.type);
       formData.append("description", this.description);
-      if(this.type == "Fishing Instructor")
-            formData.append("biography", this.biography);
+      if (this.type == "Fishing Instructor")
+        formData.append("biography", this.biography);
       this.$axios
         .post("/api/auth/signup", formData)
         .then((resp) => {
           console.log(resp);
-          this.$bvModal.show('success');
+          this.$bvModal.show("success");
           this.emailSending = false;
         })
         .catch((err) => {
           console.log(err);
         });
     },
-     registerClient() {
-      this.emailSending = true;
+    registerClient() {
       console.log(this.$v.$invalid);
       console.log(this.$v.name.$invalid);
+      console.log("OVDE JE");
+      console.log(this.$v.description.$invalid);
+      console.log(this.$v.biography.$invalid);
       this.$v.$touch();
       if (this.$v.$invalid) {
         alert("Validation failed!");
         return;
       }
+      this.emailSending = true;
       console.log("ok");
       var formData = this.getFormData();
       this.$axios
         .post("/api/auth/signupClient", formData)
         .then((resp) => {
           console.log(resp);
-          this.$bvModal.show('success');
+          this.$bvModal.show("success");
           this.emailSending = false;
         })
         .catch((err) => {
@@ -429,46 +538,85 @@ export default {
     changeToLogin() {
       this.$router.push({ path: "/login" });
     },
-		doneTyping () {
+    doneTyping() {
       console.log(username.value);
-        $('#username').addClass("ok-border");
-			this.$axios.get('/api/auth/check-if-username-exists?username='+ username.value
-			).then((resp) => {
-        console.log("PRoverenoooo",resp.data);
-        this.loadingUsername = false;
-				this.usernameExists = resp.data;
-			}).catch((err) => {
-				console.log(err);
-			})
-		},
-    setTrue(parameter){
+      $("#username").addClass("ok-border");
+      this.$axios
+        .get("/api/auth/check-if-username-exists?username=" + username.value)
+        .then((resp) => {
+          console.log("PRoverenoooo", resp.data);
+          this.loadingUsername = false;
+          this.usernameExists = resp.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    setTrue(parameter) {
       parameter = true;
     },
-		resetTimer(){
-			clearTimeout(this.typingTimer);
-			this.usernameExists = false;
+    resetTimer() {
+      clearTimeout(this.typingTimer);
+      this.usernameExists = false;
       this.loadingUsername = true;
-        $('#username').removeClass("ok-border");
-				if ($('#username').val()) {
-					this.typingTimer = setTimeout(this.doneTyping, this.doneTypingInterval);
-				}
-		}
+      $("#username").removeClass("ok-border");
+      if ($("#username").val()) {
+        this.typingTimer = setTimeout(this.doneTyping, this.doneTypingInterval);
+      }
+    },
   },
   watch: {
-    type: function(val, oldVal){
-      if(val != 'Fishing Instructor') {
+    type: function (val) {
+      if (val != "Fishing Instructor") {
         this.biography = "fhnfksdfgksdjdfsdjk";
       } else {
         this.biography = "";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 
 <style>
 .ok-border {
-  border-color: #16C79A;
+  border-color: #16c79a;
+}
+#regForm {
+  background-color: #ffffff;
+  margin: 100px auto;
+  font-family: Raleway;
+  padding: 40px;
+  width: 70%;
+  min-width: 300px;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+#prevBtn {
+  background-color: #bbbbbb;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.step.finish {
+  background-color: #04aa6d;
 }
 </style>

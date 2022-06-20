@@ -2,12 +2,12 @@
   <div>
 	<section class="bg-cover cover3" style="height: 430px">
       <div class="overlay" style="opacity: 0.25"></div>
-	 <h1 style="color: white; font-size: 70px; margin-top: 50px; margin-left: 50px;">Discover</h1>
-	 <p style="color: white; font-size: 20px; margin-left: 50px; margin-top: -15px;">Find and book a great experience.</p>
+	 <h1 style="color: white; font-size: 70px; margin-top: 50px; margin-left: 200px;">Discover</h1>
+	 <p style="color: white; font-size: 20px; margin-left: 200px; margin-top: -15px;">Find and book a great experience.</p>
     </section>
     <b-card
-      class="mb-3 discount-card"
-      style="margin: 40px; margin-top: -150px; z-index: 99"
+      class="mb-3 discount-card w-75"
+      style="margin: -150px auto 0 auto; z-index: 99"
     >
       <b-form>
         <div class="container-fluid p-2">
