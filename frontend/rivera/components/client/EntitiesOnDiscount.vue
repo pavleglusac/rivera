@@ -58,8 +58,10 @@
     </b-container>
     <Popup
       title="Congritulations!"
+      type="success"
       text="You have successfully booked your next adventure!"
       id="reservedModal"
+      ref="reservedModal"
     />
     <b-modal id="cantReserve" title="You can't make reservations.">
       <p class="my-4">

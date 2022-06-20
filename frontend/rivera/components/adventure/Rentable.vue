@@ -226,6 +226,7 @@
           id="reservedDiscountModal"
           ref="reservedDiscountModal"
           title="Congratulations!"
+          type="success"
           text="You have successfully reserved an appointment."
         />
 

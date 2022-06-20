@@ -22,8 +22,6 @@ public class BoatController {
     @Autowired
     private BoatService boatService;
 
-
-
     @PostMapping(path = "/add-boat")
     @PreAuthorize("hasRole('BOAT_OWNER')")
     public ResponseEntity<Integer> addBoat(
@@ -66,9 +64,6 @@ public class BoatController {
         boatService.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
-
-
-
 
     @PostMapping(path="/search-boats")
     public List<BoatDTO> searchBoats(SearchParams searchParams) {

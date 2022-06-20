@@ -83,7 +83,9 @@
         </b-form-group>
         <div style="float: right">
           <b-button @click="closeReviewModal">Cancel</b-button>
-          <b-button class="prime-btn" @click="reviewReservation">Review</b-button>
+          <b-button class="prime-btn" @click="reviewReservation"
+            >Review</b-button
+          >
         </div>
       </form>
     </b-modal>
@@ -91,18 +93,21 @@
     <Popup
       ref="reservation_canceled"
       id="reservation_canceled"
+      type="success"
       title="Reservation canceled"
       text="You have successfully canceled your reservation. Reservation can be canceled only 3 days in advance."
     />
     <Popup
       ref="review_sent"
       id="review_sent"
+      type="success"
       title="Sent!"
       text="You have successfully reviewed reservation."
     />
     <Popup
       ref="complain_sent"
       id="complain_sent"
+      type="success"
       title="Sent!"
       text="You have successfully complained on your reservation."
     />
@@ -266,21 +271,21 @@ export default {
     lodgeAComplaint(bvModalEvent) {
       if (this.checkFormValidity()) {
         this.$axios
-        .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
-        })
-        .then((resp) => {
-          this.$axios
-            .post(
-              `/api/complainOnReservation?&username=${resp.data}&reservationId=${this.clickedReservation.reservationId}&reviewFor=${this.selectedComplaint}&reviewText=${this.complainText}`
-            )
-            .then((response) => {
-              this.$refs.complain_sent.show();
-              this.closeComplaintModal();
-            });
-        });
+          .get("/api/auth/get-logged-username", {
+            headers: {
+              Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+            },
+          })
+          .then((resp) => {
+            this.$axios
+              .post(
+                `/api/complainOnReservation?&username=${resp.data}&reservationId=${this.clickedReservation.reservationId}&reviewFor=${this.selectedComplaint}&reviewText=${this.complainText}`
+              )
+              .then((response) => {
+                this.$refs.complain_sent.show();
+                this.closeComplaintModal();
+              });
+          });
       }
     },
     openComplaintModal(id) {
@@ -306,7 +311,7 @@ export default {
     },
     reviewEntitySelected() {
       this.selectedReview = "entity";
-    }
+    },
   },
   data() {
     return {
@@ -317,11 +322,11 @@ export default {
           owner: {
             name: "",
             surname: "",
-            photo: ""
+            photo: "",
           },
           name: "",
-          photo: ""
-        }
+          photo: "",
+        },
       },
       selectedDate: new Date().toISOString().slice(0, 10),
       selected: "all",
