@@ -76,7 +76,7 @@ public class CottageController {
     }
 
     @PostMapping(path = "delete-cottage")
-    @PreAuthorize("hasRole('COTTAGE_OWNER')")
+    //@PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ResponseEntity<String> deleteCottage(@RequestParam Integer id) {
         cottageService.delete(id);
         System.out.println("POGODIOOOO");
