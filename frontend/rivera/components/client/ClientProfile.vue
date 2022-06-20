@@ -122,7 +122,7 @@ export default {
       that.client.email = client.email;
       that.client.photo = client.photo;
       console.log(client.photo);
-      that.url = "http://localhost:8080" + client.photo;
+      that.url = process.env.backend + client.photo;
     },
     onFileChange(e) {
       const file = e.target.files[0];

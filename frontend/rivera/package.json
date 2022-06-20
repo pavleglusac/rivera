@@ -7,7 +7,12 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "serve": "npm run dev"
+    "serve": "npm run dev",
+    "heroku-postbuild": "nuxt build"
+  },
+  "engines": {
+    "node": "12.22.9",
+    "npm": "8.5.1"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
@@ -36,7 +41,6 @@
     "moment": "^2.29.2",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
-    "vue-avatar-cropper": "^6.0.9",
     "vue-country-select": "^0.2.2",
     "vue-server-renderer": "^2.6.14",
     "vue-slick-carousel": "^1.0.6",

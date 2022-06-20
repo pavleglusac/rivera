@@ -2,7 +2,10 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
-import com.tim20.rivera.repository.*;
+import com.tim20.rivera.repository.ClientRepository;
+import com.tim20.rivera.repository.MemberCategoryRepository;
+import com.tim20.rivera.repository.RentableRepository;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

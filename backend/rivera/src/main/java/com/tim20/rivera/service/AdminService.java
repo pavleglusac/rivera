@@ -1,6 +1,5 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.controller.AdminController;
 import com.tim20.rivera.controller.AdminReviewDTO;
 import com.tim20.rivera.dto.AdminReservationReportDTO;
 import com.tim20.rivera.dto.ClientRequestDTO;
@@ -8,18 +7,13 @@ import com.tim20.rivera.dto.IncomeSystemDTO;
 import com.tim20.rivera.dto.TerminationRequestDTO;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
-import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
-
-import javax.mail.MessagingException;
-import javax.persistence.OptimisticLockException;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;

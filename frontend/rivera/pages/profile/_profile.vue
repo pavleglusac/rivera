@@ -95,7 +95,7 @@ export default {
       role: "Fishing Instructor",
       member: "Gold member",
       memberColor: "#fca311",
-      host: "http://localhost:8080",
+      host: process.env.backend,
     };
   },
   mounted() {

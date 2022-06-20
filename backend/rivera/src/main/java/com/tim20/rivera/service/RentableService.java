@@ -1,6 +1,5 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.RentableDTO;
 import com.tim20.rivera.dto.ReservationDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

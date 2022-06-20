@@ -2,7 +2,6 @@ package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.BoatDTO;
 import com.tim20.rivera.dto.BoatProfileDTO;
-import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;

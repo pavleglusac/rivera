@@ -1,12 +1,8 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.CottageOwnerCottageProfileDto;
-import com.tim20.rivera.dto.ReservationDTO;
-import com.tim20.rivera.model.CottageOwner;
 import com.tim20.rivera.model.Owner;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CottageOwnerService {

@@ -424,7 +424,7 @@ export default {
           let adventure = resp.data;
           that.reviews = adventure.reviews;
           that.reviews.forEach(
-            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+            (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
           that.name = adventure.name;
           that.location = adventure.city + ", " + adventure.country;
@@ -460,7 +460,7 @@ export default {
           );
           that.score = adventure.averageScore;
           that.pictures.push(
-            ...adventure.pictures.map((x) => "http://localhost:8080" + x)
+            ...adventure.pictures.map((x) => process.env.backend + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
           var first = that.pictures.length % 2 == 1 ? half - 1 : half;
@@ -472,7 +472,7 @@ export default {
           that.equipment = adventure.equipment;
           that.owner = adventure.owner;
           that.capacity = adventure.capacity;
-          that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          that.owner.picture = process.env.backend + that.owner.picture;
           that.reservations = adventure.reservations;
         });
     },
@@ -484,7 +484,7 @@ export default {
           let cottage = resp.data;
           that.reviews = cottage.reviews;
           that.reviews.forEach(
-            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+            (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
           that.name = cottage.name;
           that.location =
@@ -524,7 +524,7 @@ export default {
             )
           );
           that.pictures.push(
-            ...cottage.pictures.map((x) => "http://localhost:8080" + x)
+            ...cottage.pictures.map((x) => process.env.backend + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
           var first = that.pictures.length % 2 == 1 ? half - 1 : half;
@@ -534,11 +534,7 @@ export default {
           that.secondColumn = that.pictures.slice(-half);
           that.id = cottage.id;
           that.owner = cottage.owner;
-          console.log("asdfhjklashdfjkl"+that.owner);
-          for(var x in that.owner){
-            console.log(x+"---"+that.owner[x]);
-          }
-          that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          that.owner.picture = process.env.backend + that.owner.picture;
           var stringRooms = cottage.rooms.split(";");
           for (var room of stringRooms) {
             if (!room.split(",")[0]) {
@@ -561,7 +557,7 @@ export default {
           let boat = resp.data;
           that.reviews = boat.reviews;
           that.reviews.forEach(
-            (x) => (x.client.photo = "http://localhost:8080" + x.client.photo)
+            (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
           that.name = boat.name;
           that.location = boat.address + "," + boat.city + "," + boat.country;
@@ -602,7 +598,7 @@ export default {
             )
           );
           that.pictures.push(
-            ...boat.pictures.map((x) => "http://localhost:8080" + x)
+            ...boat.pictures.map((x) => process.env.backend + x)
           );
           var half = Math.ceil(that.pictures.length / 2);
           var first = that.pictures.length % 2 == 1 ? half - 1 : half;
@@ -610,7 +606,7 @@ export default {
           that.secondColumn = that.pictures.slice(-half);
           that.id = boat.id;
           that.owner = boat.owner;
-          that.owner.picture = "http://localhost:8080" + that.owner.picture;
+          that.owner.picture = process.env.backend + that.owner.picture;
         });
     },
     reportModal(param) {

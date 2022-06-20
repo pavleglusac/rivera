@@ -62,11 +62,11 @@
       <form ref="form">
         <label class="form-label">Who are you reviewing?</label>
         <div @click="reviewOwnerSelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedReview == 'owner'}">
-          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
+          <b-avatar variant="info" :src='process.env.backend + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
           <span class="mr-auto">{{clickedReservation.entity.owner.name}} {{clickedReservation.entity.owner.surname}}</span>
         </div>
         <div @click="reviewEntitySelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedReview == 'entity'}">
-          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.photo' class="mr-3"></b-avatar>
+          <b-avatar variant="info" :src='process.env.backend + clickedReservation.entity.photo' class="mr-3"></b-avatar>
           <span class="mr-auto">{{clickedReservation.entity.name}}</span>
         </div>
         <label class="form-label">Score a reservation:</label>
@@ -118,11 +118,11 @@
       <form ref="form">
         <label class="form-label">Who are you complaining to?</label>
         <div @click="complaintOwnerSelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedComplaint == 'owner'}">
-          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
+          <b-avatar variant="info" :src='process.env.backend + clickedReservation.entity.owner.photo' class="mr-3"></b-avatar>
           <span class="mr-auto">{{clickedReservation.entity.owner.name}} {{clickedReservation.entity.owner.surname}}</span>
         </div>
         <div @click="complaintEntitySelected" style="cursor: pointer; padding: 10px; font-weight: 500; border-radius: 5px;" :class="{selectedClass : this.selectedComplaint == 'entity'}">
-          <b-avatar variant="info" :src='"http://localhost:8080" + clickedReservation.entity.photo' class="mr-3"></b-avatar>
+          <b-avatar variant="info" :src='process.env.backend + clickedReservation.entity.photo' class="mr-3"></b-avatar>
           <span class="mr-auto">{{clickedReservation.entity.name}}</span>
         </div>
         <b-form-group

@@ -1,6 +1,6 @@
 <template>
   <b-card no-body class="shadow-sm discount-card" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
-    <b-card-img class="cover-img" :src='"http://localhost:8080" + entity.pictures[0]' /> 
+    <b-card-img class="cover-img" :src='process.env.backend + entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
         <div class="d-flex justify-content-between align-items-center">
             <h4 class="card-title">{{entity.name}}</h4>

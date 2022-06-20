@@ -9,6 +9,7 @@ import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.repository.ReservationRepository;
 import com.tim20.rivera.repository.RulesRepository;
 import org.apache.tomcat.jni.Local;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
