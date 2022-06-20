@@ -79,6 +79,7 @@ public class CottageController {
     @PreAuthorize("hasRole('COTTAGE_OWNER')")
     public ResponseEntity<String> deleteCottage(@RequestParam Integer id) {
         cottageService.delete(id);
+        System.out.println("POGODIOOOO");
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

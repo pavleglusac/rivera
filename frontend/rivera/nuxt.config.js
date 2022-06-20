@@ -72,7 +72,8 @@ export default {
     },
 
     proxy: {
-        '/api/': { target: 'http://the-rivera-app-backend.herokuapp.com/api', pathRewrite: { '^/api/': '' } }
+        '/api/': { target: (process.env.NODE_ENV !== 'production' ? 'http://localhost:8080/api' : 'http://the-rivera-app-backend.herokuapp.com/api'),
+                    pathRewrite: { '^/api/': '' } }
     },
     // Build Configuration: https://go.nuxtjs.dev/config-build
 }
