@@ -1,6 +1,6 @@
 <template>
   <b-card no-body class="shadow-sm discount-card" img-left max-height="300" style="cursor: pointer;" @click="detailedOffer()">
-    <b-card-img class="cover-img" :src='process.env.backend + entity.pictures[0]' /> 
+    <b-card-img class="cover-img" id="cvr-img" :src='entity.pictures[0]' /> 
     <b-card-body class="d-flex flex-column h-100">
       <div class="d-flex justify-content-between align-items-center">
         <h3 class="card-title">{{ entity.name }}</h3>
@@ -62,6 +62,9 @@ export default {
   components: {},
   data() {
     return {};
+  },
+  mounted() {
+    this.entity.pictures[0] =  (process.env.backend) + "" + this.entity.pictures[0];
   },
   methods: {
     detailedOffer() {
