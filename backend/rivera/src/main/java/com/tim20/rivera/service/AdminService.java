@@ -189,7 +189,6 @@ public class AdminService {
         }
     }
 
-
     private Admin clientRequestDTOToAdmin(ClientRequestDTO clientRequestDTO) {
         Admin admin = new Admin();
         admin.setPassword(passwordEncoder.encode(clientRequestDTO.getPassword()));
@@ -245,7 +244,6 @@ public class AdminService {
             if (nextVal.isAfter(to)) {
                 nextVal = to;
             }
-            //
             Double income = reservationRepository.findTotalSystemIncome(from, nextVal);
             if (income == null) income = 0.0;
             IncomeSystemDTO incomeDto = new IncomeSystemDTO();
@@ -278,7 +276,6 @@ public class AdminService {
         return dto;
     }
 
-
     @Transactional
     public boolean resolveReport(int reportId, String responseText, boolean assignPenalty) {
         try {
@@ -286,7 +283,7 @@ public class AdminService {
             Client client = report.getReservation().getClient();
             Owner owner = report.getReservation().getRentable().getOwner();
             if (assignPenalty)  {
-                assignPenaltyAndSendEmails(responseText, report, client, owner);
+                assignPenaltyAndSendEmails(responseText, client, owner);
             } else if(report.getSanction()) {
                 rejectPenalytAndSendEmail(responseText, client, owner);
             }
@@ -305,13 +302,22 @@ public class AdminService {
         emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
                 "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
                         + client.getUsername() + " will not be assigned a penalty. Reason:\n"
-                        +responseText+
+                        + responseText +
                         "\n\nSincerely,\n Rivera.");
     }
 
-    private void assignPenaltyAndSendEmails(String responseText, ReservationReport report, Client client, Owner owner) {
+    public List<AdminReviewDTO> getPendingReviews() {
+        return reviewRepository
+                .getReviewsByStatus(ReviewStatus.PENDING)
+                .stream()
+                .map(this::reviewToAdminReviewDTO)
+                .collect(Collectors.toList());
+    }
+
+    private void assignPenaltyAndSendEmails(String responseText, Client client, Owner owner) {
         int totalPenalties = client.getNumberOfPenalties();
-        report.getReservation().getClient().setNumberOfPenalties(totalPenalties + 1);
+        client.setNumberOfPenalties(totalPenalties + 1);
+        clientRepository.save(client);
         emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
                 "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
                         "you that you have been assigned a penalty. Three of these penalties per month " +
@@ -322,14 +328,6 @@ public class AdminService {
                 "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
                         + client.getUsername() + " was assigned a penalty as per your request." +
                         "\n\nSincerely,\n Rivera.");
-    }
-
-    public List<AdminReviewDTO> getPendingReviews() {
-        return reviewRepository
-                .getReviewsByStatus(ReviewStatus.PENDING)
-                .stream()
-                .map(this::reviewToAdminReviewDTO)
-                .collect(Collectors.toList());
     }
 
     public AdminReviewDTO reviewToAdminReviewDTO(Review review) {
@@ -374,7 +372,6 @@ public class AdminService {
                                     "\n\nSincerely,\n Rivera.");
                     review.setStatus(ReviewStatus.DECLINED);
                 }
-
             } else {
                 emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
                         "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "

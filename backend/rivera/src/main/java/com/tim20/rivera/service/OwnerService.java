@@ -91,6 +91,7 @@ public class OwnerService {
         owner.setCity(userRequestDTO.getCity());
         owner.setCountry(userRequestDTO.getCountry());
         owner.setEmail(userRequestDTO.getEmail());
+        owner.setType(userRequestDTO.getBoatOwnerType().equals("captain") ? BoatOwnerType.CAPTAIN : BoatOwnerType.FIRST_OFFICER);
         owner.setName(userRequestDTO.getName());
         owner.setSurname(userRequestDTO.getSurname());
         owner.setPhoto(userRequestDTO.getPhoto());

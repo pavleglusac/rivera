@@ -2,11 +2,12 @@
   <div>
     <h6>Loyalty Program</h6>
     <p>
-      Number of points you get when your reservation is successfull is 
+      Number of points you get when your reservation is successfull is
       <b>{{ owner.pointsPerReservation }}</b
-      >. Rivera is taking <b>{{ owner.incomePercentage }}%</b> of your reservation income. The more points you
-      have, the more income you get on your next reservation! Your current
-      number of points is <b>{{ owner.numberOfPoints }}</b
+      >. Rivera is taking <b>{{ owner.incomePercentage }}%</b> of your
+      reservation income. The more points you have, the more income you get on
+      your next reservation! Your current number of points is
+      <b>{{ owner.numberOfPoints }}</b
       >.
     </p>
     <b-card
@@ -18,9 +19,11 @@
         <font-awesome-icon icon="gift" /> {{ ownerLoyalty.name }}
       </h6>
       <b-card-text>
-        Additional income percentage you have with this program is <b>{{ ownerLoyalty.percentage }}%</b>.<br>
-        Minimal number of points you should have is <b>
-        {{ ownerLoyalty.numberOfPoints }}</b>.</b-card-text
+        Additional income percentage you have with this program is
+        <b>{{ ownerLoyalty.percentage }}%</b>.<br />
+        Minimal number of points you should have is
+        <b> {{ ownerLoyalty.numberOfPoints }}</b
+        >.</b-card-text
       >
     </b-card>
     <p
@@ -36,17 +39,19 @@
     </p>
     <b-modal id="loyaltyModal" hide-footer title="All Loyalty Programs">
       <b-card
-        v-for="loyalty in owner.allLoyalties"
+        v-for="(loyalty, index) in owner.allLoyalties"
         :style="cssCard(loyalty)"
+        v-bind:key="loyalty.name + index"
         class="loyaltyCard"
       >
         <h6 :style="cssCard(loyalty)" class="loyaltyTitle">
           <font-awesome-icon icon="gift" /> {{ loyalty.name }}
         </h6>
         <b-card-text>
-          Additional income percentage you have with this program is <b>{{ loyalty.percentage }}%</b>.
-          Minimal number of points you should have is
-          <b>{{ loyalty.numberOfPoints }}</b>.</b-card-text
+          Additional income percentage you have with this program is
+          <b>{{ loyalty.percentage }}%</b>. Minimal number of points you should
+          have is <b>{{ loyalty.numberOfPoints }}</b
+          >.</b-card-text
         >
       </b-card>
     </b-modal>

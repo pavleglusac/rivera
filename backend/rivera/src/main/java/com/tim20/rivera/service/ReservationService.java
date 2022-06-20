@@ -31,6 +31,8 @@ public class ReservationService {
     @Autowired
     private OwnerService ownerService;
     @Autowired
+    private OwnerRepository ownerRepository;
+    @Autowired
     private RentableService rentableService;
     @Autowired
     private RentableRepository rentableRepository;
@@ -165,6 +167,10 @@ public class ReservationService {
         reservation.setClient(client);
         Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
         reservation.setOwnerIncomePercentage(ownerPercentage);
+        Owner owner = reservation.getRentable().getOwner();
+        int points = owner.getNumberOfPoints();
+        owner.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
+        ownerRepository.save(owner);
         discountService.setDiscountInactive(discountId);
         reservationRepository.save(reservation);
         try {

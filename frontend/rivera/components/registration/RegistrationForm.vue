@@ -257,6 +257,15 @@
               <ErrorDiv :parameter="$v.biography" :name="'Biography'">
               </ErrorDiv>
             </div>
+            <div v-else-if="type == 'Boat Owner'">
+              <select
+              v-model="boatOwnertype"
+              class="form-control"
+            >
+              <option value="captain" selected>Captain</option>
+              <option value="firstOfficer">First Officer</option>
+            </select>
+            </div>
           </div>
         </div>
 
@@ -346,6 +355,7 @@ export default {
       country: "",
       city: "",
       address: "",
+      boatOwnertype: "captain",
       type: "",
       description: "",
       password2: "",
@@ -499,6 +509,8 @@ export default {
       formData.append("description", this.description);
       if (this.type == "Fishing Instructor")
         formData.append("biography", this.biography);
+      if (this.type == "Boat Owner")
+        formData.append("boatOwnerType", this.boatOwnertype);
       this.$axios
         .post("/api/auth/signup", formData)
         .then((resp) => {

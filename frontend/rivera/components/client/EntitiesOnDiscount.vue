@@ -7,8 +7,9 @@
     <b-container class="bv-example-row" data-aos="zoom-in">
       <b-row>
         <entity-on-discount
-          v-for="e in lastMinuteOffers"
+          v-for="(e, index) in lastMinuteOffers"
           :entity="e"
+          v-bind:key="e.name + index"
           :openModal="openModal"
           :openCantReserveModal="openCantReserve"
         />
@@ -21,7 +22,8 @@
     <b-container class="bv-example-row" data-aos="zoom-in">
       <b-row>
         <entity-on-discount
-          v-for="e in popularOffers"
+          v-for="(e, index) in popularOffers"
+          v-bind:key="e.name + index"
           :entity="e"
           :openModal="openModal"
           :openCantReserveModal="openCantReserve"
@@ -35,8 +37,9 @@
     <b-container class="bv-example-row" data-aos="zoom-in">
       <b-row>
         <entity-on-discount
-          v-for="e in bestPriceOffers"
+          v-for="(e, index) in bestPriceOffers"
           :entity="e"
+          v-bind:key="e.name + index"
           :openModal="openModal"
           :openCantReserveModal="openCantReserve"
         />
@@ -49,8 +52,9 @@
     <b-container class="bv-example-row" data-aos="zoom-in">
       <b-row>
         <entity-on-discount
-          v-for="e in recommendedOffers"
+          v-for="(e, index) in recommendedOffers"
           :entity="e"
+          v-bind:key="e.name + index"
           :openCantReserveModal="openCantReserve"
           :openModal="openModal"
         />

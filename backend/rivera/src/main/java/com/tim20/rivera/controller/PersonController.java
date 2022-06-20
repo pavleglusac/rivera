@@ -21,13 +21,14 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @GetMapping(path = "person-by-username")
+    @GetMapping(path = "/person-by-username")
     public PersonDTO getPersonByUsername(@RequestParam("username") String username) {
         Person person = personService.findByUsername(username);
         if(person == null) {
             System.out.println(username + " is null!");
             return null;
         }
+        System.out.println("USAO SAM");
         return personService.personToDTO(person);
     }
 
@@ -90,6 +91,5 @@ public class PersonController {
     public void deletePerson(@RequestParam String username) {
         personService.delete(username);
     }
-
 
 }

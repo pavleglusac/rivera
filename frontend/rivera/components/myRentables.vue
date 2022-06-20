@@ -62,12 +62,12 @@
 
           <div v-else-if="!(offers.length === 0)">
             <EntityCard
-              v-for="entity in offers"
+              v-for="(entity, index) in offers"
               :entity="entity"
               :offerType="getActiveOffers()"
               :myRentable="true"
               class="mb-3"
-              v-bind:key="entity.name"
+              v-bind:key="entity.name + index"
             />
           </div>
           <div v-else>

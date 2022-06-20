@@ -19,4 +19,5 @@ import java.util.List;
         + "WHERE username = ? and version = ?")
 @Where(clause = "deleted = false")
 public class BoatOwner extends Owner {
+    private BoatOwnerType type;
 }

@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -276,6 +278,8 @@ public class ClientService {
         List<Reservation> reservations = new ArrayList<Reservation>(client.getReservations());
         reservations.add(reservation);
         client.setReservations(reservations);
+        int points = client.getNumberOfPoints();
+        client.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
         clientRepository.save(client);
     }
 
@@ -306,6 +310,25 @@ public class ClientService {
         return discount;
     }
 
+    // if client reserved an entity and cancelled it, it cannot be reserved again
+    // in that period (start of the new reservation is inbetween start and end of old one
+    public boolean didClientReserveEarlier(Client client, Integer reservationId, LocalDateTime start, LocalDateTime end) {
+        for(Reservation reservation : client.getReservations()) {
+            if(!reservation.getCancelled() && Objects.equals(reservationId, reservation.getId())
+                    && start.isAfter(reservation.getStartDateTime()) && start.isBefore(end))
+                return true;
+        }
+        return false;
+    }
+
+    public LocalDateTime parseDate(String date) {
+        try {
+            return LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        } catch (Exception e) {
+            return LocalDateTime.parse(date.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+    }
+
     public void cancelReservation(Client client, Integer reservationId) {
         for(int i=0; i<client.getReservations().size(); i++) {
             if(Objects.equals(client.getReservations().get(i).getId(), reservationId)) {
@@ -313,6 +336,8 @@ public class ClientService {
                 break;
             }
         }
+        int points = client.getNumberOfPoints();
+        client.setNumberOfPoints(points - rulesRepository.findAll().get(0).getPointsPerReservation());
         clientRepository.save(client);
     }
 

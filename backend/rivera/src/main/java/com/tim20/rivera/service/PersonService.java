@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonService{
+public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
@@ -63,7 +63,7 @@ public class PersonService{
     final String IMAGES_PATH = "\\images\\clients\\";
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
-    public Person findByUsername(String username){
+    public Person findByUsername(String username) {
         return personRepository.findByUsername(username);
     }
 
@@ -83,7 +83,10 @@ public class PersonService{
         if (person instanceof FishingInstructor) {
             dto.setBiography(((FishingInstructor) person).getBiography());
         }
-
+        System.out.println(((BoatOwner) person).getType());
+        if (person instanceof BoatOwner) {
+            dto.setBoatOwnerType(((BoatOwner) person).getType() == BoatOwnerType.CAPTAIN ? "Captain" : "First Officer");
+        }
         return dto;
     }
 
@@ -95,13 +98,13 @@ public class PersonService{
         dto.setUsername(person.getUsername());
         List<String> roleNames = person.getRoles().stream().map(Role::getName).collect(Collectors.toList());
         dto.setRole(String.join("", roleNames));
-        if(person instanceof FishingInstructor) {
+        if (person instanceof FishingInstructor) {
             dto.setDescription(((FishingInstructor) person).getBiography());
         } else {
             dto.setDescription("");
         }
         MemberCategory category = person.getCategory();
-        if(category != null) {
+        if (category != null) {
             dto.setMembership(category.getName());
             dto.setMembershipColor(category.getColor());
         } else {
@@ -119,15 +122,18 @@ public class PersonService{
         person.setAddress(dto.getAddress());
         person.setCity(dto.getCity());
         person.setCountry(dto.getCountry());
-        if(person instanceof FishingInstructor) {
+        if (person instanceof FishingInstructor) {
             ((FishingInstructor) person).setBiography(dto.getBiography());
+        }
+        if (person instanceof BoatOwner) {
+            ((BoatOwner) person).setType(dto.getBoatOwnerType().equals("captain") ? BoatOwnerType.CAPTAIN : BoatOwnerType.FIRST_OFFICER);
         }
     }
 
     @org.springframework.transaction.annotation.Transactional(readOnly = false)
     public boolean updatePerson(PersonDTO dto) {
         Person person = personRepository.findByUsername(dto.getUsername());
-        if(person == null) {
+        if (person == null) {
             return false;
         }
         copyDTOToPerson(person, dto);
@@ -173,7 +179,7 @@ public class PersonService{
 
             System.out.println(authentication.getPrincipal());
             Person user = (Person) authentication.getPrincipal();
-            if(!ownerService.checkIfApprovedOrNonExistent(user.getUsername())){
+            if (!ownerService.checkIfApprovedOrNonExistent(user.getUsername())) {
                 return null;
             }
             user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
@@ -195,11 +201,11 @@ public class PersonService{
 
     public boolean requestTermination(TerminationRequestDTO dto) {
         Person person = personRepository.findByUsername(dto.getUsername());
-        if(person == null) return false;
+        if (person == null) return false;
         System.out.println("person not null");
         List<TerminationRequest> requests = terminationRepository.findByPerson(person);
         boolean hasPending = requests.stream().anyMatch(x -> x.getStatus().equals(TerminationStatus.PENDING));
-        if(hasPending) return false;
+        if (hasPending) return false;
         System.out.println("pending not null");
         TerminationRequest terminationRequest = new TerminationRequest();
         terminationRequest.setPerson(person);
@@ -211,13 +217,13 @@ public class PersonService{
 
     public LocalDateTime getLastPasswordChange(String username) {
         Person person = personRepository.findByUsername(username);
-        if(person == null) return null;
+        if (person == null) return null;
         return person.getLastPasswordResetDate().toLocalDateTime();
     }
 
     public boolean checkIfApprovedOrNonExistent(String username) {
         Person person = personRepository.findByUsername(username);
-        return person == null || person.getStatus()==AccountStatus.ACTIVE;
+        return person == null || person.getStatus() == AccountStatus.ACTIVE;
     }
 
     public List<ProfileDTO> searchPerson(int numberOfResults, String text, String type, boolean checkIsDeletable) {

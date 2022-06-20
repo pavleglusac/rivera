@@ -11,7 +11,9 @@
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
-      <b-carousel-slide v-for="pic in pictures" style="background-color: white">
+      <b-carousel-slide v-for="(pic, index) in pictures"
+        v-bind:key="pic + index"
+       style="background-color: white">
         <template #img>
           <div class="d-flex justify-content-center">
             <img
