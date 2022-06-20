@@ -1,13 +1,8 @@
 package com.tim20.rivera.service;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.Client;
-import com.tim20.rivera.model.Rentable;
-import com.tim20.rivera.model.Reservation;
-import com.tim20.rivera.model.ReviewType;
-import com.tim20.rivera.repository.RentableRepository;
-import com.tim20.rivera.repository.ReservationRepository;
-import com.tim20.rivera.repository.RulesRepository;
+import com.tim20.rivera.model.*;
+import com.tim20.rivera.repository.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +37,12 @@ public class ReservationService {
     private EmailService emailService;
     @Autowired
     private RulesRepository rulesRepository;
+    @Autowired
+    private CottageRepository cottageRepository;
+    @Autowired
+    private BoatRepository boatRepository;
+    @Autowired
+    private AdventureRepository adventureRepository;
     @Autowired
     private DiscountService discountService;
 
@@ -140,11 +141,19 @@ public class ReservationService {
         return reservationRepository.findByRentableOwnerUsername(ownerUsername).stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
-    //@Transactional(readOnly = false)
+    @Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start,
                                       LocalDateTime end, Double price, List<String> additionalServices, String discountId) {
-        //Rentable rentable = rentableRepository.findOneById(rentableId); TODO: fix locking
         Rentable rentable = rentableRepository.findById(rentableId).get();
+        if(rentable instanceof Cottage){
+            rentable = cottageRepository.findOneById(rentableId);
+        }
+        else if(rentable instanceof Boat){
+            rentable = boatRepository.findOneById(rentableId);
+        }
+        else {
+            rentable = adventureRepository.findOneById(rentableId);
+        }
         Reservation reservation = new Reservation();
         reservation.setPrice(price);
         reservation.setRentable(rentable);
