@@ -53,6 +53,9 @@ public class AdventureService {
     @Autowired
     private FishingInstructorRepository fishingInstructorRepository;
 
+    @Autowired
+    private RentableRepository rentableRepository;
+
     final String STATIC_PATH = "src/main/resources/static/";
     final String STATIC_PATH_TARGET = "target/classes/static/";
     final String IMAGES_PATH = "/images/adventures/";
@@ -272,8 +275,14 @@ public class AdventureService {
         return dto;
     }
 
-    public List<AdventureDTO> getAdventures() {
-        return adventureRepository.findAll().stream().map(this::adventureToDto).collect(Collectors.toList());
+    public List<AdventureDTO> getAdventures(boolean checkIsDeletable) {
+        return adventureRepository.findAll()
+                                  .stream()
+                                  .filter(x -> !checkIsDeletable || (reservationRepository
+                                          .findByRentableAndCancelledAndStartDateTimeIsAfter(x, false, LocalDateTime
+                                                  .now()).isEmpty()))
+                                  .map(this::adventureToDto)
+                                  .toList();
     }
 
     private FishingInstructorAdventureProfileDto fishingInstructorToDto(FishingInstructor owner) {
@@ -291,17 +300,23 @@ public class AdventureService {
     }
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
-        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventuresOfOwner(searchParams.getOwnerUsername()), searchParams.getTags()), searchParams);
+        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventuresOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams.getTags()), searchParams);
         return filter(searchParams.getSearch().toLowerCase(), sortAdventures(searchParams.getOrderBy(),
                 adventures.stream().limit(searchParams.getNumberOfResults())
                         .collect(Collectors.toList())));
     }
 
-    public List<AdventureDTO> getAdventuresOfOwner(String ownerUsername) {
+    public List<AdventureDTO> getAdventuresOfOwner(String ownerUsername, boolean checkIsDeletable) {
         if(ownerUsername != null){
-            return adventureRepository.findByOwnerUsername(ownerUsername).stream().map(this::adventureToDto).collect(Collectors.toList());
+            return adventureRepository.findByOwnerUsername(ownerUsername)
+                                      .stream()
+                                      .filter(x -> !checkIsDeletable || (reservationRepository
+                                              .findByRentableAndCancelledAndStartDateTimeIsAfter(x, false, LocalDateTime
+                                                      .now()).isEmpty()))
+                                      .map(this::adventureToDto)
+                                      .toList();
         }
-        else return getAdventures();
+        else return getAdventures(checkIsDeletable);
     }
 
     public List<AdventureDTO> filter(String keyWord, List<AdventureDTO> adventures) {

@@ -42,8 +42,8 @@ INSERT INTO adventure_fishing_equipment (adventure_id, fishing_equipment) VALUES
 
 
 
-INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id, version) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+pera@outlook.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, 0, 1, 0);
 INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id, version) VALUES ('mika', 'Dobrovoljacka 37', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+mika@outlook.com', NULL, 'Mika', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Mikic', 0, 0, 0, 1, 0);
+INSERT INTO client (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id, version) VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+pera@outlook.com', NULL, 'Petar', '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg', 'Petrovic', 0, 0, 0, 1, 0);
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password, phone_number, photo, surname, status, version) VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+admin@outlook.com', NULL, 'Branislav', '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg', 'Bakic', 0, 0);
 
@@ -253,10 +253,10 @@ INSERT INTO user_role (user_id, role_id) VALUES ('admin', 5);
 INSERT INTO user_role (user_id, role_id) VALUES ('bowner', 2);
 
 INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-                        VALUES (0, false, true, false, 'Client didnt show up', 1, 0);
+VALUES (0, false, true, false, 'Client didnt show up', 1, 0);
 
 INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-                        VALUES (1, false, true, false, 'Client didnt show up', 2, 0);
+VALUES (1, false, true, false, 'Client didnt show up', 2, 0);
 
 INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-                        VALUES (2, false, false, false, 'Client did show up', 3, 0);
+VALUES (2, false, false, false, 'Client did show up', 3, 0);

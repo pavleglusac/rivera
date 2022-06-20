@@ -83,8 +83,8 @@ public class PersonController {
     }
 
     @GetMapping(path="search-person")
-    public List<ProfileDTO> searchPerson(@RequestParam int numberOfResults, @RequestParam String search, @RequestParam String type) {
-        return personService.searchPerson(numberOfResults, search, type);
+    public List<ProfileDTO> searchPerson(@RequestParam int numberOfResults, @RequestParam String search, @RequestParam String type, @RequestParam boolean deletable) {
+        return personService.searchPerson(numberOfResults, search, type, deletable);
     }
 
     @DeleteMapping(path = "person")

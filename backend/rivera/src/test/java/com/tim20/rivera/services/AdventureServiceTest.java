@@ -34,7 +34,7 @@ public class AdventureServiceTest {
     @Test
     @Transactional
     public void testAdventuresOfOwner() {
-        List<AdventureDTO> adventureList = adventureService.getAdventuresOfOwner("marko");
+        List<AdventureDTO> adventureList = adventureService.getAdventuresOfOwner("marko", false);
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Mountain Fishing"));
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Some adventure"));
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Very Cool Fishing"));
@@ -44,7 +44,7 @@ public class AdventureServiceTest {
     @Test
     @Transactional
     public void testGetAllAdventures() {
-        List<AdventureDTO> adventureList = adventureService.getAdventures();
+        List<AdventureDTO> adventureList = adventureService.getAdventures(false);
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Mountain Fishing"));
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Some adventure"));
         assert adventureList.stream().anyMatch(x -> x.getName().equals("Very Cool Fishing"));

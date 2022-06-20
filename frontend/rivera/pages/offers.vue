@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Navbar from '../components/navbar.vue';
-import Offers from '../components/offers.vue';
+import Navbar from '@/components/navbar.vue';
+import Offers from '@/components/offers.vue';
 
 export default {
   components: { Offers, Navbar },

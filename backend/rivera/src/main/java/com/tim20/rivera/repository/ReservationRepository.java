@@ -2,10 +2,7 @@ package com.tim20.rivera.repository;
 
 import com.tim20.rivera.dto.AttendanceDTO;
 import com.tim20.rivera.dto.IncomeDTO;
-import com.tim20.rivera.model.Cottage;
-import com.tim20.rivera.model.Owner;
-import com.tim20.rivera.model.Rentable;
-import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.*;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -21,6 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
+    List<Reservation> findByClientAndStartDateTimeAfter(Client client, LocalDateTime start);
+    @Query("select r from Reservation r WHERE r.rentable.owner = ?1 and r.startDateTime > ?2")
+    List<Reservation> findByRentableOwnerAndStartDateTime(Owner owner, LocalDateTime start);
     List<Reservation> findByRentableAndCancelledAndStartDateTimeIsAfter(Rentable rentable, Boolean cancelled, LocalDateTime dateTime);
     List<Reservation> findByRentable(Rentable rentable);
     List<Reservation> findByCancelled(Boolean cancelled);

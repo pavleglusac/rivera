@@ -71,7 +71,8 @@ export default {
     return {};
   },
   mounted() {
-    this.entity.pictures[0] = process.env.backend + this.entity.pictures[0];
+    console.log(process.env.backend);
+    this.entity.pictures[0] = this.entity.pictures[0];
   },
   methods: {
     detailedOffer() {

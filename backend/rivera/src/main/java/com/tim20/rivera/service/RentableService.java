@@ -4,9 +4,11 @@ import com.tim20.rivera.dto.RentableDTO;
 import com.tim20.rivera.dto.ReservationDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.model.*;
+import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.OwnerRepository;
 import com.tim20.rivera.repository.RentableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,9 @@ public class RentableService {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private CottageRepository cottageRepository;
 
     public List<RentableDTO> getRentablesDtoForOwner(String ownerId) {
         Owner owner = ownerRepository.findByUsername(ownerId);
@@ -119,8 +124,7 @@ public class RentableService {
     }
 
     public void delete(Integer id) {
-        Optional<Rentable> optionalRentable = rentableRepository.findById(id);
-        if(optionalRentable.isEmpty()) return;
-        rentableRepository.delete(optionalRentable.get());
+        if(rentableRepository.findById(id).isEmpty()) return;
+        rentableRepository.deleteById(id);
     }
 }

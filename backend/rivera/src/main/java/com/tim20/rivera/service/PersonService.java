@@ -53,6 +53,10 @@ public class PersonService {
     @Autowired
     private OwnerRepository ownerRepository;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+
 
     final String STATIC_PATH = "src\\main\\resources\\static\\";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -222,26 +226,29 @@ public class PersonService {
         return person == null || person.getStatus() == AccountStatus.ACTIVE;
     }
 
-    public List<ProfileDTO> searchPerson(int numberOfResults, String text, String type) {
-        if (text == null) text = "";
-        if (type.equals("client"))
+    public List<ProfileDTO> searchPerson(int numberOfResults, String text, String type, boolean checkIsDeletable) {
+        if(text == null) text = "";
+        if(type.equals("client"))
             return clientRepository
-                    .searchClient(numberOfResults, text + "%")
-                    .stream()
-                    .map(this::personToProfileDTO)
-                    .collect(Collectors.toList());
+                .searchClient(numberOfResults, text + "%")
+                .stream()
+                .filter(x -> !checkIsDeletable || reservationRepository.findByClientAndStartDateTimeAfter(x, LocalDateTime.now()).isEmpty())
+                .map(this::personToProfileDTO)
+                .collect(Collectors.toList());
         else
             return ownerRepository
-                    .searchOwner(text + "%")
-                    .stream()
-                    .map(this::personToProfileDTO)
-                    .collect(Collectors.toList());
+                .searchOwner(text + "%")
+                .stream()
+                .filter(x -> !checkIsDeletable || reservationRepository.findByRentableOwnerAndStartDateTime(x, LocalDateTime.now()).isEmpty())
+                .map(this::personToProfileDTO)
+                .collect(Collectors.toList());
     }
 
     public void delete(String username) {
         System.out.println(username);
         Person person = personRepository.findByUsername(username);
         if (person != null) {
+            System.out.println("Obrisao -->");
             personRepository.delete(person);
         }
     }

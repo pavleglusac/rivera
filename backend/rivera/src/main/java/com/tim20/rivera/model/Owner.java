@@ -11,14 +11,17 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Data
-@SQLDelete(sql = "UPDATE person SET deleted = true WHERE username = ?")
-@Where(clause="deleted=false")
+@SQLDelete(sql
+        = "UPDATE owner "
+        + "SET deleted = true "
+        + "WHERE username = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Owner extends Person {
     private String signUpDescription;
     private Integer numberOfPoints;
     @OneToMany(mappedBy = "owner")
     private List<Review> reviews;
-    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private List<Rentable> rentables;
 
     @PreRemove

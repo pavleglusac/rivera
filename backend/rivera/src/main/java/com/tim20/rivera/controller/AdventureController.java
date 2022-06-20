@@ -50,7 +50,7 @@ public class AdventureController {
 
     @GetMapping(path = "/get-adventures")
     public List<AdventureDTO> getAdventures() {
-        return adventureService.getAdventures();
+        return adventureService.getAdventures(false);
     }
 
     @PostMapping(path = "update-adventure")
