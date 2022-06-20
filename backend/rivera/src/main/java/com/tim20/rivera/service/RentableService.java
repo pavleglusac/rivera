@@ -85,6 +85,21 @@ public class RentableService {
         return rentable.get().getReservations().stream().map(this::reservationToDto).collect(Collectors.toList());
     }
 
+    public List<ReservationDTO> getDiscountReservations(Integer id) {
+        Optional<Rentable> rentable = rentableRepository.findById(id);
+        if (rentable.isEmpty()) return new ArrayList<>();
+        return rentable.get().getDiscounts().stream().filter(x -> !x.isReserved()).map(this::discountToDto).collect(Collectors.toList());
+    }
+
+    private ReservationDTO discountToDto(Discount discount) {
+        ReservationDTO dto = new ReservationDTO();
+        dto.setId(discount.getId());
+        dto.setStart(discount.getStartDateTime());
+        dto.setEnd(discount.getEndDateTime());
+        dto.setPrice(discount.getPrice());
+        return dto;
+    }
+
     private ReservationDTO reservationToDto(Reservation reservation) {
         ReservationDTO dto = new ReservationDTO();
         dto.setStart(reservation.getStartDateTime());

@@ -191,20 +191,24 @@ public class AvailabilityService {
         availabilities.sort(Comparator.comparing(Availability::getStartDateTime));
         fixOverlaps(availabilities);
         //
-        rentable.getReservations().forEach(res -> {
-            Availability av = new Availability();
-            av.setStartDateTime(res.getStartDateTime());
-            av.setEndDateTime(res.getEndDateTime());
-            subtractAvailability(av, availabilities);
-        });
+        prettyPrintAvailabilities(availabilities);
+
+        rentable.getReservations().forEach(
+            res -> {
+                Availability av = new Availability();
+                av.setStartDateTime(res.getStartDateTime());
+                av.setEndDateTime(res.getEndDateTime());
+                subtractAvailability(av, availabilities);
+            }
+        );
 
         rentable.getDiscounts().forEach(
-                res -> {
-                    Availability av = new Availability();
-                    av.setStartDateTime(res.getStartDateTime());
-                    av.setEndDateTime(res.getEndDateTime());
-                    subtractAvailability(av, availabilities);
-                }
+            res -> {
+                Availability av = new Availability();
+                av.setStartDateTime(res.getStartDateTime());
+                av.setEndDateTime(res.getEndDateTime());
+                subtractAvailability(av, availabilities);
+            }
         );
         return availabilities;
     }

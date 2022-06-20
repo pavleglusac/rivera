@@ -71,7 +71,7 @@ INSERT INTO cottage_rooms(cottage_id,rooms,rooms_key) values (5,5,2);
 
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (4, '2022-08-18 17:00:00', 450, '2022-08-18 16:00:00', 1, true);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2012-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 3, false);
