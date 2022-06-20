@@ -1,8 +1,8 @@
 <template>
 	<div class="mt-5">
-		<div class="float-left mr-1" v-if="logged">
+		<div class="float-left mr-1" v-if="logged || isClient || (owner && isOwner)">
 			<b-button
-				v-if="owner"
+				v-if="owner && isOwner"
 				size="sm"
 				class="btn btn-light"
 				style="font-weight: 500"
@@ -10,26 +10,26 @@
 			>
 				<font-awesome-icon icon="calendar-check" /> View reservations</b-button
 			>
-				<b-button
-					v-if="owner && isOwner"
-					size="sm"
-					class="btn btn-light"
-					style="font-weight: 500"
-					:disabled="!canBeChanged"
-					@click="updateRentable"
-				>
-					<font-awesome-icon icon="pen-to-square" /> Update</b-button
-				>
-				<b-button
-					v-if="owner && isOwner"
-					size="sm"
-					class="btn btn-light"
-					style="font-weight: 500"
-					:disabled="!canBeChanged"
-					@click="deleteRentable"
-				>
-					<font-awesome-icon icon="trash" /> Delete</b-button
-				>
+			<b-button
+				v-if="owner && isOwner"
+				size="sm"
+				class="btn btn-light"
+				style="font-weight: 500"
+				:disabled="!canBeChanged"
+				@click="updateRentable"
+			>
+				<font-awesome-icon icon="pen-to-square" /> Update</b-button
+			>
+			<b-button
+				v-if="owner && isOwner"
+				size="sm"
+				class="btn btn-light"
+				style="font-weight: 500"
+				:disabled="!canBeChanged"
+				@click="deleteRentable"
+			>
+				<font-awesome-icon icon="trash" /> Delete</b-button
+			>
 			<b-button
 				size="sm"
 				v-if="!isSubscribed && isClient"
@@ -47,18 +47,8 @@
 				- Unsubscribe
 			</b-button>
 		</div>
-		<div v-if="logged"><br /><br /></div>
-		<p style="font-size: 1em; font-weight: 500" class="p-0 mb-1">
-			{{ location }}&nbsp;&nbsp;&nbsp; <font-awesome-icon icon="star" />&nbsp;{{
-				score
-			}}
-		</p>
-		<h2 id="name" class="mb-4">{{ name }}</h2>
-
-		<div id="desc" class="mt-4 mb-4">
-			{{ description }}
-		</div>
-
+		<div v-else style="margin-top: -10px"></div>
+		<div v-if="logged || isClient || (owner && isOwner)"><br/><br/></div>
 		<b-modal
 			id="update_modal"
 			title="Update data"

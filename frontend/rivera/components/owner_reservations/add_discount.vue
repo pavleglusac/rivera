@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h3><font-awesome-icon icon="tag" /> Add discount</h3>
+
     <p>Start:</p>
     <b-row style="margin-top: -10px; margin-bottom: 5px">
       <b-col cols="7">
@@ -16,6 +17,7 @@
         ></b-form-timepicker>
       </b-col>
     </b-row>
+
     <p>End:</p>
     <b-row style="margin-top: -10px; margin-bottom: 5px">
       <b-col cols="7">
@@ -39,6 +41,17 @@
       v-model="tags"
       placeholder="Tags"
     ></b-form-tags>
+
+    <div v-if="additionalServices.length > 0">
+      <p>Select additional services:</p>
+      <b-form-checkbox-group
+        v-model="selectedAdditionalServices"
+        :options="additionalServices"
+        switches
+        stacked
+      ></b-form-checkbox-group>
+    </div>
+
     <p>Price:</p>
     <b-input
       style="margin-top: -10px; margin-bottom: 5px"
@@ -46,6 +59,7 @@
       id="inputPrice"
       placeholder="Price"
     />
+
     <p>Capacity:</p>
     <b-input
       style="margin-top: -10px; margin-bottom: 5px"
@@ -53,6 +67,7 @@
       id="inputCapacity"
       placeholder="Capacity"
     />
+
     <p id="errorMessage" style="color: #dc143c"></p>
     <b-button @click="upload" class="prime-btn w-100 mt-2" size="m"
       >Add discount</b-button
@@ -72,10 +87,13 @@ export default {
       capacity: "",
       price: "",
       tags: [],
+      selectedAdditionalServices: []
     };
   },
-  props: ["openModal"],
-  mounted() {},
+  props: ["openModal", "additionalServices"],
+  mounted() {
+    console.log(this.additionalServices)
+  },
   methods: {
     isPositiveInteger(str) {
       if (typeof str !== "string") {

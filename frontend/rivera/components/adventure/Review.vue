@@ -1,6 +1,6 @@
 <template>
   <div id="testimonials">
-    <div class="testimonial-box-container w-100 m-0 h-25">
+    <div class="testimonial-box-container w-100 m-1 h-25">
       <div class="testimonial-box w-100">
         <div class="box-top">
           <div class="profile">
@@ -61,7 +61,7 @@ a {
   width: 100%;
 }
 .testimonial-box {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
   background-color: #ffffff;
   padding: 20px;
   cursor: pointer;
@@ -94,7 +94,7 @@ a {
 }
 .name-user span {
   color: #979797;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 .box-top {
   display: flex;
@@ -103,7 +103,7 @@ a {
   margin-bottom: 20px;
 }
 .client-comment p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #4b4b4b;
   width: 90%;
   text-align: left;
