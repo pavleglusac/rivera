@@ -18,7 +18,11 @@ import java.util.List;
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @JsonIgnoreProperties("rentable")
-@SQLDelete(sql = "UPDATE rentable SET deleted = true WHERE id = ?")
+@SQLDelete(sql
+        = "UPDATE rentable "
+        + "SET deleted = true "
+        + "WHERE id = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Rentable {
     @Version
     private int version;

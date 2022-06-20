@@ -291,14 +291,18 @@ public class CottageService {
     }
 
     public List<CottageDTO> searchCottages(SearchParams searchParams) {
-        List<CottageDTO> cottages = checkTags(this.getCottages(), searchParams.getTags());
+        List<CottageDTO> cottages = checkTags(this.getCottages(searchParams.isDeletable()), searchParams.getTags());
         return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(),
                 cottages.stream().limit(searchParams.getNumberOfResults())
                         .collect(Collectors.toList())));
     }
 
-    public List<CottageDTO> getCottages() {
-        return cottageRepository.findAll().stream().map(this::cottageToDto).collect(Collectors.toList());
+    public List<CottageDTO> getCottages(boolean checkIsDeletable) {
+        return cottageRepository.findAll().stream()
+                                .filter(x -> !checkIsDeletable || (reservationRepository
+                                        .findByRentableAndCancelledAndStartDateTimeIsAfter(x, false, LocalDateTime
+                                                .now()).isEmpty()))
+                                .map(this::cottageToDto).collect(Collectors.toList());
     }
 
     private List<CottageDTO> checkTags(List<CottageDTO> cottages, List<String> tags) {

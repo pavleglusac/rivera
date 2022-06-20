@@ -17,4 +17,5 @@ public class SearchParams {
     List<String> tags;
     int numberOfResults;
     String ownerUsername;
+    boolean deletable = false;
 }

@@ -1,7 +1,6 @@
 package com.tim20.rivera.controller;
 
 import com.tim20.rivera.dto.*;
-import com.tim20.rivera.model.Cottage;
 import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.repository.RentableRepository;
 import com.tim20.rivera.service.*;
@@ -52,7 +51,7 @@ public class CottageController {
 
     @GetMapping(path = "get-cottages")
     public List<CottageDTO> getCottages() {
-        return cottageService.getCottages();
+        return cottageService.getCottages(false);
     }
 
     @GetMapping(path = "get-cottage")

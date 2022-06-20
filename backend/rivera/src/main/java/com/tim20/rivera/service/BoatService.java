@@ -25,18 +25,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class BoatService {
-    @Autowired
-    BoatRepository boatRepository;
     final String STATIC_PATH = "src/main/resources/static/";
     final String STATIC_PATH_TARGET = "target/classes/static/";
     final String IMAGES_PATH = "/images/boats/";
-
-    private BoatOwner temporaryOwner;
+    @Autowired
+    BoatRepository boatRepository;
     @Autowired
     CottageRepository cottageRepository;
     @Autowired
     ReservationRepository reservationRepository;
-
+    private BoatOwner temporaryOwner;
     @Autowired
     private TagService tagService;
 
@@ -88,12 +86,11 @@ public class BoatService {
         for (var x : boat.getTags()) {
             System.out.println(x.getName() + "," + x.getId() + "," + boat.getId());
         }
-        if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+        if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             boat.setOwner(boatOwnerRepository.getById("bowner"));
             List<Pricelist> pricelist = new ArrayList<>();
             boat.setPricelists(pricelist);
-        }
-        else {
+        } else {
             boat.setOwner((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
         }
         boatRepository.save(boat);
@@ -103,7 +100,7 @@ public class BoatService {
         paths = savePictures(boat, multipartFiles);
 
         boat.setPictures(paths);
-        if(paths.size() > 0) {
+        if (paths.size() > 0) {
             boat.setProfilePicture(paths.get(0));
         }
         boatRepository.save(boat);
@@ -114,7 +111,7 @@ public class BoatService {
     private List<String> savePictures(Boat boat, MultipartFile[] multipartFiles) throws IOException {
         List<String> paths = new ArrayList<>();
 
-        if(multipartFiles == null) {
+        if (multipartFiles == null) {
             return paths;
         }
 
@@ -254,7 +251,8 @@ public class BoatService {
                 .stream()
                 .map(Tag::getName)
                 .collect(Collectors.toList())
-        );dto.setAddress(boat.getAddress());
+        );
+        dto.setAddress(boat.getAddress());
         dto.setEnginePower(boat.getEnginePower());
         dto.setCapacity(boat.getCapacity());
         dto.setMaxSpeed(boat.getMaxSpeed());
@@ -267,13 +265,15 @@ public class BoatService {
         dto.setServices(boat.getAdditionalServices());
         dto.setPictures(boat.getPictures());
         dto.setRulesOfConduct(boat.getRulesOfConduct());
-        dto.setReviews(boat.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
-        dto.setDiscounts(boat.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
-        dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(boat,false,LocalDateTime.now()).isEmpty());
+        dto.setReviews(boat.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review))
+                           .collect(Collectors.toList()));
+        dto.setDiscounts(boat.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount))
+                             .collect(Collectors.toList()));
+        dto.setCanBeChanged(reservationRepository
+                .findByRentableAndCancelledAndStartDateTimeIsAfter(boat, false, LocalDateTime.now()).isEmpty());
         dto.setOwner(cottageOwnerService.CottageOwnerToCottageOwnerCPDto(boat.getOwner()));
         return dto;
     }
-
 
 
     public void update(BoatDTO boatDTO, MultipartFile[] multipartFiles) throws IOException {
@@ -288,19 +288,22 @@ public class BoatService {
         boatRepository.save(boat);
     }
 
-    public void delete(Integer id){
+    public void delete(Integer id) {
         boatRepository.delete(boatRepository.findById(id).get());
     }
 
     public List<BoatDTO> searchBoats(SearchParams searchParams) {
-        List<BoatDTO> boats = checkTags(this.getBoatsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        List<BoatDTO> boats = checkTags(this
+                .getBoatsOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams.getTags());
         return filter(searchParams.getSearch().toLowerCase(), sortBoats(searchParams.getOrderBy(),
                 boats.stream().limit(searchParams.getNumberOfResults())
-                        .collect(Collectors.toList())));
+                     .collect(Collectors.toList())));
     }
 
-    public List<BoatDTO> getBoats() {
-        return boatRepository.findAll().stream().map(this::boatToDto).collect(Collectors.toList());
+    public List<BoatDTO> getBoats(boolean checkIsDeletable) {
+        return boatRepository.findAll().stream().filter(x -> !checkIsDeletable || (reservationRepository
+                .findByRentableAndCancelledAndStartDateTimeIsAfter(x, false, LocalDateTime
+                        .now()).isEmpty())).map(this::boatToDto).collect(Collectors.toList());
     }
 
     private List<BoatDTO> checkTags(List<BoatDTO> boats, List<String> tags) {
@@ -327,26 +330,37 @@ public class BoatService {
     public List<BoatDTO> sortBoats(String sortParam, List<BoatDTO> boats) {
         return switch (sortParam) {
             case "name-a" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getName)).toList();
-            case "name-d" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getName, Comparator.reverseOrder())).toList();
+            case "name-d" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getName, Comparator.reverseOrder()))
+                                  .toList();
             case "price-a" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getPerHour)).toList();
-            case "price-d" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "price-d" -> boats.stream()
+                                   .sorted(Comparator.comparing(BoatDTO::getPerHour, Comparator.reverseOrder()))
+                                   .toList();
             case "score-a" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getAverageScore)).toList();
-            case "score-d" -> boats.stream().sorted(Comparator.comparing(BoatDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            case "score-d" -> boats.stream()
+                                   .sorted(Comparator.comparing(BoatDTO::getAverageScore, Comparator.reverseOrder()))
+                                   .toList();
             default -> boats;
         };
     }
 
     public List<BoatDTO> searchBoatsForOwner(SearchParams searchParams) {
-        List<BoatDTO> boats = checkTags(this.getBoatsOfOwner(searchParams.getOwnerUsername()), searchParams.getTags());
+        List<BoatDTO> boats = checkTags(this
+                .getBoatsOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams.getTags());
         return sortBoats(searchParams.getOrderBy(), boats.stream().limit(searchParams.getNumberOfResults())
-                .filter(a -> a.getName().toLowerCase().contains(searchParams.getSearch().toLowerCase()))
-                .collect(Collectors.toList()));
+                                                         .filter(a -> a.getName().toLowerCase()
+                                                                       .contains(searchParams.getSearch()
+                                                                                             .toLowerCase()))
+                                                         .collect(Collectors.toList()));
     }
 
-    private List<BoatDTO> getBoatsOfOwner(String ownerUsername) {
-        if(ownerUsername != null){
-            return boatRepository.findByOwnerUsername(ownerUsername).stream().map(this::boatToDto).collect(Collectors.toList());
-        }
-        else return getBoats();
+    private List<BoatDTO> getBoatsOfOwner(String ownerUsername, boolean checkIsDeletable) {
+        if (ownerUsername != null) {
+            return boatRepository.findByOwnerUsername(ownerUsername).stream()
+                                 .filter(x -> !checkIsDeletable || (reservationRepository
+                                         .findByRentableAndCancelledAndStartDateTimeIsAfter(x, false, LocalDateTime
+                                                 .now()).isEmpty()))
+                                 .map(this::boatToDto).collect(Collectors.toList());
+        } else return getBoats(checkIsDeletable);
     }
 }

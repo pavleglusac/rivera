@@ -160,10 +160,14 @@ export default {
 			that.offers = [];
 			this.$axios
 				.post(
-					`/api/boat/search-boats?&numberOfResults=10&orderBy=name-a&search=${that.searchText.trim()}&tags=`
+					`/api/boat/search-boats?&numberOfResults=10&deletable=true&orderBy=name-a&search=${that.searchText.trim()}&tags=`
 				)
 				.then((response) => {
-					console.log(response.data + "-------");
+					for (let index = 0; index < response.data.length; index++) {
+						for(let j = 0; j < response.data[index].pictures.length; j++) {
+						response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+						}
+					}
 					that.offers = response.data;
 					that.loadingRentables = false;
 				});
@@ -179,9 +183,14 @@ export default {
 			that.offers = [];
 			this.$axios
 				.post(
-					`/api/search-adventures?&numberOfResults=10&orderBy=name-a&search=${that.searchText.trim()}&tags=`
+					`/api/search-adventures?numberOfResults=10&deletable=true&orderBy=name-a&search=${that.searchText.trim()}&tags=`
 				)
 				.then((response) => {
+					for (let index = 0; index < response.data.length; index++) {
+						for(let j = 0; j < response.data[index].pictures.length; j++) {
+						response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+						}
+					}
 					that.offers = response.data;
 					that.loadingRentables = false;
 					console.log(that.offers);
@@ -198,9 +207,14 @@ export default {
 			that.offers = [];
 			this.$axios
 				.post(
-					`/api/cottage/search-cottages?&numberOfResults=10&orderBy=name-a&search=${that.searchText.trim()}&tags=`
+					`/api/cottage/search-cottages?&numberOfResults=10&deletable=true&orderBy=name-a&search=${that.searchText.trim()}&tags=`
 				)
 				.then((response) => {
+					for (let index = 0; index < response.data.length; index++) {
+						for(let j = 0; j < response.data[index].pictures.length; j++) {
+						response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+						}
+					}
 					that.offers = response.data;
 					that.loadingRentables = false;
 				});
@@ -216,7 +230,7 @@ export default {
 			that.offers = [];
 			this.$axios
 				.get(
-					`/api/search-person?&numberOfResults=10&search=${that.searchText.trim()}&type=client`
+					`/api/search-person?&numberOfResults=10&deletable=true&search=${that.searchText.trim()}&type=client`
 				)
 				.then((response) => {
 					console.log(response.data + "-------");
@@ -236,7 +250,7 @@ export default {
 			that.offers = [];
 			this.$axios
 				.get(
-					`/api/search-person?&numberOfResults=10&search=${that.searchText.trim()}&type=owner`
+					`/api/search-person?&numberOfResults=10&deletable=true&search=${that.searchText.trim()}&type=owner`
 				)
 				.then((response) => {
 					console.log(response.data + "-------");

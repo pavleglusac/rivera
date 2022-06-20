@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,14 +16,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties("client")
+@SQLDelete(sql
+        = "UPDATE client "
+        + "SET deleted = true "
+        + "WHERE username = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Client extends Person {
     private Integer numberOfPenalties;
     private Integer numberOfPoints;
     @OneToMany
     private List<Rentable> subscribed;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client")
     private List<Reservation> reservations;
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client")
     private List<Review> reviews;
     private AccountStatus status;
 

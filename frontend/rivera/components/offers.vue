@@ -176,7 +176,11 @@ export default {
           }&search=${that.searchText.trim()}&tags=${that.tags}`
         )
         .then((response) => {
-          console.log(response.data + "-------");
+          for (let index = 0; index < response.data.length; index++) {
+            for(let j = 0; j < response.data[index].pictures.length; j++) {
+              response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+            }
+          }
           that.offers = response.data;
           that.loadingRentables = false;
         });
@@ -195,6 +199,11 @@ export default {
           }&search=${that.searchText.trim()}&tags=${that.tags}`
         )
         .then((response) => {
+          for (let index = 0; index < response.data.length; index++) {
+            for(let j = 0; j < response.data[index].pictures.length; j++) {
+              response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+            }
+          }
           that.offers = response.data;
           that.loadingRentables = false;
           console.log(that.offers);
@@ -214,6 +223,11 @@ export default {
           }&search=${that.searchText.trim()}&tags=${that.tags}`
         )
         .then((response) => {
+          for (let index = 0; index < response.data.length; index++) {
+            for(let j = 0; j < response.data[index].pictures.length; j++) {
+              response.data[index].pictures[j] = process.env.backend + response.data[index].pictures[j];
+            }
+          }
           that.offers = response.data;
           that.loadingRentables = false;
         });

@@ -11,7 +11,11 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Data
-@Where(clause="deleted=false")
+@SQLDelete(sql
+        = "UPDATE owner "
+        + "SET deleted = true "
+        + "WHERE username = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Owner extends Person {
     private String signUpDescription;
     private Integer numberOfPoints;
