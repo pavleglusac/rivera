@@ -12,4 +12,5 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 public class BoatOwner extends Owner {
+    private BoatOwnerType type;
 }

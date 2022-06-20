@@ -99,7 +99,7 @@ public class ClientController {
         return reservationService.getReservations(username, search);
     }
 
-    @GetMapping(path="get-client-loyalty")
+    @GetMapping(path = "get-client-loyalty")
     public ClientLoyaltyDTO getClientLoyalty(@RequestParam("username") String username) {
         return clientService.getClientLoyalty(username);
     }
@@ -112,21 +112,23 @@ public class ClientController {
         return reservationService.calculatePriceForReservation(client, rentableId, startDateTime, endDateTime);
     }
 
+    @GetMapping(path = "didClientReserveEarlier")
+    public boolean didClientReserveEarlier(@RequestParam("username") String username, Integer rentableId,
+                                           String start, String end) {
+        Client client = clientService.findByUsername(username);
+        LocalDateTime startDateTime = clientService.parseDate(start);
+        LocalDateTime endDateTime = clientService.parseDate(end);
+        return clientService.didClientReserveEarlier(client, rentableId, startDateTime, endDateTime);
+    }
+
     @PostMapping(path = "reserve")
     public ResponseEntity<String> reserve(@RequestParam("username") String username, Integer rentableId,
                                           String start, String end, Double price, String additionalServices, String discountId) {
         Client client = clientService.findByUsername(username);
-        LocalDateTime startDateTime;
-        LocalDateTime endDateTime;
-        try {
-            startDateTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            endDateTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-        } catch(Exception e) {
-            startDateTime = LocalDateTime.parse(start.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            endDateTime = LocalDateTime.parse(end.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        }
+        LocalDateTime startDateTime = clientService.parseDate(start);
+        LocalDateTime endDateTime = clientService.parseDate(end);
         Reservation reservation = reservationService.addReservation(client, rentableId,
-                startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")),discountId);
+                startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")), discountId);
         clientService.addReservation(username, reservation);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }

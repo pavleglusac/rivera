@@ -20,6 +20,7 @@ public class OwnerRequestDTO {
     private String photo;
     private String type;
     private String description;
+    private String boatOwnerType;
     private String biography;
     private AccountStatus status;
 
@@ -35,19 +36,27 @@ public class OwnerRequestDTO {
         return description;
     }
 
+    public String getBoatOwnerType() {
+        return boatOwnerType;
+    }
+
+    public void setBoatOwnerType(String boatOwnerType) {
+        this.boatOwnerType = boatOwnerType;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public String mailPrint(){
-        String x ="";
-        x += "Email: " + email+ "<br>";
-        x += "Username: " + username+ "<br>";
-        x += "Name: " + name+ "<br>";
-        x += "Surname: " + surname+ "<br>";
-        x += "PhoneNumber: " + phoneNumber+ "<br>";
-        x += "Address: " + address+ "<br>";
-        x += "City: " + city+ "<br>";
+    public String mailPrint() {
+        String x = "";
+        x += "Email: " + email + "<br>";
+        x += "Username: " + username + "<br>";
+        x += "Name: " + name + "<br>";
+        x += "Surname: " + surname + "<br>";
+        x += "PhoneNumber: " + phoneNumber + "<br>";
+        x += "Address: " + address + "<br>";
+        x += "City: " + city + "<br>";
         x += "Country: " + country + "<br>";
         return x;
     }

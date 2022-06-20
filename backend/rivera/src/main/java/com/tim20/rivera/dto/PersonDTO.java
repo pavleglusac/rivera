@@ -17,5 +17,6 @@ public class PersonDTO {
     private String country;
     private String photo;
     private String biography;
+    private String boatOwnerType;
     private Boolean deleted;
 }
