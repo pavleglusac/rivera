@@ -203,7 +203,7 @@ export default {
             let cottage = resp.data;
             console.log("TWETEWETWTETWTEW\n\n"+cottage+"\n\nTWETEWETWTETWTEW");
             that.reviews = cottage.reviews;
-            that.reviews.forEach(x => x.client.photo = "http://localhost:8080" + x.client.photo)
+            that.reviews.forEach(x => x.client.photo = process.env.backend + x.client.photo)
 			that.name = cottage.name;
 			that.location = cottage.address+","+cottage.city+","+cottage.country;
 			that.services = cottage.services;
@@ -221,10 +221,10 @@ export default {
             that.discounts = cottage.discounts;
             that.discounts.forEach(x => x.start = moment(x.start).format("DD/MM/YY HH:MM"))
             that.discounts.forEach(x => x.end = moment(x.end).format("DD/MM/YY HH:mm"))
-            that.pictures.push(...cottage.pictures.map(x => "http://localhost:8080" + x));
+            that.pictures.push(...cottage.pictures.map(x => process.env.backend + x));
 			that.id = cottage.id;
             that.owner = cottage.owner;
-            that.owner.picture = "http://localhost:8080" + that.owner.picture;
+            that.owner.picture = process.env.backend + that.owner.picture;
 			var stringRooms = cottage.rooms.split(';');
             for(var room of stringRooms){
 				if(!room.split(',')[0]){

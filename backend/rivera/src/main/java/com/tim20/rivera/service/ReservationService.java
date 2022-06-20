@@ -4,6 +4,7 @@ import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.apache.tomcat.jni.Local;
+import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

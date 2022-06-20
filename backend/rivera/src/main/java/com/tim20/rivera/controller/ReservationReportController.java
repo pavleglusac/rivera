@@ -1,7 +1,5 @@
 package com.tim20.rivera.controller;
 
-import com.tim20.rivera.dto.ClientDTO;
-import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.service.ReservationReportService;
 import org.springframework.beans.factory.annotation.Autowired;
