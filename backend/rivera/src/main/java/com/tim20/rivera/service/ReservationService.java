@@ -268,6 +268,9 @@ public class ReservationService {
     public void cancelReservation(Integer reservationId) {
         Reservation reservation = reservationRepository.getById(reservationId);
         reservation.setCancelled(true);
+        double terms = Double.parseDouble(reservation.getRentable().getCurrentPricelist().getCancellationTerms());
+        double price = reservation.getPrice();
+        reservation.setPrice(price*terms/100);
         reservationRepository.save(reservation);
     }
 

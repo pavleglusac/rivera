@@ -454,6 +454,7 @@ export default {
           that.services = adventure.services;
           that.tags = adventure.tags;
           that.canBeChanged = !adventure.canBeChanged;
+          console.log("canBeChangedAdventure"+that.canBeChanged);
           for (var disc in adventure.discounts) {
             var startDate = adventure.discounts[disc].start;
             if (
@@ -519,6 +520,7 @@ export default {
           that.services = cottage.services;
           that.tags = cottage.tags;
           that.canBeChanged = !cottage.canBeChanged;
+          console.log("canBeChangedCottage"+that.canBeChanged);
           for (var disc in cottage.discounts) {
             var startDate = cottage.discounts[disc].start;
             if (

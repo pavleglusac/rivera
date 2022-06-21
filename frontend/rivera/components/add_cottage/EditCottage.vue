@@ -369,6 +369,7 @@ export default {
       perHour: 0,
       perDay: 0,
       description: "",
+      averageScore: "",
       cancellationTerms: "",
       id: "",
     };
@@ -445,6 +446,7 @@ export default {
         that.equipment = cottage.equipment;
         that.city = cottage.city;
         that.country = cottage.country;
+        that.averageScore = cottage.averageScore;
         that.tags = cottage.tags;
         that.pictures.push(...cottage.pictures);
         that.id = cottage.id;
@@ -581,6 +583,7 @@ export default {
       formData.append("services", this.services);
       formData.append("id", this.id);
       formData.append("pictures", this.pictures);
+      formData.append("averageScore", this.averageScore);
       if (images.files.length == 0) {
         formData.append("images", []);
       }
