@@ -13,10 +13,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.cache.annotation.Cacheable;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -64,11 +64,13 @@ public class PersonService {
     final String IMAGES_PATH = "\\images\\clients\\";
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
+    @Transactional(readOnly = true)
     @Cacheable(value="person", key="", unless="#result == null")
     public Person findByUsername(String username) {
         return personRepository.findByUsername(username);
     }
 
+    @Transactional(readOnly = true)
     public PersonDTO personToDTO(Person person) {
         PersonDTO dto = new PersonDTO();
         dto.setEmail(person.getEmail());
@@ -217,12 +219,14 @@ public class PersonService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public LocalDateTime getLastPasswordChange(String username) {
         Person person = personRepository.findByUsername(username);
         if (person == null) return null;
         return person.getLastPasswordResetDate().toLocalDateTime();
     }
 
+    @Transactional(readOnly = true)
     public boolean checkIfApprovedOrNonExistent(String username) {
         Person person = personRepository.findByUsername(username);
         return person == null || person.getStatus() == AccountStatus.ACTIVE;

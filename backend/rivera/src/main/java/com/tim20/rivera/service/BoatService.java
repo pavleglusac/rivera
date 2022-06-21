@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -194,6 +195,7 @@ public class BoatService {
         return boatRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value="boatDTO", key="", unless="#result == null")
     public BoatDTO getById(Integer id) {
         Optional<Boat> opt = boatRepository.findById(id);

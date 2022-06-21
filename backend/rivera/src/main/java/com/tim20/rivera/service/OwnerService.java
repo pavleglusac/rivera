@@ -8,6 +8,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.DayOfWeek;
@@ -46,6 +47,7 @@ public class OwnerService {
     @Autowired
     private ConfigurableEnvironment env;
 
+    @Transactional(readOnly = false)
     public Person save(OwnerRequestDTO userRequestDTO) {
         switch (userRequestDTO.getType()){
             case "Cottage Owner": return cottageOwnerRepository.save(OwnerRequestDTOToCottageOwner(userRequestDTO));
@@ -55,6 +57,7 @@ public class OwnerService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Owner findByUsername(String username) {
         return ownerRepository.findByUsername(username);
     }
@@ -154,10 +157,12 @@ public class OwnerService {
         return ownerDTO;
     }
 
+    @Transactional(readOnly = true)
     public OwnerRequestDTO findByUsernameDTO(String username) {
         return ownerToOwnerRequestDTO(ownerRepository.findByUsername(username));
     }
 
+    @Transactional(readOnly = false)
     public void activateOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
         System.out.println(owner.getUsername());
@@ -167,6 +172,7 @@ public class OwnerService {
         ownerRepository.save(owner);
     }
 
+    @Transactional(readOnly = false)
     public void deactivateOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
         owner.setStatus(AccountStatus.TERMINATED);

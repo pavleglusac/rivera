@@ -1,4 +1,4 @@
-package com.tim20.rivera.controller;
+package com.tim20.rivera.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

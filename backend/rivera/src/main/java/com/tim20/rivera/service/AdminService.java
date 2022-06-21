@@ -1,6 +1,6 @@
 package com.tim20.rivera.service;
 
-import com.tim20.rivera.controller.AdminReviewDTO;
+import com.tim20.rivera.dto.AdminReviewDTO;
 import com.tim20.rivera.dto.AdminReservationReportDTO;
 import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.IncomeSystemDTO;
@@ -69,20 +69,24 @@ public class AdminService {
     final static String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
 
+    @Transactional(readOnly = true)
     public Admin findByUsername(String username) {
         return adminRepository.findById(username)
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
     public List<MemberCategory> getCategories() {
         return memberCategoryRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Rules getRules() {
         return rulesRepository.findAll()
                 .get(0);
     }
 
+    @Transactional(readOnly = false)
     public void updateCategories(List<MemberCategory> categories) {
         clientRepository.findAll()
                 .forEach(client -> client.setCategory(null));
@@ -115,6 +119,7 @@ public class AdminService {
         return maxCategory;
     }
 
+    @Transactional(readOnly = false)
     public void updateRules(Rules rules) {
         Rules oldRule = rulesRepository.getById(1);
         oldRule.setIncomePercentage(rules.getIncomePercentage());
@@ -122,6 +127,7 @@ public class AdminService {
         rulesRepository.save(oldRule);
     }
 
+    @Transactional(readOnly = true)
     public List<String> getUnregisteredUsernames() {
         return ownerRepository
                 .findAll()
@@ -132,6 +138,7 @@ public class AdminService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Integer> getRegisteredStats() {
         HashMap<String, Integer> stats = new HashMap<>();
         ownerRepository.findAll()
@@ -139,6 +146,7 @@ public class AdminService {
         return stats;
     }
 
+    @Transactional(readOnly = true)
     public List<TerminationRequestDTO> getTerminationRequests() {
         return terminationRepository.findAllByStatus(TerminationStatus.PENDING)
                 .stream()
@@ -208,12 +216,14 @@ public class AdminService {
         return admin;
     }
 
+    @Transactional(readOnly = false)
     public Person save(ClientRequestDTO clientRequestDTO) {
         Admin admin = clientRequestDTOToAdmin(clientRequestDTO);
         adminRepository.save(admin);
         return admin;
     }
 
+    @Transactional(readOnly = true)
     public List<IncomeSystemDTO> getSystemIncome(String type, LocalDateTime from, LocalDateTime to) {
         if (from.isAfter(to)) return Collections.emptyList();
         LocalDateTime nextVal = from;
@@ -256,6 +266,7 @@ public class AdminService {
         return incomes;
     }
 
+    @Transactional(readOnly = true)
     public List<AdminReservationReportDTO> getPendingReports() {
         return reservationReportRepository
                 .findAllByResolved(false)
@@ -277,7 +288,7 @@ public class AdminService {
         return dto;
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public boolean resolveReport(int reportId, String responseText, boolean assignPenalty) {
         try {
             ReservationReport report = reservationReportRepository.getById(reportId);
@@ -307,6 +318,7 @@ public class AdminService {
                         "\n\nSincerely,\n Rivera.");
     }
 
+    @Transactional(readOnly = true)
     public List<AdminReviewDTO> getPendingReviews() {
         return reviewRepository
                 .getReviewsByStatus(ReviewStatus.PENDING)

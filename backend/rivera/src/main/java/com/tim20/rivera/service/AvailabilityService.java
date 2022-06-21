@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.support.CronExpression;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class AvailabilityService {
     @Autowired
     AvailabilityRepository availabilityRepository;
 
+    @Transactional(readOnly = false)
     public void defineAvailability(AvailabilityRequest availabilityRequest) {
         Rentable rentable = rentableRepository.getById(availabilityRequest.getRentableId());
         List<Calendar> cals = rentable.getCalendars();
@@ -81,6 +83,7 @@ public class AvailabilityService {
     }
 
 
+    @Transactional(readOnly = false)
     public List<Availability> getAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
         Optional<Rentable> optionalRentable = rentableRepository.findById(id);
         if(optionalRentable.isEmpty()) return new ArrayList<>();
@@ -308,6 +311,7 @@ public class AvailabilityService {
     }
 
 
+    @Transactional(readOnly = false)
     public void removeAvailabilities(Integer rentableId) {
         Rentable rentable = rentableRepository.getById(rentableId);
         List<Calendar> cals = rentable.getCalendars();

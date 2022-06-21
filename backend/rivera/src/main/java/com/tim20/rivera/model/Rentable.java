@@ -64,6 +64,6 @@ public class Rentable {
     @ManyToOne
     @JoinColumn(name="owner_username")
     private Owner owner;
-    private boolean deleted;
+    private boolean deleted=false;
 
 }

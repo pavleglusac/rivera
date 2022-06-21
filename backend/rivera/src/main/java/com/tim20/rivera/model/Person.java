@@ -40,7 +40,7 @@ public class Person implements UserDetails {
     private String city;
     private String country;
     private String photo;
-    private Boolean deleted;
+    private Boolean deleted=false;
     private Timestamp lastPasswordResetDate;
     private AccountStatus status;
 

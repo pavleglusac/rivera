@@ -216,7 +216,7 @@ export default {
 	methods: {
 		accept() {
 			this.$axios
-				.post(
+				.put(
 					"/api/admin/activate-owner?username=" +
 						this.usernameToRegister
 				)
@@ -233,7 +233,7 @@ export default {
 		},
 		send_decline() {
 			this.$axios
-				.post(
+				.put(
 					"/api/admin/deactivate-owner?username=" +
 						this.usernameToRegister +
 						"&reason=" +

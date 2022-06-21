@@ -180,6 +180,7 @@ public class CottageService {
         return cottageRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value="cottageDTO", key="", unless="#result == null")
     public CottageDTO getById(Integer id) {
         Optional<Cottage> opt = cottageRepository.findById(id);
