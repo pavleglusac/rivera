@@ -156,7 +156,7 @@ export default {
         formData.append("price", parseFloat(this.price).toFixed(2));
         formData.append("tags", this.tags);
         formData.append("rentableId", this.$route.params.rentable);
-        formData.append("additionalServices", that.selectedAdditionalServices);
+        formData.append("additionalServices", this.selectedAdditionalServices);
         this.$axios
           .post("/api/add-discount", formData)
           .then((resp) => {

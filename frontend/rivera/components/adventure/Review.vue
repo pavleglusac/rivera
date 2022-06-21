@@ -31,7 +31,9 @@ import Rating from "./Rating.vue";
 export default {
   props: ["review"],
   components: { Rating },
-  mounted() {},
+  mounted() {
+    console.log(this.review);
+  },
   data() {
     return {};
   },
