@@ -33,6 +33,7 @@ export default {
   components: { Rating },
   mounted() {
     console.log(this.review);
+    this.review.client.photo = process.env.backend + this.review.client.photo;
   },
   methods: {
         goToProfile() {

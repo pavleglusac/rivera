@@ -144,6 +144,8 @@ export default {
       return this.client.name != null && this.client.name.length != 0;
     },
     lastNameValidation() {
+      console.log("KLIJENT ALO")
+      console.log(this.client);
       return this.client.surname.length != 0;
     },
     phoneNumberValidation() {
