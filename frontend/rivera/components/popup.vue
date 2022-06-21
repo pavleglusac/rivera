@@ -1,13 +1,14 @@
 <template>
     <b-modal
-      v-bind:header-bg-variant="{ 'success': type == 'success', 'danger': type == 'error' }"
+      :header-bg-variant='typeColor'
       class="success-modal"
       hide-footer
       ref='modal'
     >
       <template #modal-header>
         <div class="w-100" style="color: white; display: inline-block; text-align: center;">
-          <font-awesome-icon icon="circle-check" style="font-size: 90px;" />
+          <font-awesome-icon v-if="typeColor=='success'" icon="circle-check" style="font-size: 90px;" />
+          <font-awesome-icon v-else icon="circle-xmark" style="font-size: 90px;" />
         </div>
       </template>
       <h4>{{title}}</h4>
@@ -21,8 +22,12 @@ export default {
   props: ["title", "text", "type"],
   data() {
       return {
-          
+          typeColor: "success"
       }
+  },
+  mounted() {
+    if(this.type == "error")
+      this.typeColor = "danger";
   },
   methods: {
       show() {

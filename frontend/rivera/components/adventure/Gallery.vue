@@ -3,17 +3,17 @@
   <div class="gallery__item">
     <input type="radio" id="img-1" checked name="gallery" class="gallery__selector"/>
     <img class="gallery__img" :src="pictures[0]" alt=""/>
-    <label for="img-1" class="gallery__thumb"><img :src="pictures[0]" style="max-height: 100px; max-width: 150px; object-fit: cover;"/></label>
+    <label for="img-1" class="gallery__thumb"><img :src="pictures[0]" style="height: 100px; max-width: 150px; object-fit: cover;"/></label>
   </div>
   <div class="gallery__item">
     <input type="radio" id="img-2" name="gallery" class="gallery__selector"/>
     <img class="gallery__img" :src="pictures[1]" alt=""/>
-    <label for="img-2" class="gallery__thumb"><img :src="pictures[1]" style="max-height: 100px; max-width: 150px; object-fit: cover;"/></label>
+    <label for="img-2" class="gallery__thumb"><img :src="pictures[1]" style="height: 100px; max-width: 150px; object-fit: cover;"/></label>
   </div>
   <div class="gallery__item">
     <input type="radio" id="img-3" name="gallery" class="gallery__selector"/>
     <img class="gallery__img" :src="pictures[2]" alt=""/>
-    <label for="img-3" class="gallery__thumb"><img :src="pictures[2]" style="max-height: 100px; max-width: 150px; object-fit: cover;"/></label>
+    <label for="img-3" class="gallery__thumb"><img :src="pictures[2]" style="height: 100px; max-width: 150px; object-fit: cover;"/></label>
   </div>
   <div class="gallery__item">
     <label style="margin-top: 40px; margin-left: 10px; font-weight: 500; cursor: pointer;" @click="openGalerry"><font-awesome-icon icon="image" /> View all</label>  
@@ -46,7 +46,7 @@ export default {
 }
 .gallery__img {
   position: absolute;
-  max-height: 400px;
+  height: 65%;
   object-fit: cover;
   top: 0;
   left: 0;

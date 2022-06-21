@@ -36,8 +36,47 @@
             :openGalleryModal="openGalerry"
             :pictures="pictures"
           />
-          <hr class="w-100" />
-          <h4 class="subtitle">Special Offers</h4>
+          <hr class="w-100" style="margin-top: -20px" />
+          <div style="display: inline" class="w-100">
+            <h4 class="subtitle">Special Offers
+              <font-awesome-icon
+                icon="calendar-plus"
+                v-if="canChange"
+                style="
+                  float: right;
+                  width: 30px;
+                  height: 30px;
+                  cursor: pointer;
+                  color: #16c79a;
+                "
+                @click="showAddDiscountModal"
+              />
+            </h4>
+          </div>
+          <div v-if="discounts.length > 0" class="w-100">
+            <Discount
+              v-for="discount in discounts"
+              :key="discount.id"
+              :discount="discount"
+              :isOwner="canChange"
+              :openCantReserveModal="openCantReserve"
+              :openDeletedDiscountModal="openDeletedDiscount"
+              :openModal="openModal"
+            />
+          </div>
+          <div v-else-if="canChange" class="d-flex flex-column">
+            <p>
+              There are no offers on discount right now. You can add them by
+              clicking on the green calendar button.
+            </p>
+          </div>
+          <div v-else class="d-flex flex-column">
+            <p>
+              There are no offers on discount right now. If you want to receive
+              email notification when owner creates a special offer, please
+              subscribe to this entity.
+            </p>
+          </div>
         </b-col>
 
         <b-col md="6">
@@ -208,61 +247,6 @@
       </div>
     </div>
 
-    <div class="w-100 pb-0 d-flex mt-5">
-      <div class="d-flex flex-column" style="width: 100%; height: 100%">
-        <h3 class="subtitle">Offers on discount</h3>
-        <div v-if="discounts.length > 0" class="d-flex flex-column h-100">
-          <div class="row ml-2">
-            <Discount
-              class="m-1 col-2"
-              v-for="discount in discounts"
-              :key="discount.id"
-              :discount="discount"
-              :isOwner="canChange"
-              :openCantReserveModal="openCantReserve"
-              :openModal="openModal"
-            />
-            <div
-              v-if="canChange"
-              style="text-align: center; display: flex; align-items: center"
-              class="m-4"
-            >
-              <font-awesome-icon
-                v-if="canChange"
-                icon="calendar-plus"
-                style="
-                  width: 30px;
-                  height: 30px;
-                  cursor: pointer;
-                  color: #16c79a;
-                "
-                @click="showAddDiscountModal"
-              />
-            </div>
-          </div>
-        </div>
-        <div v-else class="d-flex flex-column h-100">
-          <p>
-            There are no offers on discount right now. If you want to receive
-            email notification when owner creates a special offer, please
-            subscribe to this entity.
-          </p>
-          <div
-            v-if="canChange"
-            style="text-align: center; display: flex; align-items: center"
-            class="m-4"
-          >
-            <font-awesome-icon
-              icon="calendar-plus"
-              v-if="canChange"
-              style="width: 30px; height: 30px; cursor: pointer; color: #16c79a"
-              @click="showAddDiscountModal"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-
     <Popup
       id="reservedDiscountModal"
       ref="reservedDiscountModal"
@@ -292,13 +276,22 @@
       <ViewReservationReport :selectedId="selectedId" />
     </b-modal>
     <b-modal id="addDiscountModal" size="lg" hide-header hide-footer>
-      <AddDiscount :openModal="openAddedDiscountModal" :additionalServices="services" />
+      <AddDiscount
+        :openModal="openAddedDiscountModal"
+        :additionalServices="services"
+      />
     </b-modal>
     <Popup
       title="Discount added successfully!"
       type="success"
       ref="discountAdded"
       id="discountAdded"
+    />
+    <Popup
+      title="Discount deleted successfully!"
+      type="success"
+      ref="deletedDiscountModal"
+      id="deletedDiscountModal"
     />
   </div>
 </template>
@@ -411,6 +404,9 @@ export default {
     },
     openModal() {
       this.$refs.reservedDiscountModal.show();
+    },
+    openDeletedDiscount() {
+      this.$refs.deletedDiscountModal.show();
     },
     openAddedDiscountModal() {
       this.$refs.discountAdded.show();
