@@ -14,7 +14,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
         <navbar :currentPage="'rentables'" />
-        <b-card class="mb-3 card-shadow center" style="margin-left: 60px; margin-right: 60px; margin-top: 10px">
+        <b-card class="card-shadow" style="margin: 20px auto auto auto; width: 85%;">
             <Rentable />
         </b-card>
     </div>

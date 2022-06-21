@@ -28,7 +28,6 @@ public class PersonController {
             System.out.println(username + " is null!");
             return null;
         }
-        System.out.println("USAO SAM");
         return personService.personToDTO(person);
     }
 

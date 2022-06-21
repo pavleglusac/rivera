@@ -26,7 +26,7 @@ export default {
 
 <style>
   .full {
-    color: orange;
+    color: #16C79A;
   }
   
   .empty {
@@ -34,6 +34,6 @@ export default {
   }
 
   .half {
-    color: orange;
+    color: #16C79A;
   }
 </style>

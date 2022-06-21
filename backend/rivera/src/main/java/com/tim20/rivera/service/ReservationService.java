@@ -148,10 +148,10 @@ public class ReservationService {
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start,
                                       LocalDateTime end, Double price, List<String> additionalServices, String discountId) {
         Rentable rentable = rentableRepository.findById(rentableId).get();
-        if(rentable instanceof Cottage){
+        if(rentable instanceof Cottage) {
             rentable = cottageRepository.findOneById(rentableId);
         }
-        else if(rentable instanceof Boat){
+        else if(rentable instanceof Boat) {
             rentable = boatRepository.findOneById(rentableId);
         }
         else {
