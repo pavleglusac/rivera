@@ -3,14 +3,12 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.DiscountDTO;
 import com.tim20.rivera.dto.DiscountOfferDTO;
 import com.tim20.rivera.dto.DiscountProfileDTO;
-import com.tim20.rivera.model.Discount;
-import com.tim20.rivera.model.Owner;
-import com.tim20.rivera.model.Rentable;
-import com.tim20.rivera.model.Tag;
-import com.tim20.rivera.repository.DiscountRepository;
-import com.tim20.rivera.repository.RentableRepository;
+import com.tim20.rivera.model.*;
+import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +27,13 @@ public class DiscountService {
     private TagService tagService;
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private CottageRepository cottageRepository;
+    @Autowired
+    private BoatRepository boatRepository;
+    @Autowired
+    private AdventureRepository adventureRepository;
 
     public DiscountProfileDTO discountTODPDto(Discount discount) {
         DiscountProfileDTO discountProfileDTO = new DiscountProfileDTO();
@@ -103,9 +108,25 @@ public class DiscountService {
         return discounts.stream().map(this::discountToDODTO).collect(Collectors.toList());
     }
 
-    public void addDiscount(DiscountDTO discountDTO) {
-        discountRepository.save(discountDTOToDiscount(discountDTO));
-        sendNotificationsToSubscribed(rentableRepository.getById(discountDTO.getRentableId()), discountDTO);
+    @Transactional
+    public boolean addDiscount(DiscountDTO discountDTO) {
+        try {
+            int rentableId = discountDTO.getRentableId();
+            Rentable rentable = rentableRepository.findById(rentableId).get();
+            if (rentable instanceof Cottage) {
+                rentable = cottageRepository.findOneById(rentableId);
+            } else if (rentable instanceof Boat) {
+                rentable = boatRepository.findOneById(rentableId);
+            } else {
+                rentable = adventureRepository.findOneById(rentableId);
+            }
+            discountRepository.save(discountDTOToDiscount(discountDTO, rentable));
+            sendNotificationsToSubscribed(rentable, discountDTO);
+            return true;
+        } catch (PessimisticLockingFailureException exception) {
+            return false;
+        }
+
     }
 
     private void sendNotificationsToSubscribed(Rentable rentable, DiscountDTO discountDTO) {
@@ -127,7 +148,7 @@ public class DiscountService {
         }
     }
 
-    private Discount discountDTOToDiscount(DiscountDTO discountDTO){
+    private Discount discountDTOToDiscount(DiscountDTO discountDTO, Rentable rentable){
         Discount discount = new Discount();
         discount.setPrice(discountDTO.getPrice());
         System.out.println(discountDTO.getStartDateTime()+"DTO");
@@ -140,7 +161,7 @@ public class DiscountService {
         discount.setTags(tagService.getTagsByNames(discountDTO.getTags()));
         discount.setAdditionalServices(discountDTO.getAdditionalServices());
         discount.setReserved(discount.isReserved());
-        discount.setRentable(rentableRepository.getById(discountDTO.getRentableId()));
+        discount.setRentable(rentable);
         return discount;
     }
 
