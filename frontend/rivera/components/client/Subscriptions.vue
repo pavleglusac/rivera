@@ -11,7 +11,7 @@
     </div>
     <b-list-group v-if="subscribed.length > 0">
       <b-list-group-item v-for="entity in subscribed" :key="entity.id" class="d-flex align-items-center">
-        <b-avatar variant="info" :src='process.env.backend + entity.profilePicture' class="mr-3"></b-avatar>
+        <b-avatar variant="info" :src='entity.profilePicture' class="mr-3"></b-avatar>
         <span @click="goToProfile(entity)" style="cursor: pointer" class="mr-auto">
         <font-awesome-icon v-if="entity.kind == 'ADVENTURE'" icon="fish" />
         <font-awesome-icon v-else-if="entity.kind == 'COTTAGE'" icon="house" />
@@ -45,6 +45,9 @@ export default {
                         }).then((resp) => {
             this.$axios.get('/api/get-subscribed-entities?username=' + resp.data + '&search=' + this.search)
             .then(response => {
+                for(let i = 0; i < response.data.length; i++) {
+                  response.data[i].profilePicture = process.env.backend + response.data[i].profilePicture;
+                }
                 this.subscribed = response.data;
                 console.log(this.subscribed);
             });
