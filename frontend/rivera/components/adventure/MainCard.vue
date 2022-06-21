@@ -176,6 +176,7 @@ export default {
 				.then((resp) => {
 					if (resp.data === "") {
 						that.logged = false;
+						that.isClient = false;
 					} else {
 						var username = resp.data;
 						this.$axios

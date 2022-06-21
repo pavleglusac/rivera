@@ -1,13 +1,14 @@
 <template>
   <b-card class="discount discount-card">
-    <p style="font-weight: 500; font-size: 20px">
-      <font-awesome-icon icon="calendar" /> {{ discount.start }} -
+    <p style="font-weight: 500; font-size: 17px">
+      <font-awesome-icon icon="calendar" />  {{ discount.start }} -
       {{ discount.end }}
+      <span style="float: right">
+      <font-awesome-icon icon="person" />  {{ discount.capacity }}</span>
     </p>
-    <b-card-text>
       <p v-if="services != ''">Additional services included: {{ services }}</p>
-      <li v-for="tag in discount.tags" :key="tag" class="mb-1">
-        <span style="font-size: 12px" class="tag">{{ tag }}</span>
+      <li v-for="tag in discount.tags" :key="tag">
+        <span style="font-size: 10px" class="tag">{{ tag }}</span>
       </li>
       <hr />
       <s style="font-size: 20px; font-weight: 500" v-if="oldPrice != 0">{{ oldPrice }}$</s>&nbsp;&nbsp;&nbsp;
@@ -22,7 +23,6 @@
           >Book now!</b-button
         >
       </div>
-    </b-card-text>
   </b-card>
 </template>
 
@@ -73,17 +73,19 @@ export default {
           },
         })
         .then((resp) => {
-          this.$axios
-            .get(
-              `/api/get-reservation-price?&username=${resp.data}&rentableId=${
-                this.$route.params.rentable
-              }&start=${that.formatDate(that.discount.start)}&end=${that.formatDate(that.discount.end)}`
-            )
-            .then((response) => {
-              console.log("OLD PRICE")
-              console.log(response.data);
-              this.oldPrice = response.data;
-            });
+          if(resp.data != "") {
+            this.$axios
+              .get(
+                `/api/get-reservation-price?&username=${resp.data}&rentableId=${
+                  this.$route.params.rentable
+                }&start=${that.formatDate(that.discount.start)}&end=${that.formatDate(that.discount.end)}`
+              )
+              .then((response) => {
+                console.log("OLD PRICE")
+                console.log(response.data);
+                this.oldPrice = response.data;
+              });
+          }
         });
     },
     dateFormat(date) {
@@ -131,6 +133,7 @@ export default {
             this.openCantReserveModal();
           } else if (resp.data != "no-client") {
             console.log(resp.data);
+            console.log("/api/reserve?&username=" + resp.data + "&rentableId=" + this.$route.params.rentable + "&start=" + startDateTime + "&end=" + endDateTime + "&price=" + price + "&additionalServices=&discountId=" + this.discount.id);
             this.$axios
               .post(
                 `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}
@@ -141,7 +144,7 @@ export default {
                 this.openModal();
               });
           } else {
-            alert("Owner can't reserve discounts!");
+            this.$router.push({ path: "/login" });
           }
         })
         .catch((err) => {
@@ -161,7 +164,6 @@ export default {
   transition: all ease 0.3s;
 }
 .discount {
-  border-top: 10px solid #11698e;
   margin-bottom: 10px;
 }
 </style>

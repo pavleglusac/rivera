@@ -36,7 +36,7 @@
         <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost:
         {{ reservation.price }}$
         <br />
-        <span v-if="reservation.additionalServices.length != 0"><font-awesome-icon icon="plus" />&nbsp;&nbsp;Additional services:
+        <span v-if="services != ''"><font-awesome-icon icon="plus" />&nbsp;&nbsp;Additional services:
         {{ services }}</span>
         </b-card-text
       >
@@ -75,7 +75,9 @@ export default {
   ],
   mounted() {
     this.calculateNumberOfDaysUntilReservation();
-    this.services = this.reservation.additionalServices.join(", ")
+    console.log(this.reservation.additionalServices);
+    if(this.reservation.additionalServices != null & this.reservation.additionalServices.length != 0)
+      this.services = this.reservation.additionalServices.join(", ")
   },
   methods: {
     openCancel() {

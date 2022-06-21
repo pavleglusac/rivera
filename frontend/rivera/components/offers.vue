@@ -84,13 +84,20 @@
                 @change="reload"
               ></b-form-select>
             </div>
-            <div class="form-group col-md-9">
+            <div class="form-group col-md-8">
               <b-form-tags
                 size="md"
                 v-on:input="reload"
                 v-model="tags"
                 input-id="tags-basic"
               ></b-form-tags>
+            </div>
+            <div class="form-group col-md-1">
+              <b-button
+                size="md"
+                @click="clearSearch"
+                variant="outline-secondary"
+              >Clear</b-button>
             </div>
           </div>
         </div>
@@ -101,7 +108,7 @@
         <b-spinner variant="success" class="spinning m-2"></b-spinner>
       </div>
       <div v-else-if="offers.length === 0">
-        <p style="text-align: center">No offers found.</p>
+        <p style="text-align: center; font-size: 20px;">No offers found.</p>
       </div>
       <div v-else>
         <EntityCard
@@ -163,6 +170,13 @@ export default {
       if (this.activeCottages) return "cottage";
       else if (this.activeBoats) return "boat";
       else return "adventure";
+    },
+    clearSearch() {
+      this.searchText = "";
+      this.tags = [];
+      this.startDate = "";
+      this.endDate = "";
+      this.reload();
     },
     reload() {
       if (this.activeCottages) this.loadCottages();

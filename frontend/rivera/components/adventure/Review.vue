@@ -7,7 +7,7 @@
             <div class="profile-img">
               <img :src="review.client.photo" />
             </div>
-            <div class="name-user">
+            <div class="name-user" style="cursor: pointer" @click="goToProfile">
               <strong
                 >{{ review.client.name }} {{ review.client.surname }}</strong
               >

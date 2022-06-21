@@ -43,14 +43,14 @@ public class ClientControllerTest {
     @Test
     public void reservationPoints() throws Exception {
         mockMvc.perform(get("/api/get-client?id=pera"))
-                .andExpect(jsonPath("$.numberOfPoints").value(0));
+                .andExpect(jsonPath("$.numberOfPoints").value(26));
         mockMvc.perform(get("/api/get-reservations?username=pera&date=&upcoming=upcoming&search="))
                 .andExpect(jsonPath("$.*", hasSize(2)));
-        mockMvc.perform(get("/api/reserve?username=pera&rentableId=1&start=30/06/2022 18:00&end=30/06/2022 20:00&price=200"));
-        mockMvc.perform(get("/api/get-reservations?username=pera&date=&upcoming=upcoming&search="))
-                .andExpect(jsonPath("$.*", hasSize(2)));
+        mockMvc.perform(post("/api/reserve?&username=pera&rentableId=3&start=12/08/2022 16:00&end=13/08/2022 01:00&price=300&additionalServices=&discountId=6"));
         mockMvc.perform(get("/api/get-client?id=pera"))
-                .andExpect(jsonPath("$.numberOfPoints").value(0));
+                .andExpect(jsonPath("$.numberOfPoints").value(31));
+        mockMvc.perform(get("/api/get-reservations?username=pera&date=&upcoming=upcoming&search="))
+                .andExpect(jsonPath("$.*", hasSize(3)));
     }
 
     @Test

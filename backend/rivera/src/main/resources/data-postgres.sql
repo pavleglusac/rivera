@@ -86,7 +86,7 @@ INSERT INTO client (username, address, city, country, deleted, email, last_passw
                     phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id, version)
 VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+pera@outlook.com', NULL, 'Petar',
         '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg',
-        'Petrovic', 0, 0, 0, 1, 0);
+        'Petrovic', 2, 26, 0, 1, 0);
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password,
                    phone_number, photo, surname, status, version)

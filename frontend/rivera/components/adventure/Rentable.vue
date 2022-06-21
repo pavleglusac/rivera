@@ -262,13 +262,11 @@
       />
     </b-modal>
 
-    <b-modal id="cantReserve" title="You can't make reservations.">
-      <p class="my-4">
-        Because of your 3 penalties, we have to stop you from making a
+    <Popup id="cantReserve" ref="cantReserve" title="You can't make reservations."
+        text="Because of your 3 penalties, we have to stop you from making a
         reservation. You will have to wait till the end of month to be able to
-        reserve something again.
-      </p>
-    </b-modal>
+        reserve something again." type="error" />
+
     <b-modal id="add_modal" size="xl" hide-header hide-footer>
       <ReservationReport :selectedId="selectedId" />
     </b-modal>
@@ -412,7 +410,7 @@ export default {
       this.$refs.discountAdded.show();
     },
     openCantReserve() {
-      this.$bvModal.show("cantReserve");
+      this.$reft.cantReserve.show();
     },
     openGalerry() {
       this.$bvModal.show("gallery");

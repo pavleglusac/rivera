@@ -68,7 +68,6 @@ const countries = require("i18n-iso-countries");
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import Vue from "vue";
 import Vuelidate from "vuelidate";
-import PictureUpload from "./../add-adventure/PictureUpload.vue";
 Vue.use(Vuelidate);
 import {
   required,
@@ -111,7 +110,7 @@ export default {
       required,
     },
   },
-  props: ["selectedId"],
+  props: ["selectedId", "openFiledReportModal"],
   mounted() {
     console.log("asdasd" + this.selectedId);
   },
@@ -119,11 +118,7 @@ export default {
     upload() {
       var formData = new FormData();
       if (this.$v.$invalid) {
-        console.log(this.$v);
-        $("#emptyErrorModal").modal("show");
-        $("#addCottageForm").submit(function (e) {
-          e.preventDefault();
-        });
+        alert("Report text cannot be empty.")
         return;
       }
       formData.append("text", this.text);
@@ -140,8 +135,8 @@ export default {
           },
         })
         .then((resp) => {
-          this.$router.push({ path: "/ownerReservations/" });
-          console.log(resp);
+          this.openFiledReportModal();
+          this.close();
         })
         .catch((err) => {
           console.log(err);

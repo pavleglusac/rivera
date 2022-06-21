@@ -61,7 +61,7 @@
           {{ formatDate(new Date(reservation.endDateTime)) }}<br />
           <font-awesome-icon icon="credit-card" />&nbsp;Reservation cost:
           {{ reservation.price }}$ <br /><span
-            v-if="reservation.additionalServices.length != 0"
+            v-if="services != ''"
             ><font-awesome-icon icon="plus" />&nbsp;&nbsp;Additional services:
             {{ services }}</span
           ></b-card-text
@@ -81,10 +81,6 @@ export default {
     ViewReservationReport: ViewReservationReport,
   },
   mounted() {
-    console.log("-----------------------------------" + this.reservation); 
-    for (var x in this.reservation) {
-      console.log(x);
-    }
     this.services = this.reservation.additionalServices.join(", ");
   },
   methods: {
@@ -117,12 +113,9 @@ export default {
     },
     fileReport() {
       this.reportModal(this.reservation.reservationId);
-      //this.$router.push({ path: "/addReport/" + this.reservation.id });
     },
     viewReport() {
       this.viewReportModal(this.reservation.reservationId);
-      //this.$bvModal.show("add_modal2");
-      //this.$router.push({ path: "/viewReport/" + this.reservation.id });
     },
     isDateAfterToday(date) {
       return (

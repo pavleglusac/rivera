@@ -43,11 +43,12 @@
       </b-row>
     </b-card>
     <b-modal id="add_modal" size="md" hide-header hide-footer>
-      <ReservationReport :selectedId="selectedId" />
+      <ReservationReport :selectedId="selectedId" :openFiledReportModal = "openFiledReportModal" />
     </b-modal>
     <b-modal id="add_modal2" size="md" hide-header hide-footer>
       <ViewReservationReport :selectedId="selectedId" />
     </b-modal>
+    <Popup id="reportSendModal" ref="reportSendModal" title="You successfully filed a report!"/>
   </b-container>
 </template>
 
@@ -55,6 +56,7 @@
 import Reservation from "./reservation.vue";
 import ReservationReport from "./../owner_reservations/reservation_report";
 import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
+import Popup from "../popup.vue";
 export default {
   data() {
     return {
@@ -74,11 +76,14 @@ export default {
     };
   },
   name: "AllReservations",
-  components: { Reservation, ReservationReport, ViewReservationReport },
+  components: { Reservation, ReservationReport, ViewReservationReport, Popup },
   mounted() {
     this.loadReservations();
   },
   methods: {
+    openFiledReportModal() {
+      this.$refs.reportSendModal.show();
+    },
     loadReservations() {
       let that = this;
       that.reservations = [];

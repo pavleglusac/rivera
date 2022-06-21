@@ -255,19 +255,22 @@
 				:appointment="appointment"
 				:close="closeModal"
 				:openModal="openModal"
+				:openCantReserveAgain="openCantReserveAgain"
 				:additionalServices="additionalServices"
 			/>
 		</b-modal>
 		<b-modal id="reservedModal" title="Congratulations!">
 			<p class="my-4">You have successfully reserved your appointment.</p>
 		</b-modal>
-		<b-modal id="cantReserve" title="You can't make reservations.">
-			<p class="my-4">
-				Because of your 3 penalties, we have to stop you from making a
-				reservation. You will have to wait till the end of month to be able to
-				reserve something again.
-			</p>
-		</b-modal>
+
+		<Popup id="cantReserve" ref="cantReserve" title="You can't make reservations."
+        text="Because of your 3 penalties, we have to stop you from making a
+        reservation. You will have to wait till the end of month to be able to
+        reserve something again." type="error" />
+
+    <Popup id="cantReserveAgain" ref="cantReserveAgain" title="You can't make this reservation."
+        text="Because you reserved and cancelled this entity, you cannot make reservation
+        at the same time again. Please choose another date or another entity." type="error" />
 	</div>
 </template>
 
@@ -445,6 +448,9 @@ export default {
 		openModal() {
 			this.$bvModal.show("reservedModal");
 		},
+		openCantReserveAgain() {
+      		this.$reft.cantReserveAgain.show();
+    	},
 		handleDateSelect(selectInfo) {
 			console.log("SELECT INFO:", selectInfo);
 			let calendarApi = this.$refs.fullCalendar.getApi();

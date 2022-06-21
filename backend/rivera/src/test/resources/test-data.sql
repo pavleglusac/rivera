@@ -86,7 +86,7 @@ INSERT INTO client (username, address, city, country, deleted, email, last_passw
                     phone_number, photo, surname, number_of_penalties, number_of_points, status, category_id, version)
 VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+pera@outlook.com', NULL, 'Petar',
         '$2a$10$tonj9z9.COdaLJMbDYWoceKtivPCVmkSLSLg8LlDJGd7QRTlgh8Be', '+3815565456', '/images/clients/pera.jpg',
-        'Petrovic', 0, 0, 0, 1, 0);
+        'Petrovic', 2, 26, 0, 1, 0);
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password,
                    phone_number, photo, surname, status, version)
@@ -175,6 +175,13 @@ INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_
 VALUES (6, '2022-08-13 01:00:00', 700, '2022-08-12 16:00:00', 6, false);
 
 
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (4, '2022-08-18 17:00:00', 450, '2022-08-18 16:00:00', 1, true);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 3, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 4, false);
 
 INSERT INTO discount_tags (discount_id, tags_id)
 VALUES (1, 3);
@@ -446,6 +453,23 @@ VALUES (false, '2022-09-28 19:44:48.250883', 13, '2022-09-28 18:44:48.250856', '
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id,
                          owner_income_percentage)
 VALUES (false, '2021-10-21 19:44:48.250883', 130, '2021-09-21 18:44:48.250856', 'mika', 6, 0.5);
+
+
+
+
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-05-21 19:44:47.521598', 130, '2022-05-21 18:44:47.521546', 'pera', 1, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-05-21 19:44:47.521598', 130, '2022-05-21 18:44:47.521546', 'pera', 1, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-06-21 19:44:47.521598', 130, '2022-06-21 18:44:47.521546', 'pera', 1, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2023-05-21 19:44:47.521598', 1300, '2023-05-21 18:44:47.521546', 'pera', 4, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-10-21 19:44:48.250883', 130, '2022-05-21 18:44:48.250856', 'mika', 4, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-06-21 19:44:48.250883', 130, '2022-06-21 18:44:48.250856', 'mika', 4, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2015-05-21 19:44:48.250883', 130, '2015-05-21 18:44:48.250856', 'mika', 5, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-09-21 19:44:48.250883', 130, '2022-09-21 18:44:48.250856', 'mika', 4, 0.5);
+
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-09-21 19:44:48.250883', 200, '2022-09-21 18:44:48.250856', 'mika', 6, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-09-26 19:44:48.250883', 190, '2022-09-26 18:44:48.250856', 'mika', 7, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2022-09-28 19:44:48.250883', 13, '2022-09-28 18:44:48.250856', 'mika', 8, 0.5);
+INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id, owner_income_percentage) VALUES (false, '2021-10-21 19:44:48.250883', 130, '2021-09-21 18:44:48.250856', 'mika', 6, 0.5);
 
 
 

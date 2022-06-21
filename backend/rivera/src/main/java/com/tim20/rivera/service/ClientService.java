@@ -279,7 +279,8 @@ public class ClientService {
         reservations.add(reservation);
         client.setReservations(reservations);
         int points = client.getNumberOfPoints();
-        client.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
+        int numberOfPoints = rulesRepository.findAll().get(0).getPointsPerReservation();
+        client.setNumberOfPoints(points + numberOfPoints);
         clientRepository.save(client);
     }
 
@@ -320,6 +321,7 @@ public class ClientService {
         }
         return false;
     }
+
 
     public LocalDateTime parseDate(String date) {
         try {
