@@ -59,7 +59,9 @@ public class AdventureController {
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
     ) throws IOException {
 
-        adventureService.updateAdventure(adventure, multipartFiles);
+        if(!adventureService.updateAdventure(adventure, multipartFiles)){
+            return ResponseEntity.unprocessableEntity().body("Couldn't add cottage");
+        }
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

@@ -9,6 +9,7 @@ import com.tim20.rivera.repository.RulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -201,10 +202,12 @@ public class ClientService {
         return clientRentableDto;
     }
 
+    @Transactional(readOnly = true)
     public Client findByUsername(String username) {
         return clientRepository.findByUsername(username);
     }
 
+    @Transactional(readOnly = false)
     public Person save(ClientRequestDTO clientRequestDTO) {
         Client client;
         client = clientRepository.save(ClientRequestDTOToClient(clientRequestDTO));

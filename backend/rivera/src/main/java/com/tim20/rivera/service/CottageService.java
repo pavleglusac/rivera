@@ -160,6 +160,7 @@ public class CottageService {
         pricelist.setCancellationTerms(dto.getCancellationTerms());
         pricelist.setPricePerDay(dto.getPerDay());
         pricelist.setPricePerHour(dto.getPerHour());
+        pricelist.setRentable(cottage);
         pricelistRepository.save(pricelist);
 
         cottage.getPricelists().add(pricelist);
@@ -180,6 +181,7 @@ public class CottageService {
         return cottageRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value="cottageDTO", key="", unless="#result == null")
     public CottageDTO getById(Integer id) {
         Optional<Cottage> opt = cottageRepository.findById(id);

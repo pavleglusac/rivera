@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Service
 public class AdventureService {
 
@@ -66,6 +68,7 @@ public class AdventureService {
         temporaryOwner = fishingInstructorRepository.getById("marko");
     }
 
+    @Transactional(readOnly = false)
     public Integer addAdventure(AdventureDTO adventureDto,
                                 @RequestPart("images") MultipartFile[] multipartFiles) throws IOException {
 
@@ -123,6 +126,7 @@ public class AdventureService {
         return adventure;
     }
 
+    @Transactional(readOnly = true)
     @Cacheable(value="adventureDTO", key="", unless="#result == null")
     public AdventureDTO getAdventure(Integer id) {
         Optional<Adventure> opt = adventureRepository.findById(id);
@@ -202,20 +206,28 @@ public class AdventureService {
         return pricelist;
     }
 
-    public void updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
-        Optional<Adventure> opt = adventureRepository.findById(dto.getId());
-        if (opt.isEmpty()) return;
-        Adventure adventure = opt.get();
-        List<String> paths = savePictures(adventure, multipartFiles);
-        paths.forEach(System.out::println);
+    @Transactional(readOnly = false)
+    public boolean updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
+        try{
+            Optional<Adventure> opt = adventureRepository.findById(dto.getId());
+            if (opt.isEmpty()) return false;
+            Adventure adventure = opt.get();
+            List<String> paths = savePictures(adventure, multipartFiles);
+            paths.forEach(System.out::println);
 
-        dto.getPictures().addAll(paths);
-        dto.getPictures().forEach(System.out::println);
+            dto.getPictures().addAll(paths);
+            dto.getPictures().forEach(System.out::println);
 
-        copyDtoToAdventure(adventure, dto);
-        adventureRepository.save(adventure);
+            copyDtoToAdventure(adventure, dto);
+            adventureRepository.save(adventure);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
+    @Transactional(readOnly = true)
     public AdventureProfileDTO getFullById(Integer id) {
         Optional<Adventure> opt = adventureRepository.findById(id);
         return (opt.isEmpty() ? null : adventureToProfileDto(opt.get()));
@@ -279,6 +291,7 @@ public class AdventureService {
         return dto;
     }
 
+    @Transactional(readOnly = true)
     public List<AdventureDTO> getAdventures(boolean checkIsDeletable) {
         return adventureRepository.findAll()
                                   .stream()
@@ -299,10 +312,12 @@ public class AdventureService {
         return dto;
     }
 
+    @Transactional(readOnly = false)
     public void delete(Integer id) {
         adventureRepository.delete(adventureRepository.findById(id).get());
     }
 
+    @Transactional(readOnly = true)
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
         List<AdventureDTO> adventures = checkAvailableDates(checkTags(this
                 .getAdventuresOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams
@@ -378,6 +393,7 @@ public class AdventureService {
         };
     }
 
+    @Transactional(readOnly = true)
     public AdventureDTO getById(Integer id) {
         Optional<Adventure> opt = adventureRepository.findById(id);
         return (opt.isEmpty() ? null : adventureToDto(opt.get()));

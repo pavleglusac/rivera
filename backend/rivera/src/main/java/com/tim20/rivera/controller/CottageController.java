@@ -70,7 +70,9 @@ public class CottageController {
             CottageDTO cottage,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
     ) throws IOException {
-        cottageService.update(cottage, multipartFiles);
+        if (!cottageService.update(cottage, multipartFiles)){
+            return ResponseEntity.unprocessableEntity().body("Couldn't add cottage");
+        };
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
