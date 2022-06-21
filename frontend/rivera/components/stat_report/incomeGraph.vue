@@ -1,41 +1,43 @@
 <template>
   <div class="container">
-      <div class="form-row align-items-center">
-        <div class="form-group col-2"></div>
-        <div class="form-group col-3">
-          <b-form-datepicker
-            size="sm"
-            v-model="startDate"
-            placeholder="Start date"
-          ></b-form-datepicker>
-        </div>
-        <div class="form-group col-3">
-          <b-form-datepicker
-            size="sm"
-            v-model="endDate"
-            placeholder="End date"
-          ></b-form-datepicker>
-        </div>
-        <div class="form-group col-2">
-          <b-button
-            @click="loadAttendance"
-            class="w-100 prime-btn"
-            size="sm"
-            style="border: 1px solid #16c79a"
-            >Load</b-button
-          >
-        </div>
+    <div class="form-row align-items-center">
+      <div class="form-group col-2"></div>
+      <div class="form-group col-3">
+        <b-form-datepicker
+          size="sm"
+          v-model="startDate"
+          placeholder="Start date"
+        ></b-form-datepicker>
       </div>
-      <div class="form-row align-items-center">
-        <div class="form-group col-md-12 m-1">
-          <p style="font-weight: 500; text-align: center;">Full income: {{ fullIncome }}$</p>
+      <div class="form-group col-3">
+        <b-form-datepicker
+          size="sm"
+          v-model="endDate"
+          placeholder="End date"
+        ></b-form-datepicker>
       </div>
+      <div class="form-group col-2">
+        <b-button
+          @click="loadAttendance"
+          class="w-100 prime-btn"
+          size="sm"
+          style="border: 1px solid #16c79a"
+          >Load</b-button
+        >
       </div>
-      <div class="form-row align-items-center">
-        <div class="form-group col-md-12 m-1">
-          <canvas id="myChart" style="max-width=100%"></canvas>
-        </div>
+    </div>
+    <div class="form-row align-items-center">
+      <div class="form-group col-md-12 m-1">
+        <p style="font-weight: 500; text-align: center">
+          Full income: {{ fullIncome }}$
+        </p>
       </div>
+    </div>
+    <div class="form-row align-items-center">
+      <div class="form-group col-md-12 m-1">
+        <canvas id="myChart" style="max-width=100%"></canvas>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,19 +58,23 @@ export default {
   methods: {
     loadAttendance() {
       var that = this;
-      this.$axios
-        .get(
-          `/api/get-income?&startDate=${this.startDate}&endDate=${this.endDate}`
-        )
-        .then((response) => {
-          console.log(response.data);
-          that.xValues = response.data.map((e) => e.rentableName);
-          that.yValues = response.data.map((e) => e.income);
-          console.log(that.xValues);
-          console.log(that.yValues);
-          that.fullIncome = that.yValues.reduce((a, b) => a + b, 0);
-          this.createChart();
-        });
+      if (this.startDate != "" && this.endDate != "") {
+        this.$axios
+          .get(
+            `/api/get-income?&startDate=${this.startDate}&endDate=${this.endDate}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            that.xValues = response.data.map((e) => e.rentableName);
+            that.yValues = response.data.map((e) => e.income);
+            console.log(that.xValues);
+            console.log(that.yValues);
+            that.fullIncome = that.yValues.reduce((a, b) => a + b, 0);
+            this.createChart();
+          });
+      } else {
+        alert("You have to select the dates first.");
+      }
     },
 
     createChart() {

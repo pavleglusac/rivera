@@ -1,57 +1,171 @@
 <template>
   <div class="w-100 ml-0 mr-0 h-100">
-    <div class="w-100 pb-0 d-flex mb-5">
-      <div class="d-flex flex-column" style="width: 50%; height: 100%">
-        <MainCard
-          :location="location"
-          :description="description"
-          :name="name"
-          :score="score"
-          :canBeChanged="!canBeChanged"
-          :isOwner = "canChange"
-          :currentType="currentType"
-          :openReservationsModal="openReservationsModal"
-        />
-        <div class="mt-10 h-25">
-          <h6 class="mb-3">
-            <font-awesome-icon icon="person" /> Capacity:
-            <span class="text-muted"> {{ capacity }} people </span>
-          </h6>
-          <h6 class="mb-3">
-            <font-awesome-icon icon="money-bill-wave" /> Price:
-            <span class="text-muted">
-              {{ perHour }}$ per hour / {{ perDay }}$ per day
-            </span>
-          </h6>
-          <li v-for="tag in tags" :key="tag">
-            <span class="tag">{{ tag }}</span>
-          </li>
-          <br />
-          <div class="mt-3" @click="goToOwnerProfile" style="cursor: pointer">
-            <b-avatar variant="info" :src="owner.picture"></b-avatar>
-            <span class="mr-auto" style="font-weight: 500"
-              >{{ owner.name }} {{ owner.surname }}</span
-            >
-          </div>
-        </div>
-      </div>
-      <div class="d-flex flex-column mt-5" style="width: 50%; height: 100%">
-        <Carousel2 :pictures="pictures.slice(0, pictures.lenght)" />
-        <p
-          @click="openGalerry"
-          style="
-            background-color: #11698e;
-            cursor: pointer;
-            padding: 15px;
-            width: 100%;
-            text-align: center;
-            font-weight: 500;
-            color: white;
-          "
-        >
-          View gallery
+    <div class="w-100 pb-0 mb-5">
+      <MainCard
+        :location="location"
+        :description="description"
+        :name="name"
+        :score="score"
+        :canBeChanged="!canBeChanged"
+        :isOwner="canChange"
+        :currentType="currentType"
+        :openReservationsModal="openReservationsModal"
+      />
+      <h2 id="name">{{ name }}</h2>
+      <div>
+        <p style="font-size: 17px; font-weight: 600" class="p-0 mb-1">
+          <font-awesome-icon icon="star" />&nbsp;{{ score }}
+          <span class="text-muted"> ({{ reviews.length }} reviews)</span>
+          &nbsp;&nbsp;&nbsp;
+          <font-awesome-icon icon="location-dot" />&nbsp;{{ location }}
+          &nbsp;&nbsp;&nbsp;
+          <font-awesome-icon icon="person" /> Capacity: {{ capacity }}
+          <span class="text-muted"> people </span>
+          &nbsp;&nbsp;&nbsp;
+          <font-awesome-icon icon="money-bill-wave" /> Price:
+
+          {{ perHour }}$ <span class="text-muted">per hour</span> /
+          {{ perDay }}$ <span class="text-muted">per day</span>
         </p>
       </div>
+      <hr class="w-100" style="margin-bottom: -20px" />
+      <b-row class="mt-5">
+        <b-col md="6">
+          <Gallery
+            style="margin-left: -5px"
+            :openGalleryModal="openGalerry"
+            :pictures="pictures"
+          />
+          <hr class="w-100" />
+          <h4 class="subtitle">Special Offers</h4>
+        </b-col>
+
+        <b-col md="6">
+          <div class="description mb-4">
+            <h4 class="subtitle">About</h4>
+            <p>{{ description }}</p>
+            <div
+              @click="goToOwnerProfile"
+              style="display: flex; cursor: pointer"
+            >
+              <b-avatar
+                style="height: 40px; width: 40px; margin-right: 5px"
+                :src="owner.picture"
+              ></b-avatar>
+              <p>{{ owner.name }} {{ owner.surname }}</p>
+            </div>
+            <li v-for="tag in tags" :key="tag">
+              <span class="tag">{{ tag }}</span>
+            </li>
+          </div>
+          <hr class="w-100" />
+          <div v-if="currentType == 'adventure'">
+            <h6 class="mt-4"><font-awesome-icon icon="plus" /> Equipment:</h6>
+            <div class="flex">
+              <span class="tagish" v-for="e in equipment" :key="e">
+                {{ e }}
+              </span>
+            </div>
+          </div>
+          <h6 class="mt-2">
+            <font-awesome-icon icon="book" /> Rules of conduct:
+          </h6>
+          <div class="flex">
+            <span class="tagish" v-for="rule in rulesOfConduct" :key="rule">
+              {{ rule }}
+            </span>
+          </div>
+          <h6 class="mt-2">
+            <font-awesome-icon icon="bell-concierge" /> Additional services:
+          </h6>
+          <div class="flex">
+            <span class="tagish" v-for="service in services" :key="service">
+              {{ service }}
+            </span>
+          </div>
+          <div v-if="currentType == 'cottage'">
+            <h6 class="mt-2">
+              <font-awesome-icon icon="door-closed" /> Rooms:
+            </h6>
+            <div class="flex">
+              <span class="tagish" v-for="room in rooms" :key="room">
+                {{ room }}
+              </span>
+            </div>
+          </div>
+          <div v-if="currentType == 'boat'">
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <h6 class="mt-2"><font-awesome-icon icon="ruler" /> Length:</h6>
+                <div class="flex">
+                  <span class="tagish"> {{ boatLength }} m </span>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <h6 class="mt-2">
+                  <font-awesome-icon icon="gauge" /> Max speed:
+                </h6>
+                <div class="flex">
+                  <span class="tagish"> {{ maxSpeed }} knots </span>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <h6 class="mt-2"><font-awesome-icon icon="anchor" /> Type:</h6>
+                <div class="flex">
+                  <span class="tagish">
+                    {{ type }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <h6>
+                  <font-awesome-icon icon="bell-concierge" /> Engine Power:
+                </h6>
+                <div class="flex">
+                  <span class="tagish"> {{ enginePower }} kW </span>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <h6>
+                  <font-awesome-icon icon="bell-concierge" /> Number of engines:
+                </h6>
+                <div class="flex">
+                  <span class="tagish">
+                    {{ enginesNumber }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column mt-3">
+            <iframe
+              :src="
+                'https://maps.google.com/maps?q=' +
+                encodeURIComponent(location + ',' + address) +
+                '&t=&z=13&ie=UTF8&iwloc=&output=embed'
+              "
+              frameborder="0"
+              style="border: none; border-radius: 10px; height: 100%"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <hr class="w-100" />
+          <h4 class="subtitle">Reviews</h4>
+          <div v-if="reviews.length > 0">
+            <Review
+              class="ml-2 mt-1 w-100 h-100"
+              v-for="review in reviews"
+              :key="review.id"
+              :review="review"
+            />
+          </div>
+          <div v-else>
+            <p>No one reviewed this entity yet.</p>
+          </div>
+        </b-col>
+      </b-row>
     </div>
 
     <b-modal id="gallery" size="xl" hide-footer title="Gallery">
@@ -65,104 +179,19 @@
       </div>
     </b-modal>
 
-    <h3 class="subtitle">Details</h3>
-
-    <div class="w-100 pb-0 d-flex" style="height: 50vh">
-      <div class="d-flex flex-column" style="width: 50%; height: 100%">
-        <iframe
-          :src="
-            'https://maps.google.com/maps?q=' +
-            encodeURIComponent(location + ',' + address) +
-            '&t=&z=13&ie=UTF8&iwloc=&output=embed'
-          "
-          frameborder="0"
-          style="border: none; border-radius: 10px; height: 100%"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="d-flex flex-column ml-5" style="width: 50%; height: 100%">
-        <div v-if="currentType == 'adventure'">
-          <h6 class="mt-4"><font-awesome-icon icon="plus" /> Equipment:</h6>
-          <div class="flex">
-            <span class="tagish" v-for="e in equipment" :key="e">
-              {{ e }}
-            </span>
-          </div>
-        </div>
-        <h6 class="mt-2">
-          <font-awesome-icon icon="book" /> Rules of conduct:
-        </h6>
-        <div class="flex">
-          <span class="tagish" v-for="rule in rulesOfConduct" :key="rule">
-            {{ rule }}
-          </span>
-        </div>
-        <h6 class="mt-2">
-          <font-awesome-icon icon="bell-concierge" /> Additional services:
-        </h6>
-        <div class="flex">
-          <span class="tagish" v-for="service in services" :key="service">
-            {{ service }}
-          </span>
-        </div>
-        <div v-if="currentType == 'cottage'">
-          <h6 class="mt-2"><font-awesome-icon icon="door-closed" /> Rooms:</h6>
-          <div class="flex">
-            <span class="tagish" v-for="room in rooms" :key="room">
-              {{ room }}
-            </span>
-          </div>
-        </div>
-        <div v-if="currentType == 'boat'">
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <h6 class="mt-2"><font-awesome-icon icon="ruler" /> Length:</h6>
-              <div class="flex">
-                <span class="tagish"> {{ boatLength }} m </span>
-              </div>
-            </div>
-            <div class="form-group col-md-4">
-              <h6 class="mt-2">
-                <font-awesome-icon icon="gauge" /> Max speed:
-              </h6>
-              <div class="flex">
-                <span class="tagish"> {{ maxSpeed }} knots </span>
-              </div>
-            </div>
-            <div class="form-group col-md-4">
-              <h6 class="mt-2"><font-awesome-icon icon="anchor" /> Type:</h6>
-              <div class="flex">
-                <span class="tagish">
-                  {{ type }}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <h6><font-awesome-icon icon="bell-concierge" /> Engine Power:</h6>
-              <div class="flex">
-                <span class="tagish"> {{ enginePower }} kW </span>
-              </div>
-            </div>
-            <div class="form-group col-md-4">
-              <h6>
-                <font-awesome-icon icon="bell-concierge" /> Number of engines:
-              </h6>
-              <div class="flex">
-                <span class="tagish">
-                  {{ enginesNumber }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="w-100 pb-0 d-flex mt-5">
       <div class="d-flex flex-column" style="width: 100%; height: 100%">
+        <hr class="w-100" />
         <h3 class="subtitle">Calendar</h3>
+        <p style="font-size: 20px">
+          <b>You are wondering how to reserve your appointment?</b> <br />
+          Just click on the available appointment on calendar in order to book
+          your reservation. You will be able to book whole appointment or just a
+          part of it! Check additional services you want and your reservation is
+          ready! Remember to check your email for your reservation details. You
+          can cancel reservation 3 days in advance, so be sure to cancell it on
+          time. Otherwise, you will get a penalty.
+        </p>
         <div
           class="pl-5 w-100 justify-content-center d-flex mb-5"
           style="height: 80vh"
@@ -172,7 +201,7 @@
               :reservations="reservations"
               :currentType="currentType"
               :additionalServices="services"
-              :isOwner = "canChange"
+              :isOwner="canChange"
             />
           </div>
         </div>
@@ -193,13 +222,20 @@
               :openCantReserveModal="openCantReserve"
               :openModal="openModal"
             />
-            <div v-if="canChange"
+            <div
+              v-if="canChange"
               style="text-align: center; display: flex; align-items: center"
               class="m-4"
             >
-              <font-awesome-icon v-if = "canChange"
-              icon="calendar-plus"
-                style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
+              <font-awesome-icon
+                v-if="canChange"
+                icon="calendar-plus"
+                style="
+                  width: 30px;
+                  height: 30px;
+                  cursor: pointer;
+                  color: #16c79a;
+                "
                 @click="showAddDiscountModal"
               />
             </div>
@@ -211,74 +247,44 @@
             email notification when owner creates a special offer, please
             subscribe to this entity.
           </p>
-          <div  v-if="canChange"
+          <div
+            v-if="canChange"
             style="text-align: center; display: flex; align-items: center"
             class="m-4"
           >
             <font-awesome-icon
-              icon="calendar-plus" v-if = "canChange"
-              style="width: 30px; height: 30px; cursor: pointer; color: #16C79A"
+              icon="calendar-plus"
+              v-if="canChange"
+              style="width: 30px; height: 30px; cursor: pointer; color: #16c79a"
               @click="showAddDiscountModal"
             />
           </div>
         </div>
-        <Popup
-          id="reservedDiscountModal"
-          ref="reservedDiscountModal"
-          title="Congratulations!"
-          type="success"
-          text="You have successfully reserved an appointment."
-        />
-
-        <b-modal id="reservationModal" size="xl" hide-header hide-footer>
-          <reservation-history
-            :reportModal="reportModal"
-            :viewReportModal="viewReportModal"
-          />
-        </b-modal>
-
-        <b-modal id="cantReserve" title="You can't make reservations.">
-          <p class="my-4">
-            Because of your 3 penalties, we have to stop you from making a
-            reservation. You will have to wait till the end of month to be able
-            to reserve something again.
-          </p>
-        </b-modal>
       </div>
     </div>
 
-    <div class="mt-5 w-100 mb-5">
-      <h3 class="subtitle">Reviews</h3>
-      <div v-if="reviews.length > 0" class="row h-100 gx-0">
-        <div class="col-6 gx-0 pr-0">
-          <div>
-            <Review
-              class="ml-2 mt-1 w-100 h-100"
-              v-for="review in reviews
-                .slice()
-                .splice(0, Math.ceil(reviews.length / 2))"
-              :key="review.id"
-              :review="review"
-            />
-          </div>
-        </div>
-        <div class="col-6 gx-0">
-          <div>
-            <Review
-              class="mt-1 w-100 h-100"
-              v-for="review in reviews
-                .slice()
-                .splice(-Math.ceil(reviews.length / 2))"
-              :key="review.id"
-              :review="review"
-            />
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <p>No one reviewed this entity yet.</p>
-      </div>
-    </div>
+    <Popup
+      id="reservedDiscountModal"
+      ref="reservedDiscountModal"
+      title="Congratulations!"
+      type="success"
+      text="You have successfully reserved an appointment."
+    />
+
+    <b-modal id="reservationModal" size="xl" hide-header hide-footer>
+      <reservation-history
+        :reportModal="reportModal"
+        :viewReportModal="viewReportModal"
+      />
+    </b-modal>
+
+    <b-modal id="cantReserve" title="You can't make reservations.">
+      <p class="my-4">
+        Because of your 3 penalties, we have to stop you from making a
+        reservation. You will have to wait till the end of month to be able to
+        reserve something again.
+      </p>
+    </b-modal>
     <b-modal id="add_modal" size="xl" hide-header hide-footer>
       <ReservationReport :selectedId="selectedId" />
     </b-modal>
@@ -286,9 +292,14 @@
       <ViewReservationReport :selectedId="selectedId" />
     </b-modal>
     <b-modal id="addDiscountModal" size="lg" hide-header hide-footer>
-      <AddDiscount :openModal="openAddedDiscountModal" />
+      <AddDiscount :openModal="openAddedDiscountModal" :additionalServices="services" />
     </b-modal>
-    <Popup title="Discount added successfully!" type="success" ref="discountAdded" id="discountAdded" />
+    <Popup
+      title="Discount added successfully!"
+      type="success"
+      ref="discountAdded"
+      id="discountAdded"
+    />
   </div>
 </template>
 
@@ -298,7 +309,8 @@ import Carousel2 from "./Carousel2.vue";
 import Calendar from "./Calendar.vue";
 import Discount from "./Discount.vue";
 import Review from "./Review.vue";
-import Popup from "../popup.vue"
+import Popup from "../popup.vue";
+import Gallery from "./Gallery.vue";
 import ReservationHistory from "../owner_reservations/reservation_history.vue";
 import ReservationReport from "./../owner_reservations/reservation_report";
 import ViewReservationReport from "./../owner_reservations/view_reservation_report.vue";
@@ -320,7 +332,8 @@ export default {
     BIcon,
     BIconCalendarPlus,
     Popup,
-},
+    Gallery,
+  },
   data() {
     return {
       selectedId: "",
@@ -360,7 +373,7 @@ export default {
       enginesNumber: "",
       enginePower: "",
       maxSpeed: "",
-      canChange: false
+      canChange: false,
     };
   },
   mounted() {
@@ -384,11 +397,13 @@ export default {
           }
         }
       });
-      this.$axios
-      .get(`/api/check-if-rentable-from-logged-user?&rentableId=${that.$route.params.rentable}`).then((resp) => {
+    this.$axios
+      .get(
+        `/api/check-if-rentable-from-logged-user?&rentableId=${that.$route.params.rentable}`
+      )
+      .then((resp) => {
         that.canChange = resp.data;
-      }
-      );
+      });
   },
   methods: {
     goToOwnerProfile() {
@@ -428,7 +443,12 @@ export default {
           //   (x) => (x.client.photo = process.env.backend + x.client.photo)
           // );
           that.name = adventure.name;
-          that.location = adventure.city + ", " + adventure.country;
+          that.location =
+            adventure.address +
+            ", " +
+            adventure.city +
+            ", " +
+            adventure.country;
           that.address = adventure.address;
           that.services = adventure.services;
           that.name = adventure.name;
@@ -440,10 +460,13 @@ export default {
           that.services = adventure.services;
           that.tags = adventure.tags;
           that.canBeChanged = !adventure.canBeChanged;
-          for(var disc in adventure.discounts){
-              var startDate = adventure.discounts[disc].start;
-              if(!adventure.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
-                that.discounts.push(adventure.discounts[disc]);
+          for (var disc in adventure.discounts) {
+            var startDate = adventure.discounts[disc].start;
+            if (
+              !adventure.discounts[disc].reserved &&
+              that.isDateAfterToday(new Date(startDate))
+            )
+              that.discounts.push(adventure.discounts[disc]);
           }
           that.discounts.forEach(
             (x) => (
@@ -489,7 +512,7 @@ export default {
           );
           that.name = cottage.name;
           that.location =
-            cottage.address + "," + cottage.city + "," + cottage.country;
+            cottage.address + ", " + cottage.city + ", " + cottage.country;
           that.services = cottage.services;
           that.name = cottage.name;
           that.perHour = cottage.perHour;
@@ -502,10 +525,13 @@ export default {
           that.services = cottage.services;
           that.tags = cottage.tags;
           that.canBeChanged = !cottage.canBeChanged;
-          for(var disc in cottage.discounts){
-              var startDate = cottage.discounts[disc].start;
-              if(!cottage.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
-                that.discounts.push(cottage.discounts[disc]);
+          for (var disc in cottage.discounts) {
+            var startDate = cottage.discounts[disc].start;
+            if (
+              !cottage.discounts[disc].reserved &&
+              that.isDateAfterToday(new Date(startDate))
+            )
+              that.discounts.push(cottage.discounts[disc]);
           }
           for (var x of that.discounts) {
             console.log("---------------" + x.start);
@@ -561,7 +587,7 @@ export default {
             (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
           that.name = boat.name;
-          that.location = boat.address + "," + boat.city + "," + boat.country;
+          that.location = boat.address + ", " + boat.city + ", " + boat.country;
           that.services = boat.services;
           that.name = boat.name;
           that.perHour = boat.perHour;
@@ -579,10 +605,13 @@ export default {
           that.boatLength = boat.length;
           that.capacity = boat.capacity;
           that.canBeChanged = !boat.canBeChanged;
-          for(var disc in boat.discounts){
-              var startDate = boat.discounts[disc].start;
-              if(!boat.discounts[disc].reserved && that.isDateAfterToday(new Date(startDate)))
-                that.discounts.push(boat.discounts[disc]);
+          for (var disc in boat.discounts) {
+            var startDate = boat.discounts[disc].start;
+            if (
+              !boat.discounts[disc].reserved &&
+              that.isDateAfterToday(new Date(startDate))
+            )
+              that.discounts.push(boat.discounts[disc]);
           }
           that.discounts.forEach(
             (x) => (
@@ -639,10 +668,11 @@ export default {
 }
 
 .tagish {
-  padding: 10px;
+  padding: 7px;
+  font-size: 15px;
   background-color: #ebecf0;
   border: none;
-  border-radius: 10px;
+  border-radius: 7px;
   margin: 0;
   display: inline-block;
   list-style-type: none;
@@ -655,6 +685,7 @@ ul {
   padding: 0;
   list-style-position: inside;
 }
+
 li {
   padding: 0;
   display: inline-block;
@@ -680,16 +711,19 @@ li {
 }
 
 .gallery-row {
-  display: -ms-flexbox; /* IE 10 */
+  display: -ms-flexbox;
+  /* IE 10 */
   display: flex;
-  -ms-flex-wrap: wrap; /* IE 10 */
+  -ms-flex-wrap: wrap;
+  /* IE 10 */
   flex-wrap: wrap;
   padding: 0 4px;
 }
 
 /* Create two equal columns that sits next to each other */
 .gallery-column {
-  -ms-flex: 50%; /* IE 10 */
+  -ms-flex: 50%;
+  /* IE 10 */
   flex: 50%;
   padding: 0 4px;
 }

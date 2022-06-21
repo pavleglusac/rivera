@@ -24,6 +24,8 @@ public class Discount {
 
     @ManyToMany
     private List<Tag> tags;
+    @ElementCollection
+    private List<String> additionalServices;
 
     @ManyToOne
     @JoinColumn(name = "rentable_id")

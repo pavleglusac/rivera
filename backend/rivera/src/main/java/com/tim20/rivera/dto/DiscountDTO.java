@@ -14,6 +14,7 @@ public class DiscountDTO {
     Integer capacity;
     Double price;
     List<String> tags;
+    List<String> additionalServices;
     Integer rentableId;
     boolean reserved;
 }

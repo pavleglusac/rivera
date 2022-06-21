@@ -37,6 +37,7 @@ public class DiscountService {
         discountProfileDTO.setEnd(discount.getEndDateTime());
         discountProfileDTO.setStart(discount.getStartDateTime());
         discountProfileDTO.setTags(discount.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
+        discountProfileDTO.setAdditionalServices(discount.getAdditionalServices());
         discountProfileDTO.setCapacity(discount.getCapacity());
         discountProfileDTO.setPrice(discount.getPrice());
         discountProfileDTO.setReserved(discount.isReserved());
@@ -137,6 +138,7 @@ public class DiscountService {
         discount.setCapacity(discountDTO.getCapacity());
         tagService.addTagsIfNotPresent(discountDTO.getTags());
         discount.setTags(tagService.getTagsByNames(discountDTO.getTags()));
+        discount.setAdditionalServices(discountDTO.getAdditionalServices());
         discount.setReserved(discount.isReserved());
         discount.setRentable(rentableRepository.getById(discountDTO.getRentableId()));
         return discount;
