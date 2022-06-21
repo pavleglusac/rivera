@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -65,7 +66,7 @@ public class AdminService {
     @Autowired
     private ConfigurableEnvironment env;
 
-    final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
+    final static String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
 
     public Admin findByUsername(String username) {
@@ -82,7 +83,7 @@ public class AdminService {
                 .get(0);
     }
 
-    public void updateCategories(ArrayList<MemberCategory> categories) {
+    public void updateCategories(List<MemberCategory> categories) {
         clientRepository.findAll()
                 .forEach(client -> client.setCategory(null));
         ownerRepository.findAll()
@@ -101,7 +102,7 @@ public class AdminService {
         ownerRepository.saveAll(ownerRepository.findAll());
     }
 
-    private MemberCategory getMaxCategory(ArrayList<MemberCategory> categories, int points, boolean forOwner) {
+    private MemberCategory getMaxCategory(List<MemberCategory> categories, int points, boolean forOwner) {
         int maxPoints = 0;
         MemberCategory maxCategory = null;
         for (MemberCategory category : categories) {
@@ -128,10 +129,10 @@ public class AdminService {
                 .filter(owner -> owner.getStatus()
                         .equals(AccountStatus.WAITING))
                 .map(Person::getUsername)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public HashMap<String, Integer> getRegisteredStats() {
+    public Map<String, Integer> getRegisteredStats() {
         HashMap<String, Integer> stats = new HashMap<>();
         ownerRepository.findAll()
                 .forEach(x -> stats.put(x.getStatus().name(), stats.getOrDefault(x.getStatus().name(), 0) + 1));
@@ -214,7 +215,7 @@ public class AdminService {
     }
 
     public List<IncomeSystemDTO> getSystemIncome(String type, LocalDateTime from, LocalDateTime to) {
-        if (from.isAfter(to)) return null;
+        if (from.isAfter(to)) return Collections.emptyList();
         LocalDateTime nextVal = from;
         String label = "";
         List<IncomeSystemDTO> incomes = new ArrayList<>();
@@ -260,7 +261,7 @@ public class AdminService {
                 .findAllByResolved(false)
                 .stream()
                 .map(this::reportToAdminReportDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private AdminReservationReportDTO reportToAdminReportDTO(ReservationReport report) {
@@ -386,7 +387,7 @@ public class AdminService {
                 review.setStatus(ReviewStatus.ACCEPTED);
             }
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-                Random random = new Random();
+                Random random = SecureRandom.getInstanceStrong();;
                 int r = random.nextInt(1, 10);
                 Thread.sleep(r* 100L);
             }

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -92,7 +93,7 @@ public class AdminController {
     }
 
     @GetMapping(path = "registered-stats")
-    public HashMap<String, Integer> getRegisteredStats() {
+    public Map<String, Integer> getRegisteredStats() {
         return adminService.getRegisteredStats();
     }
 
