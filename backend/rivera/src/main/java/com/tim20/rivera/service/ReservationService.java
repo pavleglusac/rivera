@@ -147,6 +147,7 @@ public class ReservationService {
     @Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start,
                                       LocalDateTime end, Double price, List<String> additionalServices, String discountId) {
+        try{
         Rentable rentable = rentableRepository.findById(rentableId).get();
         if(rentable instanceof Cottage) {
             rentable = cottageRepository.findOneById(rentableId);
@@ -179,6 +180,9 @@ public class ReservationService {
             System.out.println("Emails not sent!");
         }
         return reservation;
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public Double calculatePriceForReservation(Client client, Integer rentableId, LocalDateTime start, LocalDateTime end) {
