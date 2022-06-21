@@ -1,34 +1,43 @@
 <template>
   <b-card class="discount discount-card">
     <p style="font-weight: 500; font-size: 17px">
-      <font-awesome-icon icon="calendar" />  {{ discount.start }} -
+      <font-awesome-icon icon="calendar" /> {{ discount.start }} -
       {{ discount.end }}
       <span style="float: right">
-      <font-awesome-icon icon="person" />  {{ discount.capacity }}</span>
-    </p>
-      <p v-if="services != ''">Additional services included: {{ services }}</p>
-      <li v-for="tag in discount.tags" :key="tag">
-        <span style="font-size: 10px" class="tag">{{ tag }}</span>
-      </li>
-      <hr />
-      <s style="font-size: 20px; font-weight: 500" v-if="oldPrice != 0">{{ oldPrice }}$</s>&nbsp;&nbsp;&nbsp;
-      <span style="font-size: 20px; color: #16c79a; font-weight: 600"
-        ><font-awesome-icon icon="tag" /> {{ discount.price }}$</span
+        <font-awesome-icon icon="person" /> {{ discount.capacity }}</span
       >
-      <div style="float: right; display: inline">
-        <b-button v-if="isOwner" @click="deleteDiscount" style="border: none"
-          >Delete discount</b-button
-        >
-        <b-button @click="reserve" v-if="!isOwner" class="prime-btn"
-          >Book now!</b-button
-        >
-      </div>
+    </p>
+    <p v-if="services != ''">Additional services included: {{ services }}</p>
+    <li v-for="tag in discount.tags" :key="tag">
+      <span style="font-size: 10px" class="tag">{{ tag }}</span>
+    </li>
+    <hr />
+    <s style="font-size: 20px; font-weight: 500" v-if="oldPrice != 0"
+      >{{ oldPrice }}$</s
+    >&nbsp;&nbsp;&nbsp;
+    <span style="font-size: 20px; color: #16c79a; font-weight: 600"
+      ><font-awesome-icon icon="tag" /> {{ discount.price }}$</span
+    >
+    <div style="float: right; display: inline">
+      <b-button v-if="isOwner" @click="deleteDiscount" style="border: none"
+        >Delete discount</b-button
+      >
+      <b-button @click="reserve" v-if="!isOwner" class="prime-btn"
+        >Book now!</b-button
+      >
+    </div>
   </b-card>
 </template>
 
 <script>
 export default {
-  props: ["discount", "openModal", "openCantReserveModal", "openDeletedDiscountModal", "isOwner"],
+  props: [
+    "discount",
+    "openModal",
+    "openCantReserveModal",
+    "openDeletedDiscountModal",
+    "isOwner",
+  ],
   mounted() {},
   data() {
     return {
@@ -55,38 +64,44 @@ export default {
         current_datetime.getFullYear() +
         "-" +
         month +
-        "-" + 
-        day + 
+        "-" +
+        day +
         "T" +
         hours +
         ":" +
-        minutes + 
+        minutes +
         ":00"
       );
     },
     calculateOldPrice() {
       var that = this;
-      this.$axios
-        .get("/api/auth/get-logged-username", {
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-          },
-        })
-        .then((resp) => {
-          if(resp.data != "") {
-            this.$axios
-              .get(
-                `/api/get-reservation-price?&username=${resp.data}&rentableId=${
-                  this.$route.params.rentable
-                }&start=${that.formatDate(that.discount.start)}&end=${that.formatDate(that.discount.end)}`
-              )
-              .then((response) => {
-                console.log("OLD PRICE")
-                console.log(response.data);
-                this.oldPrice = response.data;
-              });
-          }
-        });
+      if (!this.isOwner) {
+        this.$axios
+          .get("/api/auth/logged-user-info", {
+            headers: {
+              Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+            },
+          })
+          .then((resp) => {
+            if (resp.data.role == "ROLE_CLIENT") {
+              this.$axios
+                .get(
+                  `/api/get-reservation-price?&username=${
+                    resp.data.username
+                  }&rentableId=${
+                    this.$route.params.rentable
+                  }&start=${that.formatDate(
+                    that.discount.start
+                  )}&end=${that.formatDate(that.discount.end)}`
+                )
+                .then((response) => {
+                  console.log("OLD PRICE");
+                  console.log(response.data);
+                  this.oldPrice = response.data;
+                });
+            }
+          });
+      }
     },
     dateFormat(date) {
       var current_datetime = new Date(date);
@@ -133,7 +148,20 @@ export default {
             this.openCantReserveModal();
           } else if (resp.data != "no-client") {
             console.log(resp.data);
-            console.log("/api/reserve?&username=" + resp.data + "&rentableId=" + this.$route.params.rentable + "&start=" + startDateTime + "&end=" + endDateTime + "&price=" + price + "&additionalServices=&discountId=" + this.discount.id);
+            console.log(
+              "/api/reserve?&username=" +
+                resp.data +
+                "&rentableId=" +
+                this.$route.params.rentable +
+                "&start=" +
+                startDateTime +
+                "&end=" +
+                endDateTime +
+                "&price=" +
+                price +
+                "&additionalServices=&discountId=" +
+                this.discount.id
+            );
             this.$axios
               .post(
                 `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}
