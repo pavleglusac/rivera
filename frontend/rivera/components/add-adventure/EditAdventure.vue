@@ -231,7 +231,7 @@ export default {
   mounted() {
     let that = this;
     this.$axios
-      .get("/api/get-adventure?id=" + this.$route.params.adventure)
+      .get("/api/get-adventure?id=" + this.$route.params.rentable)
       .then((resp) => {
         console.log(resp.data);
         let adventure = resp.data;

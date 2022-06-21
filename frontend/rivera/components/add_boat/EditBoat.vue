@@ -375,6 +375,7 @@ export default {
 			perDay: 0,
 			description: "",
 			cancellationTerms: "",
+			averageScore: "",
 			id: "",
 			type: "",
 			boatLength: "",
@@ -492,6 +493,7 @@ export default {
 				that.enginePower = boat.enginePower;
 				that.maxSpeed = boat.maxSpeed;
 				that.id = boat.id;
+				that.averageScore = boat.averageScore;
 			})
 			.catch((err) => {
 				console.log(err);
@@ -536,6 +538,7 @@ export default {
 			formData.append("enginesNumber", this.enginesNumber);
 			formData.append("enginePower", this.enginePower);
 			formData.append("maxSpeed", this.maxSpeed);
+			formData.append("averageScore", this.averageScore);
 			if (images.files.length == 0) {
 				formData.append("images", []);
 			}
