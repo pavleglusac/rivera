@@ -55,25 +55,28 @@ export default {
   methods: {
     loadAttendance() {
       var that = this;
-      console.log(`/api/get-attendance?&startDate=${this.startDate}&endDate=${this.endDate}&type=${this.type}`+"ajsdfgbakjsdfhaslkjfdhasjdf");
-      this.$axios
-        .get(
-          `/api/get-attendance?&startDate=${this.startDate}&endDate=${this.endDate}&type=${this.type}`
-        )
-        .then((response) => {
-          console.log(response.data);
-          that.xValues = response.data.map((e) => e.timestamp);
-          that.yValues = response.data.map((e) => e.count);
-          if (this.type == "week")
-            that.xValues = that.xValues.map((e) => e.split("T")[0]);
-          if (this.type == "month")
-            that.xValues = that.xValues.map(
-              (e) => e.split("-")[0] + "-" + e.split("-")[1]
-            );
-          if (this.type == "year")
-            that.xValues = that.xValues.map((e) => e.split("-")[0]);
-          this.createChart();
-        });
+      if(this.startDate != "" && this.endDate != "") {
+        this.$axios
+          .get(
+            `/api/get-attendance?&startDate=${this.startDate}&endDate=${this.endDate}&type=${this.type}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            that.xValues = response.data.map((e) => e.timestamp);
+            that.yValues = response.data.map((e) => e.count);
+            if (this.type == "week")
+              that.xValues = that.xValues.map((e) => e.split("T")[0]);
+            if (this.type == "month")
+              that.xValues = that.xValues.map(
+                (e) => e.split("-")[0] + "-" + e.split("-")[1]
+              );
+            if (this.type == "year")
+              that.xValues = that.xValues.map((e) => e.split("-")[0]);
+            this.createChart();
+          });
+      } else {
+        alert("You have to select dates first");
+      }
     },
     createChart() {
       if (this.chart != "") this.chart.destroy();

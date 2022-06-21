@@ -16,5 +16,6 @@ public class DiscountProfileDTO {
     Integer capacity;
     Double price;
     List<String> tags;
+    List<String> additionalServices;
     boolean reserved;
 }

@@ -48,7 +48,7 @@
 			</b-button>
 		</div>
 		<div v-else style="margin-top: -10px"></div>
-		<div v-if="logged || isClient || (owner && isOwner)"><br/><br/></div>
+		<div v-if="isClient || (owner && isOwner)"><br/><br/></div>
 		<b-modal
 			id="update_modal"
 			title="Update data"

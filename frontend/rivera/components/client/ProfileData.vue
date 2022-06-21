@@ -129,7 +129,7 @@ export default {
         address: "",
         country: "",
         city: "",
-		type: "",
+        type: "",
         biography: "",
       },
       hasBiography: false,
@@ -175,8 +175,6 @@ export default {
           this.$axios
             .get("/api/person-by-username?username=" + resp.data)
             .then((resp) => {
-				console.log("GOSPODEEEE")
-				console.log(resp.data);
               that.setClientData(resp.data);
             });
         })
@@ -197,8 +195,8 @@ export default {
         this.client.biography = client.biography;
         this.hasBiography = true;
       }
-      if (client.type != null) {
-        this.client.type = client.BoatOwnerType;
+      if (client.boatOwnerType != null) {
+        this.client.type = client.boatOwnerType;
         this.hasType = true;
       }
     },
@@ -213,6 +211,7 @@ export default {
       formData.append("address", this.client.address);
       formData.append("country", this.client.country);
       formData.append("biography", this.client.biography);
+      formData.append("boatOwnerType", this.client.type);
       formData.append("type", this.client.type);
       formData.append("city", this.client.city);
       formData.append("numberOfPenalties", 0);

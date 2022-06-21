@@ -83,8 +83,8 @@ public class PersonService {
         if (person instanceof FishingInstructor) {
             dto.setBiography(((FishingInstructor) person).getBiography());
         }
-        System.out.println(((BoatOwner) person).getType());
         if (person instanceof BoatOwner) {
+            System.out.println(((BoatOwner) person).getType());
             dto.setBoatOwnerType(((BoatOwner) person).getType() == BoatOwnerType.CAPTAIN ? "Captain" : "First Officer");
         }
         return dto;
@@ -126,7 +126,7 @@ public class PersonService {
             ((FishingInstructor) person).setBiography(dto.getBiography());
         }
         if (person instanceof BoatOwner) {
-            ((BoatOwner) person).setType(dto.getBoatOwnerType().equals("captain") ? BoatOwnerType.CAPTAIN : BoatOwnerType.FIRST_OFFICER);
+            ((BoatOwner) person).setType(dto.getBoatOwnerType().equalsIgnoreCase("captain") ? BoatOwnerType.CAPTAIN : BoatOwnerType.FIRST_OFFICER);
         }
     }
 
