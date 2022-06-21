@@ -83,7 +83,6 @@ public class PersonService {
         if (person instanceof FishingInstructor) {
             dto.setBiography(((FishingInstructor) person).getBiography());
         }
-        System.out.println(((BoatOwner) person).getType());
         if (person instanceof BoatOwner) {
             dto.setBoatOwnerType(((BoatOwner) person).getType() == BoatOwnerType.CAPTAIN ? "Captain" : "First Officer");
         }

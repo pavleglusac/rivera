@@ -13,6 +13,11 @@ import java.util.Map;
 @Entity
 @Data
 @NoArgsConstructor
+@SQLDelete(sql
+        = "UPDATE cottage "
+        + "SET deleted = true "
+        + "WHERE id = ? and version = ?")
+@Where(clause = "deleted = false")
 public class Cottage extends Rentable {
 
     @ElementCollection

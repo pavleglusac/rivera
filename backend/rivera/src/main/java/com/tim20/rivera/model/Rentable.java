@@ -59,7 +59,7 @@ public class Rentable {
     private Pricelist currentPricelist;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Calendar> calendars;
-    @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rentable")
     private List<Reservation> reservations;
     @ManyToOne
     @JoinColumn(name="owner_username")

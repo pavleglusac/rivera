@@ -269,7 +269,47 @@ public class OwnerService {
         endDate+= "T00:00:00";
         LocalDateTime startDateTime = LocalDateTime.parse(startDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endDateTime = LocalDateTime.parse(endDate.split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return  addRentables(reservationRepository.findIncome(loggedPerson.getUsername(), startDateTime,endDateTime).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList()));
+        List<IncomeFrontDTO> lista = new ArrayList<>();
+        List<Object[]> objekti = null;
+        if(loggedPerson.getRoles().get(0).getName().equals("ROLE_COTTAGE_OWNER")){
+            objekti = reservationRepository.findCottageIncome(startDateTime,endDateTime);
+            for(Object[] object : objekti){
+                if(loggedPerson.getUsername().equals(object[2].toString())){
+                    IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
+                    incomeFrontDTO.setRentableName(object[0].toString());
+                    incomeFrontDTO.setRentableId(Integer.parseInt(object[1].toString()));
+                    incomeFrontDTO.setIncome(Double.parseDouble(object[3].toString()));
+                    lista.add(incomeFrontDTO);
+                }
+            }
+        }
+        else if(loggedPerson.getRoles().get(0).getName().equals("ROLE_BOAT_OWNER")){
+            objekti = reservationRepository.findBoatIncome(startDateTime,endDateTime);
+            for(Object[] object : objekti){
+                if(loggedPerson.getUsername().equals(object[2].toString())){
+                    IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
+                    incomeFrontDTO.setRentableName(object[0].toString());
+                    incomeFrontDTO.setRentableId(Integer.parseInt(object[1].toString()));
+                    incomeFrontDTO.setIncome(Double.parseDouble(object[3].toString()));
+                    lista.add(incomeFrontDTO);
+                }
+            }
+        }
+        else{
+            objekti = reservationRepository.findAdventureIncome(startDateTime,endDateTime);
+            for(Object[] object : objekti){
+                if(loggedPerson.getUsername().equals(object[2].toString())){
+                    IncomeFrontDTO incomeFrontDTO = new IncomeFrontDTO();
+                    incomeFrontDTO.setRentableName(object[0].toString());
+                    incomeFrontDTO.setRentableId(Integer.parseInt(object[1].toString()));
+                    incomeFrontDTO.setIncome(Double.parseDouble(object[3].toString()));
+                    lista.add(incomeFrontDTO);
+                }
+            }
+        }
+        //List<IncomeFrontDTO> lista = reservationRepository.findIncome(loggedPerson.getUsername(), startDateTime,endDateTime).stream().map(this::incomeDTOToIncomeFrontDTO).collect(Collectors.toList());
+        //List<IncomeFrontDTO> lista2 = reservationRepository.findIncomeByName(loggedPerson.getUsername(), startDateTime,endDateTime);
+        return  addRentables(lista);
     }
 
     private List<IncomeFrontDTO> addRentables(List<IncomeFrontDTO> collect) {

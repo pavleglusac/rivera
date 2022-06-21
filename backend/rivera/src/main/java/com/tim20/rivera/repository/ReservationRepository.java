@@ -2,8 +2,10 @@ package com.tim20.rivera.repository;
 
 import com.tim20.rivera.dto.AttendanceDTO;
 import com.tim20.rivera.dto.IncomeDTO;
+import com.tim20.rivera.dto.IncomeFrontDTO;
 import com.tim20.rivera.model.*;
 import lombok.NonNull;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -35,6 +37,24 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username like ?1" +
             " and reservation.startDateTime >= ?2 and reservation.startDateTime < ?3 group by rentable")
     List<IncomeDTO> findIncome(String username, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    @Query(value = "SELECT   ren.name,ren.id,ren.owner_username,\n" +
+            "             coalesce(SUM(res.owner_income_percentage*res.price),0)\n" +
+            "            FROM\n" +
+            "           reservation res right outer join cottage ren on ren.id=res.rentable_id\n" +
+            "  and res.start_date_time >= ?1 and res.start_date_time < ?2 group by ren.name,ren.id",nativeQuery = true)
+    List<Object[]> findCottageIncome(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    @Query(value = "SELECT   ren.name,ren.id,ren.owner_username,\n" +
+            "             coalesce(SUM(res.owner_income_percentage*res.price),0)\n" +
+            "            FROM\n" +
+            "           reservation res right outer join boat ren on ren.id=res.rentable_id\n" +
+            "  and res.start_date_time >= ?1 and res.start_date_time < ?2 group by ren.id",nativeQuery = true)
+    List<Object[]> findBoatIncome(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    @Query(value = "SELECT   ren.name,ren.id,ren.owner_username,\n" +
+            "             coalesce(SUM(res.owner_income_percentage*res.price),0)\n" +
+            "            FROM\n" +
+            "           reservation res right outer join adventure ren on ren.id=res.rentable_id\n" +
+            "  and res.start_date_time >= ?1 and res.start_date_time < ?2 group by ren.id,ren.name",nativeQuery = true)
+    List<Object[]> findAdventureIncome(LocalDateTime startDateTime, LocalDateTime endDateTime);
     @Query(value = "SELECT   function('date_trunc', 'week',reservation.startDateTime), COUNT (reservation)\n" +
             "            FROM \n" +
             "    Reservation reservation inner join reservation.rentable rentable inner join rentable.owner owner where owner.username = ?1" +

@@ -93,6 +93,9 @@ export default {
                 this.openModal();
               });
           }
+          else{
+            alert("Owner can't reserve discounts!");
+          }
         })
         .catch((err) => {
           console.log(err);
