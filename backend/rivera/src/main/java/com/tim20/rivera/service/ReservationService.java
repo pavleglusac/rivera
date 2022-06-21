@@ -164,8 +164,8 @@ public class ReservationService {
             reservation.setCancelled(false);
             reservation.setAdditionalServices(new ArrayList<>(additionalServices));
             reservation.setClient(client);
-            Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
-            reservation.setOwnerIncomePercentage(ownerPercentage);
+            Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (100 - rulesRepository.findAll().get(0).getIncomePercentage());
+            reservation.setOwnerIncomePercentage(ownerPercentage/100);
             Owner owner = reservation.getRentable().getOwner();
             int points = owner.getNumberOfPoints();
             owner.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
@@ -177,7 +177,7 @@ public class ReservationService {
             } catch (Exception e) {
                 System.out.println("Emails not sent!");
             }
-            Thread.sleep(60000);
+            Thread.sleep(6000);
             return reservation;
         } catch (Exception e) {
             return null;

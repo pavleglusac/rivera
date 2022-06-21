@@ -207,18 +207,24 @@ public class AdventureService {
     }
 
     @Transactional(readOnly = false)
-    public void updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
-        Optional<Adventure> opt = adventureRepository.findById(dto.getId());
-        if (opt.isEmpty()) return;
-        Adventure adventure = opt.get();
-        List<String> paths = savePictures(adventure, multipartFiles);
-        paths.forEach(System.out::println);
+    public boolean updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
+        try{
+            Optional<Adventure> opt = adventureRepository.findById(dto.getId());
+            if (opt.isEmpty()) return false;
+            Adventure adventure = opt.get();
+            List<String> paths = savePictures(adventure, multipartFiles);
+            paths.forEach(System.out::println);
 
-        dto.getPictures().addAll(paths);
-        dto.getPictures().forEach(System.out::println);
+            dto.getPictures().addAll(paths);
+            dto.getPictures().forEach(System.out::println);
 
-        copyDtoToAdventure(adventure, dto);
-        adventureRepository.save(adventure);
+            copyDtoToAdventure(adventure, dto);
+            adventureRepository.save(adventure);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
     @Transactional(readOnly = true)

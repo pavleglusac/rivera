@@ -160,6 +160,7 @@ public class CottageService {
         pricelist.setCancellationTerms(dto.getCancellationTerms());
         pricelist.setPricePerDay(dto.getPerDay());
         pricelist.setPricePerHour(dto.getPerHour());
+        pricelist.setRentable(cottage);
         pricelistRepository.save(pricelist);
 
         cottage.getPricelists().add(pricelist);

@@ -54,7 +54,9 @@ public class BoatController {
             BoatDTO boat,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
     ) throws IOException {
-        boatService.update(boat, multipartFiles);
+        if (!boatService.update(boat, multipartFiles)){
+            return ResponseEntity.unprocessableEntity().body("Couldn't update boat");
+        };
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 

@@ -280,16 +280,23 @@ public class BoatService {
     }
 
 
-    public void update(BoatDTO boatDTO, MultipartFile[] multipartFiles) throws IOException {
-        Optional<Boat> opt = boatRepository.findById(boatDTO.getId());
-        if (opt.isEmpty()) return;
-        Boat boat = opt.get();
-        List<String> paths = savePictures(boat, multipartFiles);
+    @Transactional(readOnly = false)
+    public boolean update(BoatDTO boatDTO, MultipartFile[] multipartFiles) throws IOException {
+        try{
+            Optional<Boat> opt = boatRepository.findById(boatDTO.getId());
+            if (opt.isEmpty()) return false;
+            Boat boat = opt.get();
+            List<String> paths = savePictures(boat, multipartFiles);
 
-        boatDTO.getPictures().addAll(paths);
+            boatDTO.getPictures().addAll(paths);
 
-        copyDtoToBoat(boatDTO, boat);
-        boatRepository.save(boat);
+            copyDtoToBoat(boatDTO, boat);
+            boatRepository.save(boat);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
     }
 
     public void delete(Integer id) {

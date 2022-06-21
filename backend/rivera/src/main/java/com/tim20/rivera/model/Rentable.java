@@ -48,7 +48,7 @@ public class Rentable {
     private List<String> additionalServices;
     @ManyToMany
     private List<Tag> tags;
-    private Double averageScore;
+    private Double averageScore = 0d;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.ALL)
     private List<Review> reviews;
     @OneToMany(mappedBy = "rentable", cascade = CascadeType.PERSIST)
