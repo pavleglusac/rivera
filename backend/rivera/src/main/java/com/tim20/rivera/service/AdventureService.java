@@ -333,9 +333,9 @@ public class AdventureService {
         System.out.println(searchParams.getStart() + "_" + searchParams.getEnd());
         if(StringUtils.isEmpty(searchParams.getStart()) && StringUtils.isEmpty(searchParams.getEnd())) return adventures;
         System.out.println("PROSAO");
-        LocalDate start = StringUtils.isEmpty(searchParams.getStart()) ? LocalDate.MIN : LocalDate.parse(searchParams.getStart(), DateTimeFormatter
+        LocalDate start = StringUtils.isEmpty(searchParams.getStart()) ? LocalDate.of(2022, 1, 1) : LocalDate.parse(searchParams.getStart(), DateTimeFormatter
                 .ofPattern("yyyy-MM-dd"));
-        LocalDate end = StringUtils.isEmpty(searchParams.getEnd()) ? LocalDate.MAX : LocalDate
+        LocalDate end = StringUtils.isEmpty(searchParams.getEnd()) ? LocalDate.of(2022, 12, 31) : LocalDate
                 .parse(searchParams.getEnd(), DateTimeFormatter
                 .ofPattern("yyyy-MM-dd"));
 

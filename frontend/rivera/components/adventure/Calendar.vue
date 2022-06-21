@@ -363,9 +363,11 @@ export default {
 			},
 			currentEvents: [],
 			reservationEvents: [],
+			lastEventMonthChange: '',
 		};
 	},
 	mounted() {
+
 	},
 
 	watch: {
@@ -375,8 +377,7 @@ export default {
 					x.title = "Reservation for: " + x.client.username;
 				return x;
 			});
-			this.reservationEvents = val;
-			this.calendarOptions.events = val;
+			//this.calendarOptions.events = val;
 		},
 		mode: function (val, oldVal) {
 			let calendarApi = this.$refs.fullCalendar.getApi();
@@ -395,16 +396,17 @@ export default {
 		},
 	},
 	methods: {
-		getReservations() {
+		async getReservations() {
 			if(!this.isOwner) return;
 			let calendarApi = this.$refs.fullCalendar.getApi();
+			let calendar = this.$refs.fullCalendar;
 			let that = this;
 			this.$axios
 				.get("/api/rentable-reservation?id=" + this.$route.params.rentable)
 				.then((resp) => {
 					for (let reservation of resp.data) {
 						let event = {
-							id: reservation.id,
+							id: "R" + reservation.start + reservation.end,
 							title: "Reservation for " + reservation.client.username,
 							start: reservation.start,
 							end: reservation.end,
@@ -415,12 +417,12 @@ export default {
 						calendarApi.addEvent(event);
 					}
 
-					this.$axios
+					that.$axios
 					.get("/api/rentable-discounts?id=" + this.$route.params.rentable)
 					.then((resp) => {
 						for (let reservation of resp.data) {
 							let event = {
-								id: reservation.id,
+								id: "D" + reservation.start + reservation.end,
 								title: "Discount",
 								start: reservation.start,
 								end: reservation.end,
@@ -539,6 +541,8 @@ export default {
 			this.currentEvents = events;
 		},
 		handleMonthChange(event) {
+			console.log("-------GET AVAILABILITIES HANDLE MOTH CHANGE LMAOOO---------- ");
+			console.log(event.startStr);
 			this.getAvailabilities();
 		},
 		timePicked() {
@@ -817,9 +821,10 @@ export default {
 				});
 		},
 		async getAvailabilities() {
+			
 			let calendarApi = this.$refs.fullCalendar.getApi();
 			calendarApi.removeAllEvents();
-			this.getReservations();
+			let that = this;
 			this.$axios
 				.get("/api/get-type-of-rentable?id=" + this.$route.params.rentable)
 				.then((resp) => {
@@ -828,7 +833,7 @@ export default {
 						return;
 					}
 					if (resp.data != "adventure") dataNeeded = "/cottage";
-					this.$axios
+					that.$axios
 						.get(
 							`/api${dataNeeded}/get-availabilities`,
 							{
@@ -852,7 +857,7 @@ export default {
 							console.log(response);
 							for (let temp of response.data) {
 								calendarApi.addEvent({
-									id: temp.startDateTime + temp.endDateTime,
+									id: "A" + temp.startDateTime + temp.endDateTime,
 									title:
 										temp.startDateTime.split("T")[1] +
 										" - " +
@@ -863,6 +868,7 @@ export default {
 									color: "#16C79A",
 								});
 							}
+							that.getReservations();
 						});
 				});
 		},
