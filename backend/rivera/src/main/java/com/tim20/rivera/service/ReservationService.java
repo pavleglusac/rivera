@@ -147,40 +147,38 @@ public class ReservationService {
     @Transactional(readOnly = false)
     public Reservation addReservation(Client client, Integer rentableId, LocalDateTime start,
                                       LocalDateTime end, Double price, List<String> additionalServices, String discountId) {
-        try{
-        Rentable rentable = rentableRepository.findById(rentableId).get();
-        if(rentable instanceof Cottage) {
-            rentable = cottageRepository.findOneById(rentableId);
-        }
-        else if(rentable instanceof Boat) {
-            rentable = boatRepository.findOneById(rentableId);
-        }
-        else {
-            rentable = adventureRepository.findOneById(rentableId);
-        }
-        Reservation reservation = new Reservation();
-        reservation.setPrice(price);
-        reservation.setRentable(rentable);
-        reservation.setStartDateTime(start);
-        reservation.setEndDateTime(end);
-        reservation.setCancelled(false);
-        reservation.setAdditionalServices(new ArrayList<>(additionalServices));
-        reservation.setClient(client);
-        Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
-        reservation.setOwnerIncomePercentage(ownerPercentage);
-        Owner owner = reservation.getRentable().getOwner();
-        int points = owner.getNumberOfPoints();
-        owner.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
-        ownerRepository.save(owner);
-        discountService.setDiscountInactive(discountId);
-        reservationRepository.save(reservation);
         try {
-            emailService.sendReservationNotificaition(reservation);
+            Rentable rentable = rentableRepository.findById(rentableId).get();
+            if (rentable instanceof Cottage) {
+                rentable = cottageRepository.findOneById(rentableId);
+            } else if (rentable instanceof Boat) {
+                rentable = boatRepository.findOneById(rentableId);
+            } else {
+                rentable = adventureRepository.findOneById(rentableId);
+            }
+            Reservation reservation = new Reservation();
+            reservation.setPrice(price);
+            reservation.setRentable(rentable);
+            reservation.setStartDateTime(start);
+            reservation.setEndDateTime(end);
+            reservation.setCancelled(false);
+            reservation.setAdditionalServices(new ArrayList<>(additionalServices));
+            reservation.setClient(client);
+            Double ownerPercentage = rentableRepository.getById(rentableId).getOwner().getCategory().getPercentage() + (1 - rulesRepository.findAll().get(0).getIncomePercentage());
+            reservation.setOwnerIncomePercentage(ownerPercentage);
+            Owner owner = reservation.getRentable().getOwner();
+            int points = owner.getNumberOfPoints();
+            owner.setNumberOfPoints(points + rulesRepository.findAll().get(0).getPointsPerReservation());
+            ownerRepository.save(owner);
+            discountService.setDiscountInactive(discountId);
+            reservationRepository.save(reservation);
+            try {
+                emailService.sendReservationNotificaition(reservation);
+            } catch (Exception e) {
+                System.out.println("Emails not sent!");
+            }
+            return reservation;
         } catch (Exception e) {
-            System.out.println("Emails not sent!");
-        }
-        return reservation;
-        }catch (Exception e){
             return null;
         }
     }
@@ -279,15 +277,15 @@ public class ReservationService {
             ownerService.addReview(reservation.getRentable().getOwner(), client, reviewText, rating, type);
     }
 
-    public boolean isPeriodReserved(String rentableId, LocalDateTime startDate, LocalDateTime endDate){
+    public boolean isPeriodReserved(String rentableId, LocalDateTime startDate, LocalDateTime endDate) {
         List<Reservation> reservations = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter
-                (Integer.parseInt(rentableId),endDate,startDate);
-        return reservations.size()>0;
+                (Integer.parseInt(rentableId), endDate, startDate);
+        return reservations.size() > 0;
     }
 
     public String getClientUsernameForCurrentReservation(String rentableId) {
-        List<Reservation> reservation = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter(Integer.parseInt(rentableId),LocalDateTime.now(),LocalDateTime.now());
-        if(reservation.size() > 0){
+        List<Reservation> reservation = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter(Integer.parseInt(rentableId), LocalDateTime.now(), LocalDateTime.now());
+        if (reservation.size() > 0) {
             return reservation.get(0).getClient().getUsername();
         }
         return null;

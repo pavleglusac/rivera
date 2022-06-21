@@ -100,7 +100,13 @@
 
 <script>
 export default {
-  props: ["appointment", "close", "openModal", "openCantReserveAgain", "additionalServices"],
+  props: [
+    "appointment",
+    "close",
+    "openModal",
+    "openCantReserveAgain",
+    "additionalServices",
+  ],
   data() {
     return {
       selectedAppointment: "whole",
@@ -214,53 +220,56 @@ export default {
       var correctDate = new Date(timestamp);
       return correctDate.toISOString();
     },
+    validDates(startDateTime, endDateTime) {
+      var start = new Date(startDateTime);
+      var end = new Date(endDateTime);
+      return start < end;
+    },
     reserveAppointment() {
       this.close();
       var startDateTime = this.getStartDateTime();
       var endDateTime = this.getEndDateTime();
       let that = this;
       var price = this.price;
-      console.log("SENDING TO BACK");
-      console.log(startDateTime);
-      console.log(this.isoDateWithoutTimeZone(startDateTime));
-      console.log(endDateTime.toString());
       var services = that.selectedAdditionalServices.join("|");
       console.log(services);
-
-      this.$axios
-        .get(
-          `/api/didClientReserveEarlier?&username=${that.username}&rentableId=${
-            this.$route.params.rentable
-          }&start=${this.isoDateWithoutTimeZone(
-            startDateTime
-          )}&end=${this.isoDateWithoutTimeZone(endDateTime)}`
-        )
-        .then((response) => {
-          console.log(response.data);
-          if (response.data == false) {
-            this.$axios
-              .post(
-                `/api/reserve?&username=${that.username}&rentableId=${
-                  this.$route.params.rentable
-                }&start=${this.isoDateWithoutTimeZone(
-                  startDateTime
-                )}&end=${this.isoDateWithoutTimeZone(
-                  endDateTime
-                )}&price=${price}&additionalServices=${services}`
-              )
-              .then((response) => {
-                console.log(response.data);
-                this.openModal();
-              });
-          } else {
-            this.openCantReserveAgain();
-          }
-        });
+      if (this.validDates(startDateTime, endDateTime)) {
+        this.$axios
+          .get(
+            `/api/didClientReserveEarlier?&username=${
+              that.username
+            }&rentableId=${
+              this.$route.params.rentable
+            }&start=${this.isoDateWithoutTimeZone(
+              startDateTime
+            )}&end=${this.isoDateWithoutTimeZone(endDateTime)}`
+          )
+          .then((response) => {
+            console.log(response.data);
+            if (response.data == false) {
+              this.$axios
+                .post(
+                  `/api/reserve?&username=${this.username}&rentableId=${
+                    this.$route.params.rentable
+                  }&start=${this.isoDateWithoutTimeZone(
+                    startDateTime
+                  )}&end=${this.isoDateWithoutTimeZone(
+                    endDateTime
+                  )}&price=${price}&additionalServices=${services}`
+                )
+                .then((response) => {
+                  console.log(response.data);
+                  this.openModal();
+                });
+            } else {
+              this.openCantReserveAgain();
+            }
+          });
+      } else {
+		alert("Start of the appointment has to be before the end.")
+	  }
     },
     setTimeMinMax() {
-      console.log(
-        "---------------------------------------------------------------------------------------------------------"
-      );
       var sameStart = this.datesEqual(
         this.chosenStartDate,
         this.appointment.start.date
@@ -281,6 +290,8 @@ export default {
       var startDateTime = this.getStartDateTime();
       var endDateTime = this.getEndDateTime();
       let that = this;
+	  console.log("USERNAME");
+	  console.log(that.username);
       this.$axios
         .get(
           `/api/get-reservation-price?&username=${that.username}&rentableId=${

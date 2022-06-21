@@ -3,10 +3,7 @@ package com.tim20.rivera.controller;
 import com.tim20.rivera.dto.RentableDTO;
 import com.tim20.rivera.dto.ReservationDTO;
 import com.tim20.rivera.model.Review;
-import com.tim20.rivera.service.AdventureService;
-import com.tim20.rivera.service.BoatService;
-import com.tim20.rivera.service.CottageService;
-import com.tim20.rivera.service.RentableService;
+import com.tim20.rivera.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +21,10 @@ public class RentableController {
     private BoatService boatService;
     @Autowired
     private AdventureService adventureService;
+    @Autowired
+    private ReservationService reservationService;
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping(path = "rentables-for-owner")
     public List<RentableDTO> getRentableByOwner(String ownerId) {
@@ -33,6 +34,11 @@ public class RentableController {
     @GetMapping(path = "check-if-rentable-from-logged-user")
     public boolean checkIfRentableFromOwner(String rentableId) {
         return rentableService.checkIfRentableFromOwner(rentableId);
+    }
+
+    @GetMapping(path="is-period-reserved")
+    public boolean isPeriodReserved(@RequestParam("id") String id, String start, String end) {
+        return reservationService.isPeriodReserved(id, clientService.parseDate(start), clientService.parseDate(end));
     }
 
     @GetMapping(path = "get-type-of-rentable")
