@@ -118,7 +118,7 @@
 		</b-modal>
 
 		<!-- Mode -->
-		<div class="d-flex w-100">
+		<div class="d-flex w-100" v-if = "isOwner">
 			<b-form-group label="" class="w-100">
 				<b-form-radio
 					v-model="mode"
@@ -360,17 +360,12 @@ export default {
 				background: "#16C79A",
 				eventBackgroundColor: "#16C79A",
 				eventBorderColor: "#16C79A",
-				/* you can update a remote database when these fire:
-        eventAdd:
-        eventChange:
-        eventRemove:
-        */
 			},
 			currentEvents: [],
+			reservationEvents: [],
 		};
 	},
 	mounted() {
-		//this.getAvailabilities();
 	},
 
 	watch: {
@@ -379,6 +374,7 @@ export default {
 				x.title = "Reservation for: " + x.client.username;
 				return x;
 			});
+			this.reservationEvents = val;
 			this.calendarOptions.events = val;
 		},
 		mode: function (val, oldVal) {
@@ -399,19 +395,42 @@ export default {
 	},
 	methods: {
 		getReservations() {
+			if(!this.isOwner) return;
 			let calendarApi = this.$refs.fullCalendar.getApi();
+			let that = this;
 			this.$axios
 				.get("/api/rentable-reservation?id=" + this.$route.params.rentable)
 				.then((resp) => {
-					for (let reservation of resp.data)
-						calendarApi.addEvent({
+					for (let reservation of resp.data) {
+						let event = {
 							id: reservation.id,
 							title: "Reservation for " + reservation.client.username,
 							start: reservation.start,
 							end: reservation.end,
 							display: "block",
 							color: "#19456B",
-						});
+						}
+						that.reservationEvents.push(event);
+						calendarApi.addEvent(event);
+					}
+
+					this.$axios
+					.get("/api/rentable-discounts?id=" + this.$route.params.rentable)
+					.then((resp) => {
+						for (let reservation of resp.data) {
+							let event = {
+								id: reservation.id,
+								title: "Discount",
+								start: reservation.start,
+								end: reservation.end,
+								display: "block",
+								color: "#6FA3D9",
+							}
+							that.reservationEvents.push(event);
+							calendarApi.addEvent(event);
+						}
+					});
+
 				});
 		},
 		handleWeekendsToggle() {
@@ -472,6 +491,8 @@ export default {
 			this.appointment.start = clickInfo.event.start;
 			console.log("KRAJNJE VREME " + clickInfo.event.end);
 			var isClient = false;
+			let that = this;
+			let calendarApi = this.$refs.fullCalendar.getApi();
 			this.appointment.end = clickInfo.event.end;
 			this.$axios
 				.get("/api/auth/getRole", {
@@ -483,24 +504,35 @@ export default {
 					if (resp.data == "ROLE_CLIENT") {
 						isClient = true;
 					}
-				});
-			if (isClient) {
-				this.$axios
-					.get("/api/auth/client-can-reserve", {})
-					.then((resp) => {
-						if (resp.data === "3") {
-							this.$refs["cantReserve"].show();
-							shown = true;
-						} else if (resp.data != "no-client") {
-							this.$refs["reservationModal"].show();
+					if (isClient) {
+						that.$axios
+							.get("/api/auth/client-can-reserve", {})
+							.then((resp) => {
+								if (resp.data === "3") {
+									that.$refs["cantReserve"].show();
+									shown = true;
+								} else if (resp.data != "no-client") {
+									that.$refs["reservationModal"].show();
+								}
+							})
+							.catch((err) => {
+								console.log(err);
+							});
+					} else {
+						let has = false;
+						for (const resEvent of that.reservationEvents) {
+							if(moment(resEvent.start).format("YYYY-MM-DD HH:mm:ss") == moment(clickInfo.event.startStr).format("YYYY-MM-DD HH:mm:ss")) {
+								if	(moment(resEvent.end).format("YYYY-MM-DD HH:mm:ss") == moment(clickInfo.event.endStr).format("YYYY-MM-DD HH:mm:ss")) {
+									has = true;
+								}
+							}
 						}
-					})
-					.catch((err) => {
-						console.log(err);
-					});
-			} else {
-				this.$refs["reservationModal"].show();
-			}
+						if(!has) {
+							that.$refs["reservationModal"].show();
+						}
+
+					}
+				});
 		},
 		handleEvents(events) {
 			this.currentEvents = events;
@@ -794,8 +826,6 @@ export default {
 					if (!resp.data) {
 						return;
 					}
-					console.log(resp.data);
-					console.log(dataNeeded);
 					if (resp.data != "adventure") dataNeeded = "/cottage";
 					this.$axios
 						.get(

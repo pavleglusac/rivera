@@ -2,7 +2,7 @@
     <div class='RearangeBox imgThumbContainer' id="+index+">
         <i class='material-icons imgRemoveBtn' @click='remove()'>REMOVE</i>
         <div class='IMGthumbnail'>
-            <img :src="process.env.backend + path" style="object-fit: cover;"/>
+            <img :src="path" style="object-fit: cover;"/>
         </div>
     <div class='imgName'> {{ trimImageName(path) }} </div></div>
 </template>
@@ -10,6 +10,9 @@
 <script>
 export default {
     props: ['path'],
+    mounted() {
+        this.path = process.env.backend + this.path;
+    },
     methods: {
         remove() {
             console.log('REMOVED');

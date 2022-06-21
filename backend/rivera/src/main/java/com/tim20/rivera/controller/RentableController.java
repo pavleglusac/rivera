@@ -54,6 +54,11 @@ public class RentableController {
         return rentableService.getReservations(id);
     }
 
+    @GetMapping(path="rentable-discounts")
+    public List<ReservationDTO> getDiscountReservations(@RequestParam("id") Integer id) {
+        return rentableService.getDiscountReservations(id);
+    }
+
     @GetMapping(path = "get-reviews")
     public List<Review> getReviews(@RequestParam("id") Integer id) {
         return rentableService.getReviews(id);
