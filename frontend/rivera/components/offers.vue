@@ -61,6 +61,7 @@
             <div class="form-group col-md-4">
               <b-form-datepicker
                 size="md"
+                v-model="startDate"
                 v-on:input="reload"
                 placeholder="Start date"
               ></b-form-datepicker>
@@ -68,6 +69,7 @@
             <div class="form-group col-md-4">
               <b-form-datepicker
                 size="md"
+                v-model="endDate"
                 v-on:input="reload"
                 placeholder="End date"
               ></b-form-datepicker>
@@ -137,6 +139,8 @@ export default {
       tags: [],
       activeAdventures: true,
       loadingRentables: false,
+      startDate: "",
+      endDate: "",
       searchText: "",
       sort: "name-a",
       typingTimer: "",
@@ -173,7 +177,7 @@ export default {
         .post(
           `/api/boat/search-boats?&numberOfResults=10&orderBy=${
             that.sort
-          }&search=${that.searchText.trim()}&tags=${that.tags}`
+          }&search=${that.searchText.trim()}&tags=${that.tags}&start=${that.startDate}&end=${that.endDate}`
         )
         .then((response) => {
           for (let index = 0; index < response.data.length; index++) {
@@ -196,7 +200,7 @@ export default {
         .post(
           `/api/search-adventures?&numberOfResults=10&orderBy=${
             that.sort
-          }&search=${that.searchText.trim()}&tags=${that.tags}`
+          }&search=${that.searchText.trim()}&tags=${that.tags}&start=${that.startDate}&end=${that.endDate}`
         )
         .then((response) => {
           for (let index = 0; index < response.data.length; index++) {
@@ -220,7 +224,7 @@ export default {
         .post(
           `/api/cottage/search-cottages?&numberOfResults=10&orderBy=${
             that.sort
-          }&search=${that.searchText.trim()}&tags=${that.tags}`
+          }&search=${that.searchText.trim()}&tags=${that.tags}&start=${that.startDate}&end=${that.endDate}`
         )
         .then((response) => {
           for (let index = 0; index < response.data.length; index++) {

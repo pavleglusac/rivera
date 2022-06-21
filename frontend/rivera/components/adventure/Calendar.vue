@@ -371,7 +371,8 @@ export default {
 	watch: {
 		reservations: function (val, oldVal) {
 			val.map((x) => {
-				x.title = "Reservation for: " + x.client.username;
+				if(x.client)
+					x.title = "Reservation for: " + x.client.username;
 				return x;
 			});
 			this.reservationEvents = val;

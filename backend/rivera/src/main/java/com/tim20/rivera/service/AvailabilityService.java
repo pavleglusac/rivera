@@ -63,78 +63,6 @@ public class AvailabilityService {
         rentableRepository.save(rentable);
     }
 
-    public void testAvailability() {
-        Rentable rentable = rentableRepository.getById(1);
-        AvailabilityRequest request1 = new AvailabilityRequest();
-        request1.setAddition(true);
-        request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 15 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request1.setRepeat("week");
-        request1.setRentableId(1);
-        request1.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request1);
-
-        List<Availability> avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-        AvailabilityRequest request2 = new AvailabilityRequest();
-        request2.setAddition(false);
-        request2.setPatterns(Arrays.asList(Arrays.asList("0 0 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 12 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request2.setRepeat("week");
-        request2.setRentableId(1);
-        request2.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request2);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-
-        AvailabilityRequest request3 = new AvailabilityRequest();
-        request3.setAddition(true);
-        request3.setPatterns(Arrays.asList(Arrays.asList("0 0 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 17 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request3.setRepeat("week");
-        request3.setRentableId(1);
-        request3.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request3);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-        AvailabilityRequest request4 = new AvailabilityRequest();
-        request4.setAddition(true);
-        request4.setPatterns(Arrays.asList(Arrays.asList("0 0 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 30 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request4.setRepeat("week");
-        request4.setRentableId(1);
-        request4.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request4);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-
-        AvailabilityRequest request5 = new AvailabilityRequest();
-        request5.setAddition(false);
-        request5.setPatterns(Arrays.asList(Arrays.asList("0 30 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 25 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request5.setRepeat("week");
-        request5.setRentableId(1);
-        request5.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request5.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request5);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-        //"{"patterns":["0 0,0 9,15 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI"],"selectedStartDate":"2022-04-04T00:00:00","selectedEndDate":"2022-04-09T00:00:00","repeat":"week","addition":true}"
-
-    }
 
     private void prettyPrintAvailabilities(List<Availability> avs) {
         System.out.println("\n\n\n-----------------------------\n\n\n");
@@ -152,20 +80,19 @@ public class AvailabilityService {
         }
     }
 
-    private void defineAvailabilityWeek(AvailabilityRequest availabilityRequest) {
-//        CronExpression cron = CronExpression.parse(availabilityRequest.getPatterns().get(0));
-//        LocalDateTime next = cron.next(availabilityRequest.getSelectedStartDate().minusHours(1));
-//        LocalDateTime end = availabilityRequest.getSelectedEndDate();
-//        end = end.plusWeeks(2);
-//        while(next.isBefore(end)) {
-//            System.out.println(next);
-//            next = cron.next(next);
-//        }
-    }
 
     public List<Availability> getAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
-        Rentable rentable = rentableRepository.getById(id);
+        Optional<Rentable> optionalRentable = rentableRepository.findById(id);
+        if(optionalRentable.isEmpty()) return new ArrayList<>();
+        Rentable rentable = optionalRentable.get();
         return getAvailabilities(rentable, fromDateTime, toDateTime);
+    }
+
+    public boolean hasAvailabilities(Integer id, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
+        Optional<Rentable> optionalRentable = rentableRepository.findById(id);
+        if(optionalRentable.isEmpty()) return false;
+        Rentable rentable = optionalRentable.get();
+        return !getAvailabilities(rentable, fromDateTime, toDateTime).isEmpty();
     }
 
     public List<Availability> getAvailabilities(Rentable rentable, LocalDateTime fromDateTime, LocalDateTime toDateTime) {
@@ -380,63 +307,6 @@ public class AvailabilityService {
         return (t1.isAfter(t2) || t1.isEqual(t2));
     }
 
-
-    public void testBigAvailability() {
-        Rentable rentable = rentableRepository.getById(1);
-        AvailabilityRequest request1 = new AvailabilityRequest();
-        request1.setAddition(true);
-        request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 10 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request1.setRepeat("week");
-        request1.setRentableId(1);
-        request1.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request1);
-
-        List<Availability> avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-        AvailabilityRequest request2 = new AvailabilityRequest();
-        request2.setAddition(true);
-        request2.setPatterns(Arrays.asList(Arrays.asList("0 0 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 12 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request2.setRepeat("week");
-        request2.setRentableId(1);
-        request2.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request2);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-
-        AvailabilityRequest request3 = new AvailabilityRequest();
-        request3.setAddition(true);
-        request3.setPatterns(Arrays.asList(Arrays.asList("0 30 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 14 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request3.setRepeat("week");
-        request3.setRentableId(1);
-        request3.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request3);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-        AvailabilityRequest request4 = new AvailabilityRequest();
-        request4.setAddition(true);
-        request4.setPatterns(Arrays.asList(Arrays.asList("0 0 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 35 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
-        request4.setRepeat("week");
-        request4.setRentableId(1);
-        request4.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
-        request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
-        defineAvailability(request4);
-
-        avs = getAvailabilities(rentable, LocalDateTime.of(2022, 4, 1, 0, 0), LocalDateTime.of(2022, 4, 30, 0, 0));
-
-        prettyPrintAvailabilities(avs);
-
-    }
 
     public void removeAvailabilities(Integer rentableId) {
         Rentable rentable = rentableRepository.getById(rentableId);

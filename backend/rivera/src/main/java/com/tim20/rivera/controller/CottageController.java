@@ -102,11 +102,6 @@ public class CottageController {
         return availabilityService.getAvailabilities(id, fromDateTime, toDateTime);
     }
 
-    @GetMapping("test-availability")
-    public ResponseEntity<String> testAvailability() {
-        availabilityService.testBigAvailability();
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
-    }
 
     @PostMapping("remove-availabilities")
     @PreAuthorize("hasAnyRole('COTTAGE_OWNER','BOAT_OWNER')")

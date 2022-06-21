@@ -424,9 +424,9 @@ export default {
         .then((resp) => {
           let adventure = resp.data;
           that.reviews = adventure.reviews;
-          that.reviews.forEach(
-            (x) => (x.client.photo = process.env.backend + x.client.photo)
-          );
+          // that.reviews.forEach(
+          //   (x) => (x.client.photo = process.env.backend + x.client.photo)
+          // );
           that.name = adventure.name;
           that.location = adventure.city + ", " + adventure.country;
           that.address = adventure.address;

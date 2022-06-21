@@ -3,6 +3,7 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -15,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -26,40 +29,31 @@ import java.util.stream.Stream;
 @Service
 public class AdventureService {
 
-    @Autowired
-    private AdventureRepository adventureRepository;
-
-    @Autowired
-    private TagService tagService;
-
-    @Autowired
-    private PricelistRepository pricelistRepository;
-
-    @Autowired
-    private ReviewRepository reviewRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReviewService reviewService;
-
-    @Autowired
-    private DiscountService discountService;
-
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private FishingInstructorRepository fishingInstructorRepository;
-
-    @Autowired
-    private RentableRepository rentableRepository;
-
     final String STATIC_PATH = "src/main/resources/static/";
     final String STATIC_PATH_TARGET = "target/classes/static/";
     final String IMAGES_PATH = "/images/adventures/";
-
+    @Autowired
+    private AdventureRepository adventureRepository;
+    @Autowired
+    private TagService tagService;
+    @Autowired
+    private PricelistRepository pricelistRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private DiscountService discountService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private FishingInstructorRepository fishingInstructorRepository;
+    @Autowired
+    private RentableRepository rentableRepository;
+    @Autowired
+    private AvailabilityService availabilityService;
     private FishingInstructor temporaryOwner;
 
     @PostConstruct
@@ -245,13 +239,17 @@ public class AdventureService {
         dto.setPictures(adventure.getPictures());
         dto.setRulesOfConduct(adventure.getRulesOfConduct());
         dto.setId(adventure.getId());
-        dto.setReviews(adventure.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review)).collect(Collectors.toList()));
-        dto.setDiscounts(adventure.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount)).collect(Collectors.toList()));
-        dto.setCanBeChanged(reservationRepository.findByRentableAndCancelledAndStartDateTimeIsAfter(adventure, false, LocalDateTime.now()).isEmpty());
+        dto.setReviews(adventure.getReviews().stream().map(review -> reviewService.reviewToRPDTO(review))
+                                .collect(Collectors.toList()));
+        dto.setDiscounts(adventure.getDiscounts().stream().map(discount -> discountService.discountTODPDto(discount))
+                                  .collect(Collectors.toList()));
+        dto.setCanBeChanged(reservationRepository
+                .findByRentableAndCancelledAndStartDateTimeIsAfter(adventure, false, LocalDateTime.now()).isEmpty());
         dto.setOwner(fishingInstructorToDto(fishingInstructorRepository.getById(adventure.getOwner().getUsername())));
         dto.setEquipment(adventure.getFishingEquipment());
         dto.setCapacity(adventure.getCapacity());
-        dto.setReservations(adventure.getReservations().stream().map(this::reservationToDto).collect(Collectors.toList()));
+        dto.setReservations(adventure.getReservations().stream().map(this::reservationToDto)
+                                     .collect(Collectors.toList()));
         return dto;
     }
 
@@ -263,10 +261,11 @@ public class AdventureService {
         dto.setClient(clientService.clientToCRDto(reservation.getClient()));
         dto.setId(reservation.getId());
         dto.setReport(null);
-        if(reservation.getReservationReport() != null) {
+        if (reservation.getReservationReport() != null) {
             ReservationReportDTO reservationReportDTO = new ReservationReportDTO();
             reservationReportDTO.setId(reservation.getReservationReport().getId());
-            reservationReportDTO.setReservationReportType(reservation.getReservationReport().getReservationReportType());
+            reservationReportDTO
+                    .setReservationReportType(reservation.getReservationReport().getReservationReportType());
             reservationReportDTO.setShowedUp(reservation.getReservationReport().getShowedUp());
             reservationReportDTO.setSanction(reservation.getReservationReport().getSanction());
             reservationReportDTO.setText(reservation.getReservationReport().getText());
@@ -300,14 +299,16 @@ public class AdventureService {
     }
 
     public List<AdventureDTO> searchAdventures(SearchParams searchParams) {
-        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this.getAdventuresOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams.getTags()), searchParams);
+        List<AdventureDTO> adventures = checkAvailableDates(checkTags(this
+                .getAdventuresOfOwner(searchParams.getOwnerUsername(), searchParams.isDeletable()), searchParams
+                .getTags()), searchParams);
         return filter(searchParams.getSearch().toLowerCase(), sortAdventures(searchParams.getOrderBy(),
                 adventures.stream().limit(searchParams.getNumberOfResults())
-                        .collect(Collectors.toList())));
+                          .collect(Collectors.toList())));
     }
 
     public List<AdventureDTO> getAdventuresOfOwner(String ownerUsername, boolean checkIsDeletable) {
-        if(ownerUsername != null){
+        if (ownerUsername != null) {
             return adventureRepository.findByOwnerUsername(ownerUsername)
                                       .stream()
                                       .filter(x -> !checkIsDeletable || (reservationRepository
@@ -315,22 +316,34 @@ public class AdventureService {
                                                       .now()).isEmpty()))
                                       .map(this::adventureToDto)
                                       .toList();
-        }
-        else return getAdventures(checkIsDeletable);
+        } else return getAdventures(checkIsDeletable);
     }
 
     public List<AdventureDTO> filter(String keyWord, List<AdventureDTO> adventures) {
         List<AdventureDTO> correctAdventures = new ArrayList<>();
         for (AdventureDTO a : adventures) {
             if (a.getName().toLowerCase().contains(keyWord) || a.getAddress().toLowerCase().contains(keyWord)
-            || a.getCity().toLowerCase().contains(keyWord) || a.getCountry().toLowerCase().contains(keyWord))
+                    || a.getCity().toLowerCase().contains(keyWord) || a.getCountry().toLowerCase().contains(keyWord))
                 correctAdventures.add(a);
         }
         return correctAdventures;
     }
 
     private List<AdventureDTO> checkAvailableDates(List<AdventureDTO> adventures, SearchParams searchParams) {
-        return adventures;
+        System.out.println(searchParams.getStart() + "_" + searchParams.getEnd());
+        if(StringUtils.isEmpty(searchParams.getStart()) && StringUtils.isEmpty(searchParams.getEnd())) return adventures;
+        System.out.println("PROSAO");
+        LocalDate start = StringUtils.isEmpty(searchParams.getStart()) ? LocalDate.MIN : LocalDate.parse(searchParams.getStart(), DateTimeFormatter
+                .ofPattern("yyyy-MM-dd"));
+        LocalDate end = StringUtils.isEmpty(searchParams.getEnd()) ? LocalDate.MAX : LocalDate
+                .parse(searchParams.getEnd(), DateTimeFormatter
+                .ofPattern("yyyy-MM-dd"));
+
+        return adventures.stream()
+                         .filter(x ->
+                                 availabilityService
+                                         .hasAvailabilities(x.getId(), start.atTime(0 ,0), end.atTime(0 ,0)))
+                         .toList();
     }
 
     public List<AdventureDTO> checkTags(List<AdventureDTO> adventures, List<String> tags) {
@@ -347,11 +360,15 @@ public class AdventureService {
     public List<AdventureDTO> sortAdventures(String sortParam, List<AdventureDTO> adventures) {
         return switch (sortParam) {
             case "name-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getName)).toList();
-            case "name-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getName, Comparator.reverseOrder())).toList();
-            case "price-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getPerHour, Comparator.reverseOrder())).toList();
+            case "name-d" -> adventures.stream()
+                                       .sorted(Comparator.comparing(AdventureDTO::getName, Comparator.reverseOrder()))
+                                       .toList();
+            case "price-d" -> adventures.stream().sorted(Comparator
+                    .comparing(AdventureDTO::getPerHour, Comparator.reverseOrder())).toList();
             case "price-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getPerHour)).toList();
             case "score-a" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getAverageScore)).toList();
-            case "score-d" -> adventures.stream().sorted(Comparator.comparing(AdventureDTO::getAverageScore, Comparator.reverseOrder())).toList();
+            case "score-d" -> adventures.stream().sorted(Comparator
+                    .comparing(AdventureDTO::getAverageScore, Comparator.reverseOrder())).toList();
             default -> adventures;
         };
     }
