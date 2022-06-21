@@ -19,7 +19,7 @@
               v-bind:class="{
                 'error-boarder': $v.email.$invalid && emailClicked,
               }"
-              @click="emailClicked = true"
+              @keyup="emailClicked = true"
             />
             <ErrorDiv
               v-if="emailClicked"
@@ -39,7 +39,7 @@
                 'error-boarder':
                   ($v.username.$invalid || usernameExists) && usernameClicked,
               }"
-              @click="usernameClicked = true"
+              @keydown="usernameClicked = true"
             />
             <b-spinner
               small
@@ -68,7 +68,7 @@
               v-bind:class="{
                 'error-boarder': $v.password.$invalid && passwordClicked,
               }"
-              @click="passwordClicked = true"
+              @keydown="passwordClicked = true"
             />
             <ErrorDiv
               v-if="passwordClicked"
@@ -86,7 +86,7 @@
               v-bind:class="{
                 'error-boarder': $v.password2.$invalid && password2Clicked,
               }"
-              @click="password2Clicked = true"
+              @keydown="password2Clicked = true"
             />
             <ErrorDiv
               v-if="password2Clicked"
@@ -108,7 +108,7 @@
               v-bind:class="{
                 'error-boarder': $v.name.$invalid && nameClicked,
               }"
-              @click="nameClicked = true"
+              @keydown="nameClicked = true"
             />
             <ErrorDiv v-if="nameClicked" :parameter="$v.name" :name="'Name'" />
           </div>
@@ -122,7 +122,7 @@
               v-bind:class="{
                 'error-boarder': $v.surname.$invalid && surnameClicked,
               }"
-              @click="surnameClicked = true"
+              @keydown="surnameClicked = true"
             />
             <ErrorDiv
               v-if="surnameClicked"
@@ -140,7 +140,7 @@
               v-bind:class="{
                 'error-boarder': $v.phoneNumber.$invalid && phoneNumberClicked,
               }"
-              @click="phoneNumberClicked = true"
+              @keydown="phoneNumberClicked = true"
             />
             <ErrorDiv
               v-if="phoneNumberClicked"
@@ -163,7 +163,7 @@
               v-bind:class="{
                 'error-boarder': $v.address.$invalid && addressClicked,
               }"
-              @click="addressClicked = true"
+              @keydown="addressClicked = true"
             />
             <ErrorDiv
               v-if="addressClicked"
@@ -179,7 +179,7 @@
               v-bind:class="{
                 'error-boarder': $v.country.$invalid && countryClicked,
               }"
-              @click="countryClicked = true"
+              @keydown="countryClicked = true"
             >
               <option selected>Choose...</option>
               <option
@@ -206,7 +206,7 @@
               v-bind:class="{
                 'error-boarder': $v.city.$invalid && cityClicked,
               }"
-              @click="cityClicked = true"
+              @keydown="cityClicked = true"
             />
             <ErrorDiv v-if="cityClicked" :parameter="$v.city" :name="'City'" />
           </div>
@@ -237,8 +237,10 @@
                 style="font-size: 16px"
                 v-model="description"
                 v-bind:class="{ 'error-boarder': $v.description.$invalid }"
+                @keydown="descriptionClicked = true"
               />
-              <ErrorDiv :parameter="$v.description" :name="'Description'">
+              <ErrorDiv v-if="descriptionClicked"
+              :parameter="$v.description" :name="'Description'">
               </ErrorDiv>
             </div>
           </div>
@@ -429,7 +431,10 @@ export default {
       minLength: minLength(2),
       maxLength: maxLength(20),
     },
-    description: {},
+    description: {
+      required,
+      minLength: minLength(2),
+      maxLength: maxLength(200),},
     biography: {
       required,
       minLength: minLength(5),
@@ -491,19 +496,15 @@ export default {
       formData.append("country", this.country);
       formData.append("city", this.city);
       formData.append("address", this.address);
-      console.log(this.type);
       return formData;
     },
     registerOwner() {
-      console.log(this.$v.$invalid);
-      console.log(this.$v.name.$invalid);
       this.$v.$touch();
       if (this.$v.$invalid) {
         alert("Validation failed!");
         return;
       }
       this.emailSending = true;
-      console.log("ok");
       var formData = this.getFormData();
       formData.append("type", this.type);
       formData.append("description", this.description);
@@ -523,11 +524,6 @@ export default {
         });
     },
     registerClient() {
-      console.log(this.$v.$invalid);
-      console.log(this.$v.name.$invalid);
-      console.log("OVDE JE");
-      console.log(this.$v.description.$invalid);
-      console.log(this.$v.biography.$invalid);
       this.$v.$touch();
       if (this.$v.$invalid) {
         alert("Validation failed!");
@@ -576,14 +572,24 @@ export default {
         this.typingTimer = setTimeout(this.doneTyping, this.doneTypingInterval);
       }
     },
+  isEmpty(str) {
+    return (!str || str.length === 0 );
+},
   },
   watch: {
     type: function (val) {
-      if (val != "Fishing Instructor") {
-        this.biography = "fhnfksdfgksdjdfsdjk";
-      } else {
-        this.biography = "";
-      }
+      console.log("------------------------------------------------");
+      console.log(val);
+      if (val.localeCompare("Fishing Instructor")!=0 && this.isEmpty(this.biography)) {
+        this.biography = "Biography";
+      }      
+      console.log(this.isEmpty(this.description)+"---biographyEmpty");
+      console.log(this.isEmpty(this.description)+"---opistEmpty");
+      console.log(val.localeCompare("Regular User")+"---==regular user");
+      console.log(val.localeCompare("Fishing Instructor")+"---==instructor");
+      if (val.localeCompare("Regular User")==0 && this.isEmpty(this.description)) {
+        this.description = "Description";
+      } 
     },
   },
 };
