@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
@@ -33,19 +34,22 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping(path = "owner-request")
+    @PreAuthorize("hasRole('ADMIN')")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username){
         if (username == null || username.isBlank())
             return null;
         return ownerService.findByUsernameDTO(username);
     }
 
-    @PostMapping(path = "activate-owner")
+    @PutMapping(path = "activate-owner")
+    @PreAuthorize("hasRole('ADMIN')")
     public void activateOwner(@RequestParam("username") String username) {
         System.out.println("activate");
         ownerService.activateOwner(username);
     }
 
-    @PostMapping(path = "deactivate-owner")
+    @PutMapping(path = "deactivate-owner")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deactivateOwner(@RequestParam("username") String username, @RequestParam("reason") String reason) throws MessagingException {
         System.out.println("deactivate");
         System.out.println(reason);
@@ -55,11 +59,13 @@ public class AdminController {
     }
 
     @GetMapping(path = "categories")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<MemberCategory> getCategories() {
         return adminService.getCategories();
     }
 
     @PostMapping(path = "categories")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateCategories(@RequestBody ArrayList<MemberCategory> categories) {
         if (categories.stream().noneMatch(x -> x.getNumberOfPoints() == 0 && x.getForOwner())) {
             return ResponseEntity.badRequest().body("Must have zero point category!");
@@ -74,11 +80,13 @@ public class AdminController {
     }
 
     @GetMapping(path = "rules")
+    @PreAuthorize("hasRole('ADMIN')")
     public Rules getRules() {
         return adminService.getRules();
     }
 
     @PostMapping(path = "rules")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> postRules(@RequestBody Rules rules) {
         if (rules.getIncomePercentage() > 100 || rules.getIncomePercentage() < 0) {
             return ResponseEntity.badRequest().body("Must be in range [0, 100]!");
@@ -88,22 +96,26 @@ public class AdminController {
     }
 
     @GetMapping(path = "unregistered-usernames")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<String> getUnregisteredUsernames() {
         return adminService.getUnregisteredUsernames();
     }
 
     @GetMapping(path = "registered-stats")
+    @PreAuthorize("hasRole('ADMIN')")
     public Map<String, Integer> getRegisteredStats() {
         return adminService.getRegisteredStats();
     }
 
     @GetMapping("pending-termination-requests")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<TerminationRequestDTO> getTerminationRequests() {
         return adminService.getTerminationRequests();
     }
 
 
     @PostMapping(path = "resolve-termination")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> resolveTerminationRequest(
                                                     @RequestParam("username") String username,
                                                     @RequestParam("requestId") int requestId,
@@ -118,6 +130,7 @@ public class AdminController {
 
 
     @GetMapping("system-income")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<IncomeSystemDTO> getSystemIncome(@RequestParam("type") String type,
                                                  @RequestParam("startDate")
                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -129,6 +142,7 @@ public class AdminController {
     }
 
     @GetMapping("pending-reports")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AdminReservationReportDTO> getPendingReports() {
         return adminService.getPendingReports();
     }
@@ -137,6 +151,7 @@ public class AdminController {
     @PostMapping(value = "resolve-report",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> resolveReport(@RequestBody ReportResolve resolve) {
         System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
         boolean ret = adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
@@ -145,6 +160,7 @@ public class AdminController {
     }
 
     @GetMapping("pending-reviews")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<AdminReviewDTO> getPendingReviews() {
         return adminService.getPendingReviews();
     }
@@ -153,6 +169,7 @@ public class AdminController {
     @PostMapping(value = "resolve-review",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+    @PreAuthorize("hasRole('ADMIN')")
     public void resolveReport(@RequestBody ReviewResolve resolve) {
         System.out.println(resolve.getReviewId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAllowed());
 

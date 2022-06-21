@@ -73,7 +73,7 @@ public class AdminControllerTest {
                 .perform(get("/api/admin/pending-termination-requests")
                         .with(user("admin").password("sifra").roles("ADMIN")))
                 .andExpect(jsonPath("$.[*].username").value(hasItem("pera")))
-                .andExpect(jsonPath("$.[*].description").value(hasItem("Opis")))
+                .andExpect(jsonPath("$.[*].description").value(hasItem("opis")))
                 .andExpect(jsonPath("$.[*].requestId").value(hasItem(1)));
     }
 

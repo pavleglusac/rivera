@@ -127,8 +127,8 @@ public class ClientController {
         Client client = clientService.findByUsername(username);
         LocalDateTime startDateTime = clientService.parseDate(start);
         LocalDateTime endDateTime = clientService.parseDate(end);
-        if(reservationService.isPeriodReserved(rentableId.toString(),startDateTime,endDateTime)){
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("greska");
+        if(reservationService.isPeriodReserved(rentableId.toString(), startDateTime, endDateTime)){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("error");
         }
         Reservation reservation = reservationService.addReservation(client, rentableId,
                 startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")), discountId);

@@ -141,8 +141,49 @@ export default {
         document.getElementById("errorMessage").innerHTML =
           "Start date has to be before end date!";
       // check if there is something in that period
+      else if(this.isPeriodAvailable())
+              document.getElementById("errorMessage").innerHTML =
+          "There is already a reservation in that period of time!";
       else document.getElementById("errorMessage").innerHTML = "";
       return document.getElementById("errorMessage").innerHTML == "";
+    },
+    formatDate(date) {
+      var current_datetime = new Date(date);
+      var month = current_datetime.getMonth() + 1;
+      if (month < 10) month = "0" + month;
+      var day = current_datetime.getDate();
+      if (day < 10) day = "0" + day;
+      var minutes = current_datetime.getMinutes();
+      if (minutes < 10) minutes = "0" + minutes;
+      var hours = current_datetime.getHours();
+      if (hours < 10) hours = "0" + hours;
+      return (
+        current_datetime.getFullYear() +
+        "-" +
+        month +
+        "-" +
+        day +
+        "T" +
+        hours +
+        ":" +
+        minutes +
+        ":00"
+      );
+    },
+    isPeriodAvailable() {
+      var start = this.formatDate(this.startDate + " " + this.startTime);
+      console.log(this.start);
+      var end = this.formatDate(this.endDate + " " + this.endTime);
+      console.log(this.end);
+      this.$axios
+        .get(
+          `/api/is-period-reserved?&id=${this.$route.params.rentable}&start=${start}&end=${end}`
+        )
+        .then((response) => {
+          console.log("TADA IMA VEC NEKA REZERVACIJA");
+          console.log(response.data);
+          return !response.data;
+        });
     },
     reloadPage() {
       window.location.reload();

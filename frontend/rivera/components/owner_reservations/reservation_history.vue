@@ -42,14 +42,14 @@
       </div>
       <div v-else>
         <EntityReservation
-          v-for="res in reservations"
+          v-for="(res, index) in reservations"
           :entity="res.rentable"
           :offerType="getActiveOffers()"
           :reservation="res"
           :reportModal="reportModalHistory"
           :viewReportModal="viewreportModalHistory"
           class="mb-3"
-          v-bind:key="res.rentable.name"
+          v-bind:key="res.rentable.name + index"
         />
       </div>
     </div>

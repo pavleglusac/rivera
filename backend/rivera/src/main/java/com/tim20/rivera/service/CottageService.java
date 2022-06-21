@@ -12,6 +12,7 @@ import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.PricelistRepository;
 import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -179,6 +180,7 @@ public class CottageService {
         return cottageRepository.findAll();
     }
 
+    @Cacheable(value="cottageDTO", key="", unless="#result == null")
     public CottageDTO getById(Integer id) {
         Optional<Cottage> opt = cottageRepository.findById(id);
         return (opt.isEmpty() ? null : cottageToDto(opt.get()));

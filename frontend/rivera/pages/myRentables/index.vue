@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import Navbar from '../../components/navbar.vue';
-import myRentables from './../../components/myRentables.vue'
+import Navbar from '@/components/navbar.vue';
+import myRentables from '@/components/myRentables.vue'
 export default {
   name: 'myRentablesPage',
-  components: { myRentables }
+  components: { myRentables, Navbar }
 }
 </script>

@@ -57,8 +57,10 @@ public class OwnerController {
     }
 
     @PostMapping(path = "add-discount")
-    public void addDiscount(DiscountDTO discountDTO) {
-        discountService.addDiscount(discountDTO);
+    public ResponseEntity<String> addDiscount(DiscountDTO discountDTO) {
+        boolean ret = discountService.addDiscount(discountDTO);
+        if(ret) return ResponseEntity.ok("ok");
+        return ResponseEntity.unprocessableEntity().body("Couldn't add discount");
     }
 
 

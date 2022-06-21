@@ -6,6 +6,7 @@ import com.tim20.rivera.dto.SearchParams;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -193,6 +194,7 @@ public class BoatService {
         return boatRepository.findAll();
     }
 
+    @Cacheable(value="boatDTO", key="", unless="#result == null")
     public BoatDTO getById(Integer id) {
         Optional<Boat> opt = boatRepository.findById(id);
         return (opt.isEmpty() ? null : boatToDto(opt.get()));

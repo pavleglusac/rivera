@@ -4,7 +4,10 @@ import com.tim20.rivera.dto.*;
 import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.*;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,6 +58,8 @@ public class AdventureService {
     @Autowired
     private AvailabilityService availabilityService;
     private FishingInstructor temporaryOwner;
+
+    private final Logger LOG = LoggerFactory.getLogger(AdventureService.class);
 
     @PostConstruct
     private void setTemporaryOwner() {
@@ -118,6 +123,7 @@ public class AdventureService {
         return adventure;
     }
 
+    @Cacheable(value="adventureDTO", key="", unless="#result == null")
     public AdventureDTO getAdventure(Integer id) {
         Optional<Adventure> opt = adventureRepository.findById(id);
         return (opt.isEmpty() ? null : adventureToDto(opt.get()));
