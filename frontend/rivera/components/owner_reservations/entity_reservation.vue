@@ -38,7 +38,7 @@
         >
           <b-button
             :disabled="isDateAfterToday(new Date(this.reservation.end))"
-						v-bind:class="{ 'disabled-report': isDateAfterToday(new Date(this.reservation.end)) }"
+						v-bind:class="{ 'disabled-report': !isDateAfterToday(new Date(this.reservation.end)) }"
             v-if="!this.reservation.report"
             variant="primary"
             class="book-btn"

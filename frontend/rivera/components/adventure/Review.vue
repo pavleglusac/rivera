@@ -33,8 +33,11 @@ export default {
   components: { Rating },
   mounted() {
     console.log(this.review);
-    console.log("--------");
-    this.review.client.photo = process.env.backend + this.review.client.photo;
+  },
+  methods: {
+        goToProfile() {
+      this.$router.push({ path: "/profile/" + this.review.client.username });
+    },
   },
   data() {
     return {};
