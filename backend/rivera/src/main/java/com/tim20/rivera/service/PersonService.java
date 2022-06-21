@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -63,6 +64,7 @@ public class PersonService {
     final String IMAGES_PATH = "\\images\\clients\\";
     final String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
+    @Cacheable(value="person", key="", unless="#result == null")
     public Person findByUsername(String username) {
         return personRepository.findByUsername(username);
     }
