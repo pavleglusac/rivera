@@ -138,7 +138,6 @@ public class PersonService {
     public boolean updatePerson(PersonDTO dto) {
         try {
             Person person = personRepository.findByUsername(dto.getUsername());
-            Thread.sleep(10000);
             if (person == null) {
                 return false;
             }

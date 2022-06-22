@@ -285,7 +285,6 @@ public class CottageService {
         try
         {
             Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
-            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Cottage cottage = opt.get();
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {

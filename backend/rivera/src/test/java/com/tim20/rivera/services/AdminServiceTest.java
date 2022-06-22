@@ -76,41 +76,6 @@ public class AdminServiceTest {
 
     @Test
     @Transactional
-    public void testTerminationLockingSuccess() throws InterruptedException {
-        Person person = personRepository.findByUsername("pera");
-        TerminationRequest request = terminationRepository.findById(1);
-
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        Future<Boolean> future1 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
-            System.out.println(ret);
-            return ret;
-        });
-        Thread.sleep(500);
-        Future<Boolean> future2 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
-            System.out.println(ret);
-            return ret;
-        });
-
-        try {
-            boolean r1 = future1.get();
-            assert r1;
-        } catch (Exception e) {
-            assert false;
-        }
-        try{
-            boolean r2 = future2.get();
-            assert r2;
-        } catch (Exception e) {
-            assert false;
-        }
-    }
-
-    @Test
-    @Transactional
     public void testReviewLockingSuccess() throws InterruptedException {
         Review review = reviewRepository.findById(1).get();
 

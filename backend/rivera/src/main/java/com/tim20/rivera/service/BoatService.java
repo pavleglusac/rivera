@@ -299,7 +299,6 @@ public class BoatService {
     public boolean update(BoatDTO boatDTO, MultipartFile[] multipartFiles) throws IOException {
         try {
             Optional<Boat> opt = boatRepository.findById(boatDTO.getId());
-            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Boat boat = opt.get();
             List<String> paths = savePictures(boat, multipartFiles);

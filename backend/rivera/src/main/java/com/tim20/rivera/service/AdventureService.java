@@ -208,7 +208,6 @@ public class AdventureService {
     public boolean updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
         try{
             Optional<Adventure> opt = adventureRepository.findById(dto.getId());
-            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Adventure adventure = opt.get();
             List<String> paths = savePictures(adventure, multipartFiles);

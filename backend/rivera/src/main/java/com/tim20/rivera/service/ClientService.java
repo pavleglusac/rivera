@@ -121,7 +121,6 @@ public class ClientService {
     public void updateClient(ClientDTO dto) {
         try {
             Client client = clientRepository.findByUsername(dto.getUsername());
-            Thread.sleep(10000);
             copyDTOToClient(client, dto);
             clientRepository.save(client);
         } catch(Exception e) {
