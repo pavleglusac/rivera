@@ -437,7 +437,7 @@ INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, clien
 VALUES (false, '2023-05-21 19:44:47.521598', 1300, '2023-05-21 18:44:47.521546', 'pera', 4, 0.5);
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id,
                          owner_income_percentage)
-VALUES (false, '2022-10-21 19:44:48.250883', 130, '2022-05-21 18:44:48.250856', 'mika', 4, 0.5);
+VALUES (false, '2022-11-21 19:44:48.250883', 130, '2022-10-21 18:44:48.250856', 'mika', 4, 0.5);
 INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, client_id, rentable_id,
                          owner_income_percentage)
 VALUES (false, '2022-06-21 19:44:48.250883', 130, '2022-06-21 18:44:48.250856', 'mika', 4, 0.5);

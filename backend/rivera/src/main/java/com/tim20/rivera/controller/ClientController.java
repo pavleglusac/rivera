@@ -75,6 +75,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path = "activate-client")
     public Client activateClient(@RequestParam("username") String username) {
         System.out.println("activate");
@@ -106,7 +107,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT','FISHING_INSTRUCTOR','BOAT_OWNER','COTTAGE_OWNER')")
     @GetMapping(path = "get-reservations")
     public List<ClientReservationDTO> getReservations(@RequestParam("username") String username, ReservationSearch search) {
         return reservationService.getReservations(username, search);
@@ -117,7 +118,7 @@ public class ClientController {
         return clientService.getClientLoyalty(username);
     }
 
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT','FISHING_INSTRUCTOR','BOAT_OWNER','COTTAGE_OWNER')")
     @GetMapping(path = "get-reservation-price")
     public Double getReservationPrice(@RequestParam("username") String username, Integer rentableId, String start, String end) {
         Client client = clientService.findByUsername(username);
@@ -126,7 +127,7 @@ public class ClientController {
         return reservationService.calculatePriceForReservation(client, rentableId, startDateTime, endDateTime);
     }
 
-    @PreAuthorize("hasRole('CLIENT')")
+    @PreAuthorize("hasAnyRole('CLIENT','FISHING_INSTRUCTOR','BOAT_OWNER','COTTAGE_OWNER')")
     @GetMapping(path = "didClientReserveEarlier")
     public boolean didClientReserveEarlier(@RequestParam("username") String username, Integer rentableId,
                                            String start, String end) {
