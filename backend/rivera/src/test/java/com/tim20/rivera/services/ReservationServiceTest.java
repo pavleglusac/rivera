@@ -32,8 +32,8 @@ public class ReservationServiceTest {
         for(ClientReservationDTO dto : reservations)
             if(dto.getEntity().name.equals("Mountain Fishing"))
                 numberOfAdventures++;
-        assert numberOfAdventures == 3;
-        assert reservations.size() == 4;
+        assert numberOfAdventures == 6;
+        assert reservations.size() == 8;
     }
 
     @Test
@@ -53,6 +53,6 @@ public class ReservationServiceTest {
         search.setSearch("");
         search.setDate("2022-05-21");
         search.setUpcoming("date");
-        assert reservationService.getReservations("pera", search).size() == 2;
+        assert reservationService.getReservations("pera", search).size() == 4;
     }
 }

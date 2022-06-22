@@ -363,7 +363,7 @@ public class ClientService {
 
     public List<ClientReviewDTO> getReviews(String username) {
         Client client = clientRepository.findByUsername(username);
-        return getReports(client).stream().map(this::reportToDTO).collect(Collectors.toList());
+        return getReports(client).stream().filter(x -> (x.getResolved() && x.getReservationReportType() == ReservationReportType.COMMENT)).map(this::reportToDTO).collect(Collectors.toList());
     }
 
     private List<ReservationReport> getReports(Client client) {

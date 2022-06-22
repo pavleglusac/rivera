@@ -204,8 +204,7 @@ public class OwnerService {
 
     public List<ReviewProfileDTO> getReviewsForOwner(String username) {
         Owner owner = ownerRepository.findByUsername(username);
-        System.out.println(owner.getReviews().size());
-        return owner.getReviews().stream().map(this::reviewToDTO).collect(Collectors.toList());
+        return owner.getReviews().stream().filter(x -> x.getStatus()==ReviewStatus.ACCEPTED).map(this::reviewToDTO).collect(Collectors.toList());
     }
 
     public List<AttendanceDTO> getAttendance(String startDate, String endDate, String type) {

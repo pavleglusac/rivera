@@ -6,6 +6,7 @@ import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
 import com.tim20.rivera.model.Owner;
 import com.tim20.rivera.model.Person;
+import com.tim20.rivera.model.Rentable;
 import com.tim20.rivera.model.Reservation;
 import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class EmailService {
         String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
         htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>Registration Request</h3>";
         htmlMsg += "<p style='text-align: left; font-size: 15px; font-family: sans-serif;'>" + ownerRequestDTO.mailPrint();
-        htmlMsg += "<br><br><a style='font-size: 20px; text-decoration: none; font-family: sans-serif; padding: 10px; border: none; color: white; background-color:#16C79A;' href='http://localhost:3000/registration/" + ownerRequestDTO.getUsername() + "' style=''>VIEW REPORT</a></p></div>";
+        htmlMsg += "<br><br><a style='font-size: 20px; text-decoration: none; font-family: sans-serif; padding: 10px; border: none; color: white; background-color:#16C79A;' href='http://localhost:3000/registration/" + ownerRequestDTO.getUsername() + "' style=''>VIEW REGISTRATION REQUEST</a></p></div>";
         mail.setText(htmlMsg, true);
         javaMailSender.send(mimeMessage);
         System.out.println("Email sent!");
@@ -107,6 +108,31 @@ public class EmailService {
             String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
             htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + subject + "</h3>";
             htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject("New Discount!");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
+    }
+
+    @Async
+    public void sendDiscountNotificaition(String username, String subject, String text, Rentable rentable) {
+        try {
+            System.out.println("Sending email...");
+            System.out.println("http://localhost:8080" + rentable.getPictures().get(0));
+            Person person = personService.findByUsername(username);
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + subject + "</h3>";
+            htmlMsg += "<img style='height: 200px; width: 400px; object-fit: cover; margin: auto' src='http://localhost:8080" + rentable.getPictures().get(0) + "' />";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p>";
+            htmlMsg += "<br><br><a style='font-size: 20px; margin: auto; text-align: center; text-decoration: none; font-family: sans-serif; padding: 25px; border: none; color: white; background-color:#16C79A;' href='http://localhost:3000/rentable/" + rentable.getId() + "'>RENTABLE DETAILS</a>";
+            htmlMsg += "<hr style='width: 100%'/></div>";
             mail.setText(htmlMsg, true);
             mail.setTo(person.getEmail());
             mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
