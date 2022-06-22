@@ -589,6 +589,7 @@ export default {
 			formData.append("cancellationTerms", this.cancellationTerms);
 			formData.append("rulesOfConduct", this.rulesOfConduct);
 			formData.append("services", this.services);
+			formData.append("averageScore", 0);
 			console.log(formData);
 			for (let index = 0; index < images.files.length; index++) {
 				formData.append("images", images.files[index]);

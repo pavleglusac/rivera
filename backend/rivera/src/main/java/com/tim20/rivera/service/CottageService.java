@@ -85,7 +85,7 @@ public class CottageService {
         cottage.setPictures(paths);
         cottage.setProfilePicture(paths.get(0));
         cottageRepository.save(cottage);
-        cottageOwnerRepository.save(cottageOwnerRepository.findById("cowner").get());
+        cottageOwnerRepository.save(cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get());
         return cottage.getId();
     }
 
@@ -143,7 +143,7 @@ public class CottageService {
         List<String> rulesCopy = new ArrayList<>(dto.getRulesOfConduct());
         tagService.addTagsIfNotPresent(tagsCopy);
         cottage.setTags(tagService.getTagsByNames(tagsCopy2));
-        cottage.setOwner(cottageOwnerRepository.findById("cowner").get());
+        cottage.setOwner(cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get());
         cottage.setName(dto.getName());
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
@@ -165,7 +165,7 @@ public class CottageService {
 
         cottage.getPricelists().add(pricelist);
         cottage.setCurrentPricelist(pricelist);
-        cottageOwnerRepository.findById("cowner").get().getRentables().add(cottage);
+        cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get().getRentables().add(cottage);
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
