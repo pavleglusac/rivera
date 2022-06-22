@@ -132,7 +132,8 @@ public class DiscountService {
     private void sendNotificationsToSubscribed(Rentable rentable, DiscountDTO discountDTO) {
         for(String username : rentable.getSubscribed()) {
             try {
-                emailService.sendNotificaitionToUsername(username, "New Discount!",
+                System.out.println(rentable.getProfilePicture());
+                emailService.sendDiscountNotificaition(username, "New Discount!",
                         "Dear @" + username + ",<br><br>We are notifying you that there is a new special offer! " +
                                 rentable.getName() + " is available for the period of "
                                 + discountDTO.getStartDateTime().replace("T", " ") + " to " + discountDTO.getEndDateTime().replace("T", " ") +
@@ -140,7 +141,7 @@ public class DiscountService {
                                 "Hurry up and don't miss this opportunity!<br>" +
                                 "You are subscribed to " + rentable.getName() + " so that is why you got this email. If you " +
                                 "want to unsubscribe, please go to rentable page and click 'Unsubscribe' or go to your account settings." +
-                                "<br><br>Sincerely,<br> Rivera.");
+                                "<br><br>Sincerely,<br> Rivera.", rentable);
             }
             catch (Exception e) {
                 System.out.println("email not sent!");
@@ -151,11 +152,8 @@ public class DiscountService {
     private Discount discountDTOToDiscount(DiscountDTO discountDTO, Rentable rentable){
         Discount discount = new Discount();
         discount.setPrice(discountDTO.getPrice());
-        System.out.println(discountDTO.getStartDateTime()+"DTO");
         discount.setStartDateTime(LocalDateTime.parse(discountDTO.getStartDateTime().split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         discount.setEndDateTime(LocalDateTime.parse(discountDTO.getEndDateTime().split("\\.")[0].replace("T", " "), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-        System.out.println(discount.getStartDateTime()+"DISCOUNT");
         discount.setCapacity(discountDTO.getCapacity());
         tagService.addTagsIfNotPresent(discountDTO.getTags());
         discount.setTags(tagService.getTagsByNames(discountDTO.getTags()));

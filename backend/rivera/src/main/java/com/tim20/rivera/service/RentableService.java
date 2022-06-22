@@ -135,7 +135,7 @@ public class RentableService {
     }
 
     public List<Review> getReviews(Integer id) {
-        return rentableRepository.findById(id).get().getReviews();
+        return rentableRepository.findById(id).get().getReviews().stream().filter(x -> x.getStatus()==ReviewStatus.ACCEPTED).collect(Collectors.toList());
     }
 
     public void delete(Integer id) {

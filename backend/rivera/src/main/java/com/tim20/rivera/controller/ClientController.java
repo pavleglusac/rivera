@@ -10,6 +10,7 @@ import com.tim20.rivera.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,12 +55,14 @@ public class ClientController {
         return clientService.clientExists(username);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "update-client")
     public ResponseEntity<String> updateClient(ClientDTO clientDTO) {
         clientService.updateClient(clientDTO);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "update-client-photo")
     public ResponseEntity<String> updateClientPhoto(@RequestParam("username") String username, @RequestPart(value = "image") MultipartFile image) throws IOException {
         clientService.updateClientPhoto(username, image);
@@ -72,6 +75,7 @@ public class ClientController {
         return clientService.activateClient(username);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping(path = "get-subscribed-entities")
     public List<EntityDTO> getSubscribedEntities(@RequestParam("username") String username, String search) {
         return clientService.getSubscribedEntities(username, search);
@@ -82,18 +86,21 @@ public class ClientController {
         return clientService.isSubscribed(username, id);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "subscribe")
     public ResponseEntity<String> subscribe(@RequestParam("username") String username, Integer id) {
         clientService.subscribe(username, id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "unsubscribe")
     public ResponseEntity<String> unsubscribe(@RequestParam("username") String username, Integer id) {
         clientService.unsubscribe(username, id);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping(path = "get-reservations")
     public List<ClientReservationDTO> getReservations(@RequestParam("username") String username, ReservationSearch search) {
         return reservationService.getReservations(username, search);
@@ -104,6 +111,7 @@ public class ClientController {
         return clientService.getClientLoyalty(username);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping(path = "get-reservation-price")
     public Double getReservationPrice(@RequestParam("username") String username, Integer rentableId, String start, String end) {
         Client client = clientService.findByUsername(username);
@@ -112,6 +120,7 @@ public class ClientController {
         return reservationService.calculatePriceForReservation(client, rentableId, startDateTime, endDateTime);
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @GetMapping(path = "didClientReserveEarlier")
     public boolean didClientReserveEarlier(@RequestParam("username") String username, Integer rentableId,
                                            String start, String end) {
@@ -127,7 +136,7 @@ public class ClientController {
         Client client = clientService.findByUsername(username);
         LocalDateTime startDateTime = clientService.parseDate(start);
         LocalDateTime endDateTime = clientService.parseDate(end);
-        if(reservationService.isPeriodReserved(rentableId.toString(), startDateTime, endDateTime)){
+        if (reservationService.isPeriodReserved(rentableId.toString(), startDateTime, endDateTime)) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("error");
         }
         Reservation reservation = reservationService.addReservation(client, rentableId,
@@ -136,6 +145,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "cancelReservation")
     public ResponseEntity<String> cancelReservation(@RequestParam("username") String username, Integer reservationId) {
         Client client = clientService.findByUsername(username);
@@ -144,6 +154,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "reviewReservation")
     public ResponseEntity<String> reviewReservation(@RequestParam("username") String username, Integer reservationId, String reviewFor, String rating, String reviewText) {
         Client client = clientService.findByUsername(username);
@@ -151,6 +162,7 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    @PreAuthorize("hasRole('CLIENT')")
     @PostMapping(path = "complainOnReservation")
     public ResponseEntity<String> complainOnReservation(@RequestParam("username") String username, Integer reservationId, String reviewFor, String reviewText) {
         Client client = clientService.findByUsername(username);
