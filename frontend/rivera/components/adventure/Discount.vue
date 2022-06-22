@@ -158,6 +158,8 @@ export default {
               .then((response) => {
                 console.log(response.data);
                 this.openModal();
+              }).catch(err=>{
+                alert("Couldn't reserve.")
               });
           } else {
             this.$router.push({ path: "/login" });
