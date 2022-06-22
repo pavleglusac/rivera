@@ -75,7 +75,7 @@ public class CottageService {
             System.out.println(x.getName() + "," + x.getId() + "," + cottage.getId());
         }
 
-        cottage.setOwner((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())); //TODO: izvuci ownera iz jwt kad se bude slao
+        cottage.setOwner((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
         cottageRepository.save(cottage);
 
         List<String> paths;
@@ -271,6 +271,7 @@ public class CottageService {
         try
         {
             Optional<Cottage> opt = cottageRepository.findById(cottageDTO.getId());
+            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Cottage cottage = opt.get();
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {

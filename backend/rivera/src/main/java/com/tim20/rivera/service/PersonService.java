@@ -134,15 +134,21 @@ public class PersonService {
         }
     }
 
-    @org.springframework.transaction.annotation.Transactional(readOnly = false)
+    @Transactional(readOnly = false)
     public boolean updatePerson(PersonDTO dto) {
-        Person person = personRepository.findByUsername(dto.getUsername());
-        if (person == null) {
+        try {
+            Person person = personRepository.findByUsername(dto.getUsername());
+            Thread.sleep(10000);
+            if (person == null) {
+                return false;
+            }
+            copyDTOToPerson(person, dto);
+            personRepository.save(person);
+            return true;
+        } catch (Exception e) {
             return false;
         }
-        copyDTOToPerson(person, dto);
-        personRepository.save(person);
-        return true;
+
     }
 
     public void updatePersonPhoto(String username, MultipartFile photo) throws IOException {

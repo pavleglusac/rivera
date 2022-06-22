@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.OptimisticLockException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -65,6 +67,9 @@ public class AdminService {
 
     @Autowired
     private ConfigurableEnvironment env;
+
+    @Autowired
+    private RentableRepository rentableRepository;
 
     final static String DEFAULT_PHOTO_PATH = "\\images\\default.jpg";
 
@@ -167,13 +172,13 @@ public class AdminService {
         try {
             Person person = personRepository.findByUsername(username);
             TerminationRequest request = terminationRepository.findById(requestId);
+            Thread.sleep(10000);
             if (person == null || request == null) return false;
             handlePersonTermination(terminate, person, request);
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
                 Thread.sleep(1000);
             }
             terminationRepository.save(request);
-            notifyUserOnTerminationRequest(username, terminate, reason);
             return true;
         } catch (Exception exception) {
             return false;
@@ -190,7 +195,7 @@ public class AdminService {
         }
     }
 
-    private void notifyUserOnTerminationRequest(String username, boolean terminate, String reason) {
+    public void notifyUserOnTerminationRequest(String username, boolean terminate, String reason) {
         if(!terminate) {
             emailService.sendNotificaitionToUsername(username, "Termination rejected", reason);
         } else {
@@ -210,7 +215,7 @@ public class AdminService {
         admin.setEmail(clientRequestDTO.getEmail());
         admin.setCountry(clientRequestDTO.getCountry());
         admin.setPhoto(DEFAULT_PHOTO_PATH);
-        admin.setStatus(AccountStatus.WAITING);
+        admin.setStatus(AccountStatus.ACTIVE);
         List<Role> roles = roleService.findByName("ROLE_ADMIN");
         admin.setRoles(roles);
         return admin;
@@ -288,29 +293,37 @@ public class AdminService {
         return dto;
     }
 
-    @Transactional(readOnly = false)
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public boolean resolveReport(int reportId, String responseText, boolean assignPenalty) {
         try {
-            ReservationReport report = reservationReportRepository.getById(reportId);
+            Optional<ReservationReport> optionalReport = reservationReportRepository.findById(reportId);
+            if(optionalReport.isEmpty()) return false;
+            ReservationReport report = optionalReport.get();
+            if(report.getResolved()) return false;
+            Thread.sleep(30000);
             Client client = report.getReservation().getClient();
             Owner owner = report.getReservation().getRentable().getOwner();
-            if (assignPenalty)  {
-                assignPenaltyAndSendEmails(responseText, client, owner);
-            } else if(report.getSanction()) {
-                rejectPenalytAndSendEmail(responseText, client, owner);
-            }
+            System.out.println("Resolveddddddd :DDDDD");
             report.setResolved(true);
             reservationReportRepository.save(report);
-            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-                Thread.sleep(1000);
-            }
             return true;
         } catch (Exception exception) {
             return false;
         }
     }
 
-    private void rejectPenalytAndSendEmail(String responseText, Client client, Owner owner) {
+    public void reportMail(int reportId, String responseText, boolean assignPenalty) {
+        ReservationReport report = reservationReportRepository.getById(reportId);
+        Client client = report.getReservation().getClient();
+        Owner owner = report.getReservation().getRentable().getOwner();
+        if (assignPenalty)  {
+            assignPenaltyEmail(responseText, client, owner);
+        } else if(report.getSanction()) {
+            rejectPenaltyEmail(responseText, client, owner);
+        }
+    }
+
+    private void rejectPenaltyEmail(String responseText, Client client, Owner owner) {
         emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
                 "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
                         + client.getUsername() + " will not be assigned a penalty. Reason:\n"
@@ -327,13 +340,18 @@ public class AdminService {
                 .collect(Collectors.toList());
     }
 
-    private void assignPenaltyAndSendEmails(String responseText, Client client, Owner owner) {
+    public void assignPenalty(int reportId) {
+        ReservationReport report = reservationReportRepository.getById(reportId);
+        Client client = report.getReservation().getClient();
         int totalPenalties = client.getNumberOfPenalties();
         client.setNumberOfPenalties(totalPenalties + 1);
         clientRepository.save(client);
+    }
+
+    public void assignPenaltyEmail(String responseText, Client client, Owner owner) {
         emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
                 "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
-                        "you that you have been assigned a penalty. Three of these penalties per month " +
+                        " you that you have been assigned a penalty. Three of these penalties per month " +
                         "will stop you from using our services. Reason: " + responseText +
                         "\n\nSincerely,\n Rivera.");
 
@@ -364,49 +382,102 @@ public class AdminService {
 
     @Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
     public boolean resolveReview(int reviewId, String responseText, boolean allowed) {
-        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
-        if(optionalReview.isEmpty()) return false;
         try {
+            Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+            if(optionalReview.isEmpty()) return false;
             Review review = optionalReview.get();
+            if(review.getStatus() != ReviewStatus.PENDING) return false;
             Client client = review.getClient();
             Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
+            Thread.sleep(10000);
             if (review.getType() == ReviewType.REVIEW_WITH_RATING)  {
                 if(allowed) {
-                    emailService.sendNotificaitionToUsername(owner.getUsername(), "Review",
-                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
-                                + client.getUsername() + " has just review you or your rentable with a rating of " + review.getScore() + " with" +
-                                " text \"" + review.getText() + "\"." +
-                                "<br><br>Sincerely,<br>Rivera.");
                     review.setStatus(ReviewStatus.ACCEPTED);
+                    Review rev = reviewRepository.save(review);
                 } else {
-                    emailService.sendNotificaitionToUsername(client.getUsername(), "Review",
-                            "Dear " + client.getUsername() + ",\n\nWe inform you that your review with text \" "+ review.getText()+"\" " +
-                                    "didn't get approved by the admin team. Reason: " + responseText +
-                                    "\n\nSincerely,\n Rivera.");
                     review.setStatus(ReviewStatus.DECLINED);
+                    reviewRepository.save(review);
                 }
             } else {
-                emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
-                        "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
-                                + client.getUsername() + " has just filed a complaint on you or your rentable with " +
-                                " text \"" + review.getText() + "\". The admin team has responded with \"" + responseText + "\"" +
-                                "<br><br>Sincerely,<br> Rivera.");
-
-                emailService.sendNotificaitionToUsername(client.getUsername(), "Complaint",
-                        "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
-                                "The admin team has responded with: " + responseText +
-                                "<br><br>Sincerely,<br>Rivera.");
                 review.setStatus(ReviewStatus.ACCEPTED);
+                reviewRepository.save(review);
             }
-            if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-                Random random = SecureRandom.getInstanceStrong();;
-                int r = random.nextInt(1, 10);
-                Thread.sleep(r* 100L);
-            }
-            reviewRepository.save(review);
+            testSleep();
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
+
+    public void sendReviewMails(int reviewId, String responseText, boolean allowed) {
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
+        if(optionalReview.isEmpty()) return;
+        Review review = optionalReview.get();
+        Client client = review.getClient();
+        Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
+        if (review.getType() == ReviewType.REVIEW_WITH_RATING) {
+            if (allowed) {
+                reviewAcceptedEmail(review, client, owner);
+            } else {
+                reviewDeclinedEmail(responseText, review, client);
+            }
+        } else {
+            complaintEmail(responseText, review, client, owner);
+        }
+    }
+
+    @Transactional
+    public void recalculateScore(Review review) {
+        try {
+            Rentable rentable = review.getRentable();
+            if(rentable != null) {
+                double avgScore = rentable.getAverageScore();
+                long acceptedReviews = rentable.getReviews().stream().filter(x -> x.getStatus() == ReviewStatus.ACCEPTED).count() - 1;
+                rentable.setAverageScore((acceptedReviews*avgScore + review.getScore())/(acceptedReviews + 1));
+                rentable.getReviews().add(review);
+                rentableRepository.save(rentable);
+            }
+        } catch (OptimisticLockException exception) {
+
+        }
+    }
+
+    private void testSleep() throws NoSuchAlgorithmException, InterruptedException {
+        if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            Random random = SecureRandom.getInstanceStrong();;
+            int r = random.nextInt(1, 10);
+            Thread.sleep(r* 100L);
+        }
+    }
+
+    private void complaintEmail(String responseText, Review review, Client client, Owner owner) {
+        emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
+                "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                        + client.getUsername() + " has just filed a complaint on you or your rentable with " +
+                        " text \"" + review.getText() + "\". The admin team has responded with \"" + responseText + "\"" +
+                        "<br><br>Sincerely,<br> Rivera.");
+
+        emailService.sendNotificaitionToUsername(client.getUsername(), "Complaint",
+                "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
+                        "The admin team has responded with: " + responseText +
+                        "<br><br>Sincerely,<br>Rivera.");
+    }
+
+    private void reviewDeclinedEmail(String responseText, Review review, Client client) {
+        emailService.sendNotificaitionToUsername(client.getUsername(), "Review",
+                "Dear " + client.getUsername() + ",\n\nWe inform you that your review with text \" "+ review.getText()+"\" " +
+                        "didn't get approved by the admin team. Reason: " + responseText +
+                        "\n\nSincerely,\n Rivera.");
+    }
+
+    private void reviewAcceptedEmail(Review review, Client client, Owner owner) {
+        emailService.sendNotificaitionToUsername(owner.getUsername(), "Review",
+            "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                    + client.getUsername() + " has just review you or your rentable with a rating of " + review.getScore() + " with" +
+                    " text \"" + review.getText() + "\"." +
+                    "<br><br>Sincerely,<br>Rivera.");
+    }
+
+
 }

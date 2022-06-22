@@ -108,8 +108,8 @@ export default {
 		getPendingReviews() {
 			let that = this;
 			this.$axios.get("/api/admin/pending-reviews").then((resp) => {
-				for (let index = 0; index < response.data.length; index++) {
-					response.data[index].clientImage = process.env.backend + response.data[index].clientImage;
+				for (let index = 0; index < resp.data.length; index++) {
+					resp.data[index].clientImage = process.env.backend + resp.data[index].clientImage;
 				}
 				console.log(resp.data);
 				that.reviews.push(...resp.data);

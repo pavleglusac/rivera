@@ -45,17 +45,17 @@ CREATE SEQUENCE mysequence
 START 1;
 INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture,
                        current_pricelist_id, owner_username, capacity, deleted, version)
-VALUES (nextval('mysequence'), '7 Grove St.', 3.3, 'Cairns', 'Australia',
+VALUES (nextval('mysequence'), '7 Grove St.', 0, 'Cairns', 'Australia',
         'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat',
         'Mountain Fishing', NULL, 1, 'marko', 4, false, 0);
 INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture,
                        current_pricelist_id, owner_username, capacity, deleted, version)
-VALUES (nextval('mysequence'), '7 Grove St.', 2.3, 'Cairns', 'New Zeland',
+VALUES (nextval('mysequence'), '7 Grove St.', 0, 'Cairns', 'New Zeland',
         'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat',
         'Some adventure', NULL, 2, 'marko', 3, false, 0);
 INSERT INTO adventure (id, address, average_score, city, country, description, name, profile_picture,
                        current_pricelist_id, owner_username, capacity, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate pharetra nulla, ut eleifend risus. Praesent elementum maximus quam mollis consequat',
         'Very Cool Fishing', NULL, 3, 'marko', 5, false, 0);
 
@@ -90,34 +90,41 @@ VALUES ('pera', 'Dobrovoljacka 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+p
 
 INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password,
                    phone_number, photo, surname, status, version)
-VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+admin@outlook.com', NULL, 'Branislav',
+VALUES ('admin', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+admin@outlook.com', '2022-06-22 11:05:29.267235', 'Branislav',
+        '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg',
+        'Bakic', 0, 0);
+
+
+INSERT INTO admin (username, address, city, country, deleted, email, last_password_reset_date, name, password,
+                   phone_number, photo, surname, status, version)
+VALUES ('admin2', 'Cara Dusana 42', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+admin@outlook.com', '2022-06-22 11:05:29.267235', 'Branislav',
         '$2a$10$yzjAFIt2hcdHnl85Kky.ue1/2jRcs9Gi8mkJCym.ZoQAw0p5xJ3UO', '+3815565456', '/images/clients/pera.jpg',
         'Bakic', 0, 0);
 
 INSERT INTO cottage (id, address, average_score, city, country, description, name, profile_picture,
                      current_pricelist_id, owner_username, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'In Nordic countries, cottages tend to be built from wood and are often painted red, which helps them stand out from the summer greens and winter whites of the surrounding countryside.',
         'Nordic cottage', NULL, 4, 'cowner', false, 0);
 INSERT INTO cottage (id, address, average_score, city, country, description, name, profile_picture,
                      current_pricelist_id, owner_username, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'Cottages on the English countryside often have thatched roofs, which were built as an economical form of weatherproofing. These English structures often feature cottage gardens that grow up against the buildings.',
         'English Cottage', NULL, 4, 'cowner', false, 0);
 
 INSERT INTO boat (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id,
                   owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.1, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'Unlike other boats, Catamaran is a multi-hulled watercraft that features two parallel hulls of equal size. Catamaran Boats feature less hull volume, shallower draft, and higher displacement than vessels with a single hull.',
         'Catamaran Boat', NULL, 4, 'bowner', 5, 50, 3, 300, 60, 0, false, 0);
 INSERT INTO boat (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id,
                   owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.3, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'Well-suited for fishing, yachting, sailing and other water sports, Cuddy Cabins Boats is one of the most family-friendly vessels. Featuring a closed deck over the boat’s bow, the boat allows a convenient storage space and easy navigation.',
         'Cuddy Cabins Boat', NULL, 4, 'bowner', 5, 30, 3, 50, 70, 2, false, 0);
 INSERT INTO boat (id, address, average_score, city, country, description, name, profile_picture, current_pricelist_id,
                   owner_username, capacity, engine_power, engines_number, length, max_speed, type, deleted, version)
-VALUES (nextval('mysequence'), '1234 Main St.', 3.5, 'Zrenjanin', 'Serbia',
+VALUES (nextval('mysequence'), '1234 Main St.', 0, 'Zrenjanin', 'Serbia',
         'Essentially a boat that features a hull with no cabin or foredeck and the helm station in the centre of the boat, Centre Consoles are great fishing platforms. These boats are ideal for sports fishing and work in harsh offshore waterways.',
         'Centre Console Boat', NULL, 4, 'bowner', 5, 10, 2, 100, 50, 2, false, 0);
 
@@ -473,6 +480,7 @@ INSERT INTO reservation (cancelled, end_date_time, price, start_date_time, clien
 
 
 
+
 INSERT INTO review (posted, score, status, text, client_id, rentable_id, owner_id, type, version)
 VALUES ('2022-05-21 17:44:47.41532', 3.3, 1,
         'Duis lobortis ex diam, sed euismod augue dignissim ut. Aenean non rhoncus ante. Pellentesque sed fringilla erat, in rutrum metus. Maecenas nec quam pellentesque leo ornare aliquet. Praesent viverra, lectus a egestas suscipit, mi ',
@@ -515,13 +523,15 @@ VALUES ('cowner', 1);
 INSERT INTO user_role (user_id, role_id)
 VALUES ('admin', 5);
 INSERT INTO user_role (user_id, role_id)
+VALUES ('admin2', 5);
+INSERT INTO user_role (user_id, role_id)
 VALUES ('bowner', 2);
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-VALUES (0, false, true, false, 'Client didnt show up', 1, 0);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version, client_id)
+VALUES (0, false, true, false, 'Client didnt show up', 1, 0, 'pera');
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-VALUES (1, false, true, false, 'Client didnt show up', 2, 0);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version, client_id)
+VALUES (1, false, true, false, 'Client didnt show up', 2, 0, 'pera');
 
-INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version)
-VALUES (2, false, false, false, 'Client did show up', 3, 0);
+INSERT INTO reservation_report (reservation_report_type, resolved, sanction, showed_up, text, reservation_id, version, client_id)
+VALUES (2, false, false, false, 'Client did show up', 3, 0, 'pera');

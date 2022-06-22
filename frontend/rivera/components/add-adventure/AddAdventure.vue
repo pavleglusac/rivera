@@ -264,7 +264,7 @@ export default {
           },
         })
         .then((resp) => {
-          this.$router.push({ path: "/adventure/" + resp.data });
+          this.$router.push({ path: "/rentable/" + resp.data });
           console.log(resp);
         })
         .catch((err) => {

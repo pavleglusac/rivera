@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class BoatService {
     final String STATIC_PATH = "src/main/resources/static/";
     final String STATIC_PATH_TARGET = "target/classes/static/";
@@ -149,7 +151,8 @@ public class BoatService {
         return boat;
     }
 
-    private void copyDtoToBoat(BoatDTO dto, Boat boat) {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+    public void copyDtoToBoat(BoatDTO dto, Boat boat) {
         boat.setName(dto.getName());
         boat.setDescription(dto.getDescription());
         boat.setAverageScore(dto.getAverageScore());
@@ -172,14 +175,16 @@ public class BoatService {
         pricelist.setCancellationTerms(dto.getCancellationTerms());
         pricelist.setPricePerDay(dto.getPerDay());
         pricelist.setPricePerHour(dto.getPerHour());
+        pricelist.setRentable(boat);
         pricelistRepository.save(pricelist);
 
         boat.getPricelists().add(pricelist);
         boat.setCurrentPricelist(pricelist);
         tagService.addTagsIfNotPresent(dto.getTags());
         boat.setTags(tagService.getTagsByNames(dto.getTags()));
-        boat.setOwner(temporaryOwner);
-        temporaryOwner.getRentables().add(boat);
+        boat.setOwner(boatOwnerRepository.findById(((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get());
+        boatOwnerRepository.findById(((BoatOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get().getRentables().add(boat);
+
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
@@ -284,6 +289,7 @@ public class BoatService {
     public boolean update(BoatDTO boatDTO, MultipartFile[] multipartFiles) throws IOException {
         try{
             Optional<Boat> opt = boatRepository.findById(boatDTO.getId());
+            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Boat boat = opt.get();
             List<String> paths = savePictures(boat, multipartFiles);

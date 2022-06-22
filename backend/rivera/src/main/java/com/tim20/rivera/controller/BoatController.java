@@ -54,10 +54,14 @@ public class BoatController {
             BoatDTO boat,
             @RequestPart(value = "images", required = false) MultipartFile[] multipartFiles
     ) throws IOException {
-        if (!boatService.update(boat, multipartFiles)){
+        try {
+            if (!boatService.update(boat, multipartFiles)){
+                return ResponseEntity.unprocessableEntity().body("Couldn't update boat");
+            };
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        } catch (Exception exception) {
             return ResponseEntity.unprocessableEntity().body("Couldn't update boat");
-        };
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        }
     }
 
     @PostMapping(path = "delete-boat")

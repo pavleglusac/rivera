@@ -56,8 +56,14 @@ public class ClientController {
 
     @PostMapping(path = "update-client")
     public ResponseEntity<String> updateClient(ClientDTO clientDTO) {
-        clientService.updateClient(clientDTO);
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        try {
+            System.out.println("UPDATE CLIENT");
+            clientService.updateClient(clientDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.unprocessableEntity().body("Couldn't update!");
+        }
     }
 
     @PostMapping(path = "update-client-photo")

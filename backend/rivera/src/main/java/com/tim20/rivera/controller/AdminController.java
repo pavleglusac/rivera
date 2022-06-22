@@ -32,6 +32,7 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
+
     @GetMapping(path = "owner-request")
     @PreAuthorize("hasRole('ADMIN')")
     public OwnerRequestDTO getPerson(@RequestParam("username") String username){
@@ -121,9 +122,14 @@ public class AdminController {
                                                     @RequestParam(value = "reason", required = false) String reason,
                                                     @RequestParam("accept") boolean accept)  {
         boolean ret;
-        ret = adminService.resolveTerminationRequest(username, accept, requestId, reason);
-        if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
-        else return ResponseEntity.ok("ok");
+        try {
+            ret = adminService.resolveTerminationRequest(username, accept, requestId, reason);
+            if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+            adminService.notifyUserOnTerminationRequest(username, accept, reason);
+            return ResponseEntity.ok("ok");
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+        }
     }
 
 
@@ -153,9 +159,15 @@ public class AdminController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> resolveReport(@RequestBody ReportResolve resolve) {
         System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
-        boolean ret = adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
-        if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
-        return ResponseEntity.ok("ok");
+        try {
+            boolean ret = adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+            if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+            adminService.reportMail(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+            adminService.assignPenalty(resolve.getReportId());
+            return ResponseEntity.ok("ok");
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Couldn't process request");
+        }
     }
 
     @GetMapping("pending-reviews")
@@ -169,10 +181,17 @@ public class AdminController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
     @PreAuthorize("hasRole('ADMIN')")
-    public void resolveReport(@RequestBody ReviewResolve resolve) {
+    public ResponseEntity<String> resolveReport(@RequestBody ReviewResolve resolve) {
         System.out.println(resolve.getReviewId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAllowed());
 
-        adminService.resolveReview(resolve.getReviewId(), resolve.getResponseText(), resolve.isAllowed());
+        try {
+            int reviewId = resolve.getReviewId();
+            adminService.resolveReview(resolve.getReviewId(), resolve.getResponseText(), resolve.isAllowed());
+            adminService.sendReviewMails(reviewId, resolve.getResponseText(), resolve.isAllowed());
+            return ResponseEntity.ok("ok");
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Couldn't respond to review!");
+        }
     }
 
 }

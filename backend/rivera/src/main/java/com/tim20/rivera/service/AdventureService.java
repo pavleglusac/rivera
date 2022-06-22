@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -59,14 +60,9 @@ public class AdventureService {
     private RentableRepository rentableRepository;
     @Autowired
     private AvailabilityService availabilityService;
-    private FishingInstructor temporaryOwner;
 
     private final Logger LOG = LoggerFactory.getLogger(AdventureService.class);
 
-    @PostConstruct
-    private void setTemporaryOwner() {
-        temporaryOwner = fishingInstructorRepository.getById("marko");
-    }
 
     @Transactional(readOnly = false)
     public Integer addAdventure(AdventureDTO adventureDto,
@@ -173,7 +169,8 @@ public class AdventureService {
         adventure.setRulesOfConduct(dto.getRulesOfConduct());
         adventure.setPictures(dto.getPictures());
 
-        Pricelist pricelist = createPricelist(dto);
+        Pricelist pricelist = createPricelist(dto, adventure);
+
 
         if (adventure.getPricelists() != null && !adventure.getPricelists().isEmpty()) {
             Pricelist currPricelist = adventure.getCurrentPricelist();
@@ -192,16 +189,17 @@ public class AdventureService {
                         .collect(Collectors.toList())
         );
 
-        adventure.setOwner(temporaryOwner);
+        adventure.setOwner((FishingInstructor) (SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
     }
 
-    public Pricelist createPricelist(AdventureDTO dto) {
+    public Pricelist createPricelist(AdventureDTO dto, Adventure adventure) {
         Pricelist pricelist = new Pricelist();
         pricelist.setStartDateTime(LocalDateTime.now());
         pricelist.setEndDateTime(LocalDateTime.of(9999, 12, 31, 0, 0));
         pricelist.setCancellationTerms(dto.getCancellationTerms());
         pricelist.setPricePerDay(dto.getPerDay());
         pricelist.setPricePerHour(dto.getPerHour());
+        pricelist.setRentable(adventure);
         pricelistRepository.save(pricelist);
         return pricelist;
     }
@@ -210,6 +208,7 @@ public class AdventureService {
     public boolean updateAdventure(AdventureDTO dto, MultipartFile[] multipartFiles) throws IOException {
         try{
             Optional<Adventure> opt = adventureRepository.findById(dto.getId());
+            Thread.sleep(10000);
             if (opt.isEmpty()) return false;
             Adventure adventure = opt.get();
             List<String> paths = savePictures(adventure, multipartFiles);

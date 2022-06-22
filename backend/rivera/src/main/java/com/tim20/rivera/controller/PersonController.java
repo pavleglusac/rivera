@@ -33,8 +33,14 @@ public class PersonController {
 
     @PostMapping(path = "update-person")
     public ResponseEntity<String> updatePerson(PersonDTO personDTO) {
-        Boolean success = personService.updatePerson(personDTO);
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        try {
+            System.out.println("UPDATE PERSON");
+            Boolean success = personService.updatePerson(personDTO);
+            if(!success) return ResponseEntity.unprocessableEntity().body("Couldn't update!");
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body("Couldn't update!");
+        }
     }
 
     @PostMapping(path = "update-person-photo")

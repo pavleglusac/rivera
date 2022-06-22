@@ -55,11 +55,13 @@ public class AdventureServiceTest {
     @Transactional
     public void testCreatePricelist() {
         AdventureDTO dto1 = new AdventureDTO();
+        Adventure adventure = (Adventure) rentableRepository.findById(1).get();
+
         dto1.setCancellationTerms("0.2");
         dto1.setPerDay(100.0);
         dto1.setPerHour(120.0);
 
-        Pricelist pricelist = adventureService.createPricelist(dto1);
+        Pricelist pricelist = adventureService.createPricelist(dto1, adventure);
 
         assert pricelist.getPricePerDay().equals(dto1.getPerDay());
         assert pricelist.getPricePerHour().equals(dto1.getPerHour());

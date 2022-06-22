@@ -117,10 +117,16 @@ public class ClientService {
         client.setNumberOfPoints(dto.getNumberOfPoints());
     }
 
+    @Transactional(readOnly = false)
     public void updateClient(ClientDTO dto) {
-        Client client = clientRepository.findByUsername(dto.getUsername());
-        copyDTOToClient(client, dto);
-        clientRepository.save(client);
+        try {
+            Client client = clientRepository.findByUsername(dto.getUsername());
+            Thread.sleep(10000);
+            copyDTOToClient(client, dto);
+            clientRepository.save(client);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateClientPhoto(String username, MultipartFile photo) throws IOException {
