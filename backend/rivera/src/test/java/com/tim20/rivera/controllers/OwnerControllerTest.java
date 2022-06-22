@@ -53,7 +53,7 @@ public class OwnerControllerTest {
                         .with(user("cowner").password("sifra").roles("COTTAGE_OWNER"))
                 )
                 .andExpect(jsonPath("$.[3].timestamp").value("2022-06-20T00:00:00"))
-                .andExpect(jsonPath("$.[3].count").value(1))
+                .andExpect(jsonPath("$.[3].count").value(2))
                 .andExpect(jsonPath("$.[2].timestamp").value("2022-06-13T00:00:00"))
                 .andExpect(jsonPath("$.[2].count").value(0))
                 .andExpect(jsonPath("$.[1].timestamp").value("2022-06-06T00:00:00"))

@@ -32,7 +32,7 @@ public class CottageControllerTest {
     public void getCottage() throws Exception {
         mockMvc
                 .perform(get("/api/cottage/get-cottage?id=4"))
-                .andExpect(jsonPath("$.name").value("Very Cool Cottage"))
+                .andExpect(jsonPath("$.name").value("Nordic cottage"))
                 .andExpect(jsonPath("$.address").value("1234 Main St."));
     }
 
@@ -40,7 +40,7 @@ public class CottageControllerTest {
     public void getCottages() throws Exception {
         mockMvc
                 .perform(get("/api/cottage/get-cottages"))
-                .andExpect(jsonPath("$.[*].name").value(hasItem("Very Cool Cottage")))
+                .andExpect(jsonPath("$.[*].name").value(hasItem("English Cottage")))
                 .andExpect(jsonPath("$.[*].address").value(hasItem("1234 Main St.")));
     }
 
