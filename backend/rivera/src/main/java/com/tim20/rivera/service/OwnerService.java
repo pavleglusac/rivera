@@ -69,6 +69,21 @@ public class OwnerService {
         } else return null;
     }
 
+
+    private MemberCategory getMaxCategory(List<MemberCategory> categories, int points, boolean forOwner) {
+        int maxPoints = 0;
+        MemberCategory maxCategory = null;
+        for (MemberCategory category : categories) {
+            int categoryPoints = category.getNumberOfPoints();
+            if (categoryPoints >= maxPoints && categoryPoints <= points && category.getForOwner() == forOwner) {
+                maxPoints = categoryPoints;
+                maxCategory = category;
+            }
+        }
+        return maxCategory;
+    }
+
+
     public CottageOwner OwnerRequestDTOToCottageOwner(OwnerRequestDTO userRequestDTO) {
         CottageOwner owner = new CottageOwner();
         owner.setAddress(userRequestDTO.getAddress());
@@ -83,6 +98,8 @@ public class OwnerService {
         owner.setStatus(AccountStatus.WAITING);
         owner.setSignUpDescription(userRequestDTO.getDescription());
         owner.setUsername(userRequestDTO.getUsername());
+        owner.setNumberOfPoints(0);
+        owner.setCategory(getMaxCategory(memberCategoryRepository.findAll(), owner.getNumberOfPoints(), true));
         List<Role> roles = roleService.findByName("ROLE_COTTAGE_OWNER");
         owner.setRoles(roles);
         return owner;
@@ -102,6 +119,8 @@ public class OwnerService {
         owner.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         owner.setStatus(AccountStatus.WAITING);
         owner.setSignUpDescription(userRequestDTO.getDescription());
+        owner.setNumberOfPoints(0);
+        owner.setCategory(getMaxCategory(memberCategoryRepository.findAll(), owner.getNumberOfPoints(), true));
         owner.setUsername(userRequestDTO.getUsername());
         List<Role> roles = roleService.findByName("ROLE_BOAT_OWNER");
         owner.setRoles(roles);
@@ -123,6 +142,8 @@ public class OwnerService {
         instructor.setSignUpDescription(userRequestDTO.getDescription());
         instructor.setUsername(userRequestDTO.getUsername());
         instructor.setPhoneNumber(userRequestDTO.getBiography());
+        instructor.setNumberOfPoints(0);
+        instructor.setCategory(getMaxCategory(memberCategoryRepository.findAll(), instructor.getNumberOfPoints(), true));
         List<Role> roles = roleService.findByName("ROLE_FISHING_INSTRUCTOR");
         instructor.setRoles(roles);
         return instructor;

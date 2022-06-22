@@ -123,7 +123,7 @@ public class AvailabilityService {
         //
         prettyPrintAvailabilities(availabilities);
 
-        rentable.getReservations().forEach(
+        rentable.getReservations().stream().filter(x -> !x.getCancelled()).forEach(
             res -> {
                 Availability av = new Availability();
                 av.setStartDateTime(res.getStartDateTime());

@@ -610,6 +610,7 @@ export default {
           window.location.reload();
         })
         .catch((err) => {
+          alert("Couldn't update");
           console.log(err);
         });
     },

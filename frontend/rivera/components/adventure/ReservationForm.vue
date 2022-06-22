@@ -140,8 +140,7 @@ export default {
       })
       .then((resp) => {
         currentUsername = resp.data;
-      });
-    this.$axios
+        this.$axios
       .get("/api/auth/getRole", {
         headers: {
           Authorization: "Bearer " + window.localStorage.getItem("JWT"),
@@ -159,7 +158,6 @@ export default {
               `/api/get-client-username-for-current-reservation?&id=${this.$route.params.rentable}`
             )
             .then((resp) => {
-              console.log(resp.data + "aasdfasdf");
               if (!resp.data) {
                 this.noCurrentClient();
               } else {
@@ -170,6 +168,8 @@ export default {
             });
         }
       });
+      });
+    
   },
   methods: {
     noCurrentClient() {
@@ -260,7 +260,8 @@ export default {
                 .then((response) => {
                   console.log(response.data);
                   this.openModal();
-                });
+                }).catch((resp) => {
+                alert("Couldn't reserve");});
             } else {
               this.openCantReserveAgain();
             }

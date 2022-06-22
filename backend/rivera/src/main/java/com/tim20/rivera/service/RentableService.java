@@ -82,7 +82,7 @@ public class RentableService {
     public List<ReservationDTO> getReservations(Integer id) {
         Optional<Rentable> rentable = rentableRepository.findById(id);
         if (rentable.isEmpty()) return new ArrayList<>();
-        return rentable.get().getReservations().stream().map(this::reservationToDto).collect(Collectors.toList());
+        return rentable.get().getReservations().stream().filter(x -> !x.getCancelled()).map(this::reservationToDto).collect(Collectors.toList());
     }
 
     public List<ReservationDTO> getDiscountReservations(Integer id) {

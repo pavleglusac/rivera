@@ -147,6 +147,9 @@ public class ClientController {
         }
         Reservation reservation = reservationService.addReservation(client, rentableId,
                 startDateTime, endDateTime, price, List.of(additionalServices.split("\\|")), discountId);
+        if(reservation == null) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("error");
+        }
         clientService.addReservation(username, reservation);
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }

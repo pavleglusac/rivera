@@ -68,7 +68,9 @@ export default {
   name: "EntityCard",
   components: {},
   data() {
-    return {};
+    return {
+      deleting: false,
+    }
   },
   mounted() {
     console.log(process.env.backend);
@@ -76,9 +78,15 @@ export default {
   },
   methods: {
     detailedOffer() {
-      this.$router.push({ path: "/rentable/" + this.entity.id });
+      if(!this.deleting){
+        this.$router.push({ path: "/rentable/" + this.entity.id });
+      }
+      else{
+          window.location.reload();
+      }
     },
     deleteRentable() {
+      this.deleting = true;
       if (confirm("Are you sure you want to delete this rentable?")) {
         this.trulyDeleteRentable();
       } else {

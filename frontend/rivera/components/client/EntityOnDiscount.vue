@@ -74,6 +74,8 @@ export default {
               .then((response) => {
                 console.log(response.data);
                 that.openModal();
+              }).catch((resp) => {
+                alert("Couldn't reserve");
               });
           }
         })

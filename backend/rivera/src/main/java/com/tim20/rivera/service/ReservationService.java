@@ -180,6 +180,7 @@ public class ReservationService {
             Thread.sleep(6000);
             return reservation;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -282,13 +283,13 @@ public class ReservationService {
     }
 
     public boolean isPeriodReserved(String rentableId, LocalDateTime startDate, LocalDateTime endDate) {
-        List<Reservation> reservations = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter
-                (Integer.parseInt(rentableId), endDate, startDate);
+        List<Reservation> reservations = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfterAndCancelled
+                (Integer.parseInt(rentableId), endDate, startDate, false);
         return reservations.size() > 0;
     }
 
     public String getClientUsernameForCurrentReservation(String rentableId) {
-        List<Reservation> reservation = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfter(Integer.parseInt(rentableId), LocalDateTime.now(), LocalDateTime.now());
+        List<Reservation> reservation = reservationRepository.findByRentableIdAndStartDateTimeBeforeAndEndDateTimeAfterAndCancelled(Integer.parseInt(rentableId), LocalDateTime.now(), LocalDateTime.now(), false);
         if (reservation.size() > 0) {
             return reservation.get(0).getClient().getUsername();
         }
