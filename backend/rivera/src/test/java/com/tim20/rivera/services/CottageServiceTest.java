@@ -75,7 +75,7 @@ public class CottageServiceTest {
             e.printStackTrace();
         }
         System.out.println(reservationRepository.findAll().size()+"*******************");
-            if(reservationRepository.findAll().size() != 13){
+            if(reservationRepository.findAll().size() != 25){
                 assert false;
             }
             assert true;

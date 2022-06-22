@@ -500,7 +500,7 @@ export default {
     },
     registerOwner() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || this.usernameExists) {
         alert("Validation failed!");
         return;
       }
@@ -525,7 +525,7 @@ export default {
     },
     registerClient() {
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || this.usernameExists) {
         alert("Validation failed!");
         return;
       }

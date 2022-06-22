@@ -41,12 +41,12 @@ public class SearchTest {
     @Transactional
     public void testBoatSearch() {
         SearchParams search = new SearchParams();
-        search.setSearch("cool");
+        search.setSearch("Catamaran");
         List<String> tags = new ArrayList<>();
         search.setTags(tags);
         search.setNumberOfResults(10);
         search.setOrderBy("name-a");
-        assert boatService.searchBoats(search).size() == 3;
+        assert boatService.searchBoats(search).size() == 1;
     }
 
     @Test

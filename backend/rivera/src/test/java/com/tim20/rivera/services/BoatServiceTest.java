@@ -55,13 +55,12 @@ public class BoatServiceTest {
         BoatDTO boatDTO = boatService.getById(8);
         boatDTO.setName("Novo ime");
         boatDTO.setCapacity(123456);
-        boolean firstTest = boatService.getById(8).getName().equals("Novo ime");
         try {
             boatService.update(boatDTO,null);
         } catch (IOException e) {
             assert false;
         }
 
-        assert !firstTest && boatService.getById(8).getName().equals("Novo ime") && boatService.getById(8).getCapacity() == 123456;
+        assert boatService.getById(8).getName().equals("Novo ime") && boatService.getById(8).getCapacity() == 123456;
     }
 }
