@@ -48,6 +48,8 @@ export default {
   mounted() {
     this.calculateOldPrice();
     this.services = this.discount.additionalServices.join(", ");
+    console.log("this.services");
+    console.log(this.services);
   },
   methods: {
     formatDate(date) {
@@ -147,25 +149,10 @@ export default {
           if (resp.data === "3") {
             this.openCantReserveModal();
           } else if (resp.data != "no-client") {
-            console.log(resp.data);
-            console.log(
-              "/api/reserve?&username=" +
-                resp.data +
-                "&rentableId=" +
-                this.$route.params.rentable +
-                "&start=" +
-                startDateTime +
-                "&end=" +
-                endDateTime +
-                "&price=" +
-                price +
-                "&additionalServices=&discountId=" +
-                this.discount.id
-            );
             this.$axios
               .post(
                 `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}
-                &start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=&discountId=${this.discount.id}`
+                &start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=${this.services}&discountId=${this.discount.id}`
               )
               .then((response) => {
                 console.log(response.data);

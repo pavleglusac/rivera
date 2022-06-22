@@ -125,7 +125,7 @@ INSERT INTO cottage_owner (username, address, city, country, deleted, email, las
                            phone_number, photo, surname, sign_up_description, status, number_of_points, category_id,
                            version)
 VALUES ('marko2', 'Njegoseva 35', 'Zrenjanin', 'Serbia', false, 'mrsisatim20+marko2@outlook.com', NULL, 'Marko',
-        'sifra', '+3845135535', '/images/clients/marko2.jpg', 'Markovic', NULL, 0, 0, 5, 0);
+        '$2a$10$B4S75eElnprgm7w0xP.qy.AvCNOYws0bFuEL31aP7KbbXsVWoze8O', '+3845135535', '/images/clients/mika.jpg', 'Markovic', NULL, 0, 0, 5, 0);
 INSERT INTO cottage_owner (username, address, city, country, deleted, email, last_password_reset_date, name, password,
                            phone_number, photo, surname, sign_up_description, status, number_of_points, category_id,
                            version)

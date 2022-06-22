@@ -60,7 +60,7 @@
 				<div class="p-2">
 					<form>
 						<div class="form-row">
-							<div class="form-group col-6">
+							<div class="form-group col-12">
 								<b-form-input
 									id="search-filter"
 									size="sm"
