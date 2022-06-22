@@ -357,7 +357,10 @@ public class ClientService {
         reviewDTO.setId(report.getId());
         reviewDTO.setPosted(report.getPosted());
         reviewDTO.setText(report.getText());
-        reviewDTO.setOwner(report.getReservation().getRentable().getOwner());
+        Owner owner = report.getReservation().getRentable().getOwner();
+        reviewDTO.setOwnerPicture(owner.getPhoto());
+        reviewDTO.setOwnerName(owner.getName());
+        reviewDTO.setOwnerSurname(owner.getSurname());
         return reviewDTO;
     }
 
@@ -369,8 +372,10 @@ public class ClientService {
     private List<ReservationReport> getReports(Client client) {
         List<ReservationReport> reports = new ArrayList<>();
         for(Reservation reservation : client.getReservations()) {
-            if(reservation.getReservationReport().getReservationReportType().equals(ReservationReportType.COMMENT))
-                reports.add(reservation.getReservationReport());
+            if(reservation.getReservationReport() != null) {
+                if (reservation.getReservationReport().getReservationReportType().equals(ReservationReportType.COMMENT))
+                    reports.add(reservation.getReservationReport());
+            }
         }
         return reports;
     }

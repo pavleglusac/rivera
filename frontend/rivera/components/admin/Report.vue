@@ -154,6 +154,8 @@ export default {
 				}
 			}).then(resp => {
 				window.location.reload();
+			}).catch(err=> {
+				alert("Couldn't resolve.");
 			});
 		}
 	},

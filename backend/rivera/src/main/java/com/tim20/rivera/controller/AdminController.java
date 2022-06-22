@@ -156,6 +156,7 @@ public class AdminController {
     @PostMapping(value = "resolve-report",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
+
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> resolveReport(@RequestBody ReportResolve resolve) {
         System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
@@ -186,7 +187,10 @@ public class AdminController {
 
         try {
             int reviewId = resolve.getReviewId();
-            adminService.resolveReview(resolve.getReviewId(), resolve.isAllowed());
+            boolean success = adminService.resolveReview(resolve.getReviewId(), resolve.isAllowed());
+            if(!success) {
+                return ResponseEntity.unprocessableEntity().body("Couldn't respond to review!");
+            }
             adminService.sendReviewMails(reviewId, resolve.getResponseText(), resolve.isAllowed());
             return ResponseEntity.ok("ok");
         } catch (Exception e) {

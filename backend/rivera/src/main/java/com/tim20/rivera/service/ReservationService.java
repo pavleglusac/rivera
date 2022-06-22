@@ -177,7 +177,7 @@ public class ReservationService {
             } catch (Exception e) {
                 System.out.println("Emails not sent!");
             }
-            Thread.sleep(6000);
+            Thread.sleep(10000);
             return reservation;
         } catch (Exception e) {
             e.printStackTrace();

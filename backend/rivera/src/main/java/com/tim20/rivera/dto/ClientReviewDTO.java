@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ClientReviewDTO {
     private Integer id;
-    //private Double score;
     private LocalDateTime posted;
     private String text;
-    private Owner owner;
+    private String ownerPicture;
+    private String ownerName;
+    private String ownerSurname;
 }

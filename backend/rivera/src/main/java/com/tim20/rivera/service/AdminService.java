@@ -173,6 +173,7 @@ public class AdminService {
             Person person = personRepository.findByUsername(username);
             TerminationRequest request = terminationRepository.findById(requestId);
             if (person == null || request == null) return false;
+            if(request.getStatus() != TerminationStatus.PENDING) return false;
             handlePersonTermination(terminate, person, request);
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
                 Thread.sleep(1000);
