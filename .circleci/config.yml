@@ -1,0 +1,72 @@
+version: 2.1
+orbs: 
+  sonarcloud: sonarsource/sonarcloud@1.1.1
+
+jobs:
+  build_backend:
+    working_directory: ~/rivera
+    docker:
+      - image: cimg/openjdk:17.0
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+    steps:
+      - checkout
+      - run: cd backend/rivera
+      - run: ls -l
+      - run:
+          name: Build
+          command: cd backend/rivera && mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=pavleglusac_rivera -DskipTests clean package
+  deploy_backend:
+     docker:
+       - image: cimg/openjdk:17.0
+         auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+     steps:
+       - checkout
+       - run:
+            name: Deploy backend
+            command: git subtree push --prefix backend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/the-rivera-app-backend.git master
+  build_frontend:
+    working_directory: ~/rivera
+    docker:
+      - image: circleci/node:10.16.3
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+    steps:
+      - checkout
+      - run: cd frontend/rivera
+      - run: ls -l 
+      - run:
+          name: update-npm
+          command: "sudo npm install -g npm@5"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-packages
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+          - ./node_modules
+  deploy_frontend:
+    docker:
+      - image: circleci/node:10.16.3
+        auth:
+           username: mrsisatim20
+           password: $DOCKERHUB_PASSWORD 
+    steps:
+       - checkout
+       - run:
+            name: Deploy frontend
+            command: git subtree push --prefix frontend/rivera https://heroku:$HEROKU_API_KEY@git.heroku.com/the-rivera-app.git master
+  
+workflows:
+  sample:
+    jobs:
+      - build_backend
+      - deploy_backend
+      - build_frontend
+      - deploy_frontend

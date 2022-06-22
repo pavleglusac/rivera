@@ -1,194 +1,194 @@
 <template>
-  <b-container class="bv-example-row">
-    <b-card
-      img-src="https://placekitten.com/300/300"
-      img-alt="Card image"
-      img-left
-      class="mb-3"
-    >
-      <b-card-text>
-        <h4>Mala maca</h4>
-        <h5>malamaca@gmail.com</h5>
-        <p>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nemo ad
-          consectetur similique nulla alias, doloremque itaque, nesciunt tempore
-          eligendi quaerat exercitationem ducimus quas. Nesciunt, facilis.
-          Officiis molestiae aliquid at dignissimos.
-        </p>
-        <a href="#"
-          ><b-icon icon="person-circle"></b-icon> Change profile photo</a
-        ><br />
-        <a href="#"><b-icon icon="trash-fill"></b-icon> Delete account</a>
-      </b-card-text>
-    </b-card>
-    <b-card>
-      <b-form @submit.stop.prevent>
-        <b-row>
-          <b-col>
-            <h4>Profile Settings</h4>
-            <label for="feedback-first-name">First Name</label>
-            <b-form-input
-              v-model="firstName"
-              :state="firstNameValidation"
-              id="feedback-first-name"
-              placeholder="Enter your first name"
-              required
-            ></b-form-input>
-            <b-form-invalid-feedback :state="firstNameValidation">
-              First name cannot be empty.
-            </b-form-invalid-feedback>
-
-            <label for="feedback-last-name">Last Name</label>
-            <b-form-input
-              v-model="lastName"
-              :state="lastNameValidation"
-              id="feedback-last-name"
-              placeholder="Enter your last name"
-              required
-            ></b-form-input>
-            <b-form-invalid-feedback :state="lastNameValidation">
-              Last name cannot be empty.
-            </b-form-invalid-feedback>
-
-            <label for="feedback-phone-number">Phone Number</label>
-            <b-form-input
-              v-model="phoneNumber"
-              :state="phoneNumberValidation"
-              id="feedback-phone-number"
-              placeholder="Enter your phone number"
-              required
-            ></b-form-input>
-            <b-form-invalid-feedback :state="phoneNumberValidation">
-              Phone number cannot be empty.
-            </b-form-invalid-feedback>
-
-            <label for="feedback-address">Address</label>
-            <b-form-input
-              v-model="address"
-              :state="addressValidation"
-              id="feedback-address"
-              placeholder="Enter your address"
-              required
-            ></b-form-input>
-            <b-form-invalid-feedback :state="addressValidation">
-              Address cannot be empty.
-            </b-form-invalid-feedback>
-
-            <div class="form-row">
-              <div class="form-group col-6">
-                <label for="inputCity">City</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  v-model="city"
-                  id="inputCity"
-                  placeholder="Enter your city"
-                />
-              </div>
-              <div class="form-group col-6">
-                <label for="inputState">State</label>
-                <select id="inputState" v-model="country" class="form-control">
-                  <option selected>Choose...</option>
-                  <option
-                    v-for="country in countries"
-                    :key="country.label"
-                    :value="country.value"
-                  >
-                    {{ country.label }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <b-button block class="save-changes">Save changes</b-button>
-          </b-col>
-          <b-col>
-            <h4>Password Settings</h4>
-            <password-change />
-
-            <h4>Loyalty Program</h4>
-            <p>Number of points you earned is 235.</p>
-            <b-card
-              bg-variant="light"
-              header="Gold Program"
-              class="text-center"
+  <b-card no-body class="overflow-hidden mb-3" style="margin-top: 10px">
+    <b-row no-gutters>
+      <b-col md="4">
+        <b-card-img
+          id="preview"
+          v-if="url"
+          :src="url"
+          alt="Profile photo"
+          class="rounded-0"
+        ></b-card-img>
+      </b-col>
+      <b-col md="8" center>
+        <b-card-body :title="client.fullName">
+          <b-card-text>
+            <p class="text-muted">
+              username: {{ client.username }}<br />email: {{ client.email }}
+            </p>
+            <b-button pill class="profile-btn" size="sm" v-b-modal.changePicture
+              ><b-icon icon="person-circle"></b-icon> Change profile
+              photo</b-button
             >
-              <b-card-text>With gold program, you can ...</b-card-text>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-form>
-    </b-card>
-  </b-container>
+            <b-modal id="changePicture" title="Choose your new profile photo">
+              <b-form-file
+                id="photoFile"
+                @change="onFileChange"
+                accept="image/*"
+              ></b-form-file>
+            </b-modal>
+            <b-modal
+              ref="termination_modal"
+              id="termination_modal"
+              size="xl"
+              hide-footer
+            >
+              <h3>Enter reason for termination</h3>
+              <b-form-textarea
+                id="textarea-large"
+                size="lg"
+                placeholder=""
+                v-model="terminationText"
+              >
+              </b-form-textarea>
+              <b-button class="mt-5 float-right" @click="send_termination"
+                >Send</b-button
+              >
+            </b-modal>
+            <b-button
+              pill
+              class="profile-btn"
+              size="sm"
+              v-b-modal.termination_modal
+              ><b-icon icon="trash-fill"></b-icon> Delete account</b-button
+            >
+            <b-button
+              pill
+              class="profile-btn"
+              size="sm"
+              @click="goToProfile"
+              ><font-awesome-icon icon="star" /> Reviews</b-button
+            >
+          </b-card-text>
+        </b-card-body>
+      </b-col>
+    </b-row>
+  </b-card>
 </template>
 
 <script>
-const countries = require("i18n-iso-countries");
-countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 import { BIcon, BIconTrashFill, BIconPersonCircle } from "bootstrap-vue";
-import PasswordChange from "./PasswordChange.vue";
 export default {
   name: "ClientProfile",
   components: {
     BIcon,
     BIconTrashFill,
     BIconPersonCircle,
-    PasswordChange,
   },
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      address: "",
-      country: "",
-      city: "",
+      client: {
+        fullName: "",
+        username: "",
+        photo: "",
+        email: "",
+        description: "",
+        name: "",
+        surname: "",
+      },
+      url: "",
+      photoData: null,
+      terminationText: "",
     };
   },
-  methods: {},
-  computed: {
-    firstNameValidation() {
-      return this.firstName.length != 0;
+  mounted() {
+    this.getLoggedUser();
+  },
+  computed: {},
+  methods: {
+    getLoggedUser() {
+      let that = this;
+      console.log(window.localStorage.getItem("JWT"));
+      this.$axios
+        .get("/api/auth/get-logged-username", {
+        })
+        .then((resp) => {
+          this.$axios
+            .get("/api/person-by-username?username=" + resp.data)
+            .then((resp) => {
+              that.setClientData(resp.data);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    lastNameValidation() {
-      return this.lastName.length != 0;
+    setClientData(client) {
+      let that = this;
+      that.client.fullName = client.name + " " + client.surname;
+      that.client.name = client.name;
+      that.client.username = client.username;
+      that.client.surname = client.surname;
+      that.client.email = client.email;
+      that.client.photo = client.photo;
+      console.log(client.photo);
+      that.url = process.env.backend + client.photo;
     },
-    phoneNumberValidation() {
-      return this.phoneNumber.length >= 9;
+    onFileChange(e) {
+      const file = e.target.files[0];
+      this.photoData = file;
+      this.url = URL.createObjectURL(file);
+      let formData = new FormData();
+      formData.append("image", file);
+      this.$axios
+        .post(
+          "/api/update-person-photo?username=" + this.client.username,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((resp) => {
+          console.log(resp);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    addressValidation() {
-      return this.address.length != 0;
+    goToProfile() {
+      this.$router.push({ path: "/profile/" + this.client.username });
     },
-    countries() {
-      const list = countries.getNames("en", { select: "official" });
-      return Object.keys(list).map((key) => ({ value: key, label: list[key] }));
-    },
-    buttonLabel() {
-      return this.showPassword ? "Hide" : "Show";
+    send_termination() {
+      this.$axios
+        .post(
+          "/api/request-termination",
+          {
+            username: this.client.username,
+            description: this.terminationText,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+            },
+          }
+        )
+        .then((resp) => {
+          console.log(resp);
+          alert("Request sent!");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Request failed!");
+        });
     },
   },
 };
 </script>
 
 <style scoped>
-.form-control {
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  display: block;
-  width: 100%;
+#preview {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
 }
-.save-changes {
-  margin-top: 8px;
-  margin-bottom: 8px;
-  background-color: #16c79a;
+.profile-btn {
+  font-size: 12px;
+  background-color: var(--light-blue-color);
   border: none;
+}
+.profile-btn:hover {
+  opacity: 0.9;
 }
 </style>

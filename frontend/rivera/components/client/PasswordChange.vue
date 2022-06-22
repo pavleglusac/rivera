@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="color: #4F5051">
     <label>Current Password</label>
     <div v-if="cpasswordHidden" class="bv-example-row">
         <b-input-group>
@@ -62,14 +62,14 @@
     <b-form-invalid-feedback :state="newPasswordAgainValidation">
       Re-entered password is not the same as your new password.
     </b-form-invalid-feedback>
-    <b-button block class="change-password">Change password</b-button>
+    <b-button block class="change-password" @click="changePassword">Change password</b-button>
   </div>
 </template>
 
 <script>
 import { BIcon, BIconEyeFill, BIconEyeSlashFill } from "bootstrap-vue";
 export default {
-  name: "ClientProfile",
+  name: "PasswordChange",
   components: {
     BIcon,
     BIconEyeFill,
@@ -113,13 +113,49 @@ export default {
     showCPassword() {
       this.cpasswordHidden = false;
     },
+    changePassword() {
+      let that = this;
+      
+      this.$axios
+				.get("/api/get-logged-username-novi", {
+					headers: {
+						Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+					},
+				})
+				.then((resp) => {
+					this.$axios
+						.post("/api/change-password", {
+              username: resp.data,
+              oldPassword: that.cpasswordText,
+              newPassword: that.passwordText,
+              headers: {
+                Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+              },
+            }, {
+              headers: {
+                Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+              },
+            })
+						.then((resp) => {
+							alert("changed!");
+              window.localStorage.setItem("JWT", resp.data["accessToken"]);
+						})
+            .catch(err => {
+              alert("couldn't change password!");
+            });
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+        
+    },
   },
   computed: {
     currentPasswordValidation() {
-      return this.cpasswordText == "current";
+      return true;
     },
     newPasswordValidation() {
-      return this.passwordText.length >= 8;
+      return true;
     },
     newPasswordAgainValidation() {
       return this.rpasswordText == this.passwordText;
@@ -131,6 +167,7 @@ export default {
 <style scoped>
 .change-password {
   margin-top: 8px;
+  margin-bottom: 8px;
   background-color: #fff;
   border: 1px solid #16c79a;
   color: #16c79a;

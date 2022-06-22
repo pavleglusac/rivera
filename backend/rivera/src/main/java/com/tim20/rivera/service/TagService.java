@@ -4,6 +4,7 @@ import com.tim20.rivera.model.Tag;
 import com.tim20.rivera.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class TagService {
         Optional<Tag> opt = tagRepository.findByName(name);
         return opt.isEmpty() ? addTag(name) : opt.get();
     }
+
     public Tag addTag(String name) {
         Tag tag = new Tag();
         tag.setName(name);
@@ -26,20 +28,20 @@ public class TagService {
         return tag;
     }
 
-
-    public List<Tag> getTagsByNames(List<String> names){
+    public List<Tag> getTagsByNames(List<String> names) {
         List<Tag> tags = new ArrayList<Tag>();
-        for(String name : names){
-            if(tagRepository.findByName(name).isPresent()){
+        for (String name : names) {
+            if (tagRepository.findByName(name).isPresent()) {
                 tags.add(tagRepository.findByName(name).get());
             }
         }
         return tags;
     }
 
+    @Transactional(readOnly = false)
     public void addTagsIfNotPresent(List<String> names) {
-        for(String name : names){
-            if(tagRepository.findByName(name).isEmpty()){
+        for (String name : names) {
+            if (tagRepository.findByName(name).isEmpty()) {
                 Tag tag = new Tag();
                 tag.setName(name);
                 tagRepository.save(tag);

@@ -16,7 +16,10 @@ export default {
         ]
     },
     server: {
-        port: 3000
+        port: process.env.PORT || 3000
+    },
+    env: {
+      backend: process.env.NODE_ENV !== 'production' ? 'http://localhost:8080' : 'http://the-rivera-app-backend.herokuapp.com'
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
@@ -25,7 +28,7 @@ export default {
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [],
+    plugins: ['@/plugins/axios.js'],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -69,8 +72,8 @@ export default {
     },
 
     proxy: {
-        '/api/': { target: 'http://localhost:8080/api', pathRewrite: { '^/api/': '' } }
+        '/api/': { target: (process.env.NODE_ENV !== 'production' ? 'http://localhost:8080/api' : 'http://the-rivera-app-backend.herokuapp.com/api'),
+                    pathRewrite: { '^/api/': '' } }
     },
     // Build Configuration: https://go.nuxtjs.dev/config-build
-    build: {}
 }
