@@ -23,18 +23,10 @@ public class CottageController {
 
     @Autowired
     private CottageService cottageService;
-
     @Autowired
     private RentableRepository rentableRepository;
-
-    @Autowired
-    private CottageAvailabilityService cottageAvailabilityService;
     @Autowired
     private AvailabilityService availabilityService;
-
-    @Autowired
-    private CottageOwnerService cottageOwnerService;
-
     @Autowired
     private ReservationService reservationService;
 

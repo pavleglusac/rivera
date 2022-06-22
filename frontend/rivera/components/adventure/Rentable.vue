@@ -410,7 +410,7 @@ export default {
       this.$refs.discountAdded.show();
     },
     openCantReserve() {
-      this.$reft.cantReserve.show();
+      this.$refs.cantReserve.show();
     },
     openGalerry() {
       this.$bvModal.show("gallery");
@@ -432,10 +432,9 @@ export default {
         .get("/api/get-full-adventure?id=" + this.$route.params.rentable)
         .then((resp) => {
           let adventure = resp.data;
-          that.reviews = adventure.reviews;
-          // that.reviews.forEach(
-          //   (x) => (x.client.photo = process.env.backend + x.client.photo)
-          // );
+          console.log(adventure.reviews);
+          that.reviews = adventure.reviews.filter(x => x.status === "ACCEPTED");
+          console.log(that.reviews);
           that.name = adventure.name;
           that.location =
             adventure.address +
@@ -501,7 +500,7 @@ export default {
         .get("/api/cottage/get-full-cottage?id=" + this.$route.params.rentable)
         .then((resp) => {
           let cottage = resp.data;
-          that.reviews = cottage.reviews;
+          that.reviews = cottage.reviews.filter(x => x.status === "ACCEPTED");
           that.reviews.forEach(
             (x) => (x.client.photo = process.env.backend + x.client.photo)
           );
@@ -578,10 +577,7 @@ export default {
         .get("/api/boat/get-full-boat?id=" + this.$route.params.rentable)
         .then((resp) => {
           let boat = resp.data;
-          that.reviews = boat.reviews;
-          that.reviews.forEach(
-            (x) => (x.client.photo = process.env.backend + x.client.photo)
-          );
+          that.reviews = boat.reviews.filter(x => x.status === "ACCEPTED");
           that.name = boat.name;
           that.location = boat.address + ", " + boat.city + ", " + boat.country;
           that.services = boat.services;

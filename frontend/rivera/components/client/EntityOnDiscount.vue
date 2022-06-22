@@ -34,8 +34,12 @@
             &nbsp;&nbsp;&nbsp;&nbsp; End:
             {{ new Date(entity.end).toString().substring(4, 21) }}
           </div>
+          <div class="text-secondary" v-if="services != ''" style="font-size: 1em">
+            &nbsp;&nbsp;&nbsp;&nbsp; Additional services:
+            {{ services }}
+          </div>
           <b-button
-            @click="reserveAppointment"
+            @click="reserve"
             class="prime-btn mt-2"
             variant="primary"
             >Book now for only {{ entity.price }} $</b-button
@@ -51,36 +55,64 @@ export default {
   name: "EntityOnDiscount",
   components: {},
   data() {
-    return { entity: this.entity };
+    return { 
+      services: "" 
+    };
+  },
+  mounted() {
+    this.services = this.entity.additionalServices.join(", ");
   },
   methods: {
-    reserveAppointment() {
-      var startDateTime = this.entity.start;
-      var endDateTime = this.entity.end;
+    dateFormat(date) {
+      var current_datetime = new Date(date);
+      var month = current_datetime.getMonth() + 1;
+      if (month < 10) month = "0" + month;
+      var day = current_datetime.getDate();
+      if (day < 10) day = "0" + day;
+      var minutes = current_datetime.getMinutes();
+      if (minutes < 10) minutes = "0" + minutes;
+      var hours = current_datetime.getHours();
+      if (hours < 10) hours = "0" + hours;
+      return (
+        day +
+        "/" +
+        month +
+        "/" +
+        current_datetime.getFullYear() +
+        " " +
+        hours +
+        ":" +
+        minutes
+      );
+    },
+    reserve() {
+      var startDateTime = this.dateFormat(this.entity.start);
+      var endDateTime = this.dateFormat(this.entity.end);
       var price = this.entity.price;
-      var id = this.entity.rentableId;
-      var that = this;
+      console.log(this.entity);
+      var discountId = this.entity.id;
+      var rentableId = this.entity.rentableId;
       this.$axios
         .get("/api/auth/client-can-reserve", {})
         .then((resp) => {
-          if (resp.data === "3") {
-            that.openCantReserveModal();
-          } else if (resp.data != "no-client") {
-            console.log(resp.data);
+          console.log(resp.data);
+          if (resp.data.numberOfPenalties === 3) {
+            this.openCantReserveModal();
+          } else if (resp.data.username != "") {
             this.$axios
               .post(
-                `/api/reserve?&username=${resp.data}&rentableId=${id}&start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=`
+                `/api/reserve?&username=${resp.data.username}&rentableId=${rentableId}&start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=${this.services}&discountId=${discountId}`
               )
               .then((response) => {
                 console.log(response.data);
-                that.openModal();
-              }).catch((resp) => {
-                alert("Couldn't reserve");
+                this.openModal();
               });
+          } else {
+            this.$router.push({ path: "/login" });
           }
         })
         .catch((err) => {
-          console.log(err);
+          alert("Couldn't reserve.")
         });
     },
     goToProfile(id) {

@@ -1,5 +1,6 @@
 package com.tim20.rivera.service;
 
+import com.tim20.rivera.dto.AdventureDTO;
 import com.tim20.rivera.dto.CottageDTO;
 import com.tim20.rivera.dto.CottageProfileDTO;
 import com.tim20.rivera.dto.SearchParams;
@@ -11,6 +12,7 @@ import com.tim20.rivera.repository.CottageOwnerRepository;
 import com.tim20.rivera.repository.CottageRepository;
 import com.tim20.rivera.repository.PricelistRepository;
 import com.tim20.rivera.repository.ReservationRepository;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -27,7 +29,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,8 @@ public class CottageService {
     CottageRepository cottageRepository;
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    private AvailabilityService availabilityService;
 
     @Autowired
     private TagService tagService;
@@ -143,7 +149,11 @@ public class CottageService {
         List<String> rulesCopy = new ArrayList<>(dto.getRulesOfConduct());
         tagService.addTagsIfNotPresent(tagsCopy);
         cottage.setTags(tagService.getTagsByNames(tagsCopy2));
-        cottage.setOwner(cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get());
+        if (!Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            cottage.setOwner(cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get());
+        } else {
+            cottage.setOwner(cottageOwnerRepository.findById("cowner").get());
+        }
         cottage.setName(dto.getName());
         cottage.setDescription(dto.getDescription());
         cottage.setAverageScore(dto.getAverageScore());
@@ -165,7 +175,11 @@ public class CottageService {
 
         cottage.getPricelists().add(pricelist);
         cottage.setCurrentPricelist(pricelist);
-        cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get().getRentables().add(cottage);
+        if (!Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            cottageOwnerRepository.findById(((CottageOwner) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername()).get().getRentables().add(cottage);
+        } else {
+            cottageOwnerRepository.findById("cowner").get().getRentables().add(cottage);
+        }
     }
 
     private Map<Integer, Integer> dtoRoomsToRooms(String rooms) {
@@ -295,10 +309,25 @@ public class CottageService {
     }
 
     public List<CottageDTO> searchCottages(SearchParams searchParams) {
-        List<CottageDTO> cottages = checkTags(this.getCottages(searchParams.isDeletable()), searchParams.getTags());
+        List<CottageDTO> cottages = checkAvailableDates(checkTags(this.getCottages(searchParams.isDeletable()), searchParams.getTags()), searchParams);
         return filter(searchParams.getSearch().toLowerCase(), sortCottages(searchParams.getOrderBy(),
                 cottages.stream().limit(searchParams.getNumberOfResults())
                         .collect(Collectors.toList())));
+    }
+
+    private List<CottageDTO> checkAvailableDates(List<CottageDTO> cottages, SearchParams searchParams) {
+        if(StringUtils.isEmpty(searchParams.getStart()) && StringUtils.isEmpty(searchParams.getEnd())) return cottages;
+        LocalDate start = StringUtils.isEmpty(searchParams.getStart()) ? LocalDate.of(2022, 1, 1) : LocalDate.parse(searchParams.getStart(), DateTimeFormatter
+                .ofPattern("yyyy-MM-dd"));
+        LocalDate end = StringUtils.isEmpty(searchParams.getEnd()) ? LocalDate.of(2022, 12, 31) : LocalDate
+                .parse(searchParams.getEnd(), DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd"));
+
+        return cottages.stream()
+                .filter(x ->
+                        availabilityService
+                                .hasAvailabilities(x.getId(), start.atTime(0 ,0), end.atTime(23 ,59)))
+                .toList();
     }
 
     public List<CottageDTO> getCottages(boolean checkIsDeletable) {

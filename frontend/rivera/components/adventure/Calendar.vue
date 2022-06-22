@@ -255,6 +255,7 @@
 				:appointment="appointment"
 				:close="closeModal"
 				:openModal="openModal"
+				:openCantReserveModal="openCantReserve"
 				:openCantReserveAgain="openCantReserveAgain"
 				:additionalServices="additionalServices"
 			/>
@@ -449,7 +450,10 @@ export default {
 			this.$bvModal.show("reservedModal");
 		},
 		openCantReserveAgain() {
-      		this.$reft.cantReserveAgain.show();
+      		this.$refs.cantReserveAgain.show();
+    	},
+		openCantReserve() {
+      		this.$refs.cantReserve.show();
     	},
 		handleDateSelect(selectInfo) {
 			console.log("SELECT INFO:", selectInfo);

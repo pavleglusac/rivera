@@ -10,25 +10,16 @@ import com.tim20.rivera.repository.TerminationRepository;
 import com.tim20.rivera.service.AdminService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.tim20.rivera.constants.PersonConstants.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -55,12 +46,12 @@ public class AdminServiceTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Boolean> future1 = executor.submit(() -> {
             boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId(), "blabla");
+            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
             return ret;
         });
         Future<Boolean> future2 = executor.submit(() -> {
             boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId(), "statsatat");
+            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
             return ret;
         });
 
@@ -92,14 +83,14 @@ public class AdminServiceTest {
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Boolean> future1 = executor.submit(() -> {
             boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId(), "blabla");
+            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
             System.out.println(ret);
             return ret;
         });
         Thread.sleep(500);
         Future<Boolean> future2 = executor.submit(() -> {
             boolean ret = false;
-            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId(), "statsatat");
+            ret = adminService.resolveTerminationRequest(person.getUsername(), true, request.getId());
             System.out.println(ret);
             return ret;
         });
@@ -115,47 +106,6 @@ public class AdminServiceTest {
             assert r2;
         } catch (Exception e) {
             assert false;
-        }
-    }
-
-    @Test
-    @Transactional
-    public void testReviewLockingFail() throws InterruptedException {
-        Review review = reviewRepository.findById(1).get();
-
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-        Future<Boolean> future1 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveReview(review.getId(), "response", false);
-            return ret;
-        });
-        Future<Boolean> future2 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveReview(review.getId(), "response dva", false);
-            return ret;
-        });
-
-        try {
-            boolean r1 = future1.get();
-            System.out.println(r1);
-            System.out.println(review.getVersion());
-            assert r1;
-            try {
-                boolean r2 = future2.get();
-                System.out.println(r2);
-                assert r2;
-            }  catch (Exception ex) {
-                assert true;
-            }
-        } catch (Exception e) {
-            try {
-                boolean r2 = future2.get();
-                System.out.println(review.getVersion());
-                System.out.println(r2);
-                assert r2;
-            } catch (Exception e2) {
-                assert true;
-            }
         }
     }
 
@@ -166,14 +116,14 @@ public class AdminServiceTest {
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
         Future<Boolean> future1 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveReview(review.getId(), "response", false);
+            boolean ret;
+            ret = adminService.resolveReview(review.getId(), false);
             return ret;
         });
-        Thread.sleep(1500);
+        Thread.sleep(5000);
         Future<Boolean> future2 = executor.submit(() -> {
-            boolean ret = false;
-            ret = adminService.resolveReview(review.getId(), "response dva", false);
+            boolean ret;
+            ret = adminService.resolveReview(review.getId(), false);
             return ret;
         });
 
@@ -185,7 +135,7 @@ public class AdminServiceTest {
         }
         try{
             boolean r2 = future2.get();
-            assert r2;
+            assert !r2;
         } catch (Exception e) {
             assert false;
         }

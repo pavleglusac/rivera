@@ -128,7 +128,7 @@ public class RentableService {
         review.setText(reviewText);
         review.setPosted(LocalDateTime.now());
         review.setScore(rating);
-        review.setStatus(ReviewStatus.ACCEPTED);
+        review.setStatus(ReviewStatus.PENDING);
         review.setType(type);
         rentable.getReviews().add(review);
         rentableRepository.save(rentable);

@@ -103,6 +103,7 @@ export default {
   props: [
     "appointment",
     "close",
+    "openCantReserveModal",
     "openModal",
     "openCantReserveAgain",
     "additionalServices",
@@ -141,35 +142,34 @@ export default {
       .then((resp) => {
         currentUsername = resp.data;
         this.$axios
-      .get("/api/auth/getRole", {
-        headers: {
-          Authorization: "Bearer " + window.localStorage.getItem("JWT"),
-        },
-      })
-      .then((resp) => {
-        if (resp.data == "ROLE_CLIENT") {
-          that.isClient = true;
-          that.username = currentUsername;
-          document.getElementById("mainDiv").style.display = "block";
-          this.calculateReservationPrice();
-        } else {
-          this.$axios
-            .get(
-              `/api/get-client-username-for-current-reservation?&id=${this.$route.params.rentable}`
-            )
-            .then((resp) => {
-              if (!resp.data) {
-                this.noCurrentClient();
-              } else {
-                that.username = resp.data;
-                document.getElementById("mainDiv").style.display = "block";
-                this.calculateReservationPrice();
-              }
-            });
-        }
+          .get("/api/auth/getRole", {
+            headers: {
+              Authorization: "Bearer " + window.localStorage.getItem("JWT"),
+            },
+          })
+          .then((resp) => {
+            if (resp.data == "ROLE_CLIENT") {
+              that.isClient = true;
+              that.username = currentUsername;
+              document.getElementById("mainDiv").style.display = "block";
+              this.calculateReservationPrice();
+            } else {
+              this.$axios
+                .get(
+                  `/api/get-client-username-for-current-reservation?&id=${this.$route.params.rentable}`
+                )
+                .then((resp) => {
+                  if (!resp.data) {
+                    this.noCurrentClient();
+                  } else {
+                    that.username = resp.data;
+                    document.getElementById("mainDiv").style.display = "block";
+                    this.calculateReservationPrice();
+                  }
+                });
+            }
+          });
       });
-      });
-    
   },
   methods: {
     noCurrentClient() {
@@ -232,43 +232,51 @@ export default {
       let that = this;
       var price = this.price;
       var services = that.selectedAdditionalServices.join("|");
-      console.log(services);
       if (this.validDates(startDateTime, endDateTime)) {
-        this.$axios
-          .get(
-            `/api/didClientReserveEarlier?&username=${
-              that.username
-            }&rentableId=${
-              this.$route.params.rentable
-            }&start=${this.isoDateWithoutTimeZone(
-              startDateTime
-            )}&end=${this.isoDateWithoutTimeZone(endDateTime)}`
-          )
-          .then((response) => {
-            console.log(response.data);
-            if (response.data == false) {
-              this.$axios
-                .post(
-                  `/api/reserve?&username=${this.username}&rentableId=${
-                    this.$route.params.rentable
-                  }&start=${this.isoDateWithoutTimeZone(
-                    startDateTime
-                  )}&end=${this.isoDateWithoutTimeZone(
-                    endDateTime
-                  )}&price=${price}&additionalServices=${services}`
-                )
-                .then((response) => {
-                  console.log(response.data);
-                  this.openModal();
-                }).catch((resp) => {
-                alert("Couldn't reserve");});
-            } else {
-              this.openCantReserveAgain();
-            }
-          });
+        this.$axios.get("/api/auth/client-can-reserve", {}).then((resp) => {
+          console.log(resp.data);
+          if (resp.data.numberOfPenalties === 3) {
+            this.openCantReserveModal();
+          } else {
+            this.$axios
+              .get(
+                `/api/didClientReserveEarlier?&username=${
+                  that.username
+                }&rentableId=${
+                  this.$route.params.rentable
+                }&start=${this.isoDateWithoutTimeZone(
+                  startDateTime
+                )}&end=${this.isoDateWithoutTimeZone(endDateTime)}`
+              )
+              .then((response) => {
+                console.log(response.data);
+                if (response.data == false) {
+                  this.$axios
+                    .post(
+                      `/api/reserve?&username=${this.username}&rentableId=${
+                        this.$route.params.rentable
+                      }&start=${this.isoDateWithoutTimeZone(
+                        startDateTime
+                      )}&end=${this.isoDateWithoutTimeZone(
+                        endDateTime
+                      )}&price=${price}&additionalServices=${services}`
+                    )
+                    .then((response) => {
+                      console.log(response.data);
+                      this.openModal();
+                    })
+                    .catch((resp) => {
+                      alert("Couldn't reserve");
+                    });
+                } else {
+                  this.openCantReserveAgain();
+                }
+              });
+          }
+        });
       } else {
-		alert("Start of the appointment has to be before the end.")
-	  }
+        alert("Start of the appointment has to be before the end.");
+      }
     },
     setTimeMinMax() {
       var sameStart = this.datesEqual(
@@ -291,8 +299,8 @@ export default {
       var startDateTime = this.getStartDateTime();
       var endDateTime = this.getEndDateTime();
       let that = this;
-	  console.log("USERNAME");
-	  console.log(that.username);
+      console.log("USERNAME");
+      console.log(that.username);
       this.$axios
         .get(
           `/api/get-reservation-price?&username=${that.username}&rentableId=${

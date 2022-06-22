@@ -32,12 +32,14 @@ public class AvailabilityServiceTest {
     @Test
     @Transactional
     public void testAvailabilities() {
-        Rentable rentable = rentableRepository.getById(1);
+        int rentableId = 5;
+
+        Rentable rentable = rentableRepository.getById(rentableId);
         AvailabilityRequest request1 = new AvailabilityRequest();
         request1.setAddition(true);
         request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 15 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request1.setRepeat("week");
-        request1.setRentableId(1);
+        request1.setRentableId(rentableId);
         request1.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request1);
@@ -52,7 +54,7 @@ public class AvailabilityServiceTest {
         request2.setAddition(false);
         request2.setPatterns(Arrays.asList(Arrays.asList("0 0 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 12 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request2.setRepeat("week");
-        request2.setRentableId(1);
+        request2.setRentableId(rentableId);
         request2.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request2);
@@ -67,7 +69,7 @@ public class AvailabilityServiceTest {
         request3.setAddition(true);
         request3.setPatterns(Arrays.asList(Arrays.asList("0 0 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 17 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request3.setRepeat("week");
-        request3.setRentableId(1);
+        request3.setRentableId(rentableId);
         request3.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request3);
@@ -83,7 +85,7 @@ public class AvailabilityServiceTest {
         request4.setAddition(true);
         request4.setPatterns(Arrays.asList(Arrays.asList("0 0 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 30 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request4.setRepeat("week");
-        request4.setRentableId(1);
+        request4.setRentableId(rentableId);
         request4.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request4);
@@ -100,7 +102,7 @@ public class AvailabilityServiceTest {
         request5.setAddition(false);
         request5.setPatterns(Arrays.asList(Arrays.asList("0 30 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 25 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request5.setRepeat("week");
-        request5.setRentableId(1);
+        request5.setRentableId(rentableId);
         request5.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request5.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request5);
@@ -123,12 +125,14 @@ public class AvailabilityServiceTest {
     @Test
     @Transactional
     public void testBigAvailability() {
-        Rentable rentable = rentableRepository.getById(1);
+        int rentableId = 5;
+
+        Rentable rentable = rentableRepository.getById(rentableId);
         AvailabilityRequest request1 = new AvailabilityRequest();
         request1.setAddition(true);
         request1.setPatterns(Arrays.asList(Arrays.asList("0 0 9 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 10 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request1.setRepeat("week");
-        request1.setRentableId(1);
+        request1.setRentableId(rentableId);
         request1.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request1.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request1);
@@ -142,7 +146,7 @@ public class AvailabilityServiceTest {
         request2.setAddition(true);
         request2.setPatterns(Arrays.asList(Arrays.asList("0 0 11 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 12 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request2.setRepeat("week");
-        request2.setRentableId(1);
+        request2.setRentableId(rentableId);
         request2.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request2.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request2);
@@ -159,7 +163,7 @@ public class AvailabilityServiceTest {
         request3.setAddition(true);
         request3.setPatterns(Arrays.asList(Arrays.asList("0 30 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 0 14 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request3.setRepeat("week");
-        request3.setRentableId(1);
+        request3.setRentableId(rentableId);
         request3.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request3.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request3);
@@ -177,7 +181,7 @@ public class AvailabilityServiceTest {
         request4.setAddition(true);
         request4.setPatterns(Arrays.asList(Arrays.asList("0 0 8 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI", "0 35 13 * APR,MAY,JUN,JUL MON,TUE,WED,THU,FRI")));
         request4.setRepeat("week");
-        request4.setRentableId(1);
+        request4.setRentableId(rentableId);
         request4.setSelectedStartDate(LocalDateTime.of(2022, 4, 4, 0, 0));
         request4.setSelectedEndDate(LocalDateTime.of(2022, 4, 9, 0, 0));
         availabilityService.defineAvailability(request4);

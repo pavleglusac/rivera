@@ -55,6 +55,7 @@ public class DiscountService {
         discountOfferDTO.setId(discount.getId());
         discountOfferDTO.setRentableId(discount.getRentable().getId());
         discountOfferDTO.setName(discount.getRentable().getName());
+        discountOfferDTO.setAdditionalServices(discount.getAdditionalServices());
         discountOfferDTO.setEnd(discount.getEndDateTime());
         discountOfferDTO.setStart(discount.getStartDateTime());
         discountOfferDTO.setPrice(discount.getPrice());

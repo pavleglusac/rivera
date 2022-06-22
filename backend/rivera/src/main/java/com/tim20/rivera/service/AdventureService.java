@@ -349,9 +349,7 @@ public class AdventureService {
     }
 
     private List<AdventureDTO> checkAvailableDates(List<AdventureDTO> adventures, SearchParams searchParams) {
-        System.out.println(searchParams.getStart() + "_" + searchParams.getEnd());
         if(StringUtils.isEmpty(searchParams.getStart()) && StringUtils.isEmpty(searchParams.getEnd())) return adventures;
-        System.out.println("PROSAO");
         LocalDate start = StringUtils.isEmpty(searchParams.getStart()) ? LocalDate.of(2022, 1, 1) : LocalDate.parse(searchParams.getStart(), DateTimeFormatter
                 .ofPattern("yyyy-MM-dd"));
         LocalDate end = StringUtils.isEmpty(searchParams.getEnd()) ? LocalDate.of(2022, 12, 31) : LocalDate
@@ -361,7 +359,7 @@ public class AdventureService {
         return adventures.stream()
                          .filter(x ->
                                  availabilityService
-                                         .hasAvailabilities(x.getId(), start.atTime(0 ,0), end.atTime(0 ,0)))
+                                         .hasAvailabilities(x.getId(), start.atTime(0 ,0), end.atTime(23 ,59)))
                          .toList();
     }
 

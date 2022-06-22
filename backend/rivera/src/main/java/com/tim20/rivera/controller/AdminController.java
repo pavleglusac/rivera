@@ -123,7 +123,7 @@ public class AdminController {
                                                     @RequestParam("accept") boolean accept)  {
         boolean ret;
         try {
-            ret = adminService.resolveTerminationRequest(username, accept, requestId, reason);
+            ret = adminService.resolveTerminationRequest(username, accept, requestId);
             if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
             adminService.notifyUserOnTerminationRequest(username, accept, reason);
             return ResponseEntity.ok("ok");
@@ -160,7 +160,7 @@ public class AdminController {
     public ResponseEntity<String> resolveReport(@RequestBody ReportResolve resolve) {
         System.out.println(resolve.getReportId() + " <-> " + resolve.getResponseText() + " <-> " + resolve.isAssignPenalty());
         try {
-            boolean ret = adminService.resolveReport(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
+            boolean ret = adminService.resolveReport(resolve.getReportId());
             if(!ret) return ResponseEntity.unprocessableEntity().body("Couldn't process request");
             adminService.reportMail(resolve.getReportId(), resolve.getResponseText(), resolve.isAssignPenalty());
             adminService.assignPenalty(resolve.getReportId());
@@ -186,7 +186,7 @@ public class AdminController {
 
         try {
             int reviewId = resolve.getReviewId();
-            adminService.resolveReview(resolve.getReviewId(), resolve.getResponseText(), resolve.isAllowed());
+            adminService.resolveReview(resolve.getReviewId(), resolve.isAllowed());
             adminService.sendReviewMails(reviewId, resolve.getResponseText(), resolve.isAllowed());
             return ResponseEntity.ok("ok");
         } catch (Exception e) {

@@ -162,15 +162,13 @@ public class AuthenticationController {
     }
 
     @GetMapping("client-can-reserve")
-    public String canReserve() {
+    public CanReserveDTO canReserve() {
         Client client;
         try {
             client = (Client) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         } catch (Exception e) {
-            return "no-client";
+            return new CanReserveDTO("", 0);
         }
-        if (client.getNumberOfPenalties() < 3)
-            return client.getUsername();
-        return "3";
+        return new CanReserveDTO(client.getUsername(), client.getNumberOfPenalties());
     }
 }

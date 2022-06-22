@@ -33,7 +33,7 @@ public class ReservationServiceTest {
             if(dto.getEntity().name.equals("Mountain Fishing"))
                 numberOfAdventures++;
         assert numberOfAdventures == 6;
-        assert reservations.size() == 8;
+        assert reservations.size() == 9;
     }
 
     @Test

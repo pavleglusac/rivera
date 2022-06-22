@@ -20,6 +20,7 @@ public class ReviewService {
         reviewProfileDTO.setPosted(review.getPosted());
         reviewProfileDTO.setScore(review.getScore());
         reviewProfileDTO.setText(review.getText());
+        reviewProfileDTO.setStatus(review.getStatus());
         return reviewProfileDTO;
     }
 

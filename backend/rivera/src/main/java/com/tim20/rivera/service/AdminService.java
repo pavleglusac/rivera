@@ -168,11 +168,10 @@ public class AdminService {
     }
 
     @Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
-    public boolean resolveTerminationRequest(String username, boolean terminate, int requestId, String reason) {
+    public boolean resolveTerminationRequest(String username, boolean terminate, int requestId) {
         try {
             Person person = personRepository.findByUsername(username);
             TerminationRequest request = terminationRepository.findById(requestId);
-            Thread.sleep(10000);
             if (person == null || request == null) return false;
             handlePersonTermination(terminate, person, request);
             if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
@@ -294,15 +293,12 @@ public class AdminService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public boolean resolveReport(int reportId, String responseText, boolean assignPenalty) {
+    public boolean resolveReport(int reportId) {
         try {
             Optional<ReservationReport> optionalReport = reservationReportRepository.findById(reportId);
             if(optionalReport.isEmpty()) return false;
             ReservationReport report = optionalReport.get();
             if(report.getResolved()) return false;
-            Thread.sleep(30000);
-            Client client = report.getReservation().getClient();
-            Owner owner = report.getReservation().getRentable().getOwner();
             System.out.println("Resolveddddddd :DDDDD");
             report.setResolved(true);
             reservationReportRepository.save(report);
@@ -317,7 +313,7 @@ public class AdminService {
         Client client = report.getReservation().getClient();
         Owner owner = report.getReservation().getRentable().getOwner();
         if (assignPenalty)  {
-            assignPenaltyEmail(responseText, client, owner);
+            emailService.assignPenaltyEmail(responseText, client, owner);
         } else if(report.getSanction()) {
             rejectPenaltyEmail(responseText, client, owner);
         }
@@ -348,19 +344,6 @@ public class AdminService {
         clientRepository.save(client);
     }
 
-    public void assignPenaltyEmail(String responseText, Client client, Owner owner) {
-        emailService.sendNotificaitionToUsername(client.getUsername(), "Penalty",
-                "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
-                        " you that you have been assigned a penalty. Three of these penalties per month " +
-                        "will stop you from using our services. Reason: " + responseText +
-                        "\n\nSincerely,\n Rivera.");
-
-        emailService.sendNotificaitionToUsername(owner.getUsername(), "Penalty",
-                "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
-                        + client.getUsername() + " was assigned a penalty as per your request." +
-                        "\n\nSincerely,\n Rivera.");
-    }
-
     public AdminReviewDTO reviewToAdminReviewDTO(Review review) {
         AdminReviewDTO dto = new AdminReviewDTO();
         dto.setId(review.getId());
@@ -381,19 +364,17 @@ public class AdminService {
     }
 
     @Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
-    public boolean resolveReview(int reviewId, String responseText, boolean allowed) {
+    public boolean resolveReview(int reviewId, boolean allowed) {
         try {
             Optional<Review> optionalReview = reviewRepository.findById(reviewId);
             if(optionalReview.isEmpty()) return false;
             Review review = optionalReview.get();
             if(review.getStatus() != ReviewStatus.PENDING) return false;
-            Client client = review.getClient();
-            Owner owner = review.getOwner() == null ? review.getRentable().getOwner() : review.getOwner();
-            Thread.sleep(10000);
             if (review.getType() == ReviewType.REVIEW_WITH_RATING)  {
                 if(allowed) {
                     review.setStatus(ReviewStatus.ACCEPTED);
-                    Review rev = reviewRepository.save(review);
+                    reviewRepository.save(review);
+                    recalculateScore(review);
                 } else {
                     review.setStatus(ReviewStatus.DECLINED);
                     reviewRepository.save(review);
@@ -423,7 +404,7 @@ public class AdminService {
                 reviewDeclinedEmail(responseText, review, client);
             }
         } else {
-            complaintEmail(responseText, review, client, owner);
+            emailService.complaintEmail(responseText, review, client, owner);
         }
     }
 
@@ -438,30 +419,15 @@ public class AdminService {
                 rentable.getReviews().add(review);
                 rentableRepository.save(rentable);
             }
-        } catch (OptimisticLockException exception) {
+        } catch (OptimisticLockException ignored) {
 
         }
     }
 
-    private void testSleep() throws NoSuchAlgorithmException, InterruptedException {
+    private void testSleep() throws InterruptedException {
         if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
-            Random random = SecureRandom.getInstanceStrong();;
-            int r = random.nextInt(1, 10);
-            Thread.sleep(r* 100L);
+            Thread.sleep(100);
         }
-    }
-
-    private void complaintEmail(String responseText, Review review, Client client, Owner owner) {
-        emailService.sendNotificaitionToUsername(owner.getUsername(), "Complaint",
-                "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
-                        + client.getUsername() + " has just filed a complaint on you or your rentable with " +
-                        " text \"" + review.getText() + "\". The admin team has responded with \"" + responseText + "\"" +
-                        "<br><br>Sincerely,<br> Rivera.");
-
-        emailService.sendNotificaitionToUsername(client.getUsername(), "Complaint",
-                "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
-                        "The admin team has responded with: " + responseText +
-                        "<br><br>Sincerely,<br>Rivera.");
     }
 
     private void reviewDeclinedEmail(String responseText, Review review, Client client) {

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.hasItem;
@@ -36,6 +37,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @Transactional
     public void getRules() throws Exception {
         mockMvc
                 .perform(get("/api/admin/rules")
@@ -45,6 +47,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @Transactional
     public void getOwnerRequest() throws Exception {
         mockMvc
                 .perform(get("/api/admin/owner-request?username=marko")
@@ -56,6 +59,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @Transactional
     public void getCategories() throws Exception {
         mockMvc
                 .perform(get("/api/admin/categories")
@@ -67,6 +71,7 @@ public class AdminControllerTest {
 
 
     @Test
+    @Transactional
     public void getPendingTerminationRequest() throws Exception {
         // (id, description, status, person_id, version) values (1, 'Opis', 2, 'pera', 0)
         mockMvc
@@ -78,6 +83,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @Transactional
     public void getPendingTerminationReviews() throws Exception {
         /*
         DATABASE

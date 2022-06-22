@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class DiscountOfferDTO {
     Double price;
     Double averageScore;
     String city;
+    List<String> additionalServices;
     String country;
     String picture;
     boolean reserved;

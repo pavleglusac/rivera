@@ -161,34 +161,34 @@ values (5, 5, 2);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
 VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (4, '2022-08-18 17:00:00', 450, '2022-08-18 16:00:00', 1, true);
+VALUES (4, '2022-07-18 17:00:00', 450, '2022-07-18 16:00:00', 2, true);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2012-08-12 16:00:00', 1, false);
+VALUES (3, '2022-08-13 01:00:00', 300, '2022-07-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+VALUES (3, '2022-07-13 01:00:00', 300, '2022-07-12 16:00:00', 2, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+VALUES (3, '2022-09-13 01:00:00', 350, '2022-09-12 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 3, false);
+VALUES (3, '2022-07-13 01:00:00', 300, '2022-07-12 16:00:00', 3, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 4, false);
+VALUES (3, '2022-09-13 01:00:00', 300, '2022-08-12 16:00:00', 4, false);
 
 
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 6, false);
+VALUES (3, '2022-09-13 01:00:00', 300, '2022-08-12 16:00:00', 6, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
-VALUES (5, '2022-09-13 01:00:00', 500, '2022-09-12 16:00:00', 6, false);
+VALUES (5, '2022-09-13 01:00:00', 500, '2022-09-12 16:00:00', 2, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved)
 VALUES (6, '2022-08-13 01:00:00', 700, '2022-08-12 16:00:00', 6, false);
 
 
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-11 01:00:00', 300, '2022-08-10 16:00:00', 1, false);
 INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (4, '2022-08-18 17:00:00', 450, '2022-08-18 16:00:00', 1, true);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 1, false);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 3, false);
-INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-13 01:00:00', 300, '2022-08-12 16:00:00', 4, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-16 01:00:00', 300, '2022-08-15 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-15 01:00:00', 500, '2022-08-14 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (7, '2022-09-13 01:00:00', 450, '2022-09-12 16:00:00', 1, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-06 01:00:00', 20, '2022-08-05 16:00:00', 3, false);
+INSERT INTO discount (capacity, end_date_time, price, start_date_time, rentable_id, reserved) VALUES (3, '2022-08-04 01:00:00', 100, '2022-08-03 16:00:00', 4, false);
 
 INSERT INTO discount_tags (discount_id, tags_id)
 VALUES (1, 3);

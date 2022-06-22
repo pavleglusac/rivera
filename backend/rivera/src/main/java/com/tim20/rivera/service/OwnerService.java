@@ -379,7 +379,7 @@ public class OwnerService {
         review.setType(type);
         review.setPosted(LocalDateTime.now());
         review.setScore(rating);
-        review.setStatus(ReviewStatus.ACCEPTED);
+        review.setStatus(ReviewStatus.PENDING);
         review.setRentable(null);
         review.setOwner(owner);
         List<Review> reviews = owner.getReviews();

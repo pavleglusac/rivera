@@ -4,10 +4,7 @@ package com.tim20.rivera.service;
 import com.tim20.rivera.dto.ClientRequestDTO;
 import com.tim20.rivera.dto.OwnerRequestDTO;
 import com.tim20.rivera.dto.ReservationReportDTO;
-import com.tim20.rivera.model.Owner;
-import com.tim20.rivera.model.Person;
-import com.tim20.rivera.model.Rentable;
-import com.tim20.rivera.model.Reservation;
+import com.tim20.rivera.model.*;
 import com.tim20.rivera.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -111,7 +108,7 @@ public class EmailService {
             mail.setText(htmlMsg, true);
             mail.setTo(person.getEmail());
             mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
-            mail.setSubject("New Discount!");
+            mail.setSubject(subject);
             javaMailSender.send(mimeMessage);
             System.out.println("Email sent!");
         } catch (Exception e) {
@@ -171,6 +168,98 @@ public class EmailService {
         mail.setSubject("New Reservation");
         javaMailSender.send(mimeMessage);
         System.out.println("Email to owner sent!");
+    }
+
+    @Async
+    public void assignPenaltyEmail(String responseText, Client client, Owner owner) {
+        try {
+            System.out.println("Sending email...");
+            Person person = personService.findByUsername(client.getUsername());
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            String text = "Dear " + client.getUsername() + ",\n\nUnfortunately we must inform" +
+                    " you that you have been assigned a penalty. Three of these penalties per month " +
+                    "will stop you from using our services. Reason: " + responseText +
+                    "\n\nSincerely,\n Rivera.";
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + "Penalty" + "</h3>";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject("Penalty");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
+
+        try {
+            System.out.println("Sending email...");
+            Person person = personService.findByUsername(owner.getUsername());
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String text = "Dear " + owner.getUsername() + ",\n\nWe inform you that the user with username "
+                    + client.getUsername() + " was assigned a penalty as per your request." +
+                    "\n\nSincerely,\n Rivera.";
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + "Penalty" + "</h3>";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject("Penalty");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
+    }
+
+    @Async
+    public void complaintEmail(String responseText, Review review, Client client, Owner owner) {
+        try {
+            System.out.println("Sending email...");
+            Person person = personService.findByUsername(client.getUsername());
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            String text = "Dear " + client.getUsername() + ",<br><br>We inform you that your complaint has just been reviewed by the admin team. " +
+                    "The admin team has responded with: " + responseText +
+                    "<br><br>Sincerely,<br>Rivera.";
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + "Complaint" + "</h3>";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject("Complaint");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
+
+        try {
+            System.out.println("Sending email...");
+            Person person = personService.findByUsername(owner.getUsername());
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mail = new MimeMessageHelper(mimeMessage, "utf-8");
+            String text = "Dear " + owner.getUsername() + ",<br><br>We inform you that the user with username "
+                    + client.getUsername() + " has just filed a complaint on you or your rentable with " +
+                    " text \"" + review.getText() + "\". The admin team has responded with \"" + responseText + "\"" +
+                    "<br><br>Sincerely,<br> Rivera.";
+            String htmlMsg = "<div style='max-width: 600px; margin: auto; justify-content: center; align-items: center;'>";
+            htmlMsg += "<h3 style='font-size: 30px; color:#16C79A; font-family: sans-serif; text-align: center'>" + "Complaint" + "</h3>";
+            htmlMsg += "<p style='text-align: center; font-size: 15px; font-family: sans-serif;'>" + text + "</p></div>";
+            mail.setText(htmlMsg, true);
+            mail.setTo(person.getEmail());
+            mail.setFrom(Objects.requireNonNull(env.getProperty("spring.mail.username")));
+            mail.setSubject("Complaint");
+            javaMailSender.send(mimeMessage);
+            System.out.println("Email sent!");
+        } catch (Exception e) {
+            System.out.println("email not sent");
+        }
     }
 
     private String getReservationTextClient(Reservation reservation) {

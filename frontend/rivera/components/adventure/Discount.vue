@@ -146,12 +146,13 @@ export default {
       this.$axios
         .get("/api/auth/client-can-reserve", {})
         .then((resp) => {
-          if (resp.data === "3") {
+          console.log(resp.data);
+          if (resp.data.numberOfPenalties === 3) {
             this.openCantReserveModal();
-          } else if (resp.data != "no-client") {
+          } else if (resp.data.username != "") {
             this.$axios
               .post(
-                `/api/reserve?&username=${resp.data}&rentableId=${this.$route.params.rentable}
+                `/api/reserve?&username=${resp.data.username}&rentableId=${this.$route.params.rentable}
                 &start=${startDateTime}&end=${endDateTime}&price=${price}&additionalServices=${this.services}&discountId=${this.discount.id}`
               )
               .then((response) => {
